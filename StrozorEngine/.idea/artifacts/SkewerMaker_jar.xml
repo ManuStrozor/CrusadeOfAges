@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SkewerMaker:jar">
+    <output-path>$PROJECT_DIR$/..</output-path>
+    <root id="archive" name="SkewerMaker.jar">
+      <element id="module-output" name="StrozorEngine" />
+      <element id="dir-copy" path="$PROJECT_DIR$/assets" />
+    </root>
+  </artifact>
+</component>
