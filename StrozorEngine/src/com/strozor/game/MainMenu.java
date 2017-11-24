@@ -4,32 +4,33 @@ import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
+import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Button;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Pause extends AbstractGame {
+public class MainMenu extends AbstractGame {
 
+    private ImageTile background;
     private SoundClip hover, select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, opt, menu;
+    private Button play, opt, exit;
 
-    public Pause() {
+    public MainMenu() {
+        background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
+
         hover = new SoundClip("/audio/hover.wav");
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(play = new Button(130, 20, "Continuer", 1));
-        buttons.add(opt = new Button(130, 20, "Options", 3));
-        buttons.add(menu = new Button(130, 20, "Menu principal", 0));
+        buttons.add(play = new Button(130, 20, "Single player", 1));
+        buttons.add(opt = new Button(60, 20, "Options", 3));
+        buttons.add(exit = new Button(60, 20, "Quit game", -1));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
-
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
@@ -41,7 +42,7 @@ public class Pause extends AbstractGame {
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
                     gc.setState(btn.getGoState());
-                    gc.setLastState(2);
+                    gc.setLastState(0);
                 }
             } else {
                 btn.setBgColor(0x997f8c8d);
@@ -53,14 +54,20 @@ public class Pause extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
+        for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
+            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
+                r.drawImageTile(background, x * GameManager.TS, y * GameManager.TS, 1, 0);
+            }
+        }
+
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
 
         opt.setOffX(play.getOffX());
         opt.setOffY(play.getOffY() + play.getHeight() + 10);
 
-        menu.setOffX(play.getOffX());
-        menu.setOffY(opt.getOffY() + opt.getHeight() + 10);
+        exit.setOffX(gc.getWidth() / 2 + 5);
+        exit.setOffY(opt.getOffY());
 
         for(Button btn : buttons) r.drawButton(btn, 0xffababab);
     }

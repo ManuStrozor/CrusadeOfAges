@@ -64,8 +64,4 @@ public class Button {
     public int getGoState() {
         return goState;
     }
-
-    public void setGoState(int goState) {
-        this.goState = goState;
-    }
 }

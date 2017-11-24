@@ -1,9 +1,9 @@
 package com.strozor.engine;
 
 import com.strozor.game.GameManager;
-import com.strozor.game.Menu;
+import com.strozor.game.MainMenu;
+import com.strozor.game.GameMenu;
 import com.strozor.game.Options;
-import com.strozor.game.Pause;
 
 public class GameContainer implements Runnable {
 
@@ -13,7 +13,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings settings;
-    private AbstractGame menu, opt, game, pause;
+    private AbstractGame mainMenu, opt, game, gameMenu;
 
     private boolean running = false;
     private int width, height;
@@ -21,23 +21,23 @@ public class GameContainer implements Runnable {
     private String title;
 
     private enum STATE{
-        MENU,
+        MAINMENU,
         OPT,
         GAME,
-        PAUSE,
+        GAMEMENU,
         EXIT
     }
 
-    public STATE State = STATE.MENU;
+    public STATE State = STATE.MAINMENU;
     private int lastState = 0;
 
     public GameContainer(AbstractGame game) {
-        this.menu = new Menu();
+        this.mainMenu = new MainMenu();
         this.settings = new Settings();
         this.opt = new Options(settings);
         this.game = game;
         this.gm = (GameManager) game;
-        this.pause = new Pause();
+        this.gameMenu = new GameMenu();
     }
 
     public synchronized void start() {
@@ -82,14 +82,14 @@ public class GameContainer implements Runnable {
                 unprocessedTime -= UPDATE_CAP;
                 render = true;
 
-                if(State == STATE.MENU) {
-                    menu.update(this, (float)UPDATE_CAP);
+                if(State == STATE.MAINMENU) {
+                    mainMenu.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OPT) {
                     opt.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAME) {
                     game.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.PAUSE) {
-                    pause.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.GAMEMENU) {
+                    gameMenu.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -104,7 +104,7 @@ public class GameContainer implements Runnable {
             if(render) {
                 gameRender.clear();
 
-                if(State == STATE.GAME || State == STATE.PAUSE || (State == STATE.OPT && lastState == 2)) {
+                if(State == STATE.GAME || State == STATE.GAMEMENU || (State == STATE.OPT && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCamX(0);
                     gameRender.setCamY(0);
@@ -114,15 +114,15 @@ public class GameContainer implements Runnable {
                         gameRender.drawGameStates(gm);
                 }
 
-                if(State == STATE.MENU) {
-                    menu.render(this, gameRender);
+                if(State == STATE.MAINMENU) {
+                    mainMenu.render(this, gameRender);
                 } else if(State == STATE.OPT) {
                     opt.render(this, gameRender);
-                } else if(State == STATE.PAUSE) {
-                    pause.render(this, gameRender);
+                } else if(State == STATE.GAMEMENU) {
+                    gameMenu.render(this, gameRender);
                 }
 
-                if(State == STATE.MENU || (State == STATE.OPT && lastState == 0)) {
+                if(State == STATE.MAINMENU || (State == STATE.OPT && lastState == 0)) {
                     gameRender.drawText(title + " Beta1.8", 0, getHeight(), 1, -1, 0xffababab);
                     gameRender.drawText("Strozor INC.", getWidth(), getHeight(), -1, -1, 0xffababab);
                 }
@@ -198,9 +198,9 @@ public class GameContainer implements Runnable {
     public void setState(int value) {
         switch(value) {
             case -1: State = STATE.EXIT; break;
-            case 0: State = STATE.MENU; break;
+            case 0: State = STATE.MAINMENU; break;
             case 1: State = STATE.GAME; break;
-            case 2: State = STATE.PAUSE; break;
+            case 2: State = STATE.GAMEMENU; break;
             case 3: State = STATE.OPT; break;
         }
     }

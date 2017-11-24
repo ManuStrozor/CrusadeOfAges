@@ -29,9 +29,9 @@ public class Options extends AbstractGame {
         hover = new SoundClip("/audio/hover.wav");
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(fps = new Button(130, 20, "Montrer les FPS", 0));
-        buttons.add(lights = new Button(130, 20, "Desactiver la lumiere", 0));
-        buttons.add(back = new Button(130, 20, "Retour", 0));
+        buttons.add(fps = new Button(130, 20, "Show FPS", 0));
+        buttons.add(lights = new Button(130, 20, "Disable lights", 0));
+        buttons.add(back = new Button(130, 20, "Back", 0));
     }
 
     @Override
@@ -57,20 +57,20 @@ public class Options extends AbstractGame {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                 if(settings.isShowFps()) {
                     settings.setShowFps(false);
-                    fps.setText("Montrer les FPS");
+                    fps.setText("Show FPS");
                 } else {
                     settings.setShowFps(true);
-                    fps.setText("Cacher les FPS");
+                    fps.setText("Hide FPS");
                 }
             }
         } else if(mouseIsHover(gc, lights)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                 if(settings.isShowLights()) {
                     settings.setShowLights(false);
-                    lights.setText("Activer la lumiere");
+                    lights.setText("Enable lights");
                 } else {
                     settings.setShowLights(true);
-                    lights.setText("Desactiver la lumiere");
+                    lights.setText("Disable lights");
                 }
             }
         } else if(mouseIsHover(gc, back)) {
@@ -98,7 +98,7 @@ public class Options extends AbstractGame {
         lights.setOffY(fps.getOffY() + fps.getHeight() + 10);
 
         back.setOffX(lights.getOffX());
-        back.setOffY(lights.getOffY() + lights.getHeight() + 10);
+        back.setOffY(lights.getOffY() + lights.getHeight() + 20);
 
         for(Button btn : buttons) r.drawButton(btn, 0xffababab);
     }
