@@ -16,7 +16,7 @@ public class Menu extends AbstractGame {
     private SoundClip hover, select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, crea, opt, exit;
+    private Button play, opt, exit;
 
     public Menu() {
         background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
@@ -25,7 +25,6 @@ public class Menu extends AbstractGame {
         select = new SoundClip("/audio/select.wav");
 
         buttons.add(play = new Button(130, 20, "Un joueur", 1));
-        buttons.add(crea = new Button(130, 20, "Creer un niveau", 4));
         buttons.add(opt = new Button(60, 20, "Options", 3));
         buttons.add(exit = new Button(60, 20, "Quitter", -1));
     }
@@ -64,11 +63,8 @@ public class Menu extends AbstractGame {
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
 
-        crea.setOffX(play.getOffX());
-        crea.setOffY(play.getOffY() + play.getHeight() + 10);
-
         opt.setOffX(play.getOffX());
-        opt.setOffY(crea.getOffY() + crea.getHeight() + 10);
+        opt.setOffY(play.getOffY() + play.getHeight() + 10);
 
         exit.setOffX(gc.getWidth() / 2 + 5);
         exit.setOffY(opt.getOffY());

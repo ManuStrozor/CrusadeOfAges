@@ -21,7 +21,7 @@ public class Pause extends AbstractGame {
         hover = new SoundClip("/audio/hover.wav");
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(play = new Button(130, 20, "Continuer", 0));
+        buttons.add(play = new Button(130, 20, "Continuer", 1));
         buttons.add(opt = new Button(130, 20, "Options", 3));
         buttons.add(menu = new Button(130, 20, "Menu principal", 0));
     }
@@ -29,7 +29,7 @@ public class Pause extends AbstractGame {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
@@ -40,10 +40,7 @@ public class Pause extends AbstractGame {
                 btn.setBgColor(0x99c0392b);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
-                    if(btn == play)
-                        gc.setState(gc.getLastState());
-                    else
-                        gc.setState(btn.getGoState());
+                    gc.setState(btn.getGoState());
                     gc.setLastState(2);
                 }
             } else {

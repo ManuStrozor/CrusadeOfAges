@@ -2,7 +2,6 @@ package com.strozor.engine;
 
 import com.strozor.game.GameManager;
 import com.strozor.game.Menu;
-import com.strozor.game.Crea;
 import com.strozor.game.Options;
 import com.strozor.game.Pause;
 
@@ -14,7 +13,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings settings;
-    private AbstractGame menu, crea, opt, game, pause;
+    private AbstractGame menu, opt, game, pause;
 
     private boolean running = false;
     private int width, height;
@@ -26,7 +25,6 @@ public class GameContainer implements Runnable {
         OPT,
         GAME,
         PAUSE,
-        CREA,
         EXIT
     }
 
@@ -35,7 +33,6 @@ public class GameContainer implements Runnable {
 
     public GameContainer(AbstractGame game) {
         this.menu = new Menu();
-        this.crea = new Crea();
         this.settings = new Settings();
         this.opt = new Options(settings);
         this.game = game;
@@ -87,8 +84,6 @@ public class GameContainer implements Runnable {
 
                 if(State == STATE.MENU) {
                     menu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.CREA) {
-                    crea.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OPT) {
                     opt.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAME) {
@@ -109,7 +104,7 @@ public class GameContainer implements Runnable {
             if(render) {
                 gameRender.clear();
 
-                if(State == STATE.GAME || (State == STATE.PAUSE && lastState == 1) || (State == STATE.OPT && lastState == 2)) {
+                if(State == STATE.GAME || State == STATE.PAUSE || (State == STATE.OPT && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCamX(0);
                     gameRender.setCamY(0);
@@ -121,8 +116,6 @@ public class GameContainer implements Runnable {
 
                 if(State == STATE.MENU) {
                     menu.render(this, gameRender);
-                } else if(State == STATE.CREA) {
-                    crea.render(this, gameRender);
                 } else if(State == STATE.OPT) {
                     opt.render(this, gameRender);
                 } else if(State == STATE.PAUSE) {
@@ -209,7 +202,6 @@ public class GameContainer implements Runnable {
             case 1: State = STATE.GAME; break;
             case 2: State = STATE.PAUSE; break;
             case 3: State = STATE.OPT; break;
-            case 4: State = STATE.CREA; break;
         }
     }
 }

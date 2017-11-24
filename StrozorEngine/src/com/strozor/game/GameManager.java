@@ -55,10 +55,7 @@ public class GameManager extends AbstractGame {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            gc.setState(2);
-            gc.setLastState(1);
-        }
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
 
         for(int i = 0; i < objects.size(); i++) {
             objects.get(i).update(gc, this, dt);
