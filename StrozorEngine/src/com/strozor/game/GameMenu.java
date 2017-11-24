@@ -23,7 +23,7 @@ public class GameMenu extends AbstractGame {
 
         buttons.add(play = new Button(130, 20, "Back to game", 1));
         buttons.add(opt = new Button(130, 20, "Options", 3));
-        buttons.add(menu = new Button(130, 20, "Save & Quit to title", 0));
+        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
     }
 
     @Override
@@ -53,16 +53,14 @@ public class GameMenu extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
-
-        opt.setOffX(play.getOffX());
         opt.setOffY(play.getOffY() + play.getHeight() + 10);
+        menu.setOffY(opt.getOffY() + opt.getHeight() + 10);
 
-        menu.setOffX(play.getOffX());
-        menu.setOffY(opt.getOffY() + opt.getHeight() + 20);
-
-        for(Button btn : buttons) r.drawButton(btn, 0xffababab);
+        for(Button btn : buttons) {
+            btn.setOffX(gc.getWidth() / 2 - btn.getWidth() / 2);
+            r.drawButton(btn, 0xffababab);
+        }
     }
 
     private boolean mouseIsHover(GameContainer gc, Button b) {

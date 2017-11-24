@@ -98,7 +98,7 @@ public class Options extends AbstractGame {
         lights.setOffY(fps.getOffY() + fps.getHeight() + 10);
 
         back.setOffX(lights.getOffX());
-        back.setOffY(lights.getOffY() + lights.getHeight() + 20);
+        back.setOffY(lights.getOffY() + lights.getHeight() + 10);
 
         for(Button btn : buttons) r.drawButton(btn, 0xffababab);
     }
