@@ -13,18 +13,18 @@ import java.util.ArrayList;
 public class MainMenu extends AbstractGame {
 
     private ImageTile background;
-    private SoundClip hover, select;
+    private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, opt, exit;
+    private Button play, crea, opt, exit;
 
     public MainMenu() {
         background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
 
-        hover = new SoundClip("/audio/hover.wav");
-        select = new SoundClip("/audio/select.wav");
+        select = new SoundClip("/audio/hover.wav");
 
         buttons.add(play = new Button(130, 20, "Single player", 1));
+        buttons.add(crea = new Button(130, 20, "Creative Mode", 4));
         buttons.add(opt = new Button(60, 20, "Options", 3));
         buttons.add(exit = new Button(60, 20, "Quit game", -1));
     }
@@ -34,10 +34,6 @@ public class MainMenu extends AbstractGame {
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
-                if(!btn.isHoverSounded()) {
-                    hover.stop();
-                    hover.play();
-                }
                 btn.setBgColor(0x99c0392b);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
@@ -47,7 +43,6 @@ public class MainMenu extends AbstractGame {
             } else {
                 btn.setBgColor(0x997f8c8d);
             }
-            btn.setHoverSounded(mouseIsHover(gc, btn));
         }
     }
 
@@ -63,8 +58,11 @@ public class MainMenu extends AbstractGame {
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
 
-        opt.setOffX(play.getOffX());
-        opt.setOffY(play.getOffY() + play.getHeight() + 10);
+        crea.setOffX(play.getOffX());
+        crea.setOffY(play.getOffY() + play.getHeight() + 10);
+
+        opt.setOffX(crea.getOffX());
+        opt.setOffY(crea.getOffY() + crea.getHeight() + 10);
 
         exit.setOffX(gc.getWidth() / 2 + 5);
         exit.setOffY(opt.getOffY());

@@ -17,7 +17,7 @@ public class Options extends AbstractGame {
     private Settings settings;
     private ImageTile background;
 
-    private SoundClip hover, select;
+    private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button fps, lights, back;
@@ -26,8 +26,7 @@ public class Options extends AbstractGame {
         this.settings = settings;
         background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
 
-        hover = new SoundClip("/audio/hover.wav");
-        select = new SoundClip("/audio/select.wav");
+        select = new SoundClip("/audio/hover.wav");
 
         buttons.add(fps = new Button(130, 20, "Show FPS", 0));
         buttons.add(lights = new Button(130, 20, "Disable lights", 0));
@@ -41,16 +40,11 @@ public class Options extends AbstractGame {
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
-                if(!btn.isHoverSounded()) {
-                    hover.stop();
-                    hover.play();
-                }
                 btn.setBgColor(0x99c0392b);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) select.play();
             } else {
                 btn.setBgColor(0x997f8c8d);
             }
-            btn.setHoverSounded(mouseIsHover(gc, btn));
         }
 
         if(mouseIsHover(gc, fps)) {

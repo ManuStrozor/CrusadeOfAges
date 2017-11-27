@@ -27,6 +27,12 @@ public class Image {
         image.flush();
     }
 
+    public Image(int[] p, int w, int h) {
+        this.p = p;
+        this.w = w;
+        this.h = h;
+    }
+
     // External Images
     public Image(String path, boolean test) {
         BufferedImage image = null;
@@ -43,43 +49,24 @@ public class Image {
 
         image.flush();
     }
-    // External Images
-
-    public Image(int[] p, int w, int h) {
-        this.p = p;
-        this.w = w;
-        this.h = h;
-    }
 
     public int getW() {
         return w;
-    }
-
-    public void setW(int w) {
-        this.w = w;
     }
 
     public int getH() {
         return h;
     }
 
-    public void setH(int h) {
-        this.h = h;
-    }
-
     public int[] getP() {
         return p;
     }
 
-    public void setP(int[] p) {
-        this.p = p;
+    public void setP(int x, int y, int value) {
+        this.p[x + y * getW()] = value;
     }
 
     public boolean isAlpha() {
         return alpha;
-    }
-
-    public void setAlpha(boolean alpha) {
-        this.alpha = alpha;
     }
 }

@@ -4,6 +4,8 @@ import com.strozor.game.GameManager;
 import com.strozor.game.MainMenu;
 import com.strozor.game.GameMenu;
 import com.strozor.game.Options;
+import com.strozor.game.Crea;
+import com.strozor.game.CreaMenu;
 
 public class GameContainer implements Runnable {
 
@@ -13,7 +15,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings settings;
-    private AbstractGame mainMenu, opt, game, gameMenu;
+    private AbstractGame mainMenu, game, gameMenu, opt, crea, creaMenu;
 
     private boolean running = false;
     private int width, height;
@@ -25,6 +27,8 @@ public class GameContainer implements Runnable {
         OPT,
         GAME,
         GAMEMENU,
+        CREA,
+        CREAMENU,
         EXIT
     }
 
@@ -38,6 +42,8 @@ public class GameContainer implements Runnable {
         this.game = game;
         this.gm = (GameManager) game;
         this.gameMenu = new GameMenu();
+        this.crea = new Crea();
+        this.creaMenu = new CreaMenu();
     }
 
     public synchronized void start() {
@@ -90,6 +96,10 @@ public class GameContainer implements Runnable {
                     game.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAMEMENU) {
                     gameMenu.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.CREA) {
+                    crea.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.CREAMENU) {
+                    creaMenu.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -112,6 +122,10 @@ public class GameContainer implements Runnable {
                         gameRender.process();
                     if(gm.getObject("player") != null)
                         gameRender.drawGameStates(gm);
+                } else if(State == STATE.CREA || State == STATE.CREAMENU || (State == STATE.OPT && lastState == 5)) {
+                    crea.render(this, gameRender);
+                    gameRender.setCamX(0);
+                    gameRender.setCamY(0);
                 }
 
                 if(State == STATE.MAINMENU) {
@@ -120,6 +134,8 @@ public class GameContainer implements Runnable {
                     opt.render(this, gameRender);
                 } else if(State == STATE.GAMEMENU) {
                     gameMenu.render(this, gameRender);
+                } else if(State == STATE.CREAMENU) {
+                    creaMenu.render(this, gameRender);
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPT && lastState == 0)) {
@@ -202,6 +218,8 @@ public class GameContainer implements Runnable {
             case 1: State = STATE.GAME; break;
             case 2: State = STATE.GAMEMENU; break;
             case 3: State = STATE.OPT; break;
+            case 4: State = STATE.CREA; break;
+            case 5: State = STATE.CREAMENU; break;
         }
     }
 }

@@ -10,17 +10,17 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class GameMenu extends AbstractGame {
+public class CreaMenu extends AbstractGame {
 
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, opt, menu;
+    private Button crea, opt, menu;
 
-    public GameMenu() {
+    public CreaMenu() {
         select = new SoundClip("/audio/hover.wav");
 
-        buttons.add(play = new Button(130, 20, "Back to game", 1));
+        buttons.add(crea = new Button(130, 20, "Back to creative mode", 4));
         buttons.add(opt = new Button(130, 20, "Options", 3));
         buttons.add(menu = new Button(130, 20, "Quit to title", 0));
     }
@@ -28,7 +28,7 @@ public class GameMenu extends AbstractGame {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
@@ -36,7 +36,7 @@ public class GameMenu extends AbstractGame {
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
                     gc.setState(btn.getGoState());
-                    gc.setLastState(2);
+                    gc.setLastState(5);
                 }
             } else {
                 btn.setBgColor(0x997f8c8d);
@@ -47,8 +47,8 @@ public class GameMenu extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
-        opt.setOffY(play.getOffY() + play.getHeight() + 10);
+        crea.setOffY(gc.getHeight() / 3 - crea.getHeight() / 2);
+        opt.setOffY(crea.getOffY() + crea.getHeight() + 10);
         menu.setOffY(opt.getOffY() + opt.getHeight() + 10);
 
         for(Button btn : buttons) {
