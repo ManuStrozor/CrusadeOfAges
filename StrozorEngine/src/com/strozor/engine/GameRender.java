@@ -315,6 +315,30 @@ public class GameRender {
         drawText("x"+obj.getKeys(), gm.TS, gm.TS * 3, 1, -1,-1);
     }
 
+    public void drawDock(int offX, int offY, ImageTile objectsImage, int ts, int[] elems, int selected) {
+
+        int tileX = 0, tileY = 0;
+
+        drawRect(offX, offY, elems.length * ts + 1, ts + 1, 0xff999999);
+
+        for(int i = 0; i < elems.length; i++) {
+            switch(elems[i]) {
+                case 1: tileX = 0; tileY = 0; break;
+                case 2: tileX = 3; tileY = 2; break;
+                case 3: tileX = 1; tileY = 1; break;
+                case 4: tileX = 2; tileY = 1; break;
+                case 5: tileX = 3; tileY = 1; break;
+                case 6: tileX = 3; tileY = 0; break;
+                case 7: tileX = 5; tileY = 0; break;
+                case 11: tileX = 4; tileY = 0; break;
+                case 12: tileX = 0; tileY = 2; break;
+                case 13: tileX = 4; tileY = 4; break;
+            }
+            drawImageTile(objectsImage, offX + 1 + ts * i, offY + 1, tileX, tileY);
+        }
+        drawRect(offX + ts * selected, offY, ts + 1, ts + 1, 0xff00ff00);
+    }
+
     public void setCamX(int camX) {
         this.camX = camX;
     }

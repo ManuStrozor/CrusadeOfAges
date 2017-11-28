@@ -17,9 +17,12 @@ public class Crea extends AbstractGame {
     private ImageTile objectsImage = new ImageTile("/objects.png", TS, TS);
 
     private int[] bloc;
+    private int[] elems = {1, 2, 3, 4, 5, 6, 7, 11, 12, 13};
+    private int selected = 0;
+    private int sltColor = 0xff000000;
 
     public Crea() {
-        creaMap = new Image(new int[1800], 35, 20);
+        creaMap = new Image(new int[1800], 60, 30);
         bloc = new int[creaMap.getW() * creaMap.getH()];
     }
 
@@ -27,8 +30,26 @@ public class Crea extends AbstractGame {
     public void update(GameContainer gc, float dt) {
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
 
+        if(gc.getInput().getScroll() > 0)
+            selected = (selected == elems.length - 1) ? 0 : selected + 1;
+        else if(gc.getInput().getScroll() < 0)
+            selected = (selected == 0) ? elems.length - 1 : selected - 1;
+
+        switch(elems[selected]) {
+            case 1: sltColor = 0xff000000; break;
+            case 2: sltColor = 0xffff648c; break;
+            case 3: sltColor = 0xffff0000; break;
+            case 4: sltColor = 0xffff00ff; break;
+            case 5: sltColor = 0xff0000ff; break;
+            case 6: sltColor = 0xffff7700; break;
+            case 7: sltColor = 0xffffff00; break;
+            case 11: sltColor = 0xff00ffff; break;
+            case 12: sltColor = 0xff777777; break;
+            case 13: sltColor = 0xff999999; break;
+        }
+
         if(gc.getInput().isButton(MouseEvent.BUTTON1))
-            creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, 0xff000000);
+            creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, sltColor);
         else if(gc.getInput().isButton(MouseEvent.BUTTON3))
             creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, -1);
 
@@ -60,7 +81,7 @@ public class Crea extends AbstractGame {
             }
         }
 
-
+        r.drawDock(gc.getWidth() / 2 - (elems.length * TS) / 2, gc.getHeight() - TS - 3, objectsImage, TS, elems, selected);
     }
 
     public void updateMap() {
