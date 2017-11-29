@@ -2,6 +2,7 @@ package com.strozor.engine;
 
 import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
+import com.strozor.game.Crea;
 import com.strozor.game.GameObject;
 
 import java.awt.image.DataBufferInt;
@@ -315,14 +316,15 @@ public class GameRender {
         drawText("x"+obj.getKeys(), gm.TS, gm.TS * 3, 1, -1,-1);
     }
 
-    public void drawDock(int offX, int offY, ImageTile objectsImage, int ts, int[] elems, int selected) {
+    public void drawDock(int offX, int offY, ImageTile objectsImage, int[] elems, int selected) {
 
         int tileX = 0, tileY = 0;
 
-        drawRect(offX, offY, elems.length * ts + 1, ts + 1, 0xff999999);
+        drawRect(offX, offY, elems.length * Crea.TS + 1, Crea.TS + 1, 0xff999999);
 
         for(int i = 0; i < elems.length; i++) {
             switch(elems[i]) {
+                case 0: tileX = 2; tileY = 0; break;
                 case 1: tileX = 0; tileY = 0; break;
                 case 2: tileX = 3; tileY = 2; break;
                 case 3: tileX = 1; tileY = 1; break;
@@ -334,9 +336,25 @@ public class GameRender {
                 case 12: tileX = 0; tileY = 2; break;
                 case 13: tileX = 4; tileY = 4; break;
             }
-            drawImageTile(objectsImage, offX + 1 + ts * i, offY + 1, tileX, tileY);
+            drawImageTile(objectsImage, offX + 1 + Crea.TS * i, offY + 1, tileX, tileY);
         }
-        drawRect(offX + ts * selected, offY, ts + 1, ts + 1, 0xff00ff00);
+        drawRect(offX + Crea.TS * selected, offY, Crea.TS + 1, Crea.TS + 1, 0xff00ff00);
+
+        String sltText = "";
+        switch(elems[selected]) {
+            case 0: sltText = "spawn"; break;
+            case 1: sltText = "walls"; break;
+            case 2: sltText = "heart"; break;
+            case 3: sltText = "skewer top"; break;
+            case 4: sltText = "skewer down"; break;
+            case 5: sltText = "level key"; break;
+            case 6: sltText = "check point"; break;
+            case 7: sltText = "coin"; break;
+            case 11: sltText = "torch"; break;
+            case 12: sltText = "bouncing"; break;
+            case 13: sltText = "exit door"; break;
+        }
+        drawText(sltText, offX, offY, 1, -1, -1);
     }
 
     public void setCamX(int camX) {

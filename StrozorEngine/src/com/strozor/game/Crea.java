@@ -12,12 +12,12 @@ import java.awt.event.MouseEvent;
 public class Crea extends AbstractGame {
 
     public static final int TS = 16;
+    public static Image creaMap;
 
-    private Image creaMap;
     private ImageTile objectsImage = new ImageTile("/objects.png", TS, TS);
 
     private int[] bloc;
-    private int[] elems = {1, 2, 3, 4, 5, 6, 7, 11, 12, 13};
+    private int[] elems = {0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13};
     private int selected = 0;
     private int sltColor = 0xff000000;
 
@@ -36,6 +36,7 @@ public class Crea extends AbstractGame {
             selected = (selected == 0) ? elems.length - 1 : selected - 1;
 
         switch(elems[selected]) {
+            case 0: sltColor = 0xff00ff00; break;
             case 1: sltColor = 0xff000000; break;
             case 2: sltColor = 0xffff648c; break;
             case 3: sltColor = 0xffff0000; break;
@@ -48,10 +49,10 @@ public class Crea extends AbstractGame {
             case 13: sltColor = 0xff999999; break;
         }
 
-        if(gc.getInput().isButton(MouseEvent.BUTTON1))
+        if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
             creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, sltColor);
         else if(gc.getInput().isButton(MouseEvent.BUTTON3))
-            creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, -1);
+            creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, 0x00000000);
 
         updateMap();
     }
@@ -64,6 +65,7 @@ public class Crea extends AbstractGame {
                 int index = x + y * creaMap.getW();
                 if(bloc[index] != 1 || bloc[index] == -1) r.drawImageTile(objectsImage, x * TS, y * TS, 1, 0);
                 switch(bloc[index]) {
+                    case 0: r.drawImageTile(objectsImage, x * TS, y * TS, 2, 0); break;
                     case 1: r.drawImageTile(objectsImage, x * TS, y * TS, 0, 0); break;
                     case 2: r.drawImageTile(objectsImage, x * TS, y * TS, 3, 2); break;
                     case 3: r.drawImageTile(objectsImage, x * TS, y * TS, 1, 1); break;
@@ -81,7 +83,7 @@ public class Crea extends AbstractGame {
             }
         }
 
-        r.drawDock(gc.getWidth() / 2 - (elems.length * TS) / 2, gc.getHeight() - TS - 3, objectsImage, TS, elems, selected);
+        r.drawDock(gc.getWidth() / 2 - (elems.length * TS) / 2, gc.getHeight() - TS - 3, objectsImage, elems, selected);
     }
 
     public void updateMap() {
@@ -90,7 +92,7 @@ public class Crea extends AbstractGame {
             for(int x = 0; x < creaMap.getW(); x++) {
                 index = x + y * creaMap.getW();
                 switch(creaMap.getP()[index]) {
-                    case -1://empty
+                    case 0x00000000://empty
                         bloc[index] = -1;
                         break;
                     case 0xff00ff00://spawn
