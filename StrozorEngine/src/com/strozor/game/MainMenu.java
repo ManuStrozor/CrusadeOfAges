@@ -4,6 +4,7 @@ import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
+import com.strozor.engine.gfx.Font;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Button;
 
@@ -54,6 +55,8 @@ public class MainMenu extends AbstractGame {
                 r.drawImageTile(background, x * GameManager.TS, y * GameManager.TS, 1, 0);
             }
         }
+
+        r.drawText("SKEWER MAKER", gc.getWidth() / 2, 50, 0, 1, 0x77f90000, Font.BIG_STANDARD);
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
