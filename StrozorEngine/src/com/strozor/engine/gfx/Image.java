@@ -5,6 +5,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
 
+import javax.swing.JOptionPane;
+
 public class Image {
 
     private int w, h;
@@ -70,7 +72,27 @@ public class Image {
         return alpha;
     }
 
-    public void saveImage(String filename) {
+    public void saveImage() {
+        JOptionPane jop = new JOptionPane(), jop2 = new JOptionPane();
+
+        String filename = jop.showInputDialog(null,
+                "Give a name to your level map",
+                "Skewer Maker - Creative Mode",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if(filename == null || filename.equals("")) {
+            filename = "creativeMode";
+            jop2.showMessageDialog(null,
+                    "Default : " + filename + ".png",
+                    "Skewer Maker - Creative Mode",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            jop2.showMessageDialog(null,
+                    filename + ".png",
+                    "Skewer Maker - Creative Mode",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+
         try {
             BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             for(int y = 0; y < h; y++) {

@@ -49,7 +49,7 @@ public class Crea extends AbstractGame {
             case 13: sltColor = 0xff999999; break;
         }
 
-        if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
+        if(gc.getInput().isButton(MouseEvent.BUTTON1))
             creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, sltColor);
         else if(gc.getInput().isButton(MouseEvent.BUTTON3))
             creaMap.setP(gc.getInput().getMouseX() / TS, gc.getInput().getMouseY() / TS, 0x00000000);
