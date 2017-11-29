@@ -3,6 +3,7 @@ package com.strozor.engine.gfx;
 public class Font {
 
     public static final Font STANDARD = new Font("/fonts/standard.png");
+    public static final Font BIG_STANDARD = new Font("/fonts/big_standard.png");
 
     private Image fontImage;
     private int[] offsets;
@@ -22,6 +23,10 @@ public class Font {
             if(!next && fontImage.getP()[i] == 0xff0000ff) {
                 widths[unicode] = i - offsets[unicode];
                 unicode++;
+            } else if(fontImage.getP()[i] == 0xffff0000) {
+                widths[unicode] = i - offsets[unicode];
+                unicode++;
+                next = true;
             }
 
             if(unicode < offsets.length && fontImage.getP()[i] == 0xff0000ff) {

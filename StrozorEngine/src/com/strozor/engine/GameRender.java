@@ -12,7 +12,6 @@ import java.util.Comparator;
 
 public class GameRender {
 
-    private Font font = Font.STANDARD;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
     private int pW, pH;
@@ -111,7 +110,7 @@ public class GameRender {
         lm[x + y * pW] = maxR << 16 | maxG << 8 | maxB;
     }
 
-    public void drawText(String text, int offX, int offY, int alignX, int alignY, int color) {
+    public void drawText(String text, int offX, int offY, int alignX, int alignY, int color, Font font) {
 
         if(alignX != 1) {
             int textW = 0;
@@ -132,7 +131,7 @@ public class GameRender {
 
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
-                    if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == -1) {
+                    if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
                         setPixel(x + offX + offset, y + offY, color);
                     }
                 }
@@ -251,7 +250,7 @@ public class GameRender {
     public void drawButton(Button b, int color) {
         drawRect(b.getOffX(), b.getOffY(), b.getWidth(), b.getHeight(), color);
         fillRect(b.getOffX()+1, b.getOffY()+1, b.getWidth()-1, b.getHeight()-1, b.getBgColor());
-        drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, color);
+        drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, color, Font.STANDARD);
     }
 
     public void drawLight(Light l, int offX, int offY) {
@@ -307,13 +306,13 @@ public class GameRender {
         GameObject obj = gm.getObject("player");
 
         drawImageTile(gm.getObjectsImage(), camX, camY, 3, 2);
-        drawText("x"+obj.getLives(), gm.TS, gm.TS, 1, -1,-1);
+        drawText("x"+obj.getLives(), gm.TS, gm.TS, 1, -1,-1, Font.STANDARD);
 
         drawImageTile(gm.getObjectsImage(), camX, camY + 16, 5, 0);
-        drawText("x"+obj.getCoins(), gm.TS, gm.TS * 2, 1, -1,-1);
+        drawText("x"+obj.getCoins(), gm.TS, gm.TS * 2, 1, -1,-1, Font.STANDARD);
 
         drawImageTile(gm.getObjectsImage(), camX, camY + 32, 3, 1);
-        drawText("x"+obj.getKeys(), gm.TS, gm.TS * 3, 1, -1,-1);
+        drawText("x"+obj.getKeys(), gm.TS, gm.TS * 3, 1, -1,-1, Font.STANDARD);
     }
 
     public void drawDock(int offX, int offY, ImageTile objectsImage, int[] elems, int selected) {
@@ -354,7 +353,7 @@ public class GameRender {
             case 12: sltText = "bouncing"; break;
             case 13: sltText = "exit door"; break;
         }
-        drawText(sltText, offX, offY, 1, -1, -1);
+        drawText(sltText, offX, offY, 1, -1, -1, Font.STANDARD);
     }
 
     public void setCamX(int camX) {

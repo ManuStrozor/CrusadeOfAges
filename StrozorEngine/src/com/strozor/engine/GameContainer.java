@@ -1,5 +1,6 @@
 package com.strozor.engine;
 
+import com.strozor.engine.gfx.Font;
 import com.strozor.game.GameManager;
 import com.strozor.game.MainMenu;
 import com.strozor.game.GameMenu;
@@ -139,12 +140,12 @@ public class GameContainer implements Runnable {
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPT && lastState == 0)) {
-                    gameRender.drawText(title + " Beta1.8", 0, getHeight(), 1, -1, 0xffababab);
-                    gameRender.drawText("Strozor INC.", getWidth(), getHeight(), -1, -1, 0xffababab);
+                    gameRender.drawText(title + " Beta1.8", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText("Strozor INC.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 
                 if(settings.isShowFps())
-                    gameRender.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab);
+                    gameRender.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
 
                 window.update();
                 frames++;
