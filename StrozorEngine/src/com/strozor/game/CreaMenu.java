@@ -15,13 +15,14 @@ public class CreaMenu extends AbstractGame {
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button crea, opt, menu;
+    private Button crea, opt, save, menu;
 
     public CreaMenu() {
         select = new SoundClip("/audio/hover.wav");
 
         buttons.add(crea = new Button(130, 20, "Back to creative mode", 4));
         buttons.add(opt = new Button(130, 20, "Options", 3));
+        buttons.add(save = new Button(130, 20, "Save level to saved.png", -1));
         buttons.add(menu = new Button(130, 20, "Quit to title", 0));
     }
 
@@ -34,6 +35,8 @@ public class CreaMenu extends AbstractGame {
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0x99c0392b);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
+                    if(btn == save)
+                        Crea.creaMap.saveImage("saved");
                     select.play();
                     gc.setState(btn.getGoState());
                     gc.setLastState(5);
@@ -49,7 +52,8 @@ public class CreaMenu extends AbstractGame {
 
         crea.setOffY(gc.getHeight() / 3 - crea.getHeight() / 2);
         opt.setOffY(crea.getOffY() + crea.getHeight() + 10);
-        menu.setOffY(opt.getOffY() + opt.getHeight() + 10);
+        save.setOffY(opt.getOffY() + opt.getHeight() + 10);
+        menu.setOffY(save.getOffY() + save.getHeight() + 10);
 
         for(Button btn : buttons) {
             btn.setOffX(gc.getWidth() / 2 - btn.getWidth() / 2);

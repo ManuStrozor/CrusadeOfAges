@@ -69,4 +69,19 @@ public class Image {
     public boolean isAlpha() {
         return alpha;
     }
+
+    public void saveImage(String filename) {
+        try {
+            BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+            for(int y = 0; y < h; y++) {
+                for(int x = 0; x < w; x++) {
+                    bi.setRGB(x, y, p[x + y * w]);
+                }
+            }
+            File out = new File(filename+".png");
+            ImageIO.write(bi, "png", out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
