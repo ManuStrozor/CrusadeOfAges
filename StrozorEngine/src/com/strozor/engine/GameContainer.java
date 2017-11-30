@@ -30,6 +30,7 @@ public class GameContainer implements Runnable {
         GAMEMENU,
         CREA,
         CREAMENU,
+        CREDITS,
         EXIT
     }
 
@@ -140,7 +141,7 @@ public class GameContainer implements Runnable {
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPT && lastState == 0)) {
-                    gameRender.drawText(title + " Beta1.8", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText(title + " Beta1.8.1", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor INC.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 
@@ -221,6 +222,7 @@ public class GameContainer implements Runnable {
             case 3: State = STATE.OPT; break;
             case 4: State = STATE.CREA; break;
             case 5: State = STATE.CREAMENU; break;
+            case 6: State = STATE.CREDITS; break;
         }
     }
 }

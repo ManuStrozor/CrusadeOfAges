@@ -17,7 +17,7 @@ public class MainMenu extends AbstractGame {
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, crea, opt, exit;
+    private Button play, crea, credits, opt, exit;
 
     public MainMenu() {
         background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
@@ -26,6 +26,7 @@ public class MainMenu extends AbstractGame {
 
         buttons.add(play = new Button(130, 20, "Single player", 1));
         buttons.add(crea = new Button(130, 20, "Creative Mode", 4));
+        buttons.add(credits = new Button(130, 20, "Credits", 0));
         buttons.add(opt = new Button(60, 20, "Options", 3));
         buttons.add(exit = new Button(60, 20, "Quit game", -1));
     }
@@ -64,8 +65,11 @@ public class MainMenu extends AbstractGame {
         crea.setOffX(play.getOffX());
         crea.setOffY(play.getOffY() + play.getHeight() + 10);
 
-        opt.setOffX(crea.getOffX());
-        opt.setOffY(crea.getOffY() + crea.getHeight() + 10);
+        credits.setOffX(crea.getOffX());
+        credits.setOffY(crea.getOffY() + crea.getHeight() + 10);
+
+        opt.setOffX(credits.getOffX());
+        opt.setOffY(credits.getOffY() + credits.getHeight() + 10);
 
         exit.setOffX(gc.getWidth() / 2 + 5);
         exit.setOffY(opt.getOffY());
