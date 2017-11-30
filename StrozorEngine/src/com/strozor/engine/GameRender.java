@@ -353,8 +353,8 @@ public class GameRender {
             case 0: sltText = "Spawn"; break;
             case 1: sltText = "Wall"; break;
             case 2: sltText = "Heart"; break;
-            case 3: sltText = "Skewer top"; break;
-            case 4: sltText = "Skewer down"; break;
+            case 3: sltText = "Bottom trap"; break;
+            case 4: sltText = "Top trap"; break;
             case 5: sltText = "Key"; break;
             case 6: sltText = "Check point"; break;
             case 7: sltText = "Coin"; break;
