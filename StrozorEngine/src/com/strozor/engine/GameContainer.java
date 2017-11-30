@@ -39,6 +39,8 @@ public class GameContainer implements Runnable {
     private int lastState = 0;
 
     public GameContainer(AbstractGame game) {
+        this.game = game;
+
         this.mainMenu = new MainMenu();
         this.gameMenu = new GameMenu();
         this.overMenu = new OverMenu();
@@ -48,7 +50,6 @@ public class GameContainer implements Runnable {
         this.optsMenu = new OptsMenu(settings);
 
         this.crea = new Crea();
-        this.game = game;
         this.gm = (GameManager) game;
     }
 
@@ -122,11 +123,13 @@ public class GameContainer implements Runnable {
             if(render) {
                 gameRender.clear();
 
-                if(State == STATE.GAME || State == STATE.GAMEMENU || (State == STATE.OPTSMENU && lastState == 2)) {
+                if(State == STATE.GAME || State == STATE.GAMEMENU || State == STATE.OVERMENU || (State == STATE.OPTSMENU && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
-                    if(settings.isShowLights()) gameRender.process();
-                    if(gm.getObject("player") != null) gameRender.drawGameStates(gm);
+                    if(settings.isShowLights())
+                        gameRender.process();
+                    if(gm.getObject("player") != null)
+                        gameRender.drawGameStates(gm);
                 } else if(State == STATE.CREA || State == STATE.CREAMENU || (State == STATE.OPTSMENU && lastState == 5)) {
                     crea.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);

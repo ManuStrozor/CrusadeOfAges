@@ -74,7 +74,7 @@ public class GameManager extends AbstractGame {
         if(animCoin > 6) animCoin = 0;
 
         //Reload after Death
-        if(getObject("player") == null && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+        if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
             if(mapTester)
                 loadLevel(mapTest);
             else

@@ -25,7 +25,7 @@
       <file leaf-file-name="GameContainer.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
+            <state relative-caret-position="-44">
               <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -96,7 +96,6 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Window.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Menu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Pause.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Button.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Input.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Font.java" />
@@ -108,17 +107,18 @@
         <option value="$PROJECT_DIR$/src/com/strozor/game/MainMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/GameMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/CreaMenu.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/view/MainMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/Options.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Crea.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/GameOver.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/view/OverMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/GameObject.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Camera.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/view/MainMenu.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/view/OverMenu.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
       </list>
     </option>
   </component>
@@ -671,16 +671,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreaMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="17" column="58" lean-forward="true" selection-start-line="17" selection-start-column="58" selection-end-line="17" selection-end-column="58" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/View.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
@@ -707,48 +697,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OverMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="0" lean-forward="true" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/view/Options.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="24">
           <caret line="58" column="64" lean-forward="true" selection-start-line="58" selection-start-column="64" selection-end-line="58" selection-end-column="64" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/MainMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1210">
-          <caret line="55" column="59" lean-forward="true" selection-start-line="55" selection-start-column="59" selection-end-line="55" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/GameMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="24" column="68" lean-forward="true" selection-start-line="24" selection-start-column="68" selection-end-line="24" selection-end-column="68" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="42" lean-forward="true" selection-start-line="3" selection-start-column="42" selection-end-line="3" selection-end-column="42" />
           <folding />
         </state>
       </provider>
@@ -779,10 +731,60 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreaMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="17" column="58" lean-forward="true" selection-start-line="17" selection-start-column="58" selection-end-line="17" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/GameMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="24" column="68" lean-forward="true" selection-start-line="24" selection-start-column="68" selection-end-line="24" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/MainMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="55" column="0" lean-forward="true" selection-start-line="55" selection-start-column="0" selection-end-line="55" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="43" column="43" lean-forward="true" selection-start-line="43" selection-start-column="43" selection-end-line="43" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OverMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="286">
+          <caret line="31" column="68" lean-forward="true" selection-start-line="31" selection-start-column="68" selection-end-line="31" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2126">
-          <caret line="94" column="46" lean-forward="true" selection-start-line="94" selection-start-column="46" selection-end-line="94" selection-end-column="46" />
+        <state relative-caret-position="396">
+          <caret line="123" column="40" lean-forward="true" selection-start-line="123" selection-start-column="40" selection-end-line="123" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -791,8 +793,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-42">
-          <caret line="57" column="71" lean-forward="false" selection-start-line="57" selection-start-column="71" selection-end-line="57" selection-end-column="71" />
+        <state relative-caret-position="594">
+          <caret line="30" column="30" lean-forward="true" selection-start-line="30" selection-start-column="30" selection-end-line="30" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#getSolid#0;class#GameManager#0" expanded="false" />
@@ -813,7 +815,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
+        <state relative-caret-position="-44">
           <caret line="7" column="48" lean-forward="true" selection-start-line="7" selection-start-column="48" selection-end-line="7" selection-end-column="48" />
           <folding>
             <element signature="imports" expanded="true" />

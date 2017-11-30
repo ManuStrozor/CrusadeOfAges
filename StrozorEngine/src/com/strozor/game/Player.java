@@ -119,6 +119,8 @@ public class Player extends GameObject {
 
             if(this.lives == 0) {
                 this.setDead(true);
+                gc.setState(7);
+                gc.setLastState(1);
                 gm.getGameOver().play();
             } else {
                 pauseRes += dt * 10;

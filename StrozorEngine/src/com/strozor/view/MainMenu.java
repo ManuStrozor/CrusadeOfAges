@@ -34,7 +34,6 @@ public class MainMenu extends View {
 
     @Override
     public void update(GameContainer gc, float dt) {
-
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0x99c0392b);
