@@ -2,7 +2,6 @@ package com.strozor.engine;
 
 import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
-import com.strozor.game.Crea;
 import com.strozor.game.GameObject;
 
 import java.awt.image.DataBufferInt;
@@ -306,19 +305,40 @@ public class GameRender {
         GameObject obj = gm.getObject("player");
 
         drawImageTile(gm.getObjectsImage(), camX, camY, 3, 2);
-        drawText("x"+obj.getLives(), gm.TS, gm.TS, 1, -1,-1, Font.STANDARD);
+        drawText("x"+obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,-1, Font.STANDARD);
 
         drawImageTile(gm.getObjectsImage(), camX, camY + 16, 5, 0);
-        drawText("x"+obj.getCoins(), gm.TS, gm.TS * 2, 1, -1,-1, Font.STANDARD);
+        drawText("x"+obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,-1, Font.STANDARD);
 
         drawImageTile(gm.getObjectsImage(), camX, camY + 32, 3, 1);
-        drawText("x"+obj.getKeys(), gm.TS, gm.TS * 3, 1, -1,-1, Font.STANDARD);
+        drawText("x"+obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,-1, Font.STANDARD);
     }
 
-    public void drawDock(int offX, int offY, ImageTile objectsImage, int[] elems, int selected) {
+    public void drawBloc(int bloc, ImageTile objectsImage, int x, int y) {
+        if(bloc != 1 || bloc == -1)
+            drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 1, 0);
+        switch(bloc) {
+            case 0: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 2, 0); break;
+            case 1: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 0, 0); break;
+            case 2: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 2); break;
+            case 3: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 1, 1); break;
+            case 4: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 2, 1); break;
+            case 5: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 1); break;
+            case 6: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 0); break;
+            case 7: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 5, 0); break;
+            case 11:drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 4, 0); break;
+            case 12:drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 0, 2); break;
+            case 13:drawImageTile(objectsImage, x * GameManager.TS, (y-1) * GameManager.TS, 4, 3);
+                    drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 4, 4); break;
+        }
+    }
 
+    public void drawDock(GameContainer gc, ImageTile objectsImage, int[] elems, int selected) {
+
+        int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2;
+        int offY = gc.getHeight() - GameManager.TS - 6;
         int tileX = 0, tileY = 0;
-        int height = Crea.TS + 1;
+        int height = GameManager.TS + 1;
         int width = elems.length * (height + 4);
 
         for(int i = 0; i < elems.length; i++) {
@@ -338,7 +358,7 @@ public class GameRender {
             drawRect(offX - 3 + (height + 4) * i, offY - 3, height + 4, height + 4, 0xbbc4c4c4);
             drawRect(offX - 2 + (height + 4) * i, offY - 2, height + 2, height + 2, 0x77c4c4c4);
             drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
-            fillRect(offX + (height + 4) * i, offY, Crea.TS, Crea.TS, 0x99000000);
+            fillRect(offX + (height + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
             drawImageTile(objectsImage, offX + (height + 4) * i, offY, tileX, tileY);
         }
         drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
@@ -363,6 +383,20 @@ public class GameRender {
             case 13: sltText = "Exit door"; break;
         }
         drawText(sltText, offX + width / 2, offY - 6, 0, -1, -1, Font.STANDARD);
+    }
+
+    public void drawBackground(GameContainer gc, ImageTile objectsImage, int tileX, int tileY) {
+        for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
+            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
+                drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, tileX, tileY);
+            }
+        }
+    }
+
+    public void drawGameTitle(GameContainer gc, String bigTitle, String smallTitle) {
+        drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
+        if(smallTitle != "")
+            drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
     }
 
     public void setCamX(int camX) {
