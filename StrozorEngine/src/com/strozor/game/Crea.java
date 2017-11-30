@@ -84,7 +84,7 @@ public class Crea extends AbstractGame {
             }
         }
 
-        r.drawDock(gc.getWidth() / 2 - (elems.length * (TS + 5)) / 2, gc.getHeight() - TS - 5, objectsImage, elems, selected);
+        r.drawDock(gc.getWidth() / 2 - (elems.length * (TS + 5)) / 2, gc.getHeight() - TS - 6, objectsImage, elems, selected);
     }
 
     public void updateMap() {
