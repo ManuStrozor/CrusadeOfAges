@@ -6,7 +6,7 @@ Skewer Maker est un jeu de plate-forme 2d inspiré du magnifique Super-Meat-Boy 
 ![Screenshot](https://raw.githubusercontent.com/ManuStrozor/Skewer-Maker/master/screenshots/30.11.2017_mapTester.png)
 
 ## Versions
-* `30.11.2017` beta1.8
+* `30.11.2017` beta1.8 (https://github.com/ManuStrozor/Skewer-Maker/blob/master/versions/beta1.8.jar?raw=true)
 * `21.11.2017` beta1.7.4
 * `19.11.2017` beta1.7.3
 * `18.11.2017` beta1.7.2
