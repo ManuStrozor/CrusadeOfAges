@@ -1,8 +1,10 @@
-# Skewer Maker
+## Skewer Maker
+Skewer Maker est un jeu de plate-forme 2d...
 
+## Screenshots
 ![Screenshot](https://raw.githubusercontent.com/ManuStrozor/Skewer-Maker/master/screenshots/30.11.2017.png)
 
-Versions :
+## Versions
 * `30.11.2017` beta1.8
 * `21.11.2017` beta1.7.4
 * `19.11.2017` beta1.7.3
