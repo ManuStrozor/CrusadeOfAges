@@ -84,7 +84,8 @@ public class Options extends AbstractGame {
                     r.drawImageTile(background, x * GameManager.TS, y * GameManager.TS, 1, 0);
                 }
             }
-            r.drawText("SKEWER MAKER", gc.getWidth() / 2, 50, 0, 1, 0x77f90000, Font.BIG_STANDARD);
+            r.drawText("SKEWER MAKER", gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
+            r.drawText("version beta", gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
         }
 
         fps.setOffX(gc.getWidth() / 2 - fps.getWidth() / 2);
