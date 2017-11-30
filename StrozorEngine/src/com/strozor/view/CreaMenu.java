@@ -1,16 +1,17 @@
-package com.strozor.game;
+package com.strozor.view;
 
-import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
+import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
+import com.strozor.game.Crea;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class CreaMenu extends AbstractGame {
+public class CreaMenu extends View {
 
     private SoundClip select;
 
@@ -57,12 +58,5 @@ public class CreaMenu extends AbstractGame {
             btn.setOffX(gc.getWidth() / 2 - btn.getWidth() / 2);
             r.drawButton(btn, 0xffababab);
         }
-    }
-
-    private boolean mouseIsHover(GameContainer gc, Button b) {
-        return gc.getInput().getMouseX() > b.getOffX()+1 &&
-                gc.getInput().getMouseX() <= b.getOffX() + b.getWidth() &&
-                gc.getInput().getMouseY() > b.getOffY()+1 &&
-                gc.getInput().getMouseY() <= b.getOffY() + b.getHeight();
     }
 }

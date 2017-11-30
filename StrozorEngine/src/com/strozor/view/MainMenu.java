@@ -1,32 +1,33 @@
-package com.strozor.game;
+package com.strozor.view;
 
-import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
+import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Font;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Button;
+import com.strozor.game.GameManager;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class MainMenu extends AbstractGame {
+public class MainMenu extends View {
 
-    private ImageTile background;
+    private ImageTile objectsImage;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button play, crea, credits, opt, exit;
 
     public MainMenu() {
-        background = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
+        objectsImage = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
 
         select = new SoundClip("/audio/hover.wav");
 
         buttons.add(play = new Button(130, 20, "Single player", 1));
         buttons.add(crea = new Button(130, 20, "Creative Mode", 4));
         buttons.add(credits = new Button(130, 20, "Credits", 0));
+
         buttons.add(opt = new Button(60, 20, "Options", 3));
         buttons.add(exit = new Button(60, 20, "Quit game", -1));
     }
@@ -51,13 +52,8 @@ public class MainMenu extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
-            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                r.drawImageTile(background, x * GameManager.TS, y * GameManager.TS, 1, 0);
-            }
-        }
-        r.drawText("SKEWER MAKER", gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
-        r.drawText("version beta", gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
+        r.drawBackground(gc, objectsImage, 1, 0);
+        r.drawGameTitle(gc,"SKEWER MAKER", "version beta");
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
@@ -75,12 +71,5 @@ public class MainMenu extends AbstractGame {
         exit.setOffY(opt.getOffY());
 
         for(Button btn : buttons) r.drawButton(btn, 0xffababab);
-    }
-
-    private boolean mouseIsHover(GameContainer gc, Button b) {
-        return gc.getInput().getMouseX() > b.getOffX()+1 &&
-                gc.getInput().getMouseX() <= b.getOffX() + b.getWidth() &&
-                gc.getInput().getMouseY() > b.getOffY()+1 &&
-                gc.getInput().getMouseY() <= b.getOffY() + b.getHeight();
     }
 }
