@@ -37,8 +37,8 @@
       <file leaf-file-name="GameRender.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="340" column="82" lean-forward="false" selection-start-line="340" selection-start-column="82" selection-end-line="340" selection-end-column="82" />
+            <state relative-caret-position="110">
+              <caret line="329" column="52" lean-forward="true" selection-start-line="329" selection-start-column="52" selection-end-line="329" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -812,8 +812,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="340" column="82" lean-forward="false" selection-start-line="340" selection-start-column="82" selection-end-line="340" selection-end-column="82" />
+        <state relative-caret-position="110">
+          <caret line="329" column="52" lean-forward="true" selection-start-line="329" selection-start-column="52" selection-end-line="329" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
