@@ -1,4 +1,7 @@
 # Skewer Maker
+
+![Screenshot](https://raw.githubusercontent.com/ManuStrozor/Skewer-Maker/master/screenshots/30.11.2017.png)
+
 Versions :
 * (30.11.2017) beta1.8
 * (21.11.2017) beta1.7.4
@@ -12,6 +15,3 @@ Versions :
 * (13.11.2017) beta1.3
 * (12.11.2017) beta1.2
 * (11.11.2017) beta1.1
-
-Screenshots :
-![Screenshot](https://github.com/ManuStrozor/Skewer-Maker/tree/master/screenshots/30.11.2017.png:large)
