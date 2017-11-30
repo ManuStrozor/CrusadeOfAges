@@ -1,2 +1,3 @@
 # Skewer Maker
-version actuelle : beta1.8
+Versions :
+beta1.8 (30.11.2017)
