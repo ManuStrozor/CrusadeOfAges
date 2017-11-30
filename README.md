@@ -14,4 +14,4 @@ Versions :
 (11.11.2017) beta1.1
 
 Screenshots :
-![Screenshot 1](https://github.com/ManuStrozor/Skewer-Maker/tree/master/screenshots/30.11.2017.png?raw=true)
+![Screenshot 1](https://github.com/ManuStrozor/Skewer-Maker/tree/master/screenshots/30.11.2017.png:large)
