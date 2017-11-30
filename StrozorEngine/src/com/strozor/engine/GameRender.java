@@ -318,8 +318,8 @@ public class GameRender {
     public void drawDock(int offX, int offY, ImageTile objectsImage, int[] elems, int selected) {
 
         int tileX = 0, tileY = 0;
-
-        drawRect(offX, offY, elems.length * Crea.TS + 1, Crea.TS + 1, 0xff999999);
+        int height = Crea.TS + 1;
+        int width = elems.length * (height + 4);
 
         for(int i = 0; i < elems.length; i++) {
             switch(elems[i]) {
@@ -335,25 +335,34 @@ public class GameRender {
                 case 12: tileX = 0; tileY = 2; break;
                 case 13: tileX = 4; tileY = 4; break;
             }
-            drawImageTile(objectsImage, offX + 1 + Crea.TS * i, offY + 1, tileX, tileY);
+            drawRect(offX - 3 + (height + 4) * i, offY - 3, height + 4, height + 4, 0xbbc4c4c4);
+            drawRect(offX - 2 + (height + 4) * i, offY - 2, height + 2, height + 2, 0x77c4c4c4);
+            drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
+            fillRect(offX + (height + 4) * i, offY, Crea.TS, Crea.TS, 0x99000000);
+            drawImageTile(objectsImage, offX + (height + 4) * i, offY, tileX, tileY);
         }
-        drawRect(offX + Crea.TS * selected, offY, Crea.TS + 1, Crea.TS + 1, 0xff00ff00);
+        drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
+
+        drawRect(offX - 4 + (height + 4) * selected, offY - 4, height + 6, height + 5, -1);
+        drawRect(offX - 3 + (height + 4) * selected, offY - 3, height + 4, height + 4, 0xbbffffff);
+        drawRect(offX - 2 + (height + 4) * selected, offY - 2, height + 2, height + 2, 0x77ffffff);
+        drawRect(offX - 1 + (height + 4) * selected, offY - 1, height, height, 0x33ffffff);
 
         String sltText = "";
         switch(elems[selected]) {
-            case 0: sltText = "spawn"; break;
-            case 1: sltText = "walls"; break;
-            case 2: sltText = "heart"; break;
-            case 3: sltText = "skewer top"; break;
-            case 4: sltText = "skewer down"; break;
-            case 5: sltText = "level key"; break;
-            case 6: sltText = "check point"; break;
-            case 7: sltText = "coin"; break;
-            case 11: sltText = "torch"; break;
-            case 12: sltText = "bouncing"; break;
-            case 13: sltText = "exit door"; break;
+            case 0: sltText = "Spawn"; break;
+            case 1: sltText = "Wall"; break;
+            case 2: sltText = "Heart"; break;
+            case 3: sltText = "Skewer top"; break;
+            case 4: sltText = "Skewer down"; break;
+            case 5: sltText = "Key"; break;
+            case 6: sltText = "Check point"; break;
+            case 7: sltText = "Coin"; break;
+            case 11: sltText = "Torch"; break;
+            case 12: sltText = "Bouncing carpet"; break;
+            case 13: sltText = "Exit door"; break;
         }
-        drawText(sltText, offX, offY, 1, -1, -1, Font.STANDARD);
+        drawText(sltText, offX + width / 2, offY - 6, 0, -1, -1, Font.STANDARD);
     }
 
     public void setCamX(int camX) {

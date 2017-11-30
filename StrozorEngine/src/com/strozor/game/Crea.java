@@ -63,7 +63,8 @@ public class Crea extends AbstractGame {
         for(int y = 0; y < creaMap.getH(); y++) {
             for(int x = 0; x < creaMap.getW(); x++) {
                 int index = x + y * creaMap.getW();
-                if(bloc[index] != 1 || bloc[index] == -1) r.drawImageTile(objectsImage, x * TS, y * TS, 1, 0);
+                if(bloc[index] != 1 || bloc[index] == -1)
+                    r.drawImageTile(objectsImage, x * TS, y * TS, 1, 0);
                 switch(bloc[index]) {
                     case 0: r.drawImageTile(objectsImage, x * TS, y * TS, 2, 0); break;
                     case 1: r.drawImageTile(objectsImage, x * TS, y * TS, 0, 0); break;
@@ -83,51 +84,26 @@ public class Crea extends AbstractGame {
             }
         }
 
-        r.drawDock(gc.getWidth() / 2 - (elems.length * TS) / 2, gc.getHeight() - TS - 3, objectsImage, elems, selected);
+        r.drawDock(gc.getWidth() / 2 - (elems.length * (TS + 5)) / 2, gc.getHeight() - TS - 5, objectsImage, elems, selected);
     }
 
     public void updateMap() {
-        int index;
         for(int y = 0; y < creaMap.getH(); y++) {
             for(int x = 0; x < creaMap.getW(); x++) {
-                index = x + y * creaMap.getW();
+                int index = x + y * creaMap.getW();
                 switch(creaMap.getP()[index]) {
-                    case 0x00000000://empty
-                        bloc[index] = -1;
-                        break;
-                    case 0xff00ff00://spawn
-                        bloc[index] = 0;
-                        break;
-                    case 0xff000000://walls
-                        bloc[index] = 1;
-                        break;
-                    case 0xffff648c://heart
-                        bloc[index] = 2;
-                        break;
-                    case 0xffff0000://skewer top
-                        bloc[index] = 3;
-                        break;
-                    case 0xffff00ff://skewer down
-                        bloc[index] = 4;
-                        break;
-                    case 0xff0000ff://level key
-                        bloc[index] = 5;
-                        break;
-                    case 0xffff7700://check point
-                        bloc[index] = 6;
-                        break;
-                    case 0xffffff00://coin
-                        bloc[index] = 7;
-                        break;
-                    case 0xff00ffff://torch
-                        bloc[index] = 11;
-                        break;
-                    case 0xff777777://bouncing
-                        bloc[index] = 12;
-                        break;
-                    case 0xff999999://exit door
-                        bloc[index] = 13;
-                        break;
+                    case 0x00000000: bloc[index] = -1; break;//empty
+                    case 0xff00ff00: bloc[index] = 0; break;//spawn
+                    case 0xff000000: bloc[index] = 1; break;//walls
+                    case 0xffff648c: bloc[index] = 2; break;//heart
+                    case 0xffff0000: bloc[index] = 3; break;//skewer top
+                    case 0xffff00ff: bloc[index] = 4; break;//skewer down
+                    case 0xff0000ff: bloc[index] = 5; break;//level key
+                    case 0xffff7700: bloc[index] = 6; break;//check point
+                    case 0xffffff00: bloc[index] = 7; break;//coin
+                    case 0xff00ffff: bloc[index] = 11; break;//torch
+                    case 0xff777777: bloc[index] = 12; break;//bouncing
+                    case 0xff999999: bloc[index] = 13; break;//exit door
                 }
             }
         }
