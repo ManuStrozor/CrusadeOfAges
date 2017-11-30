@@ -98,16 +98,16 @@ public class GameContainer implements Runnable {
                     mainMenu.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OPTSMENU) {
                     optsMenu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.GAME) {
-                    game.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAMEMENU) {
                     gameMenu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.CREA) {
-                    crea.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.CREAMENU) {
                     creaMenu.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OVERMENU) {
                     overMenu.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.GAME) {
+                    game.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.CREA) {
+                    crea.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -124,16 +124,12 @@ public class GameContainer implements Runnable {
 
                 if(State == STATE.GAME || State == STATE.GAMEMENU || (State == STATE.OPTSMENU && lastState == 2)) {
                     game.render(this, gameRender);
-                    gameRender.setCamX(0);
-                    gameRender.setCamY(0);
-                    if (settings.isShowLights())
-                        gameRender.process();
-                    if(gm.getObject("player") != null)
-                        gameRender.drawGameStates(gm);
+                    gameRender.setCoorCam(0, 0);
+                    if(settings.isShowLights()) gameRender.process();
+                    if(gm.getObject("player") != null) gameRender.drawGameStates(gm);
                 } else if(State == STATE.CREA || State == STATE.CREAMENU || (State == STATE.OPTSMENU && lastState == 5)) {
                     crea.render(this, gameRender);
-                    gameRender.setCamX(0);
-                    gameRender.setCamY(0);
+                    gameRender.setCoorCam(0, 0);
                 }
 
                 if(State == STATE.MAINMENU) {

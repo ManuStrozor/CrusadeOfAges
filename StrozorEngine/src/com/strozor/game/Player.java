@@ -105,7 +105,7 @@ public class Player extends GameObject {
             checkPoint.play();
         }
 
-        //Hit skewers
+        //Hit trap
         if(gm.getBloc(tileX, tileY) == 3 || gm.getBloc(tileX, tileY) == 4 || gm.getBloc(tileX, tileY) == 9 || gm.getBloc(tileX, tileY) == 10) {
             if(gm.getBloc(tileX, tileY) == 3 || gm.getBloc(tileX, tileY) == 3)
                 gm.setBloc(tileX, tileY, 9);

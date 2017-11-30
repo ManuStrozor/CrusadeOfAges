@@ -46,23 +46,11 @@ public abstract class GameObject {
         return lives;
     }
 
-    public void setLives(int lives) {
-        this.lives = lives;
-    }
-
     public int getCoins() {
         return coins;
     }
 
-    public void setCoins(int coins) {
-        this.coins = coins;
-    }
-
     public int getKeys() {
         return keys;
-    }
-
-    public void setKeys(int keys) {
-        this.keys = keys;
     }
 }

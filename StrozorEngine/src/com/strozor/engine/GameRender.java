@@ -399,11 +399,8 @@ public class GameRender {
             drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
     }
 
-    public void setCamX(int camX) {
+    public void setCoorCam(int camX, int camY) {
         this.camX = camX;
-    }
-
-    public void setCamY(int camY) {
         this.camY = camY;
     }
 

@@ -27,12 +27,11 @@ public class Camera {
 
         if(offX < 0) offX = 0;
         if(offY < 0) offY = 0;
-        if(offX + gc.getWidth() > gm.getLevelW() * gm.TS) offX = gm.getLevelW() * gm.TS - gc.getWidth();
-        if(offY + gc.getHeight() > gm.getLevelH() * gm.TS) offY = gm.getLevelH() * gm.TS - gc.getHeight();
+        if(offX + gc.getWidth() > gm.getLevelW() * GameManager.TS) offX = gm.getLevelW() * GameManager.TS - gc.getWidth();
+        if(offY + gc.getHeight() > gm.getLevelH() * GameManager.TS) offY = gm.getLevelH() * GameManager.TS - gc.getHeight();
     }
 
     public void render(GameRender r) {
-        r.setCamX((int)offX);
-        r.setCamY((int)offY);
+        r.setCoorCam((int)offX, (int)offY);
     }
 }
