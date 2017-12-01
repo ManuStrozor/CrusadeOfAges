@@ -20,8 +20,8 @@ public class Crea extends AbstractGame {
     private int selected = 1;
     private int sltColor;
 
-    public Crea() {
-        creaMap = new Image(new int[1800], 60, 30);
+    public Crea(int width, int height) {
+        creaMap = new Image(new int[width * height], width, height);
         bloc = new int[creaMap.getW() * creaMap.getH()];
     }
 
@@ -47,44 +47,49 @@ public class Crea extends AbstractGame {
             case 12: sltColor = 0xff777777; break;
             case 13: sltColor = 0xff999999; break;
         }
-
-        if(gc.getInput().isButton(MouseEvent.BUTTON1))
-            creaMap.setP(gc.getInput().getMouseX() / GameManager.TS, gc.getInput().getMouseY() / GameManager.TS, sltColor);
-        else if(gc.getInput().isButton(MouseEvent.BUTTON3))
-            creaMap.setP(gc.getInput().getMouseX() / GameManager.TS, gc.getInput().getMouseY() / GameManager.TS, 0x00000000);
-
-        updateMap();
     }
 
     @Override
     public void render(GameContainer gc, GameRender r) {
+
+        if(gc.getCurrState() == 4) {
+            if(gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D)) r.setCamX(r.getCamX() + 6);
+            if(gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q)) r.setCamX(r.getCamX() - 6);
+            if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) r.setCamY(r.getCamY() + 6);
+            if(gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z)) r.setCamY(r.getCamY() - 6);
+        }
+
+        int mouseTileX = (gc.getInput().getMouseX() + r.getCamX()) / GameManager.TS;
+        int mouseTileY = (gc.getInput().getMouseY() + r.getCamY()) / GameManager.TS;
+
+        if(mouseTileX >= 0 && mouseTileX < creaMap.getW() && mouseTileY >= 0 && mouseTileY < creaMap.getH()) {
+            if(gc.getInput().isButton(MouseEvent.BUTTON1))
+                creaMap.setP(mouseTileX, mouseTileY, sltColor);
+            else if(gc.getInput().isButton(MouseEvent.BUTTON3))
+                creaMap.setP(mouseTileX, mouseTileY, 0x00000000);
+        }
+
         for(int y = 0; y < creaMap.getH(); y++) {
             for(int x = 0; x < creaMap.getW(); x++) {
-                r.drawBloc(bloc[x + y * creaMap.getW()], objectsImage, x, y);
+
+                int index = x + y * creaMap.getW();
+                switch(creaMap.getP()[index]) {
+                    case 0x00000000: bloc[index] = -1;break;//Empty
+                    case 0xff00ff00: bloc[index] = 0; break;//Spawn
+                    case 0xff000000: bloc[index] = 1; break;//Wall
+                    case 0xffff648c: bloc[index] = 2; break;//Heart
+                    case 0xffff0000: bloc[index] = 3; break;//Bottom trap
+                    case 0xffff00ff: bloc[index] = 4; break;//Top trap
+                    case 0xff0000ff: bloc[index] = 5; break;//Key
+                    case 0xffff7700: bloc[index] = 6; break;//Check point
+                    case 0xffffff00: bloc[index] = 7; break;//Coin
+                    case 0xff00ffff: bloc[index] = 11;break;//Torch
+                    case 0xff777777: bloc[index] = 12;break;//Bouncing carpet
+                    case 0xff999999: bloc[index] = 13;break;//Door
+                }
+                r.drawBloc(bloc[index], objectsImage, x, y);
             }
         }
         r.drawDock(gc, objectsImage, elems, selected);
-    }
-
-    public void updateMap() {
-        for(int y = 0; y < creaMap.getH(); y++) {
-            for(int x = 0; x < creaMap.getW(); x++) {
-                int index = x + y * creaMap.getW();
-                switch(creaMap.getP()[index]) {
-                    case 0x00000000: bloc[index] = -1;break;//empty
-                    case 0xff00ff00: bloc[index] = 0; break;//spawn
-                    case 0xff000000: bloc[index] = 1; break;//walls
-                    case 0xffff648c: bloc[index] = 2; break;//heart
-                    case 0xffff0000: bloc[index] = 3; break;//skewer top
-                    case 0xffff00ff: bloc[index] = 4; break;//skewer down
-                    case 0xff0000ff: bloc[index] = 5; break;//level key
-                    case 0xffff7700: bloc[index] = 6; break;//check point
-                    case 0xffffff00: bloc[index] = 7; break;//coin
-                    case 0xff00ffff: bloc[index] = 11;break;//torch
-                    case 0xff777777: bloc[index] = 12;break;//bouncing
-                    case 0xff999999: bloc[index] = 13;break;//exit door
-                }
-            }
-        }
     }
 }

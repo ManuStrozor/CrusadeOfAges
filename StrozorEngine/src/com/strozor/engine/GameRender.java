@@ -247,8 +247,8 @@ public class GameRender {
     }
 
     public void drawButton(Button b, int color) {
-        drawRect(b.getOffX(), b.getOffY(), b.getWidth(), b.getHeight(), color);
-        fillRect(b.getOffX()+1, b.getOffY()+1, b.getWidth()-1, b.getHeight()-1, b.getBgColor());
+        drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), color);
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-1, b.getHeight()-1, b.getBgColor());
         drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, color, Font.STANDARD);
     }
 
@@ -335,8 +335,8 @@ public class GameRender {
 
     public void drawDock(GameContainer gc, ImageTile objectsImage, int[] elems, int selected) {
 
-        int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2;
-        int offY = gc.getHeight() - GameManager.TS - 6;
+        int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2 + camX;
+        int offY = gc.getHeight() - GameManager.TS - 6 + camY;
         int tileX = 0, tileY = 0;
         int height = GameManager.TS + 1;
         int width = elems.length * (height + 4);
@@ -382,7 +382,7 @@ public class GameRender {
             case 12: sltText = "Bouncing carpet"; break;
             case 13: sltText = "Exit door"; break;
         }
-        drawText(sltText, offX + width / 2, offY - 6, 0, -1, -1, Font.STANDARD);
+        drawText(sltText, offX + width / 2 - camX, offY - 6 - camY, 0, -1, -1, Font.STANDARD);
     }
 
     public void drawBackground(GameContainer gc, ImageTile objectsImage, int tileX, int tileY) {
@@ -397,6 +397,22 @@ public class GameRender {
         drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
         if(smallTitle != "")
             drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
+    }
+
+    public int getCamX() {
+        return camX;
+    }
+
+    public void setCamX(int camX) {
+        this.camX = camX;
+    }
+
+    public int getCamY() {
+        return camY;
+    }
+
+    public void setCamY(int camY) {
+        this.camY = camY;
     }
 
     public void setCoorCam(int camX, int camY) {
