@@ -36,7 +36,7 @@ public class GameContainer implements Runnable {
     }
 
     public STATE State = STATE.MAINMENU;
-    private int lastState = 0;
+    private int currState = 0, lastState = 0;
 
     public GameContainer(AbstractGame game) {
         this.game = game;
@@ -49,7 +49,7 @@ public class GameContainer implements Runnable {
         this.settings = new Settings();
         this.optsMenu = new OptsMenu(settings);
 
-        this.crea = new Crea();
+        this.crea = new Crea(60, 30);
         this.gm = (GameManager) game;
     }
 
@@ -130,8 +130,9 @@ public class GameContainer implements Runnable {
                         gameRender.process();
                     if(gm.getObject("player") != null)
                         gameRender.drawGameStates(gm);
-                } else if(State == STATE.CREA || State == STATE.CREAMENU || (State == STATE.OPTSMENU && lastState == 5)) {
+                } else if(State == STATE.CREA || State == STATE.CREAMENU) {
                     crea.render(this, gameRender);
+                } else {
                     gameRender.setCoorCam(0, 0);
                 }
 
@@ -212,6 +213,10 @@ public class GameContainer implements Runnable {
         return settings;
     }
 
+    public int getCurrState() {
+        return currState;
+    }
+
     public int getLastState() {
         return lastState;
     }
@@ -232,5 +237,6 @@ public class GameContainer implements Runnable {
             case 6: State = STATE.CREDITS; break;
             case 7: State = STATE.OVERMENU; break;
         }
+        currState = value;
     }
 }
