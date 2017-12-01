@@ -3,7 +3,6 @@ package com.strozor.engine.gfx;
 public class Button {
 
     private int offX, offY, width, height, bgColor, goState;
-    private boolean hoverSounded = false;
     private String text;
 
     public Button(int width, int height, String text, int goState) {
@@ -11,14 +10,6 @@ public class Button {
         this.height = height;
         this.text = text;
         this.goState = goState;
-    }
-
-    public boolean isHoverSounded() {
-        return hoverSounded;
-    }
-
-    public void setHoverSounded(boolean hoverSounded) {
-        this.hoverSounded = hoverSounded;
     }
 
     public int getOffX() {
