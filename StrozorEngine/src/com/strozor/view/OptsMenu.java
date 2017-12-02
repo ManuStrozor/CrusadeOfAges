@@ -77,7 +77,7 @@ public class OptsMenu extends View {
 
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, objectsImage, 1, 0);
-            r.drawMenuTitle(gc,"SKEWER MAKER", "version beta");
+            r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), "version beta");
         }
 
         tglFps.setOffX(gc.getWidth() / 2 - tglFps.getWidth() / 2);

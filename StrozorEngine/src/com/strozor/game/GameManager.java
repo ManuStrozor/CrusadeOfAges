@@ -7,8 +7,11 @@ import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Image;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Light;
+import jdk.nashorn.internal.parser.JSONParser;
+import org.json.JSONPointer;
 
 import java.awt.event.KeyEvent;
+import java.io.FileReader;
 import java.util.ArrayList;
 
 public class GameManager extends AbstractGame {
@@ -105,7 +108,7 @@ public class GameManager extends AbstractGame {
 
     public void loadLevel(String path) {
 
-        Image levelImage = mapTester ? new Image(path, true) : new Image(path);
+        Image levelImage = new Image(path, mapTester);
         levelW = levelImage.getW();
         levelH = levelImage.getH();
         solid = new boolean[levelW * levelH];
@@ -246,7 +249,7 @@ public class GameManager extends AbstractGame {
             mapTest = args[0];
         }
         GameContainer gc = new GameContainer(new GameManager());
-        gc.setTitle("Skewer Maker");
+        gc.setTitle("Square Monster");
         gc.setScale(3f);
         gc.start();
     }

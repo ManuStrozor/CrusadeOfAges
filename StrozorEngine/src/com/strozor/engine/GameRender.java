@@ -334,7 +334,6 @@ public class GameRender {
             case 5: tileX = 3; tileY = 1; break;
             case 6: tileX = 3; tileY = 0; break;
             case 7: tileX = 5; tileY = (int)animCoin; break;
-            case 8: tileX = 0; tileY = 1; break;//blood prints
             case 9: tileX = 1; tileY = 2; break;
             case 10: tileX = 2; tileY = 2; break;
             case 11: tileX = 4; tileY = (int)animTorch; break;

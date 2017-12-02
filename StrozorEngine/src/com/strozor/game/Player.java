@@ -46,12 +46,6 @@ public class Player extends GameObject {
     @Override
     public void update(GameContainer gc, GameManager gm, float dt) {
 
-        //Blood prints
-        if(tileY + 1 < gm.getLevelH()) {
-            if (gm.getBloc(tileX, tileY + 1) == 1 && fallDist == 0)
-                gm.setBloc(tileX, tileY + 1, 8);
-        }
-
         //Bouncing block
         if(gm.getBloc(tileX, tileY) == 12 && fallDist == 0) {
             fallDist = -6;

@@ -52,7 +52,7 @@ public class MainMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, objectsImage, 1, 0);
-        r.drawMenuTitle(gc,"SKEWER MAKER", "version beta");
+        r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), "version beta");
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);

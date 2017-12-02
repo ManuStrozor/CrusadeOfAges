@@ -5,7 +5,7 @@ public class ImageTile extends Image {
     private int tileW, tileH;
 
     public ImageTile(String path, int tileW, int tileH) {
-        super(path);
+        super(path, false);
         this.tileW = tileW;
         this.tileH = tileH;
     }
