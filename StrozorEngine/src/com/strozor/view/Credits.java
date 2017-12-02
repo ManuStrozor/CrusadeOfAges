@@ -17,6 +17,10 @@ public class Credits extends View {
     private ImageTile objectsImage;
     private SoundClip select;
 
+    private String[] devs = {"ManuStrozor"};
+    private String[] thanks = {"My family", "Beta testers"};
+    private String[] contribs = {"Majoolwip"};
+
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button back;
 
@@ -49,7 +53,11 @@ public class Credits extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, objectsImage, 1, 0);
-        r.drawMenuTitle(gc,"GAME CREDITS", "Strozor Inc.");
+        r.drawMenuTitle(gc,"GAME CREDITS", "Development team");
+
+        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, "MAIN DEVELOPERS", devs);
+        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, "THANKS TO", thanks);
+        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, "CONTRIBUTORS", contribs);
 
         back.setOffX(5);
         back.setOffY(5);

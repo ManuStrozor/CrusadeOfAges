@@ -402,6 +402,13 @@ public class GameRender {
         }
     }
 
+    public void drawList(int offX, int offY, String title, String[] list) {
+        drawText(title, offX, offY, 0, 0, 0xff27ae60, Font.STANDARD);
+        for(int i = 0; i < list.length; i++) {
+            drawText(list[i], offX, offY + 14 * (i + 1), 0, 0, 0xffababab, Font.STANDARD);
+        }
+    }
+
     public int getCamX() {
         return camX;
     }
