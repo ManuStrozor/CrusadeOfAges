@@ -13,7 +13,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings settings;
-    private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu;
+    private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu, credits;
     private AbstractGame game, crea;
 
 
@@ -45,6 +45,7 @@ public class GameContainer implements Runnable {
         this.gameMenu = new GameMenu();
         this.overMenu = new OverMenu();
         this.creaMenu = new CreaMenu();
+        this.credits = new Credits();
 
         this.settings = new Settings();
         this.optsMenu = new OptsMenu(settings);
@@ -97,6 +98,8 @@ public class GameContainer implements Runnable {
 
                 if(State == STATE.MAINMENU) {
                     mainMenu.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.CREDITS) {
+                    credits.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OPTSMENU) {
                     optsMenu.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAMEMENU) {
@@ -128,16 +131,16 @@ public class GameContainer implements Runnable {
                     gameRender.setCoorCam(0, 0);
                     if(settings.isShowLights())
                         gameRender.process();
-                    if(gm.getObject("player") != null)
-                        gameRender.drawGameStates(gm);
+                    if(gm.getObject("player") != null) gameRender.drawGameStates(gm, gm.getObject("player"));
                 } else if(State == STATE.CREA || State == STATE.CREAMENU) {
                     crea.render(this, gameRender);
-                } else {
-                    gameRender.setCoorCam(0, 0);
                 }
 
                 if(State == STATE.MAINMENU) {
                     mainMenu.render(this, gameRender);
+                    gameRender.setCoorCam(0, 0);
+                } else if(State == STATE.CREDITS) {
+                    credits.render(this, gameRender);
                 } else if(State == STATE.OPTSMENU) {
                     optsMenu.render(this, gameRender);
                 } else if(State == STATE.GAMEMENU) {
@@ -149,7 +152,7 @@ public class GameContainer implements Runnable {
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
-                    gameRender.drawText(title + " Beta1.8.1", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText(title + " Beta1.8.2", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 

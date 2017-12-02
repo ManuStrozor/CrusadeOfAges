@@ -19,6 +19,8 @@ public class GameRender {
     private int zDepth = 0;
     private boolean processing = false;
 
+    private float animTorch = 0, animCoin = 0;
+
     public GameRender(GameContainer gc) {
         pW = gc.getWidth();
         pH = gc.getHeight();
@@ -246,12 +248,6 @@ public class GameRender {
         }
     }
 
-    public void drawButton(Button b, int color) {
-        drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), color);
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-1, b.getHeight()-1, b.getBgColor());
-        drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, color, Font.STANDARD);
-    }
-
     public void drawLight(Light l, int offX, int offY) {
 
         offX -= camX;
@@ -301,65 +297,67 @@ public class GameRender {
         }
     }
 
-    public void drawGameStates(GameManager gm) {
-        GameObject obj = gm.getObject("player");
-
-        drawImageTile(gm.getObjectsImage(), camX, camY, 3, 2);
-        drawText("x"+obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,-1, Font.STANDARD);
-
-        drawImageTile(gm.getObjectsImage(), camX, camY + 16, 5, 0);
-        drawText("x"+obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,-1, Font.STANDARD);
-
-        drawImageTile(gm.getObjectsImage(), camX, camY + 32, 3, 1);
-        drawText("x"+obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,-1, Font.STANDARD);
+    public void drawButton(Button b) {
+        drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xffababab);
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, b.getHeight() - 1, b.getBgColor());
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 1, 0x99636363);
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, 1, 0x99636363);
+        drawText(b.getText(), b.getOffX() + b.getWidth() / 2 - 1, b.getOffY() + b.getHeight() / 2, 0, 0, 0x99636363, Font.STANDARD);
+        drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
-    public void drawBloc(int bloc, ImageTile objectsImage, int x, int y) {
-        if(bloc != 1 || bloc == -1)
-            drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 1, 0);
+    public void drawGameStates(GameManager gm, GameObject obj) {
+        drawBloc(2, gm.getObjectsImage(), 0, 0, true);
+        drawText("x" + obj.getLives(), GameManager.TS - 1, GameManager.TS, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,0xffcdcdcd, Font.STANDARD);
+
+        drawBloc(7, gm.getObjectsImage(), 0, GameManager.TS, true);
+        drawText("x" + obj.getCoins(), GameManager.TS - 1, GameManager.TS * 2, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,0xffcdcdcd, Font.STANDARD);
+
+        drawBloc(5, gm.getObjectsImage(), 0, GameManager.TS * 2, true);
+        drawText("x" + obj.getKeys(), GameManager.TS - 1, GameManager.TS * 3, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,0xffcdcdcd, Font.STANDARD);
+    }
+
+    public void drawBloc(int bloc, ImageTile objectsImage, int x, int y, boolean alpha) {
+        int tileX = 1, tileY = 0;
+
+        if(bloc != 1 && !alpha)
+            drawImageTile(objectsImage, x, y, 1, 0);//wall
         switch(bloc) {
-            case 0: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 2, 0); break;
-            case 1: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 0, 0); break;
-            case 2: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 2); break;
-            case 3: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 1, 1); break;
-            case 4: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 2, 1); break;
-            case 5: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 1); break;
-            case 6: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 3, 0); break;
-            case 7: drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 5, 0); break;
-            case 11:drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 4, 0); break;
-            case 12:drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 0, 2); break;
-            case 13:drawImageTile(objectsImage, x * GameManager.TS, (y-1) * GameManager.TS, 4, 3);
-                    drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, 4, 4); break;
+            case -1: tileX = 2; tileY = 0; break;
+            case 1: tileX = 0; tileY = 0; break;//floor
+            case 2: tileX = 3; tileY = 2; break;
+            case 3: tileX = 1; tileY = 1; break;
+            case 4: tileX = 2; tileY = 1; break;
+            case 5: tileX = 3; tileY = 1; break;
+            case 6: tileX = 3; tileY = 0; break;
+            case 7: tileX = 5; tileY = (int)animCoin; break;
+            case 8: tileX = 0; tileY = 1; break;//blood prints
+            case 9: tileX = 1; tileY = 2; break;
+            case 10: tileX = 2; tileY = 2; break;
+            case 11: tileX = 4; tileY = (int)animTorch; break;
+            case 12: tileX = 0; tileY = 2; break;
+            case 13: tileX = 4; tileY = 3; break;
         }
+        drawImageTile(objectsImage, x, y, tileX, tileY);
     }
 
     public void drawDock(GameContainer gc, ImageTile objectsImage, int[] elems, int selected) {
 
         int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2 + camX;
         int offY = gc.getHeight() - GameManager.TS - 6 + camY;
-        int tileX = 0, tileY = 0;
         int height = GameManager.TS + 1;
         int width = elems.length * (height + 4);
 
         for(int i = 0; i < elems.length; i++) {
-            switch(elems[i]) {
-                case 0: tileX = 2; tileY = 0; break;
-                case 1: tileX = 0; tileY = 0; break;
-                case 2: tileX = 3; tileY = 2; break;
-                case 3: tileX = 1; tileY = 1; break;
-                case 4: tileX = 2; tileY = 1; break;
-                case 5: tileX = 3; tileY = 1; break;
-                case 6: tileX = 3; tileY = 0; break;
-                case 7: tileX = 5; tileY = 0; break;
-                case 11: tileX = 4; tileY = 0; break;
-                case 12: tileX = 0; tileY = 2; break;
-                case 13: tileX = 4; tileY = 4; break;
-            }
             drawRect(offX - 3 + (height + 4) * i, offY - 3, height + 4, height + 4, 0xbbc4c4c4);
             drawRect(offX - 2 + (height + 4) * i, offY - 2, height + 2, height + 2, 0x77c4c4c4);
             drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
+
             fillRect(offX + (height + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
-            drawImageTile(objectsImage, offX + (height + 4) * i, offY, tileX, tileY);
+            drawBloc(elems[i], objectsImage, offX + (height + 4) * i, offY, true);
         }
         drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
 
@@ -368,21 +366,23 @@ public class GameRender {
         drawRect(offX - 2 + (height + 4) * selected, offY - 2, height + 2, height + 2, 0x77ffffff);
         drawRect(offX - 1 + (height + 4) * selected, offY - 1, height, height, 0x33ffffff);
 
-        String sltText = "";
+        String name;
         switch(elems[selected]) {
-            case 0: sltText = "Spawn"; break;
-            case 1: sltText = "Wall"; break;
-            case 2: sltText = "Heart"; break;
-            case 3: sltText = "Bottom trap"; break;
-            case 4: sltText = "Top trap"; break;
-            case 5: sltText = "Key"; break;
-            case 6: sltText = "Check point"; break;
-            case 7: sltText = "Coin"; break;
-            case 11: sltText = "Torch"; break;
-            case 12: sltText = "Bouncing carpet"; break;
-            case 13: sltText = "Exit door"; break;
+            case -1:name = "Spawn"; break;
+            case 1: name = "Floor"; break;
+            case 2: name = "Heart"; break;
+            case 3: name = "Bottom trap"; break;
+            case 4: name = "Top trap"; break;
+            case 5: name = "Key"; break;
+            case 6: name = "Check point"; break;
+            case 7: name = "Coin"; break;
+            case 11:name = "Torch"; break;
+            case 12:name = "Bouncing bloc"; break;
+            case 13:name = "Door"; break;
+            default:name = "Unknown"; break;
         }
-        drawText(sltText, offX + width / 2 - camX, offY - 6 - camY, 0, -1, -1, Font.STANDARD);
+        drawText(name, offX + width / 2 - camX - 1, offY - 6 - camY, 0, -1, 0x99636363, Font.STANDARD);
+        drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
     public void drawBackground(GameContainer gc, ImageTile objectsImage, int tileX, int tileY) {
@@ -393,10 +393,13 @@ public class GameRender {
         }
     }
 
-    public void drawGameTitle(GameContainer gc, String bigTitle, String smallTitle) {
+    public void drawMenuTitle(GameContainer gc, String bigTitle, String smallTitle) {
+        drawText(bigTitle, gc.getWidth() / 2, 43, 0, 1, 0x99800000, Font.BIG_STANDARD);
         drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
-        if(smallTitle != "")
-            drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, -1, Font.STANDARD);
+        if(!smallTitle.equals("")) {
+            drawText(smallTitle, gc.getWidth() / 2, 59, 0, 1, 0x99636363, Font.STANDARD);
+            drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, 0xffababab, Font.STANDARD);
+        }
     }
 
     public int getCamX() {
@@ -422,5 +425,13 @@ public class GameRender {
 
     private void setzDepth(int zDepth) {
         this.zDepth = zDepth;
+    }
+
+    public void setAnimTorch(float animTorch) {
+        this.animTorch = animTorch;
+    }
+
+    public void setAnimCoin(float animCoin) {
+        this.animCoin = animCoin;
     }
 }

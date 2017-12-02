@@ -5,34 +5,39 @@ import com.strozor.engine.GameRender;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
+import com.strozor.engine.gfx.ImageTile;
+import com.strozor.game.GameManager;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class OverMenu extends View {
+public class Credits extends View {
 
+    private ImageTile objectsImage;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, menu, exit;
+    private Button back;
 
-    public OverMenu() {
+    public Credits() {
+        objectsImage = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
         select = new SoundClip("/audio/hover.wav");
-
-        buttons.add(play = new Button(130, 20, "Try again", 1));
-        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
-        buttons.add(exit = new Button(130, 20, "Quit game", -1));
+        buttons.add(back = new Button(60, 20, "Back", 0));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
+
         for(Button btn : buttons) {
-            if(mouseIsHover(gc, btn)) {
+            if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
                     gc.setState(btn.getGoState());
-                    gc.setLastState(7);
+                    gc.setLastState(6);
                 }
             } else {
                 btn.setBgColor(0xff424242);
@@ -43,16 +48,11 @@ public class OverMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawMenuTitle(gc,"GAME OVER", "You are dead");
+        r.drawBackground(gc, objectsImage, 1, 0);
+        r.drawMenuTitle(gc,"GAME CREDITS", "Strozor Inc.");
 
-        play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
-        play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
-
-        menu.setOffX(play.getOffX());
-        menu.setOffY(play.getOffY() + play.getHeight() + 10);
-
-        exit.setOffX(menu.getOffX());
-        exit.setOffY(menu.getOffY() + menu.getHeight() + 10);
+        back.setOffX(5);
+        back.setOffY(5);
 
         for(Button btn : buttons) r.drawButton(btn);
     }

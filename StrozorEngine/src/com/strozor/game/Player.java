@@ -186,21 +186,21 @@ public class Player extends GameObject {
         }
 
         //Final Position
-        if(offY > gm.TS / 2) {
+        if(offY > GameManager.TS / 2) {
             tileY++;
-            offY -= gm.TS;
+            offY -= GameManager.TS;
         }
-        if(offY < -gm.TS / 2) {
+        if(offY < -GameManager.TS / 2) {
             tileY--;
-            offY += gm.TS;
+            offY += GameManager.TS;
         }
-        if(offX > gm.TS / 2) {
+        if(offX > GameManager.TS / 2) {
             tileX++;
-            offX -= gm.TS;
+            offX -= GameManager.TS;
         }
-        if(offX < -gm.TS / 2) {
+        if(offX < -GameManager.TS / 2) {
             tileX--;
-            offX += gm.TS;
+            offX += GameManager.TS;
         }
         //END Final Position
 
@@ -232,15 +232,15 @@ public class Player extends GameObject {
         if(fallDist != 0) anim = 3;
         //END Player faces & animation
 
-        posX = tileX * gm.TS + offX;
-        posY = tileY * gm.TS + offY;
+        posX = tileX * GameManager.TS + offX;
+        posY = tileY * GameManager.TS + offY;
     }
 
     @Override
     public void render(GameContainer gc, GameManager gm, GameRender r) {
         r.drawImageTile(playerImage, (int)posX, (int)posY, direction, (int)anim);
         if(gc.getSettings().isShowLights())
-            r.drawLight(gm.getlPlayer(), (int)posX + gm.TS / 2, (int)posY + gm.TS / 2);
+            r.drawLight(gm.getlPlayer(), (int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
     }
 
     private void respawn(int x, int y) {

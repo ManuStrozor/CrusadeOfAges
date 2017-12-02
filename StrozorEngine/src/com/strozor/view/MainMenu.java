@@ -26,7 +26,7 @@ public class MainMenu extends View {
 
         buttons.add(play = new Button(130, 20, "Single player", 1));
         buttons.add(crea = new Button(130, 20, "Creative Mode", 4));
-        buttons.add(credits = new Button(130, 20, "Credits", 0));
+        buttons.add(credits = new Button(130, 20, "Game credits", 6));
 
         buttons.add(opt = new Button(60, 20, "Options", 3));
         buttons.add(exit = new Button(60, 20, "Quit game", -1));
@@ -36,14 +36,14 @@ public class MainMenu extends View {
     public void update(GameContainer gc, float dt) {
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0x99c0392b);
+                btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     select.play();
                     gc.setState(btn.getGoState());
                     gc.setLastState(0);
                 }
             } else {
-                btn.setBgColor(0x997f8c8d);
+                btn.setBgColor(0xff424242);
             }
         }
     }
@@ -52,7 +52,7 @@ public class MainMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, objectsImage, 1, 0);
-        r.drawGameTitle(gc,"SKEWER MAKER", "version beta");
+        r.drawMenuTitle(gc,"SKEWER MAKER", "version beta");
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
@@ -69,6 +69,6 @@ public class MainMenu extends View {
         exit.setOffX(gc.getWidth() / 2 + 5);
         exit.setOffY(opt.getOffY());
 
-        for(Button btn : buttons) r.drawButton(btn, 0xffababab);
+        for(Button btn : buttons) r.drawButton(btn);
     }
 }

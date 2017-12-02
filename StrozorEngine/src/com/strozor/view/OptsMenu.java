@@ -37,11 +37,11 @@ public class OptsMenu extends View {
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0x99c0392b);
+                btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
                     select.play();
             } else {
-                btn.setBgColor(0x997f8c8d);
+                btn.setBgColor(0xff424242);
             }
         }
 
@@ -77,7 +77,7 @@ public class OptsMenu extends View {
 
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, objectsImage, 1, 0);
-            r.drawGameTitle(gc,"SKEWER MAKER", "version beta");
+            r.drawMenuTitle(gc,"SKEWER MAKER", "version beta");
         }
 
         tglFps.setOffX(gc.getWidth() / 2 - tglFps.getWidth() / 2);
@@ -89,6 +89,6 @@ public class OptsMenu extends View {
         back.setOffX(tglLights.getOffX());
         back.setOffY(tglLights.getOffY() + tglLights.getHeight() + 10);
 
-        for(Button btn : buttons) r.drawButton(btn, 0xffababab);
+        for(Button btn : buttons) r.drawButton(btn);
     }
 }

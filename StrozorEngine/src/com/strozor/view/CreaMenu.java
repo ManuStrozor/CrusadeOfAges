@@ -33,7 +33,7 @@ public class CreaMenu extends View {
 
         for(Button btn : buttons) {
             if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0x99c0392b);
+                btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     if(btn == save)
                         Crea.creaMap.saveImage();
@@ -42,7 +42,7 @@ public class CreaMenu extends View {
                     gc.setLastState(5);
                 }
             } else {
-                btn.setBgColor(0x997f8c8d);
+                btn.setBgColor(0xff424242);
             }
         }
     }
@@ -56,7 +56,7 @@ public class CreaMenu extends View {
 
         for(Button btn : buttons) {
             btn.setOffX(gc.getWidth() / 2 - btn.getWidth() / 2);
-            r.drawButton(btn, 0xffababab);
+            r.drawButton(btn);
         }
     }
 }
