@@ -115,10 +115,7 @@ public class GameRender {
 
         if(alignX != 1) {
             int textW = 0;
-            for(int i = 0; i < text.length(); i++) {
-                textW += font.getWidths()[text.codePointAt(i)];
-            }
-            textW++;
+            for(int i = 0; i < text.length(); i++) textW += font.getWidths()[text.codePointAt(i)];
             if(alignX == 0) offX -= textW / 2;
             else if(alignX == -1) offX -= textW;
         }

@@ -21,9 +21,9 @@ public class CreaMenu extends View {
     public CreaMenu() {
         select = new SoundClip("/audio/hover.wav");
 
-        buttons.add(crea = new Button(130, 20, "Back to creative mode", 4));
-        buttons.add(save = new Button(130, 20, "Save & Quit game", -1));
-        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
+        buttons.add(crea = new Button(170, 20, "Back to creative mode", 4));
+        buttons.add(save = new Button(170, 20, "Save & Quit game", -1));
+        buttons.add(menu = new Button(170, 20, "Quit to title", 0));
     }
 
     @Override

@@ -24,12 +24,12 @@ public class MainMenu extends View {
 
         select = new SoundClip("/audio/hover.wav");
 
-        buttons.add(play = new Button(130, 20, "Single player", 1));
-        buttons.add(crea = new Button(130, 20, "Creative Mode", 4));
-        buttons.add(credits = new Button(130, 20, "Game credits", 6));
+        buttons.add(play = new Button(170, 20, "Single player", 1));
+        buttons.add(crea = new Button(170, 20, "Creative Mode", 4));
+        buttons.add(credits = new Button(170, 20, "Game credits", 6));
 
-        buttons.add(opt = new Button(60, 20, "Options", 3));
-        buttons.add(exit = new Button(60, 20, "Quit game", -1));
+        buttons.add(opt = new Button(80, 20, "Options", 3));
+        buttons.add(exit = new Button(80, 20, "Quit game", -1));
     }
 
     @Override
