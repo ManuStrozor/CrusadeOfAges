@@ -2,8 +2,8 @@ package com.strozor.engine.gfx;
 
 public class Font {
 
-    public static final Font STANDARD = new Font("/fonts/standard.png");
-    public static final Font BIG_STANDARD = new Font("/fonts/big_standard.png");
+    public static final Font STANDARD = new Font("/fonts/intv.png");
+    public static final Font BIG_STANDARD = new Font("/fonts/big_intv.png");
 
     private Image fontImage;
     private int[] offsets;
@@ -12,8 +12,8 @@ public class Font {
     public Font(String path) {
         fontImage = new Image(path, false);
 
-        offsets = new int[95];
-        widths = new int[95];
+        offsets = new int[256];
+        widths = new int[256];
 
         int unicode = 0;
         boolean next = true;

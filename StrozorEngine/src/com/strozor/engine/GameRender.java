@@ -115,20 +115,22 @@ public class GameRender {
 
         if(alignX != 1) {
             int textW = 0;
-            for(int i = 0; i < text.length(); i++) textW += font.getWidths()[text.codePointAt(i) - 32];
+            for(int i = 0; i < text.length(); i++) {
+                textW += font.getWidths()[text.codePointAt(i)];
+            }
             textW++;
             if(alignX == 0) offX -= textW / 2;
             else if(alignX == -1) offX -= textW;
         }
 
         if(alignY != 1) {
-            if(alignY == 0) offY -= 9 / 2;
-            else if(alignY == -1) offY -= 9;
+            if(alignY == 0) offY -= font.getFontImage().getH() / 2;
+            else if(alignY == -1) offY -= font.getFontImage().getH();
         }
 
         int offset = 0;
         for(int i = 0; i < text.length(); i++) {
-            int unicode = text.codePointAt(i) - 32;
+            int unicode = text.codePointAt(i);
 
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
@@ -302,21 +304,21 @@ public class GameRender {
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, b.getHeight() - 1, b.getBgColor());
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 1, 0x99636363);
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, 1, 0x99636363);
-        drawText(b.getText(), b.getOffX() + b.getWidth() / 2 - 1, b.getOffY() + b.getHeight() / 2, 0, 0, 0x99636363, Font.STANDARD);
+        drawText(b.getText(), b.getOffX() + b.getWidth() / 2-1, b.getOffY() + b.getHeight() / 2-1, 0, 0, 0x99636363, Font.STANDARD);
         drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
     public void drawGameStates(GameManager gm, GameObject obj) {
         drawBloc(2, gm.getObjectsImage(), 0, 0, true);
-        drawText("x" + obj.getLives(), GameManager.TS - 1, GameManager.TS, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getLives(), GameManager.TS-1, GameManager.TS-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,0xffcdcdcd, Font.STANDARD);
 
         drawBloc(7, gm.getObjectsImage(), 0, GameManager.TS, true);
-        drawText("x" + obj.getCoins(), GameManager.TS - 1, GameManager.TS * 2, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getCoins(), GameManager.TS-1, GameManager.TS * 2-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,0xffcdcdcd, Font.STANDARD);
 
         drawBloc(5, gm.getObjectsImage(), 0, GameManager.TS * 2, true);
-        drawText("x" + obj.getKeys(), GameManager.TS - 1, GameManager.TS * 3, 1, -1,0x99636363, Font.STANDARD);
+        drawText("x" + obj.getKeys(), GameManager.TS-1, GameManager.TS * 3-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,0xffcdcdcd, Font.STANDARD);
     }
 
@@ -380,7 +382,7 @@ public class GameRender {
             case 13:name = "Door"; break;
             default:name = "Unknown"; break;
         }
-        drawText(name, offX + width / 2 - camX - 1, offY - 6 - camY, 0, -1, 0x99636363, Font.STANDARD);
+        drawText(name, offX + width / 2 - camX - 1, offY - 7 - camY, 0, -1, 0x99636363, Font.STANDARD);
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
@@ -393,17 +395,19 @@ public class GameRender {
     }
 
     public void drawMenuTitle(GameContainer gc, String bigTitle, String smallTitle) {
-        drawText(bigTitle, gc.getWidth() / 2, 43, 0, 1, 0x99800000, Font.BIG_STANDARD);
+        drawText(bigTitle, gc.getWidth() / 2-1, 44, 0, 1, 0x99800000, Font.BIG_STANDARD);
         drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
         if(!smallTitle.equals("")) {
-            drawText(smallTitle, gc.getWidth() / 2, 59, 0, 1, 0x99636363, Font.STANDARD);
+            drawText(smallTitle, gc.getWidth() / 2-1, 59, 0, 1, 0x99636363, Font.STANDARD);
             drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, 0xffababab, Font.STANDARD);
         }
     }
 
     public void drawList(int offX, int offY, String title, String[] list) {
+        drawText(title, offX-1, offY-1, 0, 0, 0x99006323, Font.STANDARD);
         drawText(title, offX, offY, 0, 0, 0xff27ae60, Font.STANDARD);
         for(int i = 0; i < list.length; i++) {
+            drawText(list[i], offX-1, offY + 14 * (i + 1)-1, 0, 0, 0x99636363, Font.STANDARD);
             drawText(list[i], offX, offY + 14 * (i + 1), 0, 0, 0xffababab, Font.STANDARD);
         }
     }
