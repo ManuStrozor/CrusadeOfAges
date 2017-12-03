@@ -86,7 +86,7 @@ public class OptsMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         if(gc.getLastState() == 0) {
-            r.drawBackground(gc, objectsImage, 1, 0);
+            r.drawBackground(gc, objectsImage, 0);
             r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
         }
 

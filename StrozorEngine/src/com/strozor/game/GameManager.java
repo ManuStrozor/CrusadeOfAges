@@ -7,11 +7,9 @@ import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Image;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Light;
-import jdk.nashorn.internal.parser.JSONParser;
-import org.json.JSONPointer;
+import com.strozor.engine.gfx.Map;
 
 import java.awt.event.KeyEvent;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 public class GameManager extends AbstractGame {
@@ -27,29 +25,27 @@ public class GameManager extends AbstractGame {
     private Light lLamp, lPlayer;
     private SoundClip gameOver;
 
-    private boolean[] solid;
-    private int[] bloc;
-    private int levelW, levelH;
-    private int spawnX, spawnY;
+    private Map map;
     private int currLevel = 0;
-    private float animTorch = 0, animCoin = 0;
     private String[] levelList = {
-            "/level0.png",
-            "/level1.png",
-            "/level2.png",
-            "/level3.png",
-            "/level4.png"
+            "/levels/level0.png",
+            "/levels/level1.png",
+            "/levels/level2.png",
+            "/levels/level3.png",
+            "/levels/level4.png"
     };
 
-    private GameManager() {
+    private GameManager(Map map) {
+        this.map = map;
+
         if(mapTester)
-            loadLevel(mapTest);
+            load(mapTest);
         else
-            loadLevel(levelList[currLevel]);
+            load(levelList[currLevel]);
 
         gameOver = new SoundClip("/audio/gameover.wav");
-        objects.add(new Player("player", spawnX, spawnY, 1));
-        camera = new Camera("player");
+        objects.add(new Player("player", map, 1));
+        camera = new Camera("player", map);
 
         lLamp = new Light(70, -1);
         lPlayer = new Light(150, -1);
@@ -69,21 +65,20 @@ public class GameManager extends AbstractGame {
         }
 
         //Animations
-        animTorch += dt * 3;
-        animCoin += dt * 3;
+        map.animate(dt * 3);
 
         //Reload level
         if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
             if(mapTester)
-                loadLevel(mapTest);
+                load(mapTest);
             else
-                loadLevel(levelList[currLevel]);
+                load(levelList[currLevel]);
 
             gameOver.stop();
-            objects.add(new Player("player", spawnX, spawnY, 1));
+            objects.add(new Player("player", map, 1));
 
             camera = null;
-            camera = new Camera("player");
+            camera = new Camera("player", map);
         }
 
         camera.update(gc, this, dt);
@@ -92,77 +87,18 @@ public class GameManager extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
         camera.render(r);
-
-        r.setAnimTorch(animTorch > 3 ? animTorch = 0 : animTorch);
-        r.setAnimCoin(animCoin > 6 ? animCoin = 0 : animCoin);
-
-        for(int y = 0; y < levelH; y++) {
-            for(int x = 0; x < levelW; x++) {
-                r.drawBloc(bloc[x + y * levelW], objectsImage, x * GameManager.TS, y * GameManager.TS, false);
-                if(gc.getSettings().isShowLights() && bloc[x + y * levelW] == 11)
-                    r.drawLight(lLamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 2);
-            }
-        }
+        r.drawMap(map);
+        if(gc.getSettings().isShowLights())
+            r.drawMapLights(map, lLamp);
         for(GameObject obj : objects) obj.render(gc, this, r);
     }
 
-    public void loadLevel(String path) {
-
-        Image levelImage = new Image(path, mapTester);
-        levelW = levelImage.getW();
-        levelH = levelImage.getH();
-        solid = new boolean[levelW * levelH];
-        bloc = new int[levelW * levelH];
-
-        for(int y = 0; y < levelH; y++) {
-            for(int x = 0; x < levelW; x++) {
-                int index = x + y * levelW;
-                switch(levelImage.getP()[index]) {
-                    case 0xff00ff00://Spawn
-                        spawnX = x;
-                        spawnY = y;
-                        break;
-                    case 0xff000000://Floor
-                        solid[index] = true;
-                        bloc[index] = 1;
-                        break;
-                    case 0xffff648c://Heart
-                        solid[index] = false;
-                        bloc[index] = 2;
-                        break;
-                    case 0xffff0000://Bottom trap
-                        solid[index] = false;
-                        bloc[index] = 3;
-                        break;
-                    case 0xffff00ff://Top trap
-                        solid[index] = false;
-                        bloc[index] = 4;
-                        break;
-                    case 0xff0000ff://Key
-                        solid[index] = false;
-                        bloc[index] = 5;
-                        break;
-                    case 0xffff7700://Check point
-                        solid[index] = false;
-                        bloc[index] = 6;
-                        break;
-                    case 0xffffff00://Coin
-                        solid[index] = false;
-                        bloc[index] = 7;
-                        break;
-                    case 0xff00ffff://Torch
-                        solid[index] = false;
-                        bloc[index] = 11;
-                        break;
-                    case 0xff777777://Bouncing bloc
-                        solid[index] = false;
-                        bloc[index] = 12;
-                        break;
-                    case 0xff999999://Door
-                        solid[index] = false;
-                        bloc[index] = 13;
-                        break;
-                }
+    public void load(String path) {
+        Image img = new Image(path, mapTester);
+        map.initMap(img.getW(), img.getH());
+        for(int y = 0; y < map.getHeight(); y++) {
+            for(int x = 0; x < map.getWidth(); x++) {
+                map.initBloc(x, y, img.getP()[x + y * map.getWidth()]);
             }
         }
     }
@@ -184,47 +120,8 @@ public class GameManager extends AbstractGame {
     }
 
     public GameObject getObject(String tag) {
-
-        for(GameObject obj : objects) {
-            if(obj.getTag().equals(tag)) return obj;
-        }
+        for(GameObject obj : objects) if(obj.getTag().equals(tag)) return obj;
         return null;
-    }
-
-    public boolean getSolid(int x, int y) {
-        return x < 0 || x >= levelW || y < 0 || y >= levelH || solid[x + y * levelW];
-    }
-
-    public int getBloc(int x, int y) {
-        return bloc[x + y * levelW];
-    }
-
-    public void setBloc(int x, int y, int value) {
-        bloc[x + y * levelW] = value;
-    }
-
-    public int getLevelW() {
-        return levelW;
-    }
-
-    public int getLevelH() {
-        return levelH;
-    }
-
-    public int getSpawnX() {
-        return spawnX;
-    }
-
-    public int getSpawnY() {
-        return spawnY;
-    }
-
-    public void setSpawnX(int spawnX) {
-        this.spawnX = spawnX;
-    }
-
-    public void setSpawnY(int spawnY) {
-        this.spawnY = spawnY;
     }
 
     public SoundClip getGameOver() {
@@ -248,7 +145,7 @@ public class GameManager extends AbstractGame {
             mapTester = true;
             mapTest = args[0];
         }
-        GameContainer gc = new GameContainer(new GameManager());
+        GameContainer gc = new GameContainer(new GameManager(new Map()));
         gc.setTitle("Square Monster");
         gc.setScale(3f);
         gc.start();

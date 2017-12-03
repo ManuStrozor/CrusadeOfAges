@@ -4,10 +4,13 @@ import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.ImageTile;
+import com.strozor.engine.gfx.Map;
 
 import java.awt.event.KeyEvent;
 
 public class Player extends GameObject {
+
+    private Map map;
 
     private ImageTile playerImage = new ImageTile("/player.png", GameManager.TS, GameManager.TS);
 
@@ -19,7 +22,11 @@ public class Player extends GameObject {
     private int speed, ground = 2;
     private float fallDist = 0;
 
-    public Player(String tag, int posX, int posY, int lives) {
+    public Player(String tag, Map map, int lives) {
+        this.map = map;
+        this.tag = tag;
+        this.lives = lives;
+
         jump = new SoundClip("/audio/jump.wav");
         jump.setVolume(-10f);
         impaled = new SoundClip("/audio/impaled.wav");
@@ -30,81 +37,78 @@ public class Player extends GameObject {
         checkPoint = new SoundClip("/audio/checkpoint.wav");
         checkPoint.setVolume(-15f);
 
-        tileX = posX;
-        tileY = posY;
-        offX = 0;
-        offY = 0;
         width = GameManager.TS;
         height = GameManager.TS;
-
-        this.tag = tag;
-        this.posX = posX * GameManager.TS;
-        this.posY = posY * GameManager.TS;
-        this.lives = lives;
+        tileX = map.getSpawnX();
+        tileY = map.getSpawnY();
+        posX = tileX * GameManager.TS;
+        posY = tileY * GameManager.TS;
+        offX = 0;
+        offY = 0;
     }
 
     @Override
     public void update(GameContainer gc, GameManager gm, float dt) {
 
         //Bouncing block
-        if(gm.getBloc(tileX, tileY) == 12 && fallDist == 0) {
+        if(map.getId(tileX, tileY) == 12 && fallDist == 0) {
             fallDist = -6;
-            if(!gm.getSolid(tileX, tileY - 1) && !gm.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
+            if(!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
                 jump.play();
         }
 
         //Gain life
-        if(gm.getBloc(tileX, tileY) == 2) {
+        if(map.getId(tileX, tileY) == 2) {
             lives++;
-            gm.setBloc(tileX, tileY, 0);
+            map.setBloc(tileX, tileY, 0);
             bonus.play();
         }
 
         //Gain coin
-        if(gm.getBloc(tileX, tileY) == 7) {
+        if(map.getId(tileX, tileY) == 7) {
             coins++;
-            gm.setBloc(tileX, tileY, 0);
+            map.setBloc(tileX, tileY, 0);
             coin.play();
         }
 
         //Gain key
-        if(gm.getBloc(tileX, tileY) == 5) {
+        if(map.getId(tileX, tileY) == 5) {
             keys++;
-            gm.setBloc(tileX, tileY, 0);
+            map.setBloc(tileX, tileY, 0);
             bonus.play();
         }
 
         //Win Time & Switch Level
-        if(keys >= 1 && gm.getBloc(tileX, tileY) == 13 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+        if(keys >= 1 && map.getId(tileX, tileY) == 13 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             keys--;
             if(!gm.isMapTesting()) {
                 if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
-                    gm.loadLevel(gm.getLevelList()[gm.getCurrLevel() + 1]);
+                    gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
                     gm.setCurrLevel(gm.getCurrLevel() + 1);
                 } else {
-                    gm.loadLevel(gm.getLevelList()[0]);
+                    gm.load(gm.getLevelList()[0]);
                     gm.setCurrLevel(0);
                 }
             } else {
-                gm.loadLevel(gm.getMapTest());
+                gm.load(gm.getMapTest());
                 gm.setCurrLevel(0);
             }
-            respawn(gm.getSpawnX(), gm.getSpawnY());
+            respawn(map.getSpawnX(), map.getSpawnY());
         }
 
         //CheckPoint
-        if(gm.getBloc(tileX, tileY) == 6 && tileX != gm.getSpawnX() && tileY != gm.getSpawnY()) {
-            gm.setSpawnX(tileX);
-            gm.setSpawnY(tileY);
+        if(map.getId(tileX, tileY) == 6 && tileX != map.getSpawnX() && tileY != map.getSpawnY()) {
+            map.setSpawnX(tileX);
+            map.setSpawnY(tileY);
             checkPoint.play();
         }
 
         //Hit trap
-        if(gm.getBloc(tileX, tileY) == 3 || gm.getBloc(tileX, tileY) == 4 || gm.getBloc(tileX, tileY) == 9 || gm.getBloc(tileX, tileY) == 10) {
-            if(gm.getBloc(tileX, tileY) == 3 || gm.getBloc(tileX, tileY) == 3)
-                gm.setBloc(tileX, tileY, 9);
-            else if(gm.getBloc(tileX, tileY) == 4 || gm.getBloc(tileX, tileY) == 10)
-                gm.setBloc(tileX, tileY, 10);
+        if(map.getId(tileX, tileY) == 3 || map.getId(tileX, tileY) == 4 || map.getId(tileX, tileY) == 9 || map.getId(tileX, tileY) == 10) {
+            if(map.getId(tileX, tileY) == 3 || map.getId(tileX, tileY) == 3)
+                map.setBloc(tileX, tileY, 9);
+            else if(map.getId(tileX, tileY) == 4 || map.getId(tileX, tileY) == 10)
+                map.setBloc(tileX, tileY, 10);
 
             if(pauseRes == 0) {
                 lives--;
@@ -119,14 +123,14 @@ public class Player extends GameObject {
             } else {
                 pauseRes += dt * 10;
                 if(pauseRes > 3) {
-                    respawn(gm.getSpawnX(), gm.getSpawnY());
+                    respawn(map.getSpawnX(), map.getSpawnY());
                     pauseRes = 0;
                 }
             }
         } else {
             //Left & Right
             if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q)) {
-                if (gm.getSolid(tileX - 1, tileY) || gm.getSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
+                if (map.getSolid(tileX - 1, tileY) || map.getSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX > 0) {
                         offX -= dt * speed;
                         if (offX < 0) offX = 0;
@@ -139,7 +143,7 @@ public class Player extends GameObject {
             }
 
             if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D)) {
-                if (gm.getSolid(tileX + 1, tileY) || gm.getSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
+                if (map.getSolid(tileX + 1, tileY) || map.getSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX < 0) {
                         offX += dt * speed;
                         if (offX > 0) offX = 0;
@@ -156,7 +160,7 @@ public class Player extends GameObject {
 
             if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
                 fallDist = -3;
-                if (!gm.getSolid(tileX, tileY - 1) && !gm.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
                     jump.play();
                 ground++;
             }
@@ -164,14 +168,14 @@ public class Player extends GameObject {
             offY += fallDist;
 
             if (fallDist < 0) {
-                if ((gm.getSolid(tileX, tileY - 1) || gm.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                if ((map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
                     fallDist = 0;
                     offY = 0;
                 }
             }
 
             if (fallDist > 0) {
-                if ((gm.getSolid(tileX, tileY + 1) || gm.getSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                if ((map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
                     fallDist = 0;
                     offY = 0;
                     ground = 0;

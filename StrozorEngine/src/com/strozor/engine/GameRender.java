@@ -12,6 +12,7 @@ import java.util.Comparator;
 public class GameRender {
 
     private Settings settings;
+    private ImageTile objsImg = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
     private int pW, pH;
@@ -19,8 +20,6 @@ public class GameRender {
     private int camX, camY;
     private int zDepth = 0;
     private boolean processing = false;
-
-    private float animTorch = 0, animCoin = 0;
 
     public GameRender(GameContainer gc, Settings settings) {
         this.settings = settings;
@@ -111,6 +110,48 @@ public class GameRender {
         int maxB = Math.max(baseColor & 255, value & 255);
 
         lm[x + y * pW] = maxR << 16 | maxG << 8 | maxB;
+    }
+
+    private int getTileX(int id) {
+        int value = 1;
+        switch(id) {
+            case -1: value = 2; break;
+            case 0: value = 1; break;
+            case 1: value = 0; break;
+            case 2: value = 3; break;
+            case 3: value = 1; break;
+            case 4: value = 2; break;
+            case 5: value = 3; break;
+            case 6: value = 3; break;
+            case 7: value = 5; break;
+            case 9: value = 1; break;
+            case 10: value = 2; break;
+            case 11: value = 4; break;
+            case 12: value = 0; break;
+            case 13: value = 4; break;
+        }
+        return value;
+    }
+
+    private int getTileY(int id) {
+        int value = 0;
+        switch(id) {
+            case -1: value = 0; break;
+            case 0: value = 0; break;
+            case 1: value = 0; break;
+            case 2: value = 2; break;
+            case 3: value = 1; break;
+            case 4: value = 1; break;
+            case 5: value = 1; break;
+            case 6: value = 0; break;
+            case 7: value = 0; break;
+            case 9: value = 2; break;
+            case 10: value = 2; break;
+            case 11: value = 0; break;
+            case 12: value = 2; break;
+            case 13: value = 3; break;
+        }
+        return value;
     }
 
     public void drawText(String text, int offX, int offY, int alignX, int alignY, int color, Font font) {
@@ -321,30 +362,32 @@ public class GameRender {
         drawText("x" + obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,0xffcdcdcd, Font.STANDARD);
     }
 
-    public void drawBloc(int bloc, ImageTile objectsImage, int x, int y, boolean alpha) {
-        int tileX = 1, tileY = 0;
-
-        if(bloc != 1 && !alpha)
-            drawImageTile(objectsImage, x, y, 1, 0);//wall
-        switch(bloc) {
-            case -1: tileX = 2; tileY = 0; break;
-            case 1: tileX = 0; tileY = 0; break;//floor
-            case 2: tileX = 3; tileY = 2; break;
-            case 3: tileX = 1; tileY = 1; break;
-            case 4: tileX = 2; tileY = 1; break;
-            case 5: tileX = 3; tileY = 1; break;
-            case 6: tileX = 3; tileY = 0; break;
-            case 7: tileX = 5; tileY = (int)animCoin; break;
-            case 9: tileX = 1; tileY = 2; break;
-            case 10: tileX = 2; tileY = 2; break;
-            case 11: tileX = 4; tileY = (int)animTorch; break;
-            case 12: tileX = 0; tileY = 2; break;
-            case 13: tileX = 4; tileY = 3; break;
+    public void drawMap(Map map) {
+        for(int y = 0; y < map.getHeight(); y++) {
+            for(int x = 0; x < map.getWidth(); x++) {
+                if(map.getId(x, y) != 1)
+                    drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 1, 0);
+                drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y));
+            }
         }
-        drawImageTile(objectsImage, x, y, tileX, tileY);
     }
 
-    public void drawDock(GameContainer gc, ImageTile objectsImage, int[] elems, int selected) {
+    public void drawMapLights(Map map, Light lamp) {
+        for(int y = 0; y < map.getHeight(); y++) {
+            for(int x = 0; x < map.getWidth(); x++) {
+                if(map.getId(x, y) == 11)
+                    drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 2);
+            }
+        }
+    }
+
+    private void drawBloc(int bloc, ImageTile img, int x, int y, boolean alpha) {
+        if(bloc != 1 && !alpha)
+            drawImageTile(img, x, y, 1, 0);
+        drawImageTile(img, x, y, getTileX(bloc), getTileY(bloc));
+    }
+
+    public void drawDock(GameContainer gc, int[] elems, int selected) {
 
         int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2 + camX;
         int offY = gc.getHeight() - GameManager.TS - 6 + camY;
@@ -357,7 +400,7 @@ public class GameRender {
             drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
 
             fillRect(offX + (height + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
-            drawBloc(elems[i], objectsImage, offX + (height + 4) * i, offY, true);
+            drawBloc(elems[i], objsImg, offX + (height + 4) * i, offY, true);
         }
         drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
 
@@ -384,10 +427,10 @@ public class GameRender {
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
-    public void drawBackground(GameContainer gc, ImageTile objectsImage, int tileX, int tileY) {
+    public void drawBackground(GameContainer gc, ImageTile img, int bloc) {
         for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
             for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                drawImageTile(objectsImage, x * GameManager.TS, y * GameManager.TS, tileX, tileY);
+                drawBloc(bloc, img, x * GameManager.TS, y * GameManager.TS, false);
             }
         }
     }
@@ -433,13 +476,5 @@ public class GameRender {
 
     private void setzDepth(int zDepth) {
         this.zDepth = zDepth;
-    }
-
-    public void setAnimTorch(float animTorch) {
-        this.animTorch = animTorch;
-    }
-
-    public void setAnimCoin(float animCoin) {
-        this.animCoin = animCoin;
     }
 }
