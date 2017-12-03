@@ -11,6 +11,7 @@ import java.util.Comparator;
 
 public class GameRender {
 
+    private Settings settings;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
     private int pW, pH;
@@ -21,7 +22,8 @@ public class GameRender {
 
     private float animTorch = 0, animCoin = 0;
 
-    public GameRender(GameContainer gc) {
+    public GameRender(GameContainer gc, Settings settings) {
+        this.settings = settings;
         pW = gc.getWidth();
         pH = gc.getHeight();
         p = ((DataBufferInt)gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
@@ -364,20 +366,19 @@ public class GameRender {
         drawRect(offX - 2 + (height + 4) * selected, offY - 2, height + 2, height + 2, 0x77ffffff);
         drawRect(offX - 1 + (height + 4) * selected, offY - 1, height, height, 0x33ffffff);
 
-        String name;
+        String name = "";
         switch(elems[selected]) {
-            case -1:name = "Spawn"; break;
-            case 1: name = "Floor"; break;
-            case 2: name = "Heart"; break;
-            case 3: name = "Bottom trap"; break;
-            case 4: name = "Top trap"; break;
-            case 5: name = "Key"; break;
-            case 6: name = "Check point"; break;
-            case 7: name = "Coin"; break;
-            case 11:name = "Torch"; break;
-            case 12:name = "Bouncing bloc"; break;
-            case 13:name = "Door"; break;
-            default:name = "Unknown"; break;
+            case -1:name = settings.getWords()[21][settings.getLangIndex()]; break;
+            case 1: name = settings.getWords()[22][settings.getLangIndex()]; break;
+            case 2: name = settings.getWords()[23][settings.getLangIndex()]; break;
+            case 3: name = settings.getWords()[24][settings.getLangIndex()]; break;
+            case 4: name = settings.getWords()[25][settings.getLangIndex()]; break;
+            case 5: name = settings.getWords()[26][settings.getLangIndex()]; break;
+            case 6: name = settings.getWords()[27][settings.getLangIndex()]; break;
+            case 7: name = settings.getWords()[28][settings.getLangIndex()]; break;
+            case 11:name = settings.getWords()[29][settings.getLangIndex()]; break;
+            case 12:name = settings.getWords()[30][settings.getLangIndex()]; break;
+            case 13:name = settings.getWords()[31][settings.getLangIndex()]; break;
         }
         drawText(name, offX + width / 2 - camX - 1, offY - 7 - camY, 0, -1, 0x99636363, Font.STANDARD);
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);

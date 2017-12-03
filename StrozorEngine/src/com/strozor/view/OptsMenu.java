@@ -17,7 +17,7 @@ public class OptsMenu extends View {
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button tglFps, tglLights, back;
+    private Button tglLang, tglFps, tglLights, back;
 
     public OptsMenu(Settings settings) {
         this.settings = settings;
@@ -25,9 +25,10 @@ public class OptsMenu extends View {
 
         select = new SoundClip("/audio/hover.wav");
 
-        buttons.add(tglFps = new Button(130, 20, "Show FPS", 0));
-        buttons.add(tglLights = new Button(130, 20, "Disable lights", 0));
-        buttons.add(back = new Button(130, 20, "Back", 0));
+        buttons.add(tglLang = new Button(130, 20, 0, 0));
+        buttons.add(tglFps = new Button(130, 20, 7, 0));
+        buttons.add(tglLights = new Button(130, 20, 8, 0));
+        buttons.add(back = new Button(130, 20, 11, 0));
     }
 
     @Override
@@ -36,6 +37,7 @@ public class OptsMenu extends View {
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
 
         for(Button btn : buttons) {
+            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
@@ -45,24 +47,32 @@ public class OptsMenu extends View {
             }
         }
 
-        if(mouseIsHover(gc, tglFps)) {
+        if(mouseIsHover(gc, tglLang)) {
+            if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
+                if(settings.getLangIndex() < settings.getWords()[0].length - 1) {
+                    settings.setLangIndex(settings.getLangIndex() + 1);
+                } else {
+                    settings.setLangIndex(0);
+                }
+            }
+        } else if(mouseIsHover(gc, tglFps)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                 if(settings.isShowFps()) {
                     settings.setShowFps(false);
-                    tglFps.setText("Show FPS");
+                    tglFps.setWordsIndex(7);
                 } else {
                     settings.setShowFps(true);
-                    tglFps.setText("Hide FPS");
+                    tglFps.setWordsIndex(9);
                 }
             }
         } else if(mouseIsHover(gc, tglLights)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                 if(settings.isShowLights()) {
                     settings.setShowLights(false);
-                    tglLights.setText("Enable lights");
+                    tglLights.setWordsIndex(10);
                 } else {
                     settings.setShowLights(true);
-                    tglLights.setText("Disable lights");
+                    tglLights.setWordsIndex(8);
                 }
             }
         } else if(mouseIsHover(gc, back)) {
@@ -77,11 +87,14 @@ public class OptsMenu extends View {
 
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, objectsImage, 1, 0);
-            r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), "version beta");
+            r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
         }
 
-        tglFps.setOffX(gc.getWidth() / 2 - tglFps.getWidth() / 2);
-        tglFps.setOffY(gc.getHeight() / 3 - tglFps.getHeight() / 2);
+        tglLang.setOffX(gc.getWidth() / 2 - tglLang.getWidth() / 2);
+        tglLang.setOffY(gc.getHeight() / 3 - tglLang.getHeight() / 2);
+
+        tglFps.setOffX(tglLang.getOffX());
+        tglFps.setOffY(tglLang.getOffY() + tglLang.getHeight() + 20);
 
         tglLights.setOffX(tglFps.getOffX());
         tglLights.setOffY(tglFps.getOffY() + tglFps.getHeight() + 10);

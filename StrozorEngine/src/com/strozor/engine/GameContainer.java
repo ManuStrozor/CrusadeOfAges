@@ -40,15 +40,14 @@ public class GameContainer implements Runnable {
 
     public GameContainer(AbstractGame game) {
         this.game = game;
-
-        this.mainMenu = new MainMenu();
-        this.gameMenu = new GameMenu();
-        this.overMenu = new OverMenu();
-        this.creaMenu = new CreaMenu();
-        this.credits = new Credits();
-
         this.settings = new Settings();
+
+        this.mainMenu = new MainMenu(settings);
         this.optsMenu = new OptsMenu(settings);
+        this.gameMenu = new GameMenu(settings);
+        this.overMenu = new OverMenu(settings);
+        this.creaMenu = new CreaMenu(settings);
+        this.credits = new Credits(settings);
 
         this.crea = new Crea(60, 30);
         this.gm = (GameManager) game;
@@ -56,7 +55,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        gameRender = new GameRender(this);
+        gameRender = new GameRender(this, settings);
         input = new Input(this);
 
         thread = new Thread(this);

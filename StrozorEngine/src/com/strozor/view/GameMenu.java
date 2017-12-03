@@ -2,6 +2,7 @@ package com.strozor.view;
 
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
+import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
@@ -12,17 +13,19 @@ import java.util.ArrayList;
 
 public class GameMenu extends View {
 
+    private Settings settings;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button play, opt, menu;
 
-    public GameMenu() {
+    public GameMenu(Settings settings) {
+        this.settings = settings;
         select = new SoundClip("/audio/hover.wav");
 
-        buttons.add(play = new Button(130, 20, "Back to game", 1));
-        buttons.add(opt = new Button(130, 20, "Options", 3));
-        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
+        buttons.add(play = new Button(130, 20, 12, 1));
+        buttons.add(opt = new Button(130, 20, 5, 3));
+        buttons.add(menu = new Button(130, 20, 13, 0));
     }
 
     @Override
@@ -31,6 +34,7 @@ public class GameMenu extends View {
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
 
         for(Button btn : buttons) {
+            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
