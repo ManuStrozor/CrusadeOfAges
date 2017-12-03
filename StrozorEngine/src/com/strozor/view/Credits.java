@@ -56,7 +56,7 @@ public class Credits extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawBackground(gc, objectsImage, 0);
+        r.drawBackground(gc, 0);
         r.drawMenuTitle(gc, settings.getWords()[4][settings.getLangIndex()].toUpperCase(), settings.getWords()[17][settings.getLangIndex()]);
 
         r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, settings.getWords()[18][settings.getLangIndex()], devs);

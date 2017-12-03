@@ -54,7 +54,7 @@ public class MainMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawBackground(gc, objectsImage, 0);
+        r.drawBackground(gc, 0);
         r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);

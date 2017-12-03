@@ -25,13 +25,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GameRender.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GameRender.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="489">
-              <caret line="402" column="77" lean-forward="true" selection-start-line="402" selection-start-column="77" selection-end-line="402" selection-end-column="77" />
+            <state relative-caret-position="216">
+              <caret line="8" column="29" lean-forward="true" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
               <folding>
-                <element signature="imports" expanded="true" />
                 <element signature="method#clear#0;class#GameRender#0" expanded="false" />
                 <element signature="method#process#0;class#GameRender#0" expanded="false" />
                 <element signature="method#setPixel#0;class#GameRender#0" expanded="false" />
@@ -47,24 +46,14 @@
                 <element signature="method#drawLightLine#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawButton#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawGameStates#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawMap#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawMapLights#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawBloc#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawDock#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
                 <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
                 <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameManager.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="80" column="47" lean-forward="true" selection-start-line="80" selection-start-column="47" selection-end-line="80" selection-end-column="47" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -136,15 +125,15 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Bloc.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Camera.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Image.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/view/MainMenu.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/view/Credits.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Map.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Crea.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/view/MainMenu.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/view/Credits.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java" />
       </list>
     </option>
   </component>
@@ -155,7 +144,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="35" />
     <option name="y" value="27" />
     <option name="width" value="605" />
@@ -429,7 +418,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -446,7 +435,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15833333" sideWeight="0.49579832" order="8" side_tool="false" content_ui="combo" x="837" y="80" width="297" height="947" />
+      <window_info id="Project" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15833333" sideWeight="0.49579832" order="8" side_tool="false" content_ui="combo" x="837" y="80" width="297" height="947" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -708,45 +697,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/Credits.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="399">
-          <caret line="58" column="46" lean-forward="true" selection-start-line="58" selection-start-column="46" selection-end-line="58" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="88" column="47" lean-forward="true" selection-start-line="88" selection-start-column="47" selection-end-line="88" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/MainMenu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="56" column="46" lean-forward="true" selection-start-line="56" selection-start-column="46" selection-end-line="56" selection-end-column="46" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreaMenu.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-216">
           <caret line="26" column="55" lean-forward="true" selection-start-line="26" selection-start-column="55" selection-end-line="26" selection-end-column="55" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="134" column="50" lean-forward="false" selection-start-line="134" selection-start-column="50" selection-end-line="134" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -756,36 +711,6 @@
           <caret line="88" column="50" lean-forward="true" selection-start-line="88" selection-start-column="50" selection-end-line="88" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="402" column="77" lean-forward="true" selection-start-line="402" selection-start-column="77" selection-end-line="402" selection-end-column="77" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#clear#0;class#GameRender#0" expanded="false" />
-            <element signature="method#process#0;class#GameRender#0" expanded="false" />
-            <element signature="method#setPixel#0;class#GameRender#0" expanded="false" />
-            <element signature="method#setLightMap#0;class#GameRender#0" expanded="false" />
-            <element signature="method#getTileX#0;class#GameRender#0" expanded="false" />
-            <element signature="method#getTileY#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawText#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawImage#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawImageTile#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawRect#0;class#GameRender#0" expanded="false" />
-            <element signature="method#fillRect#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawLight#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawLightLine#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawButton#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawGameStates#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawBloc#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
-            <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
-            <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -821,6 +746,72 @@
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/MainMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="56" column="32" lean-forward="true" selection-start-line="56" selection-start-column="32" selection-end-line="56" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="132" column="105" lean-forward="true" selection-start-line="132" selection-start-column="105" selection-end-line="132" selection-end-column="105" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/Credits.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="58" column="27" lean-forward="false" selection-start-line="58" selection-start-column="27" selection-end-line="58" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="88" column="31" lean-forward="false" selection-start-line="88" selection-start-column="31" selection-end-line="88" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="216">
+          <caret line="8" column="29" lean-forward="true" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
+          <folding>
+            <element signature="method#clear#0;class#GameRender#0" expanded="false" />
+            <element signature="method#process#0;class#GameRender#0" expanded="false" />
+            <element signature="method#setPixel#0;class#GameRender#0" expanded="false" />
+            <element signature="method#setLightMap#0;class#GameRender#0" expanded="false" />
+            <element signature="method#getTileX#0;class#GameRender#0" expanded="false" />
+            <element signature="method#getTileY#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawText#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawImage#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawImageTile#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawRect#0;class#GameRender#0" expanded="false" />
+            <element signature="method#fillRect#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawLight#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawLightLine#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawButton#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawGameStates#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawMap#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawMapLights#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawBloc#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawDock#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
+            <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
           </folding>
         </state>
       </provider>

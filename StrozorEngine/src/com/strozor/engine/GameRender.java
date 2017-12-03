@@ -348,16 +348,16 @@ public class GameRender {
         drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
-    public void drawGameStates(GameManager gm, GameObject obj) {
-        drawBloc(2, gm.getObjectsImage(), 0, 0, true);
+    public void drawGameStates(GameObject obj) {
+        drawBloc(2, 0, 0, true);
         drawText("x" + obj.getLives(), GameManager.TS-1, GameManager.TS-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,0xffcdcdcd, Font.STANDARD);
 
-        drawBloc(7, gm.getObjectsImage(), 0, GameManager.TS, true);
+        drawBloc(7, 0, GameManager.TS, true);
         drawText("x" + obj.getCoins(), GameManager.TS-1, GameManager.TS * 2-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,0xffcdcdcd, Font.STANDARD);
 
-        drawBloc(5, gm.getObjectsImage(), 0, GameManager.TS * 2, true);
+        drawBloc(5, 0, GameManager.TS * 2, true);
         drawText("x" + obj.getKeys(), GameManager.TS-1, GameManager.TS * 3-1, 1, -1,0x99636363, Font.STANDARD);
         drawText("x" + obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,0xffcdcdcd, Font.STANDARD);
     }
@@ -381,10 +381,10 @@ public class GameRender {
         }
     }
 
-    private void drawBloc(int bloc, ImageTile img, int x, int y, boolean alpha) {
+    private void drawBloc(int bloc, int x, int y, boolean alpha) {
         if(bloc != 1 && !alpha)
-            drawImageTile(img, x, y, 1, 0);
-        drawImageTile(img, x, y, getTileX(bloc), getTileY(bloc));
+            drawImageTile(objsImg, x, y, 1, 0);
+        drawImageTile(objsImg, x, y, getTileX(bloc), getTileY(bloc));
     }
 
     public void drawDock(GameContainer gc, int[] elems, int selected) {
@@ -400,7 +400,7 @@ public class GameRender {
             drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
 
             fillRect(offX + (height + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
-            drawBloc(elems[i], objsImg, offX + (height + 4) * i, offY, true);
+            drawBloc(elems[i], offX + (height + 4) * i, offY, true);
         }
         drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
 
@@ -427,10 +427,10 @@ public class GameRender {
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
-    public void drawBackground(GameContainer gc, ImageTile img, int bloc) {
+    public void drawBackground(GameContainer gc, int bloc) {
         for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
             for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                drawBloc(bloc, img, x * GameManager.TS, y * GameManager.TS, false);
+                drawBloc(bloc, x * GameManager.TS, y * GameManager.TS, false);
             }
         }
     }
