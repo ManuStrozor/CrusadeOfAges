@@ -6,6 +6,7 @@ Square Monster est un jeu de plate-forme 2d inspiré du magnifique Super-Meat-Bo
 
 ## Versions
 * ![Download the current version](https://github.com/ManuStrozor/Skewer-Maker/blob/master/SquareMonster.jar?raw=true)
+* `04.12.2017` ![Beta 1.9](https://github.com/ManuStrozor/Skewer-Maker/blob/master/versions/beta1.9.jar?raw=true)
 * `01.12.2017` ![Beta 1.8.1](https://github.com/ManuStrozor/Skewer-Maker/blob/master/versions/beta1.8.1.jar?raw=true)
 * `30.11.2017` ![Beta 1.8](https://github.com/ManuStrozor/Skewer-Maker/blob/master/versions/beta1.8.jar?raw=true)
 * `21.11.2017` ![Beta 1.7.4](https://github.com/ManuStrozor/Skewer-Maker/blob/master/versions/beta1.7.4.jar?raw=true)
