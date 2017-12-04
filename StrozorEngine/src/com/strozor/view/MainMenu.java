@@ -5,16 +5,13 @@ import com.strozor.engine.GameRender;
 import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Button;
-import com.strozor.game.GameManager;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class MainMenu extends View {
 
-    private ImageTile objectsImage;
     private Settings settings;
     private SoundClip select;
 
@@ -23,7 +20,6 @@ public class MainMenu extends View {
 
     public MainMenu(Settings settings) {
         this.settings = settings;
-        objectsImage = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
 
         select = new SoundClip("/audio/hover.wav");
 
@@ -55,7 +51,7 @@ public class MainMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, 0);
-        r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
+        r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);

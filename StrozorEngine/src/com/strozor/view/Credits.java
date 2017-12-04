@@ -6,8 +6,6 @@ import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
-import com.strozor.engine.gfx.ImageTile;
-import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 
 public class Credits extends View {
 
-    private ImageTile objectsImage;
     private Settings settings;
     private SoundClip select;
 
@@ -28,7 +25,6 @@ public class Credits extends View {
 
     public Credits(Settings settings) {
         this.settings = settings;
-        objectsImage = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
         select = new SoundClip("/audio/hover.wav");
         buttons.add(back = new Button(60, 20, 11, 0));
     }

@@ -3,7 +3,6 @@ package com.strozor.view;
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.*;
-import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -12,7 +11,6 @@ import java.util.ArrayList;
 public class OptsMenu extends View {
 
     private Settings settings;
-    private ImageTile objectsImage;
 
     private SoundClip select;
 
@@ -21,7 +19,6 @@ public class OptsMenu extends View {
 
     public OptsMenu(Settings settings) {
         this.settings = settings;
-        objectsImage = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
 
         select = new SoundClip("/audio/hover.wav");
 

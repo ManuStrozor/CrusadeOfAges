@@ -13,18 +13,16 @@ import java.awt.event.MouseEvent;
 
 public class Crea extends AbstractGame {
 
-    public static Image creaMap;
+    public static Image creaImg;
 
     private Map map;
-
     private int[] elems = {-1, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13};
-    private int curr = 0;
-    private int color;
+    private int color, curr = 0;
 
     public Crea(int width, int height) {
         this.map = new Map();
-        creaMap = new Image(new int[width * height], width, height);
-        load();
+        creaImg = new Image(new int[width * height], width, height);
+        load(creaImg);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class Crea extends AbstractGame {
         int mouseTileX = (gc.getInput().getMouseX() + r.getCamX()) / GameManager.TS;
         int mouseTileY = (gc.getInput().getMouseY() + r.getCamY()) / GameManager.TS;
 
-        if(mouseTileX >= 0 && mouseTileX < creaMap.getW() && mouseTileY >= 0 && mouseTileY < creaMap.getH()) {
+        if(mouseTileX >= 0 && mouseTileX < creaImg.getW() && mouseTileY >= 0 && mouseTileY < creaImg.getH()) {
             if(gc.getCurrState() == 4) {
                 int speed = 10;
                 if(gc.getInput().getMouseX() == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
@@ -70,10 +68,10 @@ public class Crea extends AbstractGame {
             }
 
             if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
-                creaMap.setP(mouseTileX, mouseTileY, color);
+                creaImg.setP(mouseTileX, mouseTileY, color);
                 map.setBloc(mouseTileX, mouseTileY, elems[curr]);
             } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
-                creaMap.setP(mouseTileX, mouseTileY, 0x00000000);
+                creaImg.setP(mouseTileX, mouseTileY, 0x00000000);
                 map.setBloc(mouseTileX, mouseTileY, 0);
             }
         }
@@ -81,11 +79,11 @@ public class Crea extends AbstractGame {
         r.drawDock(gc, elems, curr);
     }
 
-    private void load() {
-        map.initMap(creaMap.getW(), creaMap.getH());
+    private void load(Image img) {
+        map.initMap(img.getW(), img.getH());
         for(int y = 0; y < map.getHeight(); y++) {
             for(int x = 0; x < map.getWidth(); x++) {
-                map.initBloc(x, y, creaMap.getP()[x + y * map.getWidth()]);
+                map.initBloc(x, y, img.getP()[x + y * map.getWidth()]);
             }
         }
     }

@@ -5,7 +5,6 @@ import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Image;
-import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Light;
 import com.strozor.engine.gfx.Map;
 
@@ -19,7 +18,6 @@ public class GameManager extends AbstractGame {
     public static boolean mapTester = false;
     public static String mapTest;
 
-    private ImageTile objectsImage = new ImageTile("/objects.png", TS, TS);
     private ArrayList<GameObject> objects = new ArrayList<>();
     private Camera camera;
     private Light lLamp, lPlayer;
@@ -126,10 +124,6 @@ public class GameManager extends AbstractGame {
 
     public SoundClip getGameOver() {
         return gameOver;
-    }
-
-    public ImageTile getObjectsImage() {
-        return objectsImage;
     }
 
     public boolean isMapTesting() {

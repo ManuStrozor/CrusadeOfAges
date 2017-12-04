@@ -40,7 +40,7 @@ public class CreaMenu extends View {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
                     if(btn == save)
-                        Crea.creaMap.saveImage();
+                        Crea.creaImg.saveIt();
                     select.play();
                     gc.setState(btn.getGoState());
                     gc.setLastState(5);

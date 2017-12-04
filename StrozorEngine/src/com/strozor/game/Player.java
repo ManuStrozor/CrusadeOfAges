@@ -200,7 +200,6 @@ public class Player extends GameObject {
             tileX--;
             offX += GameManager.TS;
         }
-        //END Final Position
 
         //Player faces & animations
         if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
@@ -228,7 +227,6 @@ public class Player extends GameObject {
 
         if(anim > 4) anim = 0;
         if(fallDist != 0) anim = 3;
-        //END Player faces & animation
 
         posX = tileX * GameManager.TS + offX;
         posY = tileY * GameManager.TS + offY;
