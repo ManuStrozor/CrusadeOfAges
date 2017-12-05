@@ -150,8 +150,9 @@ public class GameManager extends AbstractGame {
             try {
                 List<String> lines = Arrays.asList(
                         "gameLang:en",
-                        "showFPS:true",
-                        "showLights:false"
+                        "scale:3",
+                        "showFPS:false",
+                        "showLights:true"
                 );
                 Path file = Paths.get(appdata + "\\options.txt");
                 Files.write(file, lines, Charset.forName("UTF-8"));
@@ -174,6 +175,7 @@ public class GameManager extends AbstractGame {
                             default: settings.setLangIndex(0); break;
                         }
                         break;
+                    case "scale": settings.setScale(Float.valueOf(sub[1])); break;
                     case "showFPS": settings.setShowFps(sub[1].equals("true")); break;
                     case "showLights": settings.setShowLights(sub[1].equals("true")); break;
                 }
@@ -195,7 +197,7 @@ public class GameManager extends AbstractGame {
         }
         GameContainer gc = new GameContainer(new GameManager(new Map()), settings);
         gc.setTitle("Square Monster");
-        gc.setScale(3f);
+        gc.setScale(settings.getScale());
         gc.start();
     }
 }

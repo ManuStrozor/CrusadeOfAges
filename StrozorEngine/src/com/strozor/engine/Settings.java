@@ -39,9 +39,10 @@ public class Settings {
             {"GAME OVER", "MANCHE PERDU"},
             {"You are dead", "Vous êtes mort(e)"}
     };
-    private int langIndex = 1;
+    private int langIndex = 0;
+    private float scale = 3f;
     private boolean showFps = false;
-    private boolean showLights = false;
+    private boolean showLights = true;
 
     public Settings() {
 
@@ -57,6 +58,14 @@ public class Settings {
 
     public void setLangIndex(int langIndex) {
         this.langIndex = langIndex;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public boolean isShowFps() {

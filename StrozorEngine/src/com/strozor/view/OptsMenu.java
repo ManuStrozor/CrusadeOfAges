@@ -124,6 +124,7 @@ public class OptsMenu extends View {
                             case 1: newLines.add(line.replace(sub[1], "fr")); break;
                         }
                         break;
+                    case "scale": newLines.add(line); break;
                     case "showFPS": newLines.add(line.replace(sub[1], settings.isShowFps() ? "true" : "false")); break;
                     case "showLights": newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false")); break;
                 }

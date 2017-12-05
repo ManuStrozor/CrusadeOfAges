@@ -25,26 +25,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="GameManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="GameManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="167" column="47" lean-forward="true" selection-start-line="167" selection-start-column="47" selection-end-line="167" selection-end-column="47" />
+            <state relative-caret-position="389">
+              <caret line="190" column="71" lean-forward="true" selection-start-line="190" selection-start-column="71" selection-end-line="190" selection-end-column="71" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
                 <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
+                <element signature="method#readAppData#0;class#GameManager#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="OptsMenu.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="254">
-              <caret line="117" column="114" lean-forward="true" selection-start-line="117" selection-start-column="114" selection-end-line="117" selection-end-column="114" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -120,8 +111,8 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Map.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/Settings.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/Settings.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java" />
       </list>
@@ -134,7 +125,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="35" />
     <option name="y" value="27" />
     <option name="width" value="605" />
@@ -395,7 +386,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -760,31 +751,34 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/Settings.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="146">
-          <caret line="39" column="49" lean-forward="true" selection-start-line="39" selection-start-column="49" selection-end-line="39" selection-end-column="49" />
+        <state relative-caret-position="473">
+          <caret line="68" column="5" lean-forward="true" selection-start-line="68" selection-start-column="5" selection-end-line="68" selection-end-column="5" />
           <folding>
             <element signature="method#Settings#0;class#Settings#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="167" column="47" lean-forward="true" selection-start-line="167" selection-start-column="47" selection-end-line="167" selection-end-column="47" />
+        <state relative-caret-position="699">
+          <caret line="113" column="33" lean-forward="false" selection-start-line="113" selection-start-column="33" selection-end-line="113" selection-end-column="33" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
-            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
+            <element signature="method#updateAppData#0;class#OptsMenu#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java">
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="254">
-          <caret line="117" column="114" lean-forward="true" selection-start-line="117" selection-start-column="114" selection-end-line="117" selection-end-column="114" />
-          <folding />
+        <state relative-caret-position="389">
+          <caret line="190" column="71" lean-forward="true" selection-start-line="190" selection-start-column="71" selection-end-line="190" selection-end-column="71" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
+            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
+            <element signature="method#readAppData#0;class#GameManager#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
