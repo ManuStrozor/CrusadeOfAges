@@ -23,8 +23,8 @@ public class OptsMenu extends View {
         select = new SoundClip("/audio/hover.wav");
 
         buttons.add(tglLang = new Button(130, 20, 0, 0));
-        buttons.add(tglFps = new Button(130, 20, 9, 0));
-        buttons.add(tglLights = new Button(130, 20, 8, 0));
+        buttons.add(tglFps = new Button(130, 20, 7, 0));
+        buttons.add(tglLights = new Button(130, 20, 10, 0));
         buttons.add(back = new Button(130, 20, 11, 0));
     }
 

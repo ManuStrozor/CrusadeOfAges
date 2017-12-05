@@ -26,7 +26,7 @@ public class Settings {
             {"CONTRIBUTORS", "CONTRIBUTEURS"},
             {"Spawn", "Point d'apparition"},
             {"Floor", "Sol"},
-            {"Health bonus", "Bonus de santé"},
+            {"Health pill", "Pillule de santé"},
             {"Ground trap", "Piège au sol"},
             {"Ceiling trap", "Piège au plafond"},
             {"Key", "Clé"},
@@ -40,8 +40,8 @@ public class Settings {
             {"You are dead", "Vous êtes mort(e)"}
     };
     private int langIndex = 1;
-    private boolean showFps = true;
-    private boolean showLights = true;
+    private boolean showFps = false;
+    private boolean showLights = false;
 
     public Settings() {
 
