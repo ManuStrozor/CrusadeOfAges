@@ -3,16 +3,20 @@ package com.strozor.game;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
+import com.strozor.engine.gfx.FlashNotif;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.gfx.Map;
 
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class Player extends GameObject {
 
     private Map map;
 
     private ImageTile playerImage = new ImageTile("/player.png", GameManager.TS, GameManager.TS);
+
+    private ArrayList<FlashNotif> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
     private float offX, offY, pauseRes = 0, anim = 0;
@@ -49,6 +53,12 @@ public class Player extends GameObject {
 
     @Override
     public void update(GameContainer gc, GameManager gm, float dt) {
+
+        //Notifications update
+        for(int i = 0; i < notifs.size(); i++) {
+            notifs.get(i).update(gc, dt);
+            if(notifs.get(i).isEnded()) notifs.remove(i);
+        }
 
         //Bouncing block
         if(map.getId(tileX, tileY + 1) == 12 && fallDist == 0) {
@@ -269,6 +279,7 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, GameManager gm, GameRender r) {
         r.drawImageTile(playerImage, (int)posX, (int)posY, direction, (int)anim);
+        for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
     private void respawn(int x, int y) {

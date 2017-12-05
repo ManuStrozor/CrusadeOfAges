@@ -68,18 +68,16 @@ public class GameManager extends AbstractGame {
                 String filename = sdf.format(new Date()) + ".png";
                 File out = new File(GameManager.APPDATA + "\\screenshots\\" + filename);
                 ImageIO.write(gc.getWindow().getImage(), "png", out);
-                notifs.add(new FlashNotif(filename, 3, 100));
+                notifs.add(new FlashNotif(filename, 3, 100, -1));
             } catch(IOException e) {
                 e.printStackTrace();
             }
         }
 
+        //Notifications update
         for(int i = 0; i < notifs.size(); i++) {
             notifs.get(i).update(gc, dt);
-            if(notifs.get(i).getElapsed() == notifs.get(i).getDuration()) {
-                notifs.remove(i);
-                i--;
-            }
+            if(notifs.get(i).isEnded()) notifs.remove(i);
         }
 
         for(int i = 0; i < objects.size(); i++) {
