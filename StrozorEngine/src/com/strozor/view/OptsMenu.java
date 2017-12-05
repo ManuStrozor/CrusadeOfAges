@@ -6,7 +6,12 @@ import com.strozor.engine.gfx.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OptsMenu extends View {
 
@@ -23,15 +28,18 @@ public class OptsMenu extends View {
         select = new SoundClip("/audio/hover.wav");
 
         buttons.add(tglLang = new Button(130, 20, 0, 0));
-        buttons.add(tglFps = new Button(130, 20, 7, 0));
-        buttons.add(tglLights = new Button(130, 20, 10, 0));
+        buttons.add(tglFps = new Button(130, 20, settings.isShowFps() ? 9 : 7, 0));
+        buttons.add(tglLights = new Button(130, 20, settings.isShowLights() ? 8 : 10, 0));
         buttons.add(back = new Button(130, 20, 11, 0));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            updateAppData();
+            gc.setState(gc.getLastState());
+        }
 
         for(Button btn : buttons) {
             btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
@@ -74,6 +82,7 @@ public class OptsMenu extends View {
             }
         } else if(mouseIsHover(gc, back)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
+                updateAppData();
                 gc.setState(gc.getLastState());
             }
         }
@@ -100,5 +109,28 @@ public class OptsMenu extends View {
         back.setOffY(tglLights.getOffY() + tglLights.getHeight() + 10);
 
         for(Button btn : buttons) r.drawButton(btn);
+    }
+
+    private void updateAppData() {
+        try {
+            String appdata = System.getenv("APPDATA") + "\\.squaremonster";
+            List<String> newLines = new ArrayList<>();
+            for (String line : Files.readAllLines(Paths.get(appdata + "\\options.txt"), StandardCharsets.UTF_8)) {
+                String[] sub = line.split(":");
+                switch(sub[0]) {
+                    case "gameLang":
+                        switch(settings.getLangIndex()) {
+                            case 0: newLines.add(line.replace(sub[1], "en")); break;
+                            case 1: newLines.add(line.replace(sub[1], "fr")); break;
+                        }
+                        break;
+                    case "showFPS": newLines.add(line.replace(sub[1], settings.isShowFps() ? "true" : "false")); break;
+                    case "showLights": newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false")); break;
+                }
+            }
+            Files.write(Paths.get(appdata + "\\options.txt"), newLines, StandardCharsets.UTF_8);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 }

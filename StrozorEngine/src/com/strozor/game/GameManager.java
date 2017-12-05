@@ -3,13 +3,24 @@ package com.strozor.game;
 import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
+import com.strozor.engine.Settings;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Image;
 import com.strozor.engine.gfx.Light;
 import com.strozor.engine.gfx.Map;
 
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GameManager extends AbstractGame {
 
@@ -130,12 +141,59 @@ public class GameManager extends AbstractGame {
         return mapTest;
     }
 
+    static void writeAppData(String appdata) {
+        File smFolder = new File(appdata);
+        if(!smFolder.exists())
+            smFolder.mkdir();
+        File smOptFile = new File(appdata + "\\options.txt");
+        if(!smOptFile.exists()) {
+            try {
+                List<String> lines = Arrays.asList(
+                        "gameLang:en",
+                        "showFPS:true",
+                        "showLights:false"
+                );
+                Path file = Paths.get(appdata + "\\options.txt");
+                Files.write(file, lines, Charset.forName("UTF-8"));
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    static void readAppData(Settings settings, String appdata) {
+        try(BufferedReader br = new BufferedReader(new FileReader(appdata + "\\options.txt"))) {
+            String line = br.readLine();
+            while (line != null) {
+                String[] sub = line.split(":");
+                switch(sub[0]) {
+                    case "gameLang":
+                        switch(sub[1]) {
+                            case "en": settings.setLangIndex(0); break;
+                            case "fr": settings.setLangIndex(1); break;
+                            default: settings.setLangIndex(0); break;
+                        }
+                        break;
+                    case "showFPS": settings.setShowFps(sub[1].equals("true")); break;
+                    case "showLights": settings.setShowLights(sub[1].equals("true")); break;
+                }
+                line = br.readLine();
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
+        Settings settings = new Settings();
+        String appdata = System.getenv("APPDATA") + "\\.squaremonster";
+        writeAppData(appdata);
+        readAppData(settings, appdata);
         if(args.length == 1) {
             mapTester = true;
             mapTest = args[0];
         }
-        GameContainer gc = new GameContainer(new GameManager(new Map()));
+        GameContainer gc = new GameContainer(new GameManager(new Map()), settings);
         gc.setTitle("Square Monster");
         gc.setScale(3f);
         gc.start();

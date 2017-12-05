@@ -38,9 +38,9 @@ public class GameContainer implements Runnable {
     public STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game) {
+    public GameContainer(AbstractGame game, Settings settings) {
         this.game = game;
-        this.settings = new Settings();
+        this.settings = settings;
 
         this.mainMenu = new MainMenu(settings);
         this.optsMenu = new OptsMenu(settings);
