@@ -4,8 +4,6 @@ import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.gfx.Image;
-import com.strozor.engine.gfx.ImageTile;
-import com.strozor.engine.gfx.Light;
 import com.strozor.engine.gfx.Map;
 
 import java.awt.event.KeyEvent;
@@ -16,7 +14,7 @@ public class Crea extends AbstractGame {
     public static Image creaImg;
 
     private Map map;
-    private int[] elems = {-1, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13};
+    private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, curr = 0;
 
     public Crea(int width, int height) {
@@ -46,6 +44,7 @@ public class Crea extends AbstractGame {
             case 5: color = 0xff0000ff; break;
             case 6: color = 0xffff7700; break;
             case 7: color = 0xffffff00; break;
+            case 8: color = 0xff009900; break;
             case 11: color = 0xff00ffff; break;
             case 12: color = 0xff777777; break;
             case 13: color = 0xff999999; break;

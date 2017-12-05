@@ -47,7 +47,7 @@ public class OverMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawMenuTitle(gc, settings.getWords()[32][settings.getLangIndex()], settings.getWords()[33][settings.getLangIndex()]);
+        r.drawMenuTitle(gc, settings.getWords()[33][settings.getLangIndex()], settings.getWords()[34][settings.getLangIndex()]);
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);

@@ -13,24 +13,21 @@ import java.util.ArrayList;
 
 public class GameManager extends AbstractGame {
 
-    public static final int TS = 16;
+    public static final int TS = 32;
 
     public static boolean mapTester = false;
     public static String mapTest;
 
     private ArrayList<GameObject> objects = new ArrayList<>();
     private Camera camera;
-    private Light lLamp, lPlayer;
+    private Light lPlayer;
     private SoundClip gameOver;
 
     private Map map;
     private int currLevel = 0;
     private String[] levelList = {
-            "/levels/level0.png",
-            "/levels/level1.png",
-            "/levels/level2.png",
-            "/levels/level3.png",
-            "/levels/level4.png"
+            "/levels/0.png",
+            "/levels/1.png"
     };
 
     private GameManager(Map map) {
@@ -45,8 +42,7 @@ public class GameManager extends AbstractGame {
         objects.add(new Player("player", map, 1));
         camera = new Camera("player", map);
 
-        lLamp = new Light(70, -1);
-        lPlayer = new Light(150, -1);
+        lPlayer = new Light(100, -1);
     }
 
     @Override
@@ -87,7 +83,7 @@ public class GameManager extends AbstractGame {
         camera.render(r);
         r.drawMap(map);
         if(gc.getSettings().isShowLights())
-            r.drawMapLights(map, lLamp);
+            r.drawMapLights(map, new Light(80, 0xffffff00));
         for(GameObject obj : objects) obj.render(gc, this, r);
     }
 

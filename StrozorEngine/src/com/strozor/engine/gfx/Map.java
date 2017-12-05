@@ -45,6 +45,10 @@ public class Map {
         this.spawnY = spawnY;
     }
 
+    public String getName(int x, int y) {
+        return name[x + y * width];
+    }
+
     public int getId(int x, int y) {
         return id[x + y * width];
     }
@@ -64,7 +68,6 @@ public class Map {
     public void animate(float speed) {
         for(int i = 0; i < width * height; i++) {
             anim[i] += speed;
-            if(name[i].equals("Coin")) tileY[i] = (int) (anim[i] > 6 ? anim[i] = 0 : anim[i]);
             if(name[i].equals("Torch")) tileY[i] = (int) (anim[i] > 3 ? anim[i] = 0 : anim[i]);
         }
     }
@@ -127,6 +130,12 @@ public class Map {
                 name[index] = "Coin";
                 solid[index] = false;
                 break;
+            case 8:
+                tileX[index] = 0;
+                tileY[index] = 1;
+                name[index] = "Ladder";
+                solid[index] = false;
+                break;
             case 9:
                 tileX[index] = 1;
                 tileY[index] = 2;
@@ -150,11 +159,11 @@ public class Map {
                 tileX[index] = 0;
                 tileY[index] = 2;
                 name[index] = "Bouncing bloc";
-                solid[index] = false;
+                solid[index] = true;
                 break;
             case 13:
-                tileX[index] = 4;
-                tileY[index] = 3;
+                tileX[index] = 5;
+                tileY[index] = 2;
                 name[index] = "Door";
                 solid[index] = false;
                 break;
@@ -231,6 +240,13 @@ public class Map {
                 solid[index] = false;
                 id[index] = 7;
                 break;
+            case 0xff009900:
+                tileX[index] = 0;
+                tileY[index] = 1;
+                name[index] = "Ladder";
+                solid[index] = false;
+                id[index] = 8;
+                break;
             case 0xff990000:
                 tileX[index] = 1;
                 tileY[index] = 2;
@@ -257,12 +273,12 @@ public class Map {
                 tileX[index] = 0;
                 tileY[index] = 2;
                 name[index] = "Bouncing bloc";
-                solid[index] = false;
+                solid[index] = true;
                 id[index] = 12;
                 break;
             case 0xff999999:
-                tileX[index] = 4;
-                tileY[index] = 3;
+                tileX[index] = 5;
+                tileY[index] = 2;
                 name[index] = "Door";
                 solid[index] = false;
                 id[index] = 13;

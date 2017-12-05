@@ -18,7 +18,7 @@ public class Settings {
             {"Back to game", "Retour au jeu"},
             {"Quit to title", "Menu principal"},
             {"Try again", "Recommencer"},
-            {"Back to creative mode", "Retour au mode créatif"},
+            {"Keep on", "Continuer"},
             {"Save & Quit game", "Enregistrer & quitter"},
             {"Development team", "Equipe de développement"},
             {"MAIN DEVELOPERS", "PRINCIPAUX DEVELOPPEURS"},
@@ -26,20 +26,21 @@ public class Settings {
             {"CONTRIBUTORS", "CONTRIBUTEURS"},
             {"Spawn", "Point d'apparition"},
             {"Floor", "Sol"},
-            {"Heart", "Coeur"},
-            {"Bottom trap", "Piège vers le haut"},
-            {"Top trap", "Piège vers le bas"},
+            {"Health bonus", "Bonus de santé"},
+            {"Ground trap", "Piège au sol"},
+            {"Ceiling trap", "Piège au plafond"},
             {"Key", "Clé"},
             {"Check point", "Point de sauvegarde"},
             {"Coin", "Pièce"},
             {"Torch", "Torche"},
-            {"Bouncing carpet", "Tapis rebondissant"},
+            {"Slime bloc", "Bloc de slime"},
             {"Door", "Porte"},
+            {"Ladder", "Echelle"},
             {"GAME OVER", "MANCHE PERDU"},
             {"You are dead", "Vous êtes mort(e)"}
     };
-    private int langIndex = 0;
-    private boolean showFps = false;
+    private int langIndex = 1;
+    private boolean showFps = true;
     private boolean showLights = true;
 
     public Settings() {

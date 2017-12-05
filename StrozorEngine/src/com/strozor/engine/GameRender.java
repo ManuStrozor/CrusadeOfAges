@@ -34,7 +34,7 @@ public class GameRender {
         for(int i = 0; i < p.length; i++) {
             p[i] = 0;
             zb[i] = 0;
-            lm[i] = 0xff424242;
+            lm[i] = 0xff898989;
         }
     }
 
@@ -124,6 +124,7 @@ public class GameRender {
             case 5: value = 3; break;
             case 6: value = 3; break;
             case 7: value = 5; break;
+            case 8: value = 0; break;
             case 9: value = 1; break;
             case 10: value = 2; break;
             case 11: value = 4; break;
@@ -145,6 +146,7 @@ public class GameRender {
             case 5: value = 1; break;
             case 6: value = 0; break;
             case 7: value = 0; break;
+            case 8: value = 1; break;
             case 9: value = 2; break;
             case 10: value = 2; break;
             case 11: value = 0; break;
@@ -183,7 +185,7 @@ public class GameRender {
         }
     }
 
-    public void drawImage(Image image, int offX, int offY) {
+    private void drawImage(Image image, int offX, int offY) {
 
         offX -= camX;
         offY -= camY;
@@ -247,7 +249,7 @@ public class GameRender {
         }
     }
 
-    public void drawRect(int offX, int offY, int width, int height, int color) {
+    private void drawRect(int offX, int offY, int width, int height, int color) {
 
         offX -= camX;
         offY -= camY;
@@ -263,7 +265,7 @@ public class GameRender {
         }
     }
 
-    public void fillRect(int offX, int offY, int width, int height, int color) {
+    private void fillRect(int offX, int offY, int width, int height, int color) {
 
         offX -= camX;
         offY -= camY;
@@ -290,7 +292,7 @@ public class GameRender {
         }
     }
 
-    public void drawLight(Light l, int offX, int offY) {
+    private void drawLight(Light l, int offX, int offY) {
 
         offX -= camX;
         offY -= camY;
@@ -365,9 +367,14 @@ public class GameRender {
     public void drawMap(Map map) {
         for(int y = 0; y < map.getHeight(); y++) {
             for(int x = 0; x < map.getWidth(); x++) {
-                if(map.getId(x, y) != 1)
+                if(!map.getSolid(x, y))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 1, 0);
-                drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y));
+                if(map.getId(x, y) != 0)
+                    drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y));
+                if(!map.getSolid(x, y) && map.getSolid(x, y - 1))
+                    drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 0, 3);
+                if(map.getName(x, y).equals("Door"))
+                    drawImageTile(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y)-1);
             }
         }
     }
@@ -376,7 +383,7 @@ public class GameRender {
         for(int y = 0; y < map.getHeight(); y++) {
             for(int x = 0; x < map.getWidth(); x++) {
                 if(map.getId(x, y) == 11)
-                    drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 2);
+                    drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 3);
             }
         }
     }
@@ -419,6 +426,7 @@ public class GameRender {
             case 5: name = settings.getWords()[26][settings.getLangIndex()]; break;
             case 6: name = settings.getWords()[27][settings.getLangIndex()]; break;
             case 7: name = settings.getWords()[28][settings.getLangIndex()]; break;
+            case 8:name = settings.getWords()[32][settings.getLangIndex()]; break;
             case 11:name = settings.getWords()[29][settings.getLangIndex()]; break;
             case 12:name = settings.getWords()[30][settings.getLangIndex()]; break;
             case 13:name = settings.getWords()[31][settings.getLangIndex()]; break;

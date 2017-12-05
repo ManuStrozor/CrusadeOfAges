@@ -128,9 +128,9 @@ public class GameContainer implements Runnable {
                 if(State == STATE.GAME || State == STATE.GAMEMENU || State == STATE.OVERMENU || (State == STATE.OPTSMENU && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
-                    if(settings.isShowLights())
-                        gameRender.process();
-                    if(gm.getObject("player") != null) gameRender.drawGameStates(gm.getObject("player"));
+                    if(settings.isShowLights()) gameRender.process();
+                    if(gm.getObject("player") != null)
+                        gameRender.drawGameStates(gm.getObject("player"));
                 } else if(State == STATE.CREA || State == STATE.CREAMENU) {
                     crea.render(this, gameRender);
                 }
@@ -151,7 +151,7 @@ public class GameContainer implements Runnable {
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
-                    gameRender.drawText(title + " Beta1.9", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText(title + " Beta2.0", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 

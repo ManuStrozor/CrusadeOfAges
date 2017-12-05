@@ -51,8 +51,8 @@ public class Player extends GameObject {
     public void update(GameContainer gc, GameManager gm, float dt) {
 
         //Bouncing block
-        if(map.getId(tileX, tileY) == 12 && fallDist == 0) {
-            fallDist = -6;
+        if(map.getId(tileX, tileY + 1) == 12 && fallDist == 0) {
+            fallDist = -10;
             if(!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
                 jump.play();
         }
@@ -155,30 +155,61 @@ public class Player extends GameObject {
                 }
             }
 
-            //Jump & Gravity
-            fallDist += dt * 10;
-
-            if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
-                fallDist = -3;
-                if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
-                    jump.play();
-                ground++;
-            }
-
-            offY += fallDist;
-
-            if (fallDist < 0) {
-                if ((map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
-                    fallDist = 0;
-                    offY = 0;
+            if(map.getName(tileX, tileY).equals("Ladder") || (map.getName(tileX, tileY + 1).equals("Ladder") && fallDist == 0)) {
+                //Climbing ladders
+                fallDist = 0;
+                ground = 0;
+                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
+                    if(!map.getName(tileX, tileY).equals("Ladder")) {
+                        fallDist = -5;
+                        if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                            jump.play();
+                        ground++;
+                    } else if (map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
+                        if (offY > 0) {
+                            offY -= dt * speed;
+                            if (offY < 0) offY = 0;
+                        } else {
+                            offY = 0;
+                        }
+                    } else {
+                        offY -= dt * speed;
+                    }
+                } else if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
+                    if (map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
+                        if (offY < 0) {
+                            offY += dt * speed;
+                            if (offY > 0) offY = 0;
+                        } else {
+                            offY = 0;
+                        }
+                    } else {
+                        offY += dt * speed;
+                    }
                 }
-            }
+            } else {
+                //Jump & Gravity
+                fallDist += dt * 14;
 
-            if (fallDist > 0) {
-                if ((map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
-                    fallDist = 0;
-                    offY = 0;
-                    ground = 0;
+                if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
+                    fallDist = -5;
+                    if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                        jump.play();
+                    ground++;
+                }
+                offY += fallDist;
+                if (fallDist < 0) {
+                    if ((map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                        fallDist = 0;
+                        offY = 0;
+                    }
+                }
+                if (fallDist > 0) {
+                    if ((map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                        fallDist = 0;
+                        offY = 0;
+                        ground = 0;
+                    }
                 }
             }
         }
@@ -217,12 +248,15 @@ public class Player extends GameObject {
         }
 
         //Snick -> Slow
-        if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
-            speed = 30;
-            anim += dt * 6;
+        if(map.getName(tileX, tileY).equals("Ladder")) {
+            speed = 180;
+            anim += dt * 18;
+        } else if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
+            speed = 40;
+            anim += dt * 4;
         } else {
-            speed = 100;
-            anim += dt * 20;
+            speed = 180;
+            anim += dt * 18;
         }
 
         if(anim > 4) anim = 0;
@@ -235,8 +269,9 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, GameManager gm, GameRender r) {
         r.drawImageTile(playerImage, (int)posX, (int)posY, direction, (int)anim);
-        if(gc.getSettings().isShowLights())
-            r.drawLight(gm.getlPlayer(), (int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
+        if(gc.getSettings().isShowLights()) {
+            //r.drawLight(gm.getlPlayer(), (int) posX + GameManager.TS / 2, (int) posY + GameManager.TS / 2);
+        }
     }
 
     private void respawn(int x, int y) {
