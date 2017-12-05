@@ -5,10 +5,9 @@ import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.Settings;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Image;
-import com.strozor.engine.gfx.Light;
-import com.strozor.engine.gfx.Map;
+import com.strozor.engine.gfx.*;
 
+import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,20 +17,24 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class GameManager extends AbstractGame {
 
     public static final int TS = 32;
+    public static final String APPDATA = System.getenv("APPDATA") + "\\.squaremonster";
 
-    public static boolean mapTester = false;
-    public static String mapTest;
+    private static boolean mapTester = false;
+    private static String mapTest;
 
     private ArrayList<GameObject> objects = new ArrayList<>();
+    private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
-    private Light lPlayer;
     private SoundClip gameOver;
 
     private Map map;
@@ -52,14 +55,32 @@ public class GameManager extends AbstractGame {
         gameOver = new SoundClip("/audio/gameover.wav");
         objects.add(new Player("player", map, 1));
         camera = new Camera("player", map);
-
-        lPlayer = new Light(100, -1);
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
+
+        if(gc.getInput().isKeyDown(KeyEvent.VK_F12)) {
+            try {
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+                String filename = sdf.format(new Date()) + ".png";
+                File out = new File(GameManager.APPDATA + "\\screenshots\\" + filename);
+                ImageIO.write(gc.getWindow().getImage(), "png", out);
+                notifs.add(new FlashNotif(filename, 3, 100));
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for(int i = 0; i < notifs.size(); i++) {
+            notifs.get(i).update(gc, dt);
+            if(notifs.get(i).getElapsed() == notifs.get(i).getDuration()) {
+                notifs.remove(i);
+                i--;
+            }
+        }
 
         for(int i = 0; i < objects.size(); i++) {
             objects.get(i).update(gc, this, dt);
@@ -96,6 +117,7 @@ public class GameManager extends AbstractGame {
         if(gc.getSettings().isShowLights())
             r.drawMapLights(map, new Light(80, 0xffffff00));
         for(GameObject obj : objects) obj.render(gc, this, r);
+        for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
     public void load(String path) {
@@ -106,10 +128,6 @@ public class GameManager extends AbstractGame {
                 map.initBloc(x, y, img.getP()[x + y * map.getWidth()]);
             }
         }
-    }
-
-    public Light getlPlayer() {
-        return lPlayer;
     }
 
     public int getCurrLevel() {
@@ -141,21 +159,25 @@ public class GameManager extends AbstractGame {
         return mapTest;
     }
 
-    static void writeAppData(String appdata) {
+    static private void writeAppData() {
         //.squaremonster
-        File smFolder = new File(appdata);
+        File smFolder = new File(APPDATA);
         if(!smFolder.exists()) smFolder.mkdir();
 
+        //assets
+        File smAssets = new File(APPDATA + "\\assets");
+        if(!smAssets.exists()) smAssets.mkdir();
+
         //screenshots
-        File smScreenshots = new File(appdata + "\\screenshots");
+        File smScreenshots = new File(APPDATA + "\\screenshots");
         if(!smScreenshots.exists()) smScreenshots.mkdir();
 
         //creative_mode
-        File smCrea = new File(appdata + "\\creative_mode");
+        File smCrea = new File(APPDATA + "\\creative_mode");
         if(!smCrea.exists()) smCrea.mkdir();
 
         //options.txt
-        File smOptFile = new File(appdata + "\\options.txt");
+        File smOptFile = new File(APPDATA + "\\options.txt");
         if(!smOptFile.exists()) {
             try {
                 List<String> lines = Arrays.asList(
@@ -165,7 +187,7 @@ public class GameManager extends AbstractGame {
                         "showFPS:false",
                         "showLights:true"
                 );
-                Path file = Paths.get(appdata + "\\options.txt");
+                Path file = Paths.get(APPDATA + "\\options.txt");
                 Files.write(file, lines, Charset.forName("UTF-8"));
             } catch(IOException e) {
                 e.printStackTrace();
@@ -173,8 +195,8 @@ public class GameManager extends AbstractGame {
         }
     }
 
-    static void readAppData(Settings settings, String appdata) {
-        try(BufferedReader br = new BufferedReader(new FileReader(appdata + "\\options.txt"))) {
+    static private void readOptions(Settings settings) {
+        try(BufferedReader br = new BufferedReader(new FileReader(APPDATA + "\\options.txt"))) {
             String line = br.readLine();
             while (line != null) {
                 String[] sub = line.split(":");
@@ -200,9 +222,8 @@ public class GameManager extends AbstractGame {
 
     public static void main(String[] args) {
         Settings settings = new Settings();
-        String appdata = System.getenv("APPDATA") + "\\.squaremonster";
-        writeAppData(appdata);
-        readAppData(settings, appdata);
+        writeAppData();
+        readOptions(settings);
         if(args.length == 1) {
             mapTester = true;
             mapTest = args[0];
