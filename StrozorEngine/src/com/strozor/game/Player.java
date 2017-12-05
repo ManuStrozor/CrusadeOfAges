@@ -269,9 +269,6 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, GameManager gm, GameRender r) {
         r.drawImageTile(playerImage, (int)posX, (int)posY, direction, (int)anim);
-        if(gc.getSettings().isShowLights()) {
-            //r.drawLight(gm.getlPlayer(), (int) posX + GameManager.TS / 2, (int) posY + GameManager.TS / 2);
-        }
     }
 
     private void respawn(int x, int y) {

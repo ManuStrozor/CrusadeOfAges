@@ -1,5 +1,7 @@
 package com.strozor.engine.gfx;
 
+import com.strozor.game.GameManager;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,19 +17,15 @@ public class Image {
     private boolean alpha = false;
 
     public Image(String path, boolean test) {
-        BufferedImage image = null;
-
         try {
-            image = test ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
+            BufferedImage image = test ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
+            w = image.getWidth();
+            h = image.getHeight();
+            p = image.getRGB(0, 0, w, h, null, 0, w);
+            image.flush();
         } catch(IOException e) {
             e.printStackTrace();
         }
-
-        w = image.getWidth();
-        h = image.getHeight();
-        p = image.getRGB(0, 0, w, h, null, 0, w);
-
-        image.flush();
     }
 
     public Image(int[] p, int w, int h) {
@@ -35,8 +33,6 @@ public class Image {
         this.w = w;
         this.h = h;
     }
-
-    public Image() {}
 
     public int getW() {
         return w;
@@ -58,21 +54,16 @@ public class Image {
         return alpha;
     }
 
-    public void saveIt(String path, BufferedImage screen) {
-        try {
-            BufferedImage bi;
-            if(screen == null) {
-                bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-                for(int y = 0; y < h; y++) {
-                    for(int x = 0; x < w; x++) {
-                        bi.setRGB(x, y, p[x + y * w]);
-                    }
-                }
-            } else {
-                bi = screen;
+    public void saveIt() {
+        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for(int y = 0; y < h; y++) {
+            for(int x = 0; x < w; x++) {
+                bi.setRGB(x, y, p[x + y * w]);
             }
+        }
+        try {
             DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-            File out = new File(path + sdf.format(new Date()) + ".png");
+            File out = new File(GameManager.APPDATA + "\\creative_mode\\" + sdf.format(new Date()) + ".png");
             ImageIO.write(bi, "png", out);
         } catch(IOException e) {
             e.printStackTrace();

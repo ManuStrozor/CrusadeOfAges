@@ -39,8 +39,7 @@ public class CreaMenu extends View {
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                    if(btn == save)
-                        Crea.creaImg.saveIt(System.getenv("APPDATA") + "\\.squaremonster\\creative_mode\\", null);
+                    if(btn == save) Crea.creaImg.saveIt();
                     select.play();
                     gc.setState(btn.getGoState());
                     gc.setLastState(5);

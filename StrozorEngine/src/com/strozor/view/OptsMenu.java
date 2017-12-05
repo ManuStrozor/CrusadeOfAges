@@ -3,6 +3,7 @@ package com.strozor.view;
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.*;
+import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -37,7 +38,7 @@ public class OptsMenu extends View {
     public void update(GameContainer gc, float dt) {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            updateAppData();
+            updateOptions();
             gc.setState(gc.getLastState());
         }
 
@@ -82,7 +83,7 @@ public class OptsMenu extends View {
             }
         } else if(mouseIsHover(gc, back)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                updateAppData();
+                updateOptions();
                 gc.setState(gc.getLastState());
             }
         }
@@ -111,11 +112,10 @@ public class OptsMenu extends View {
         for(Button btn : buttons) r.drawButton(btn);
     }
 
-    private void updateAppData() {
+    private void updateOptions() {
         try {
-            String appdata = System.getenv("APPDATA") + "\\.squaremonster";
             List<String> newLines = new ArrayList<>();
-            for (String line : Files.readAllLines(Paths.get(appdata + "\\options.txt"), StandardCharsets.UTF_8)) {
+            for (String line : Files.readAllLines(Paths.get(GameManager.APPDATA + "\\options.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
@@ -130,7 +130,7 @@ public class OptsMenu extends View {
                     case "showLights": newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false")); break;
                 }
             }
-            Files.write(Paths.get(appdata + "\\options.txt"), newLines, StandardCharsets.UTF_8);
+            Files.write(Paths.get(GameManager.APPDATA + "\\options.txt"), newLines, StandardCharsets.UTF_8);
         } catch(IOException e) {
             e.printStackTrace();
         }

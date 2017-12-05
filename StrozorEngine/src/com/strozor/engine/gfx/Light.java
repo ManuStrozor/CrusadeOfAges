@@ -35,23 +35,7 @@ public class Light {
         return radius;
     }
 
-    public void setRadius(int radius) {
-        this.radius = radius;
-    }
-
     public int getDiameter() {
         return diameter;
-    }
-
-    public void setDiameter(int diameter) {
-        this.diameter = diameter;
-    }
-
-    public int getColor() {
-        return color;
-    }
-
-    public int[] getLm() {
-        return lm;
     }
 }
