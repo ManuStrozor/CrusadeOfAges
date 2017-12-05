@@ -41,6 +41,7 @@ public class Settings {
     };
     private int langIndex = 0;
     private float scale = 3f;
+    private int maxFPS = 60;
     private boolean showFps = false;
     private boolean showLights = true;
 
@@ -66,6 +67,14 @@ public class Settings {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public int getMaxFPS() {
+        return maxFPS;
+    }
+
+    public void setMaxFPS(int maxFPS) {
+        this.maxFPS = maxFPS;
     }
 
     public boolean isShowFps() {

@@ -142,15 +142,26 @@ public class GameManager extends AbstractGame {
     }
 
     static void writeAppData(String appdata) {
+        //.squaremonster
         File smFolder = new File(appdata);
-        if(!smFolder.exists())
-            smFolder.mkdir();
+        if(!smFolder.exists()) smFolder.mkdir();
+
+        //screenshots
+        File smScreenshots = new File(appdata + "\\screenshots");
+        if(!smScreenshots.exists()) smScreenshots.mkdir();
+
+        //creative_mode
+        File smCrea = new File(appdata + "\\creative_mode");
+        if(!smCrea.exists()) smCrea.mkdir();
+
+        //options.txt
         File smOptFile = new File(appdata + "\\options.txt");
         if(!smOptFile.exists()) {
             try {
                 List<String> lines = Arrays.asList(
-                        "gameLang:en",
-                        "scale:3",
+                        "lang:en",
+                        "guiScale:3",
+                        "maxFPS:60",
                         "showFPS:false",
                         "showLights:true"
                 );
@@ -168,14 +179,15 @@ public class GameManager extends AbstractGame {
             while (line != null) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
-                    case "gameLang":
+                    case "lang":
                         switch(sub[1]) {
                             case "en": settings.setLangIndex(0); break;
                             case "fr": settings.setLangIndex(1); break;
                             default: settings.setLangIndex(0); break;
                         }
                         break;
-                    case "scale": settings.setScale(Float.valueOf(sub[1])); break;
+                    case "guiScale": settings.setScale(Float.valueOf(sub[1])); break;
+                    case "maxFPS": settings.setMaxFPS(Integer.valueOf(sub[1])); break;
                     case "showFPS": settings.setShowFps(sub[1].equals("true")); break;
                     case "showLights": settings.setShowLights(sub[1].equals("true")); break;
                 }

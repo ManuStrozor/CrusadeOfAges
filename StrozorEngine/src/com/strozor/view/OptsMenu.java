@@ -118,13 +118,14 @@ public class OptsMenu extends View {
             for (String line : Files.readAllLines(Paths.get(appdata + "\\options.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
-                    case "gameLang":
+                    case "lang":
                         switch(settings.getLangIndex()) {
                             case 0: newLines.add(line.replace(sub[1], "en")); break;
                             case 1: newLines.add(line.replace(sub[1], "fr")); break;
                         }
                         break;
-                    case "scale": newLines.add(line); break;
+                    case "guiScale": newLines.add(line); break;
+                    case "maxFPS": newLines.add(line); break;
                     case "showFPS": newLines.add(line.replace(sub[1], settings.isShowFps() ? "true" : "false")); break;
                     case "showLights": newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false")); break;
                 }

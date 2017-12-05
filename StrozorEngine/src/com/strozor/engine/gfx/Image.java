@@ -36,6 +36,8 @@ public class Image {
         this.h = h;
     }
 
+    public Image() {}
+
     public int getW() {
         return w;
     }
@@ -56,16 +58,21 @@ public class Image {
         return alpha;
     }
 
-    public void saveIt() {
+    public void saveIt(String path, BufferedImage screen) {
         try {
-            BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-            for(int y = 0; y < h; y++) {
-                for(int x = 0; x < w; x++) {
-                    bi.setRGB(x, y, p[x + y * w]);
+            BufferedImage bi;
+            if(screen == null) {
+                bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+                for(int y = 0; y < h; y++) {
+                    for(int x = 0; x < w; x++) {
+                        bi.setRGB(x, y, p[x + y * w]);
+                    }
                 }
+            } else {
+                bi = screen;
             }
-            DateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-            File out = new File(sdf.format(new Date())+".png");
+            DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+            File out = new File(path + sdf.format(new Date()) + ".png");
             ImageIO.write(bi, "png", out);
         } catch(IOException e) {
             e.printStackTrace();

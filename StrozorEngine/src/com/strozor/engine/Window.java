@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.awt.event.FocusListener;
-import java.awt.event.FocusEvent;
 
 public class Window {
 

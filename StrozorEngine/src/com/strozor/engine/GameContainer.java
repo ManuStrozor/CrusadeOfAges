@@ -1,9 +1,12 @@
 package com.strozor.engine;
 
 import com.strozor.engine.gfx.Font;
+import com.strozor.engine.gfx.Image;
 import com.strozor.game.GameManager;
 import com.strozor.game.Crea;
 import com.strozor.view.*;
+
+import java.awt.event.KeyEvent;
 
 public class GameContainer implements Runnable {
 
@@ -108,6 +111,10 @@ public class GameContainer implements Runnable {
                 } else if(State == STATE.OVERMENU) {
                     overMenu.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAME) {
+                    if(input.isKeyDown(KeyEvent.VK_F12)) {
+                        Image ss = new Image();
+                        ss.saveIt(System.getenv("APPDATA") + "\\.squaremonster\\screenshots\\", window.getImage());
+                    }
                     game.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.CREA) {
                     crea.update(this, (float)UPDATE_CAP);
