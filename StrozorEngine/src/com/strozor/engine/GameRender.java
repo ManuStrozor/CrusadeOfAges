@@ -351,17 +351,16 @@ public class GameRender {
     }
 
     public void drawGameStates(GameObject obj) {
+        fillRect(0, 0, GameManager.TS * 6, GameManager.TS, 0x99000000);
         drawBloc(2, 0, 0, true);
-        drawText("x" + obj.getLives(), GameManager.TS-1, GameManager.TS-1, 1, -1,0x99636363, Font.STANDARD);
-        drawText("x" + obj.getLives(), GameManager.TS, GameManager.TS, 1, -1,0xffcdcdcd, Font.STANDARD);
-
-        drawBloc(7, 0, GameManager.TS, true);
-        drawText("x" + obj.getCoins(), GameManager.TS-1, GameManager.TS * 2-1, 1, -1,0x99636363, Font.STANDARD);
-        drawText("x" + obj.getCoins(), GameManager.TS, GameManager.TS * 2, 1, -1,0xffcdcdcd, Font.STANDARD);
-
-        drawBloc(5, 0, GameManager.TS * 2, true);
-        drawText("x" + obj.getKeys(), GameManager.TS-1, GameManager.TS * 3-1, 1, -1,0x99636363, Font.STANDARD);
-        drawText("x" + obj.getKeys(), GameManager.TS, GameManager.TS * 3, 1, -1,0xffcdcdcd, Font.STANDARD);
+        drawBloc(7, GameManager.TS * 2, 0, true);
+        drawBloc(5, GameManager.TS * 4, 0, true);
+        drawText("x" + obj.getLives(), GameManager.TS-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
+        drawText("x" + obj.getLives(), GameManager.TS-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getCoins(), GameManager.TS * 3-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
+        drawText("x" + obj.getCoins(), GameManager.TS * 3-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getKeys(), GameManager.TS * 5-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
+        drawText("x" + obj.getKeys(), GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
     public void drawMap(Map map) {

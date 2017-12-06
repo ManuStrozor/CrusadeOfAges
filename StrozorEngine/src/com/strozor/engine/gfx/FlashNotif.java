@@ -14,7 +14,7 @@ public class FlashNotif {
         this.duration = duration;
         this.distance = distance;
         this.color = color;
-        this.shadow = shadowIt(color);
+        this.shadow = darken(color);
     }
 
     public void update(GameContainer gc, float dt) {
@@ -40,7 +40,7 @@ public class FlashNotif {
         return elapsed == duration;
     }
 
-    private int shadowIt(int col) {
+    private int darken(int col) {
         int a = (col >> 24) & 0xff;
         int r = (col >> 16) & 0xff;
         int g = (col >> 8) & 0xff;

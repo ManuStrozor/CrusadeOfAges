@@ -25,14 +25,36 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
+      <file leaf-file-name="GameRender.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
-              <caret line="63" column="64" lean-forward="true" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
+            <state relative-caret-position="193">
+              <caret line="378" column="5" lean-forward="true" selection-start-line="378" selection-start-column="5" selection-end-line="378" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#respawn#0;class#Player#0" expanded="false" />
+                <element signature="method#clear#0;class#GameRender#0" expanded="false" />
+                <element signature="method#process#0;class#GameRender#0" expanded="false" />
+                <element signature="method#setPixel#0;class#GameRender#0" expanded="false" />
+                <element signature="method#setLightMap#0;class#GameRender#0" expanded="false" />
+                <element signature="method#getTileX#0;class#GameRender#0" expanded="false" />
+                <element signature="method#getTileY#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawText#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawImage#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawImageTile#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawRect#0;class#GameRender#0" expanded="false" />
+                <element signature="method#fillRect#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawLight#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawLightLine#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawButton#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawGameStates#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawMap#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawMapLights#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawBloc#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawDock#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
+                <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
+                <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -102,7 +124,6 @@
         <option value="$PROJECT_DIR$/src/com/strozor/game/Camera.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Crea.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Map.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Settings.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Window.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/OptsMenu.java" />
@@ -112,8 +133,9 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/View.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Light.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/FlashNotif.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/FlashNotif.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
       </list>
     </option>
   </component>
@@ -124,7 +146,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="35" />
     <option name="y" value="27" />
     <option name="width" value="605" />
@@ -157,6 +179,11 @@
             <path>
               <item name="Square Monster" type="b2602c69:ProjectViewProjectNode" />
               <item name="StrozorEngine" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Square Monster" type="b2602c69:ProjectViewProjectNode" />
+              <item name="StrozorEngine" type="462c0819:PsiDirectoryNode" />
+              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="Square Monster" type="b2602c69:ProjectViewProjectNode" />
@@ -393,7 +420,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -737,10 +764,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="405">
+          <caret line="68" column="88" lean-forward="true" selection-start-line="68" selection-start-column="88" selection-end-line="68" selection-end-column="88" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
+            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
+            <element signature="method#readOptions#0;class#GameManager#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1701">
+          <caret line="63" column="64" lean-forward="true" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#respawn#0;class#Player#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/gfx/FlashNotif.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="48" column="5" lean-forward="true" selection-start-line="48" selection-start-column="5" selection-end-line="48" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#darken#0;class#FlashNotif#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="446" column="68" lean-forward="false" selection-start-line="446" selection-start-column="58" selection-end-line="446" selection-end-column="68" />
+        <state relative-caret-position="193">
+          <caret line="378" column="5" lean-forward="true" selection-start-line="378" selection-start-column="5" selection-end-line="378" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#clear#0;class#GameRender#0" expanded="false" />
@@ -761,44 +823,11 @@
             <element signature="method#drawMap#0;class#GameRender#0" expanded="false" />
             <element signature="method#drawMapLights#0;class#GameRender#0" expanded="false" />
             <element signature="method#drawBloc#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawDock#0;class#GameRender#0" expanded="false" />
             <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
+            <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
             <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
             <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/gfx/FlashNotif.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="21" column="51" lean-forward="true" selection-start-line="21" selection-start-column="51" selection-end-line="21" selection-end-column="51" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#shadowIt#0;class#FlashNotif#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="68" column="88" lean-forward="true" selection-start-line="68" selection-start-column="88" selection-end-line="68" selection-end-column="88" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
-            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
-            <element signature="method#readOptions#0;class#GameManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="63" column="64" lean-forward="true" selection-start-line="63" selection-start-column="64" selection-end-line="63" selection-end-column="64" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#respawn#0;class#Player#0" expanded="false" />
           </folding>
         </state>
       </provider>
