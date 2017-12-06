@@ -20,7 +20,7 @@ public class OverMenu extends View {
 
     public OverMenu(Settings settings) {
         this.settings = settings;
-        select = new SoundClip("/audio/hover.wav");
+        select = new SoundClip("/audio/select.wav");
 
         buttons.add(play = new Button(130, 20, 14, 1));
         buttons.add(menu = new Button(130, 20, 13, 0));

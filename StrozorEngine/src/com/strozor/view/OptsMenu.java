@@ -26,7 +26,7 @@ public class OptsMenu extends View {
     public OptsMenu(Settings settings) {
         this.settings = settings;
 
-        select = new SoundClip("/audio/hover.wav");
+        select = new SoundClip("/audio/select.wav");
 
         buttons.add(tglLang = new Button(130, 20, 0, 0));
         buttons.add(tglFps = new Button(130, 20, settings.isShowFps() ? 9 : 7, 0));
@@ -93,7 +93,7 @@ public class OptsMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         if(gc.getLastState() == 0) {
-            r.drawBackground(gc, 0);
+            r.drawBackground(gc, new Bloc(0));
             r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
         }
 

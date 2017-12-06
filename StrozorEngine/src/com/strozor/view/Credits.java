@@ -5,6 +5,7 @@ import com.strozor.engine.GameRender;
 import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
+import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
@@ -25,7 +26,7 @@ public class Credits extends View {
 
     public Credits(Settings settings) {
         this.settings = settings;
-        select = new SoundClip("/audio/hover.wav");
+        select = new SoundClip("/audio/select.wav");
         buttons.add(back = new Button(60, 20, 11, 0));
     }
 
@@ -52,7 +53,7 @@ public class Credits extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawBackground(gc, 0);
+        r.drawBackground(gc, new Bloc(0));
         r.drawMenuTitle(gc, settings.getWords()[4][settings.getLangIndex()].toUpperCase(), settings.getWords()[17][settings.getLangIndex()]);
 
         r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, settings.getWords()[18][settings.getLangIndex()], devs);

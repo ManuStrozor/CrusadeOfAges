@@ -1,9 +1,6 @@
 package com.strozor.game;
 
-import com.strozor.engine.AbstractGame;
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.*;
 
@@ -47,10 +44,8 @@ public class GameManager extends AbstractGame {
     private GameManager(Map map) {
         this.map = map;
 
-        if(mapTester)
-            load(mapTest);
-        else
-            load(levelList[currLevel]);
+        if(mapTester) load(mapTest);
+        else load(levelList[currLevel]);
 
         gameOver = new SoundClip("/audio/gameover.wav");
         objects.add(new Player("player", map, 1));
@@ -93,10 +88,9 @@ public class GameManager extends AbstractGame {
 
         //Reload level
         if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
-            if(mapTester)
-                load(mapTest);
-            else
-                load(levelList[currLevel]);
+
+            if(mapTester) load(mapTest);
+            else load(levelList[currLevel]);
 
             gameOver.stop();
             objects.add(new Player("player", map, 1));
@@ -119,13 +113,7 @@ public class GameManager extends AbstractGame {
     }
 
     public void load(String path) {
-        Image img = new Image(path, mapTester);
-        map.initMap(img.getW(), img.getH());
-        for(int y = 0; y < map.getHeight(); y++) {
-            for(int x = 0; x < map.getWidth(); x++) {
-                map.initBloc(x, y, img.getP()[x + y * map.getWidth()]);
-            }
-        }
+        map.init(new Image(path, mapTester));
     }
 
     public int getCurrLevel() {

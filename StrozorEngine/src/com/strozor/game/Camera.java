@@ -2,7 +2,7 @@ package com.strozor.game;
 
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
-import com.strozor.engine.gfx.Map;
+import com.strozor.engine.Map;
 
 public class Camera {
 

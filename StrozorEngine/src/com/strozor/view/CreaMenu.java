@@ -22,7 +22,7 @@ public class CreaMenu extends View {
 
     public CreaMenu(Settings settings) {
         this.settings = settings;
-        select = new SoundClip("/audio/hover.wav");
+        select = new SoundClip("/audio/select.wav");
 
         buttons.add(crea = new Button(170, 20, 15, 4));
         buttons.add(save = new Button(170, 20, 16, -1));

@@ -21,7 +21,7 @@ public class GameMenu extends View {
 
     public GameMenu(Settings settings) {
         this.settings = settings;
-        select = new SoundClip("/audio/hover.wav");
+        select = new SoundClip("/audio/select.wav");
 
         buttons.add(play = new Button(130, 20, 12, 1));
         buttons.add(opt = new Button(130, 20, 5, 3));

@@ -112,52 +112,23 @@ public class GameRender {
         lm[x + y * pW] = maxR << 16 | maxG << 8 | maxB;
     }
 
-    private int getTileX(int id) {
-        int value = 1;
-        switch(id) {
-            case -1: value = 2; break;
-            case 0: value = 1; break;
-            case 1: value = 0; break;
-            case 2: value = 3; break;
-            case 3: value = 1; break;
-            case 4: value = 2; break;
-            case 5: value = 3; break;
-            case 6: value = 3; break;
-            case 7: value = 5; break;
-            case 8: value = 0; break;
-            case 9: value = 1; break;
-            case 10: value = 2; break;
-            case 11: value = 4; break;
-            case 12: value = 0; break;
-            case 13: value = 4; break;
-        }
-        return value;
-    }
+    private int darken(int color) {
+        int val = 100;
 
-    private int getTileY(int id) {
-        int value = 0;
-        switch(id) {
-            case -1: value = 0; break;
-            case 0: value = 0; break;
-            case 1: value = 0; break;
-            case 2: value = 2; break;
-            case 3: value = 1; break;
-            case 4: value = 1; break;
-            case 5: value = 1; break;
-            case 6: value = 0; break;
-            case 7: value = 0; break;
-            case 8: value = 1; break;
-            case 9: value = 2; break;
-            case 10: value = 2; break;
-            case 11: value = 0; break;
-            case 12: value = 2; break;
-            case 13: value = 3; break;
-        }
-        return value;
+        int a = (color >> 24) & 0xff;
+        int r = (color >> 16) & 0xff;
+        int g = (color >> 8) & 0xff;
+        int b = color & 0xff;
+
+        int newA = (a - val < 0 ? 0 : a - val) << 24;
+        int newR = (r - val < 0 ? 0 : r - val) << 16;
+        int newG = (g - val < 0 ? 0 : g - val) << 8;
+        int newB = b - val < 0 ? 0 : b - val;
+
+        return newA | newR | newG | newB;
     }
 
     public void drawText(String text, int offX, int offY, int alignX, int alignY, int color, Font font) {
-
         if(alignX != 1) {
             int textW = 0;
             for(int i = 0; i < text.length(); i++) textW += font.getWidths()[text.codePointAt(i)];
@@ -173,7 +144,15 @@ public class GameRender {
         int offset = 0;
         for(int i = 0; i < text.length(); i++) {
             int unicode = text.codePointAt(i);
-
+            //With darker color
+            for(int y = 0; y < font.getFontImage().getH(); y++) {
+                for(int x = 0; x < font.getWidths()[unicode]; x++) {
+                    if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
+                        setPixel(x + offX + offset - 1, y + offY - 1, darken(color));
+                    }
+                }
+            }
+            //With normal color
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
                     if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
@@ -346,34 +325,41 @@ public class GameRender {
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, b.getHeight() - 1, b.getBgColor());
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 1, 0x99636363);
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, 1, 0x99636363);
-        drawText(b.getText(), b.getOffX() + b.getWidth() / 2-1, b.getOffY() + b.getHeight() / 2-1, 0, 0, 0x99636363, Font.STANDARD);
         drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
-    public void drawGameStates(GameObject obj) {
-        fillRect(0, 0, GameManager.TS * 6, GameManager.TS, 0x99000000);
-        drawBloc(2, 0, 0, true);
-        drawBloc(7, GameManager.TS * 2, 0, true);
-        drawBloc(5, GameManager.TS * 4, 0, true);
-        drawText("x" + obj.getLives(), GameManager.TS-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
-        drawText("x" + obj.getLives(), GameManager.TS-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getCoins(), GameManager.TS * 3-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
-        drawText("x" + obj.getCoins(), GameManager.TS * 3-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getKeys(), GameManager.TS * 5-5, GameManager.TS-1, 1, -1,0x99636363, Font.BIG_STANDARD);
-        drawText("x" + obj.getKeys(), GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+    public void drawGameStates(GameContainer gc, GameObject obj) {
+        int width = GameManager.TS * 6;
+        int x = gc.getWidth() / 2 - width / 2;
+        fillRect(x, 0, width, GameManager.TS, 0x99000000);
+        drawBloc(new Bloc(2), x, 0);
+        drawBloc(new Bloc(7), x + GameManager.TS * 2, 0);
+        drawBloc(new Bloc(5), x + GameManager.TS * 4, 0);
+        drawText("x" + obj.getLives(), x + GameManager.TS-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getCoins(), x + GameManager.TS * 3-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getKeys(), x + GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
     public void drawMap(Map map) {
         for(int y = 0; y < map.getHeight(); y++) {
             for(int x = 0; x < map.getWidth(); x++) {
-                if(!map.getSolid(x, y))
+
+                Bloc curr = map.getBloc(x, y);
+
+                //draw wall behind non-solid bloc
+                if(!curr.isSolid() && !curr.getName().equals("Wall"))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 1, 0);
-                if(map.getId(x, y) != 0)
-                    drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y));
-                if(!map.getSolid(x, y) && map.getSolid(x, y - 1))
+
+                //draw bloc
+                drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, curr.getTileX(), curr.getTileY());
+
+                //draw shadow under solid bloc
+                if(!curr.isSolid() && map.isSolid(x, y-1))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 0, 3);
-                if(map.getName(x, y).equals("Door"))
-                    drawImageTile(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, map.getTileX(x, y), map.getTileY(x, y)-1);
+
+                //draw top part of the door
+                if(curr.getName().equals("Door"))
+                    drawImageTile(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, curr.getTileX(), curr.getTileY()-1);
             }
         }
     }
@@ -381,16 +367,14 @@ public class GameRender {
     public void drawMapLights(Map map, Light lamp) {
         for(int y = 0; y < map.getHeight(); y++) {
             for(int x = 0; x < map.getWidth(); x++) {
-                if(map.getId(x, y) == 11)
+                if(map.getBloc(x, y).getName().equals("Torch"))
                     drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 3);
             }
         }
     }
 
-    private void drawBloc(int bloc, int x, int y, boolean alpha) {
-        if(bloc != 1 && !alpha)
-            drawImageTile(objsImg, x, y, 1, 0);
-        drawImageTile(objsImg, x, y, getTileX(bloc), getTileY(bloc));
+    private void drawBloc(Bloc bloc, int x, int y) {
+        drawImageTile(objsImg, x, y, bloc.getTileX(), bloc.getTileY());
     }
 
     public void drawDock(GameContainer gc, int[] elems, int selected) {
@@ -406,7 +390,7 @@ public class GameRender {
             drawRect(offX - 1 + (height + 4) * i, offY - 1, height, height, 0x33c4c4c4);
 
             fillRect(offX + (height + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
-            drawBloc(elems[i], offX + (height + 4) * i, offY, true);
+            drawBloc(new Bloc(elems[i]), offX + (height + 4) * i, offY);
         }
         drawRect(offX - 4, offY - 4, width + 2, height + 6, 0xff000000);
 
@@ -434,30 +418,24 @@ public class GameRender {
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
-    public void drawBackground(GameContainer gc, int bloc) {
+    public void drawBackground(GameContainer gc, Bloc bloc) {
         for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
             for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                drawBloc(bloc, x * GameManager.TS, y * GameManager.TS, false);
+                drawBloc(bloc, x * GameManager.TS, y * GameManager.TS);
             }
         }
     }
 
     public void drawMenuTitle(GameContainer gc, String bigTitle, String smallTitle) {
-        drawText(bigTitle, gc.getWidth() / 2-1, 44, 0, 1, 0x99800000, Font.BIG_STANDARD);
         drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
-        if(!smallTitle.equals("")) {
-            drawText(smallTitle, gc.getWidth() / 2-1, 59, 0, 1, 0x99636363, Font.STANDARD);
+        if(!smallTitle.equals(""))
             drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, 0xffababab, Font.STANDARD);
-        }
     }
 
     public void drawList(int offX, int offY, String title, String[] list) {
-        drawText(title, offX-1, offY-1, 0, 0, 0x99006323, Font.STANDARD);
         drawText(title, offX, offY, 0, 0, 0xff27ae60, Font.STANDARD);
-        for(int i = 0; i < list.length; i++) {
-            drawText(list[i], offX-1, offY + 14 * (i + 1)-1, 0, 0, 0x99636363, Font.STANDARD);
+        for(int i = 0; i < list.length; i++)
             drawText(list[i], offX, offY + 14 * (i + 1), 0, 0, 0xffababab, Font.STANDARD);
-        }
     }
 
     public int getCamX() {

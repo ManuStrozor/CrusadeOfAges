@@ -130,7 +130,7 @@ public class GameContainer implements Runnable {
                     gameRender.setCoorCam(0, 0);
                     if(settings.isShowLights()) gameRender.process();
                     if(gm.getObject("player") != null)
-                        gameRender.drawGameStates(gm.getObject("player"));
+                        gameRender.drawGameStates(this, gm.getObject("player"));
                 } else if(State == STATE.CREA || State == STATE.CREAMENU) {
                     crea.render(this, gameRender);
                 }

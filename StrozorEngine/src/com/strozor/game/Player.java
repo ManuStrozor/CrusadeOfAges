@@ -3,9 +3,9 @@ package com.strozor.game;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.FlashNotif;
+import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.ImageTile;
-import com.strozor.engine.gfx.Map;
+import com.strozor.engine.Map;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public class Player extends GameObject {
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
-    private float offX, offY, pauseRes = 0, anim = 0;
+    private float offX, offY, anim = 0;
 
     private SoundClip jump, impaled, coin, bonus, checkPoint;
 
@@ -60,70 +60,68 @@ public class Player extends GameObject {
             if(notifs.get(i).isEnded()) notifs.remove(i);
         }
 
-        //Bouncing block
-        if(map.getId(tileX, tileY + 1) == 12 && fallDist == 0) {
+        //Blocs
+        Bloc curr = map.getBloc(tileX, tileY);
+        Bloc bottom = map.getBloc(tileX, tileY+1);
+
+        //Bouncing bloc
+        if(bottom.getName().equals("Slime bloc") && fallDist == 0) {
             fallDist = -10;
-            if(!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
+            if(!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
                 jump.play();
         }
 
-        //Gain life
-        if(map.getId(tileX, tileY) == 2) {
-            lives++;
-            map.setBloc(tileX, tileY, 0);
-            bonus.play();
-        }
-
-        //Gain coin
-        if(map.getId(tileX, tileY) == 7) {
-            coins++;
-            map.setBloc(tileX, tileY, 0);
-            coin.play();
-        }
-
-        //Gain key
-        if(map.getId(tileX, tileY) == 5) {
-            keys++;
-            map.setBloc(tileX, tileY, 0);
-            bonus.play();
-        }
-
-        //Win Time & Switch Level
-        if(keys >= 1 && map.getId(tileX, tileY) == 13 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            keys--;
-            if(!gm.isMapTesting()) {
-                if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
-                    gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
-                    gm.setCurrLevel(gm.getCurrLevel() + 1);
-                } else {
-                    gm.load(gm.getLevelList()[0]);
-                    gm.setCurrLevel(0);
+        //Events on current bloc
+        switch(curr.getName()) {
+            case "Coin":
+                curr.remove();
+                coins++;
+                coin.play();
+                break;
+            case "Check point":
+                if(tileX != map.getSpawnX() && tileY != map.getSpawnY()) {
+                    map.setSpawnX(tileX);
+                    map.setSpawnY(tileY);
+                    checkPoint.play();
                 }
-            } else {
-                gm.load(gm.getMapTest());
-                gm.setCurrLevel(0);
-            }
-            respawn(map.getSpawnX(), map.getSpawnY());
+                break;
+            case "Heart":
+                curr.remove();
+                lives++;
+                bonus.play();
+                break;
+            case "Key":
+                curr.remove();
+                keys++;
+                bonus.play();
+                break;
+            case "Ground trap":
+                lives--;
+                impaled.play();
+                break;
+            case "Ceiling trap":
+                lives--;
+                impaled.play();
+                break;
+            case "Ground trap blooded":
+                lives--;
+                impaled.play();
+                break;
+            case "Ceiling trap blooded":
+                lives--;
+                impaled.play();
+                break;
         }
 
-        //CheckPoint
-        if(map.getId(tileX, tileY) == 6 && tileX != map.getSpawnX() && tileY != map.getSpawnY()) {
-            map.setSpawnX(tileX);
-            map.setSpawnY(tileY);
-            checkPoint.play();
+        if(curr.getName().equals("Door") && keys >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+            keys--;
+            respawn(gm, true);
         }
 
         //Hit trap
-        if(map.getId(tileX, tileY) == 3 || map.getId(tileX, tileY) == 4 || map.getId(tileX, tileY) == 9 || map.getId(tileX, tileY) == 10) {
-            if(map.getId(tileX, tileY) == 3 || map.getId(tileX, tileY) == 3)
-                map.setBloc(tileX, tileY, 9);
-            else if(map.getId(tileX, tileY) == 4 || map.getId(tileX, tileY) == 10)
-                map.setBloc(tileX, tileY, 10);
-
-            if(pauseRes == 0) {
-                lives--;
-                impaled.play();
-            }
+        if(curr.getId() == 3 || curr.getId() == 4 || curr.getId() == 9 || curr.getId() == 10) {
+            if(curr.getId() == 3) map.setBloc(tileX, tileY, 9);
+            else if(curr.getId() == 4) map.setBloc(tileX, tileY, 10);
 
             if(this.lives == 0) {
                 this.setDead(true);
@@ -131,16 +129,13 @@ public class Player extends GameObject {
                 gc.setLastState(1);
                 gm.getGameOver().play();
             } else {
-                pauseRes += dt * 10;
-                if(pauseRes > 3) {
-                    respawn(map.getSpawnX(), map.getSpawnY());
-                    pauseRes = 0;
-                }
+                respawn(gm, false);
             }
+
         } else {
             //Left & Right
             if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q)) {
-                if (map.getSolid(tileX - 1, tileY) || map.getSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
+                if (map.isSolid(tileX - 1, tileY) || map.isSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX > 0) {
                         offX -= dt * speed;
                         if (offX < 0) offX = 0;
@@ -153,7 +148,7 @@ public class Player extends GameObject {
             }
 
             if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D)) {
-                if (map.getSolid(tileX + 1, tileY) || map.getSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
+                if (map.isSolid(tileX + 1, tileY) || map.isSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX < 0) {
                         offX += dt * speed;
                         if (offX > 0) offX = 0;
@@ -165,17 +160,17 @@ public class Player extends GameObject {
                 }
             }
 
-            if(map.getName(tileX, tileY).equals("Ladder") || (map.getName(tileX, tileY + 1).equals("Ladder") && fallDist == 0)) {
+            if(curr.getName().equals("Ladder") || (bottom.getName().equals("Ladder") && fallDist == 0)) {
                 //Climbing ladders
                 fallDist = 0;
                 ground = 0;
                 if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
-                    if(!map.getName(tileX, tileY).equals("Ladder")) {
+                    if(!curr.getName().equals("Ladder")) {
                         fallDist = -5;
-                        if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                        if (!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
                             jump.play();
                         ground++;
-                    } else if (map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
+                    } else if (map.isSolid(tileX, tileY - 1) || map.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
                         if (offY > 0) {
                             offY -= dt * speed;
                             if (offY < 0) offY = 0;
@@ -186,7 +181,7 @@ public class Player extends GameObject {
                         offY -= dt * speed;
                     }
                 } else if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
-                    if (map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
+                    if (map.isSolid(tileX, tileY + 1) || map.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
                         if (offY < 0) {
                             offY += dt * speed;
                             if (offY > 0) offY = 0;
@@ -203,19 +198,19 @@ public class Player extends GameObject {
 
                 if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
                     fallDist = -5;
-                    if (!map.getSolid(tileX, tileY - 1) && !map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                    if (!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
                         jump.play();
                     ground++;
                 }
                 offY += fallDist;
                 if (fallDist < 0) {
-                    if ((map.getSolid(tileX, tileY - 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                    if ((map.isSolid(tileX, tileY - 1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
                 if (fallDist > 0) {
-                    if ((map.getSolid(tileX, tileY + 1) || map.getSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                    if ((map.isSolid(tileX, tileY + 1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -258,7 +253,7 @@ public class Player extends GameObject {
         }
 
         //Snick -> Slow
-        if(map.getName(tileX, tileY).equals("Ladder")) {
+        if(curr.getName().equals("Ladder")) {
             speed = 140;
             anim += dt * 14;
         } else if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
@@ -282,11 +277,25 @@ public class Player extends GameObject {
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
-    private void respawn(int x, int y) {
+    private void respawn(GameManager gm, boolean reload) {
+        if(reload) {
+            if(!gm.isMapTesting()) {
+                if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
+                    gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
+                    gm.setCurrLevel(gm.getCurrLevel() + 1);
+                } else {
+                    gm.load(gm.getLevelList()[0]);
+                    gm.setCurrLevel(0);
+                }
+            } else {
+                gm.load(gm.getMapTest());
+                gm.setCurrLevel(0);
+            }
+        }
         direction = 0;
         fallDist = 0;
-        tileX = x;
-        tileY = y;
+        tileX = map.getSpawnX();
+        tileY = map.getSpawnY();
         offX = 0;
         offY = 0;
     }

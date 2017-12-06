@@ -4,7 +4,7 @@ import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.gfx.Image;
-import com.strozor.engine.gfx.Map;
+import com.strozor.engine.Map;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -20,7 +20,7 @@ public class Crea extends AbstractGame {
     public Crea(int width, int height) {
         this.map = new Map();
         creaImg = new Image(new int[width * height], width, height);
-        load(creaImg);
+        map.init(creaImg);
     }
 
     @Override
@@ -76,14 +76,5 @@ public class Crea extends AbstractGame {
         }
         r.drawMap(map);
         r.drawDock(gc, elems, curr);
-    }
-
-    private void load(Image img) {
-        map.initMap(img.getW(), img.getH());
-        for(int y = 0; y < map.getHeight(); y++) {
-            for(int x = 0; x < map.getWidth(); x++) {
-                map.initBloc(x, y, img.getP()[x + y * map.getWidth()]);
-            }
-        }
     }
 }
