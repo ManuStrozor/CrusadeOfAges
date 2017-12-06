@@ -259,8 +259,8 @@ public class Player extends GameObject {
 
         //Snick -> Slow
         if(map.getName(tileX, tileY).equals("Ladder")) {
-            speed = 180;
-            anim += dt * 18;
+            speed = 140;
+            anim += dt * 14;
         } else if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
             speed = 40;
             anim += dt * 4;
