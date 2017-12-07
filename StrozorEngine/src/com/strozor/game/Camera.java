@@ -11,7 +11,7 @@ public class Camera {
     private String targetTag;
     private GameObject target = null;
 
-    public Camera(String tag, GameMap gameMap) {
+    Camera(String tag, GameMap gameMap) {
         this.targetTag = tag;
         this.gameMap = gameMap;
     }

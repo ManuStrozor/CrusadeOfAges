@@ -2,13 +2,12 @@ package com.strozor.engine.gfx;
 
 public class Light {
 
-    private int radius, diameter, color;
+    private int radius, diameter;
     private int[] lm;
 
     public Light(int radius, int color) {
         this.radius = radius;
         this.diameter = radius * 2;
-        this.color = color;
         this.lm = new int[diameter * diameter];
 
         for(int y = 0; y < diameter; y++) {

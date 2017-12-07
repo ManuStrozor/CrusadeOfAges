@@ -8,8 +8,8 @@ public class Bloc {
     private int tileX, tileY;
     private float anim;
 
-    public Bloc(int[] pix, int pos) {
-        switch(pix[pos]) {
+    public Bloc(int[] pArray, int pos) {
+        switch(pArray[pos]) {
             default:
                 name = "Wall";
                 id = 0;

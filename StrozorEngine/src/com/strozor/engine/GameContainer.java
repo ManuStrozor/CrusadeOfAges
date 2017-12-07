@@ -35,7 +35,7 @@ public class GameContainer implements Runnable {
         EXIT
     }
 
-    public STATE State = STATE.MAINMENU;
+    private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
     public GameContainer(AbstractGame game, Settings settings) {
@@ -175,7 +175,7 @@ public class GameContainer implements Runnable {
         return width;
     }
 
-    public void setWidth(int width) {
+    void setWidth(int width) {
         this.width = width;
     }
 
@@ -183,11 +183,11 @@ public class GameContainer implements Runnable {
         return height;
     }
 
-    public void setHeight(int height) {
+    void setHeight(int height) {
         this.height = height;
     }
 
-    public float getScale() {
+    float getScale() {
         return scale;
     }
 

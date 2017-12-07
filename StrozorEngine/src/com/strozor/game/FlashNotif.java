@@ -10,14 +10,14 @@ public class FlashNotif {
     private float duration, elapsed = 0;
     private int color, distance;
 
-    public FlashNotif(String message, float duration, int distance, int color) {
+    FlashNotif(String message, float duration, int distance, int color) {
         this.message = message;
         this.duration = duration;
         this.distance = distance;
         this.color = color;
     }
 
-    public void update(GameContainer gc, float dt) {
+    public void update(float dt) {
         elapsed += dt;
         if(elapsed >= duration) elapsed = duration;
     }
@@ -32,7 +32,7 @@ public class FlashNotif {
         r.drawText(message, 1, (int) offset, 1, -1, newColor, Font.STANDARD);
     }
 
-    public boolean isEnded() {
+    boolean isEnded() {
         return elapsed == duration;
     }
 }

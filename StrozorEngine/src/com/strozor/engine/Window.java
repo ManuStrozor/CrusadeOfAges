@@ -7,20 +7,19 @@ import java.awt.image.BufferedImage;
 
 public class Window {
 
-    private JFrame frame;
     private BufferedImage image;
     private Canvas canvas;
     private BufferStrategy bs;
     private Graphics g;
 
-    public Window(GameContainer gc) {
+    Window(GameContainer gc) {
 
-        frame = new JFrame(gc.getTitle());
+        JFrame frame = new JFrame(gc.getTitle());
         frame.setUndecorated(true);
         frame.setResizable(false);
         frame.setVisible(true);
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -58,7 +57,7 @@ public class Window {
         return image;
     }
 
-    public Canvas getCanvas() {
+    Canvas getCanvas() {
         return canvas;
     }
 }

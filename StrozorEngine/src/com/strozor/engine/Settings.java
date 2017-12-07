@@ -6,18 +6,16 @@ import java.util.Map;
 
 public class Settings {
 
-    private Map<String, String> en = new HashMap<>();
-    private Map<String, String> fr = new HashMap<>();
-
     private ArrayList<Map> lang = new ArrayList<>();
 
     private int langIndex = 0;
     private float scale = 3f;
-    private int maxFPS = 60;
     private boolean showFps = false;
     private boolean showLights = true;
 
     public Settings() {
+        Map<String, String> en = new HashMap<>();
+        Map<String, String> fr = new HashMap<>();
         en.put("lang", "English");
         en.put("beta version", "beta version");
         en.put("Single player", "Single player");
@@ -100,7 +98,9 @@ public class Settings {
         String value = "";
         try {
             value = lang.get(langIndex).get(key).toString();
-        } catch(Exception e) {}
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
         return value;
     }
 
@@ -118,14 +118,6 @@ public class Settings {
 
     public void setScale(float scale) {
         this.scale = scale;
-    }
-
-    public int getMaxFPS() {
-        return maxFPS;
-    }
-
-    public void setMaxFPS(int maxFPS) {
-        this.maxFPS = maxFPS;
     }
 
     public boolean isShowFps() {

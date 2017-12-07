@@ -72,10 +72,11 @@ public class GameManager extends AbstractGame {
 
         //Notifications update
         for(int i = 0; i < notifs.size(); i++) {
-            notifs.get(i).update(gc, dt);
+            notifs.get(i).update(dt);
             if(notifs.get(i).isEnded()) notifs.remove(i);
         }
 
+        //All objects update
         for(int i = 0; i < objects.size(); i++) {
             objects.get(i).update(gc, this, dt);
             if(objects.get(i).isDead()) {
@@ -113,19 +114,19 @@ public class GameManager extends AbstractGame {
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
-    public void load(String path) {
+    void load(String path) {
         gameMap.init(new Image(path, mapTester));
     }
 
-    public int getCurrLevel() {
+    int getCurrLevel() {
         return currLevel;
     }
 
-    public void setCurrLevel(int currLevel) {
+    void setCurrLevel(int currLevel) {
         this.currLevel = currLevel;
     }
 
-    public String[] getLevelList() {
+    String[] getLevelList() {
         return levelList;
     }
 
@@ -134,15 +135,15 @@ public class GameManager extends AbstractGame {
         return null;
     }
 
-    public SoundClip getGameOver() {
+    SoundClip getGameOver() {
         return gameOver;
     }
 
-    public boolean isMapTesting() {
+    boolean isMapTesting() {
         return mapTester;
     }
 
-    public static String getMapTest() {
+    static String getMapTest() {
         return mapTest;
     }
 
@@ -168,9 +169,8 @@ public class GameManager extends AbstractGame {
         if(!smOptFile.exists()) {
             try {
                 List<String> lines = Arrays.asList(
-                        "lang:en",
+                        "lang:fr",
                         "guiScale:3",
-                        "maxFPS:60",
                         "showFPS:false",
                         "showLights:true"
                 );
@@ -196,7 +196,6 @@ public class GameManager extends AbstractGame {
                         }
                         break;
                     case "guiScale": settings.setScale(Float.valueOf(sub[1])); break;
-                    case "maxFPS": settings.setMaxFPS(Integer.valueOf(sub[1])); break;
                     case "showFPS": settings.setShowFps(sub[1].equals("true")); break;
                     case "showLights": settings.setShowLights(sub[1].equals("true")); break;
                 }

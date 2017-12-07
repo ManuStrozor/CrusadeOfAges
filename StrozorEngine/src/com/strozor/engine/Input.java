@@ -17,7 +17,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     private int mouseX, mouseY;
     private int scroll;
 
-    public Input(GameContainer gc) {
+    Input(GameContainer gc) {
         this.gc = gc;
         mouseX = 0;
         mouseY = 0;
@@ -30,16 +30,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     }
 
     public void update() {
-
         scroll = 0;
-
-        for(int i = 0; i < NUM_KEYS; i++) {
-            keysLast[i] = keys[i];
-        }
-
-        for(int i = 0; i < NUM_BUTTONS; i++) {
-            buttonsLast[i] = buttons[i];
-        }
+        System.arraycopy(keys, 0, keysLast, 0, NUM_KEYS);
+        System.arraycopy(buttons, 0, buttonsLast, 0, NUM_BUTTONS);
     }
 
     public boolean isKey(int keyCode) {

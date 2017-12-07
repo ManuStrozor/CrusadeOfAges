@@ -9,7 +9,7 @@ public class Font {
     private int[] offsets;
     private int[] widths;
 
-    public Font(String path) {
+    private Font(String path) {
         fontImage = new Image(path, false);
 
         offsets = new int[256];
