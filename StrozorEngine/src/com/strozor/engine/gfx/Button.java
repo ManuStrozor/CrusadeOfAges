@@ -2,15 +2,14 @@ package com.strozor.engine.gfx;
 
 public class Button {
 
-    private int offX, offY, width, height, bgColor, wordsIndex, goState;
+    private int offX, offY, width, height, bgColor, goState;
     private String text;
 
-    public Button(int width, int height, int wordsIndex, int goState) {
+    public Button(int width, int height, String text, int goState) {
         this.width = width;
         this.height = height;
-        this.wordsIndex = wordsIndex;
         this.goState = goState;
-        this.text = "";
+        this.text = text;
     }
 
     public int getOffX() {
@@ -35,14 +34,6 @@ public class Button {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getWordsIndex() {
-        return wordsIndex;
-    }
-
-    public void setWordsIndex(int wordsIndex) {
-        this.wordsIndex = wordsIndex;
     }
 
     public int getBgColor() {

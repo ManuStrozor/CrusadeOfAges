@@ -12,25 +12,24 @@ import java.util.ArrayList;
 
 public class OverMenu extends View {
 
-    private Settings settings;
+    private Settings s;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button play, menu, exit;
 
     public OverMenu(Settings settings) {
-        this.settings = settings;
+        s = settings;
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(play = new Button(130, 20, 14, 1));
-        buttons.add(menu = new Button(130, 20, 13, 0));
-        buttons.add(exit = new Button(130, 20, 6, -1));
+        buttons.add(play = new Button(130, 20, "Try again", 1));
+        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
+        buttons.add(exit = new Button(130, 20, "Quit game", -1));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
         for(Button btn : buttons) {
-            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if(mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
@@ -47,7 +46,7 @@ public class OverMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawMenuTitle(gc, settings.getWords()[33][settings.getLangIndex()], settings.getWords()[34][settings.getLangIndex()]);
+        r.drawMenuTitle(gc, s.translate("GAME OVER"), s.translate("You are dead"));
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
@@ -58,6 +57,6 @@ public class OverMenu extends View {
         exit.setOffX(menu.getOffX());
         exit.setOffY(menu.getOffY() + menu.getHeight() + 10);
 
-        for(Button btn : buttons) r.drawButton(btn);
+        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
     }
 }

@@ -13,28 +13,26 @@ import java.util.ArrayList;
 
 public class MainMenu extends View {
 
-    private Settings settings;
+    private Settings s;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button play, crea, credits, opt, exit;
 
     public MainMenu(Settings settings) {
-        this.settings = settings;
-
+        s = settings;
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(play = new Button(170, 20, 2, 1));
-        buttons.add(crea = new Button(170, 20, 3, 4));
-        buttons.add(credits = new Button(170, 20, 4, 6));
-        buttons.add(opt = new Button(80, 20, 5, 3));
-        buttons.add(exit = new Button(80, 20, 6, -1));
+        buttons.add(play = new Button(170, 20, "Single player", 1));
+        buttons.add(crea = new Button(170, 20, "Creative Mode", 4));
+        buttons.add(credits = new Button(170, 20, "Game credits", 6));
+        buttons.add(opt = new Button(80, 20, "Options", 3));
+        buttons.add(exit = new Button(80, 20, "Quit game", -1));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
         for(Button btn : buttons) {
-            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
@@ -52,7 +50,7 @@ public class MainMenu extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, new Bloc(0));
-        r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
+        r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
 
         play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
         play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
@@ -69,6 +67,6 @@ public class MainMenu extends View {
         exit.setOffX(gc.getWidth() / 2 + 5);
         exit.setOffY(opt.getOffY());
 
-        for(Button btn : buttons) r.drawButton(btn);
+        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
     }
 }

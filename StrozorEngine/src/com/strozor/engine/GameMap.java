@@ -3,12 +3,12 @@ package com.strozor.engine;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Image;
 
-public class Map {
+public class GameMap {
 
     private Bloc[] blocs;
     private int width, height, spawnX, spawnY;
 
-    public Map() {}
+    public GameMap() {}
 
     public void init(Image img) {
         this.width = img.getW();

@@ -1,44 +1,16 @@
 package com.strozor.engine;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Settings {
 
-    private String[][] words = {
-            {"English", "Français"},
-            {"beta version", "version beta"},
-            {"Single player", "Joueur solo"},
-            {"Creative Mode", "Mode créatif"},
-            {"Game credits", "Credits"},
-            {"Options", "Options"},
-            {"Quit game", "Quitter"},
-            {"FPS off", "FPS off"},
-            {"Darkness", "Obscurité"},
-            {"FPS on", "FPS on"},
-            {"Full day", "Plein jour"},
-            {"Back", "Retour"},
-            {"Back to game", "Retour au jeu"},
-            {"Quit to title", "Menu principal"},
-            {"Try again", "Recommencer"},
-            {"Keep on", "Continuer"},
-            {"Save & Quit game", "Enregistrer & quitter"},
-            {"Development team", "Equipe de développement"},
-            {"MAIN DEVELOPERS", "PRINCIPAUX DEVELOPPEURS"},
-            {"THANKS TO", "MERCI A"},
-            {"CONTRIBUTORS", "CONTRIBUTEURS"},
-            {"Spawn", "Point d'apparition"},
-            {"Floor", "Sol"},
-            {"Health pill", "Pillule de santé"},
-            {"Ground trap", "Piège au sol"},
-            {"Ceiling trap", "Piège au plafond"},
-            {"Key", "Clé"},
-            {"Check point", "Point de sauvegarde"},
-            {"Coin", "Pièce"},
-            {"Torch", "Torche"},
-            {"Slime bloc", "Bloc de slime"},
-            {"Door", "Porte"},
-            {"Ladder", "Echelle"},
-            {"GAME OVER", "MANCHE PERDU"},
-            {"You are dead", "Vous êtes mort(e)"}
-    };
+    private Map<String, String> en = new HashMap<>();
+    private Map<String, String> fr = new HashMap<>();
+
+    private ArrayList<Map> lang = new ArrayList<>();
+
     private int langIndex = 0;
     private float scale = 3f;
     private int maxFPS = 60;
@@ -46,11 +18,90 @@ public class Settings {
     private boolean showLights = true;
 
     public Settings() {
-
+        en.put("lang", "English");
+        en.put("beta version", "beta version");
+        en.put("Single player", "Single player");
+        en.put("Creative Mode", "Creative Mode");
+        en.put("Game credits", "Game credits");
+        en.put("Options", "Options");
+        en.put("Quit game", "Quit game");
+        en.put("FPS off", "FPS off");
+        en.put("Darkness", "Darkness");
+        en.put("FPS on", "FPS on");
+        en.put("Full day", "Full day");
+        en.put("Back", "Back");
+        en.put("Back to game", "Back to game");
+        en.put("Quit to title", "Quit to title");
+        en.put("Try again", "Try again");
+        en.put("Keep on", "Keep on");
+        en.put("Save & Quit game", "Save & Quit game");
+        en.put("Development team", "Development team");
+        en.put("MAIN DEVELOPERS", "MAIN DEVELOPERS");
+        en.put("THANKS TO", "THANKS TO");
+        en.put("CONTRIBUTORS", "CONTRIBUTORS");
+        en.put("Spawn", "Spawn");
+        en.put("Floor", "Floor");
+        en.put("Health pill", "Health pill");
+        en.put("Ground spikes", "Ground spikes");
+        en.put("Ceiling spikes", "Ceiling spikes");
+        en.put("Key", "Key");
+        en.put("Check point", "Check point");
+        en.put("Coin", "Coin");
+        en.put("Torch", "Torch");
+        en.put("Slime bloc", "Slime bloc");
+        en.put("Door", "Door");
+        en.put("Ladder", "Ladder");
+        en.put("GAME OVER", "GAME OVER");
+        en.put("You are dead", "You are dead");
+        lang.add(en);
+        fr.put("lang", "Français");
+        fr.put("beta version", "version beta");
+        fr.put("Single player", "Joueur solo");
+        fr.put("Creative Mode", "Mode créatif");
+        fr.put("Game credits", "Credits");
+        fr.put("Options", "Options");
+        fr.put("Quit game", "Quitter");
+        fr.put("FPS off", "FPS off");
+        fr.put("Darkness", "Obscurité");
+        fr.put("FPS on", "FPS on");
+        fr.put("Full day", "Plein jour");
+        fr.put("Back", "Retour");
+        fr.put("Back to game", "Retour au jeu");
+        fr.put("Quit to title", "Menu principal");
+        fr.put("Try again", "Recommencer");
+        fr.put("Keep on", "Continuer");
+        fr.put("Save & Quit game", "Enregistrer & quitter");
+        fr.put("Development team", "Equipe de développement");
+        fr.put("MAIN DEVELOPERS", "PRINCIPAUX DEVELOPPEURS");
+        fr.put("THANKS TO", "MERCI A");
+        fr.put("CONTRIBUTORS", "CONTRIBUTEURS");
+        fr.put("Spawn", "Point d'apparition");
+        fr.put("Floor", "Sol");
+        fr.put("Health pill", "Pillule de santé");
+        fr.put("Ground spikes", "Pics au sol");
+        fr.put("Ceiling spikes", "Pics au plafond");
+        fr.put("Key", "Clé");
+        fr.put("Check point", "Point de sauvegarde");
+        fr.put("Coin", "Pièce");
+        fr.put("Torch", "Torche");
+        fr.put("Slime bloc", "Bloc de slime");
+        fr.put("Door", "Porte");
+        fr.put("Ladder", "Echelle");
+        fr.put("GAME OVER", "MANCHE PERDU");
+        fr.put("You are dead", "Vous êtes mort(e)");
+        lang.add(fr);
     }
 
-    public String[][] getWords() {
-        return words;
+    public ArrayList<Map> getLang() {
+        return lang;
+    }
+
+    public String translate(String key) {
+        String value = "";
+        try {
+            value = lang.get(langIndex).get(key).toString();
+        } catch(Exception e) {}
+        return value;
     }
 
     public int getLangIndex() {

@@ -34,22 +34,22 @@ public class GameManager extends AbstractGame {
     private Camera camera;
     private SoundClip gameOver;
 
-    private Map map;
+    private GameMap gameMap;
     private int currLevel = 0;
     private String[] levelList = {
             "/levels/0.png",
             "/levels/1.png"
     };
 
-    private GameManager(Map map) {
-        this.map = map;
+    private GameManager(GameMap gameMap) {
+        this.gameMap = gameMap;
 
         if(mapTester) load(mapTest);
         else load(levelList[currLevel]);
 
         gameOver = new SoundClip("/audio/gameover.wav");
-        objects.add(new Player("player", map, 1));
-        camera = new Camera("player", map);
+        objects.add(new Player("player", gameMap, 1));
+        camera = new Camera("player", gameMap);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class GameManager extends AbstractGame {
         }
 
         //Animations
-        map.animate(dt * 3);
+        gameMap.animate(dt * 3);
 
         //Reload level
         if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
@@ -93,10 +93,10 @@ public class GameManager extends AbstractGame {
             else load(levelList[currLevel]);
 
             gameOver.stop();
-            objects.add(new Player("player", map, 1));
+            objects.add(new Player("player", gameMap, 1));
 
             camera = null;
-            camera = new Camera("player", map);
+            camera = new Camera("player", gameMap);
         }
 
         camera.update(gc, this, dt);
@@ -105,15 +105,15 @@ public class GameManager extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
         camera.render(r);
-        r.drawMap(map);
+        r.drawMap(gameMap);
         if(gc.getSettings().isShowLights())
-            r.drawMapLights(map, new Light(80, 0xffffff00));
+            r.drawMapLights(gameMap, new Light(80, 0xffffff00));
         for(GameObject obj : objects) obj.render(gc, this, r);
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
     public void load(String path) {
-        map.init(new Image(path, mapTester));
+        gameMap.init(new Image(path, mapTester));
     }
 
     public int getCurrLevel() {
@@ -214,7 +214,7 @@ public class GameManager extends AbstractGame {
             mapTester = true;
             mapTest = args[0];
         }
-        GameContainer gc = new GameContainer(new GameManager(new Map()), settings);
+        GameContainer gc = new GameContainer(new GameManager(new GameMap()), settings);
         gc.setTitle("Square Monster");
         gc.setScale(settings.getScale());
         gc.start();

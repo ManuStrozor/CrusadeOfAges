@@ -4,7 +4,7 @@ import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.gfx.Image;
-import com.strozor.engine.Map;
+import com.strozor.engine.GameMap;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -13,14 +13,14 @@ public class Crea extends AbstractGame {
 
     public static Image creaImg;
 
-    private Map map;
+    private GameMap gameMap;
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, curr = 0;
 
     public Crea(int width, int height) {
-        this.map = new Map();
+        this.gameMap = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
-        map.init(creaImg);
+        gameMap.init(creaImg);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class Crea extends AbstractGame {
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
 
         //Animations
-        map.animate(dt * 3);
+        gameMap.animate(dt * 3);
 
         if(gc.getInput().getScroll() > 0)
             curr = (curr == elems.length - 1) ? 0 : curr + 1;
@@ -68,13 +68,13 @@ public class Crea extends AbstractGame {
 
             if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
                 creaImg.setP(mouseTileX, mouseTileY, color);
-                map.setBloc(mouseTileX, mouseTileY, elems[curr]);
+                gameMap.setBloc(mouseTileX, mouseTileY, elems[curr]);
             } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
                 creaImg.setP(mouseTileX, mouseTileY, 0x00000000);
-                map.setBloc(mouseTileX, mouseTileY, 0);
+                gameMap.setBloc(mouseTileX, mouseTileY, 0);
             }
         }
-        r.drawMap(map);
+        r.drawMap(gameMap);
         r.drawDock(gc, elems, curr);
     }
 }

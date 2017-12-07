@@ -2,18 +2,18 @@ package com.strozor.game;
 
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
-import com.strozor.engine.Map;
+import com.strozor.engine.GameMap;
 
 public class Camera {
 
     private float offX, offY;
-    private Map map;
+    private GameMap gameMap;
     private String targetTag;
     private GameObject target = null;
 
-    public Camera(String tag, Map map) {
+    public Camera(String tag, GameMap gameMap) {
         this.targetTag = tag;
-        this.map = map;
+        this.gameMap = gameMap;
     }
 
     public void update(GameContainer gc, GameManager gm, float dt) {
@@ -29,8 +29,8 @@ public class Camera {
 
         if(offX < 0) offX = 0;
         if(offY < 0) offY = 0;
-        if(offX + gc.getWidth() > map.getWidth() * GameManager.TS) offX = map.getWidth() * GameManager.TS - gc.getWidth();
-        if(offY + gc.getHeight() > map.getHeight() * GameManager.TS) offY = map.getHeight() * GameManager.TS - gc.getHeight();
+        if(offX + gc.getWidth() > gameMap.getWidth() * GameManager.TS) offX = gameMap.getWidth() * GameManager.TS - gc.getWidth();
+        if(offY + gc.getHeight() > gameMap.getHeight() * GameManager.TS) offY = gameMap.getHeight() * GameManager.TS - gc.getHeight();
     }
 
     public void render(GameRender r) {

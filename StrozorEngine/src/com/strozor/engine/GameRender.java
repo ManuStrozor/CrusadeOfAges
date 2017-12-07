@@ -11,7 +11,8 @@ import java.util.Comparator;
 
 public class GameRender {
 
-    private Settings settings;
+    private Settings s;
+    private int langIndex;
     private ImageTile objsImg = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
@@ -22,7 +23,8 @@ public class GameRender {
     private boolean processing = false;
 
     public GameRender(GameContainer gc, Settings settings) {
-        this.settings = settings;
+        s = settings;
+        this.langIndex = settings.getLangIndex();
         pW = gc.getWidth();
         pH = gc.getHeight();
         p = ((DataBufferInt)gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
@@ -320,12 +322,12 @@ public class GameRender {
         }
     }
 
-    public void drawButton(Button b) {
+    public void drawButton(Button b, String text) {
         drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xffababab);
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, b.getHeight() - 1, b.getBgColor());
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 1, 0x99636363);
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, 1, 0x99636363);
-        drawText(b.getText(), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
+        drawText(text, b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
     public void drawGameStates(GameContainer gc, GameObject obj) {
@@ -340,11 +342,11 @@ public class GameRender {
         drawText("x" + obj.getKeys(), x + GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawMap(Map map) {
-        for(int y = 0; y < map.getHeight(); y++) {
-            for(int x = 0; x < map.getWidth(); x++) {
+    public void drawMap(GameMap gameMap) {
+        for(int y = 0; y < gameMap.getHeight(); y++) {
+            for(int x = 0; x < gameMap.getWidth(); x++) {
 
-                Bloc curr = map.getBloc(x, y);
+                Bloc curr = gameMap.getBloc(x, y);
 
                 //draw wall behind non-solid bloc
                 if(!curr.isSolid() && !curr.getName().equals("Wall"))
@@ -354,7 +356,7 @@ public class GameRender {
                 drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, curr.getTileX(), curr.getTileY());
 
                 //draw shadow under solid bloc
-                if(!curr.isSolid() && map.isSolid(x, y-1))
+                if(!curr.isSolid() && gameMap.isSolid(x, y-1))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 0, 3);
 
                 //draw top part of the door
@@ -364,10 +366,10 @@ public class GameRender {
         }
     }
 
-    public void drawMapLights(Map map, Light lamp) {
-        for(int y = 0; y < map.getHeight(); y++) {
-            for(int x = 0; x < map.getWidth(); x++) {
-                if(map.getBloc(x, y).getName().equals("Torch"))
+    public void drawMapLights(GameMap gameMap, Light lamp) {
+        for(int y = 0; y < gameMap.getHeight(); y++) {
+            for(int x = 0; x < gameMap.getWidth(); x++) {
+                if(gameMap.getBloc(x, y).getName().equals("Torch"))
                     drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 3);
             }
         }
@@ -401,18 +403,18 @@ public class GameRender {
 
         String name = "";
         switch(elems[selected]) {
-            case -1:name = settings.getWords()[21][settings.getLangIndex()]; break;
-            case 1: name = settings.getWords()[22][settings.getLangIndex()]; break;
-            case 2: name = settings.getWords()[23][settings.getLangIndex()]; break;
-            case 3: name = settings.getWords()[24][settings.getLangIndex()]; break;
-            case 4: name = settings.getWords()[25][settings.getLangIndex()]; break;
-            case 5: name = settings.getWords()[26][settings.getLangIndex()]; break;
-            case 6: name = settings.getWords()[27][settings.getLangIndex()]; break;
-            case 7: name = settings.getWords()[28][settings.getLangIndex()]; break;
-            case 8:name = settings.getWords()[32][settings.getLangIndex()]; break;
-            case 11:name = settings.getWords()[29][settings.getLangIndex()]; break;
-            case 12:name = settings.getWords()[30][settings.getLangIndex()]; break;
-            case 13:name = settings.getWords()[31][settings.getLangIndex()]; break;
+            case -1: name = s.translate("Spawn"); break;
+            case 1: name = s.translate("Floor"); break;
+            case 2: name = s.translate("Health pill"); break;
+            case 3: name = s.translate("Ground spikes"); break;
+            case 4: name = s.translate("Ceiling spikes"); break;
+            case 5: name = s.translate("Key"); break;
+            case 6: name = s.translate("Check point"); break;
+            case 7: name = s.translate("Coin"); break;
+            case 8:name = s.translate("Ladder"); break;
+            case 11:name = s.translate("Torch"); break;
+            case 12:name = s.translate("Slime bloc"); break;
+            case 13:name = s.translate("Door"); break;
         }
         drawText(name, offX + width / 2 - camX - 1, offY - 7 - camY, 0, -1, 0x99636363, Font.STANDARD);
         drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);

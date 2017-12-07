@@ -5,14 +5,14 @@ import com.strozor.engine.GameRender;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.ImageTile;
-import com.strozor.engine.Map;
+import com.strozor.engine.GameMap;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Player extends GameObject {
 
-    private Map map;
+    private GameMap gameMap;
 
     private ImageTile playerImage = new ImageTile("/player.png", GameManager.TS, GameManager.TS);
 
@@ -26,8 +26,8 @@ public class Player extends GameObject {
     private int speed, ground = 2;
     private float fallDist = 0;
 
-    public Player(String tag, Map map, int lives) {
-        this.map = map;
+    public Player(String tag, GameMap gameMap, int lives) {
+        this.gameMap = gameMap;
         this.tag = tag;
         this.lives = lives;
 
@@ -43,8 +43,8 @@ public class Player extends GameObject {
 
         width = GameManager.TS;
         height = GameManager.TS;
-        tileX = map.getSpawnX();
-        tileY = map.getSpawnY();
+        tileX = gameMap.getSpawnX();
+        tileY = gameMap.getSpawnY();
         posX = tileX * GameManager.TS;
         posY = tileY * GameManager.TS;
         offX = 0;
@@ -61,13 +61,13 @@ public class Player extends GameObject {
         }
 
         //Blocs
-        Bloc curr = map.getBloc(tileX, tileY);
-        Bloc bottom = map.getBloc(tileX, tileY+1);
+        Bloc curr = gameMap.getBloc(tileX, tileY);
+        Bloc bottom = gameMap.getBloc(tileX, tileY+1);
 
         //Bouncing bloc
         if(bottom.getName().equals("Slime bloc") && fallDist == 0) {
             fallDist = -10;
-            if(!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
+            if(!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
                 jump.play();
         }
 
@@ -79,9 +79,9 @@ public class Player extends GameObject {
                 coin.play();
                 break;
             case "Check point":
-                if(tileX != map.getSpawnX() && tileY != map.getSpawnY()) {
-                    map.setSpawnX(tileX);
-                    map.setSpawnY(tileY);
+                if(tileX != gameMap.getSpawnX() && tileY != gameMap.getSpawnY()) {
+                    gameMap.setSpawnX(tileX);
+                    gameMap.setSpawnY(tileY);
                     checkPoint.play();
                 }
                 break;
@@ -120,8 +120,8 @@ public class Player extends GameObject {
 
         //Hit trap
         if(curr.getId() == 3 || curr.getId() == 4 || curr.getId() == 9 || curr.getId() == 10) {
-            if(curr.getId() == 3) map.setBloc(tileX, tileY, 9);
-            else if(curr.getId() == 4) map.setBloc(tileX, tileY, 10);
+            if(curr.getId() == 3) gameMap.setBloc(tileX, tileY, 9);
+            else if(curr.getId() == 4) gameMap.setBloc(tileX, tileY, 10);
 
             if(this.lives == 0) {
                 this.setDead(true);
@@ -135,7 +135,7 @@ public class Player extends GameObject {
         } else {
             //Left & Right
             if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q)) {
-                if (map.isSolid(tileX - 1, tileY) || map.isSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
+                if (gameMap.isSolid(tileX - 1, tileY) || gameMap.isSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX > 0) {
                         offX -= dt * speed;
                         if (offX < 0) offX = 0;
@@ -148,7 +148,7 @@ public class Player extends GameObject {
             }
 
             if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D)) {
-                if (map.isSolid(tileX + 1, tileY) || map.isSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
+                if (gameMap.isSolid(tileX + 1, tileY) || gameMap.isSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
                     if (offX < 0) {
                         offX += dt * speed;
                         if (offX > 0) offX = 0;
@@ -167,10 +167,10 @@ public class Player extends GameObject {
                 if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
                     if(!curr.getName().equals("Ladder")) {
                         fallDist = -5;
-                        if (!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                        if (!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
                             jump.play();
                         ground++;
-                    } else if (map.isSolid(tileX, tileY - 1) || map.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
+                    } else if (gameMap.isSolid(tileX, tileY - 1) || gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
                         if (offY > 0) {
                             offY -= dt * speed;
                             if (offY < 0) offY = 0;
@@ -181,7 +181,7 @@ public class Player extends GameObject {
                         offY -= dt * speed;
                     }
                 } else if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
-                    if (map.isSolid(tileX, tileY + 1) || map.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
+                    if (gameMap.isSolid(tileX, tileY + 1) || gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
                         if (offY < 0) {
                             offY += dt * speed;
                             if (offY > 0) offY = 0;
@@ -198,19 +198,19 @@ public class Player extends GameObject {
 
                 if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
                     fallDist = -5;
-                    if (!map.isSolid(tileX, tileY - 1) && !map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
+                    if (!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
                         jump.play();
                     ground++;
                 }
                 offY += fallDist;
                 if (fallDist < 0) {
-                    if ((map.isSolid(tileX, tileY - 1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                    if ((gameMap.isSolid(tileX, tileY - 1) || gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
                 if (fallDist > 0) {
-                    if ((map.isSolid(tileX, tileY + 1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                    if ((gameMap.isSolid(tileX, tileY + 1) || gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -294,8 +294,8 @@ public class Player extends GameObject {
         }
         direction = 0;
         fallDist = 0;
-        tileX = map.getSpawnX();
-        tileY = map.getSpawnY();
+        tileX = gameMap.getSpawnX();
+        tileY = gameMap.getSpawnY();
         offX = 0;
         offY = 0;
     }

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class Credits extends View {
 
-    private Settings settings;
+    private Settings s;
     private SoundClip select;
 
     private String[] devs = {"ManuStrozor"};
@@ -25,9 +25,9 @@ public class Credits extends View {
     private Button back;
 
     public Credits(Settings settings) {
-        this.settings = settings;
+        s = settings;
         select = new SoundClip("/audio/select.wav");
-        buttons.add(back = new Button(60, 20, 11, 0));
+        buttons.add(back = new Button(60, 20, "Back", 0));
     }
 
     @Override
@@ -36,7 +36,6 @@ public class Credits extends View {
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
 
         for(Button btn : buttons) {
-            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
@@ -54,15 +53,15 @@ public class Credits extends View {
     public void render(GameContainer gc, GameRender r) {
 
         r.drawBackground(gc, new Bloc(0));
-        r.drawMenuTitle(gc, settings.getWords()[4][settings.getLangIndex()].toUpperCase(), settings.getWords()[17][settings.getLangIndex()]);
+        r.drawMenuTitle(gc, s.translate("Game credits").toUpperCase(), s.translate("Development team"));
 
-        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, settings.getWords()[18][settings.getLangIndex()], devs);
-        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, settings.getWords()[19][settings.getLangIndex()], thanks);
-        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, settings.getWords()[20][settings.getLangIndex()], contribs);
+        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("MAIN DEVELOPERS"), devs);
+        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, s.translate("THANKS TO"), thanks);
+        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, s.translate("CONTRIBUTORS"), contribs);
 
         back.setOffX(5);
         back.setOffY(5);
 
-        for(Button btn : buttons) r.drawButton(btn);
+        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
     }
 }

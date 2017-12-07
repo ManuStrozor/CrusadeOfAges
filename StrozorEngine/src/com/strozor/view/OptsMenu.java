@@ -16,22 +16,20 @@ import java.util.List;
 
 public class OptsMenu extends View {
 
-    private Settings settings;
-
+    private Settings s;
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
     private Button tglLang, tglFps, tglLights, back;
 
     public OptsMenu(Settings settings) {
-        this.settings = settings;
-
+        s = settings;
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(tglLang = new Button(130, 20, 0, 0));
-        buttons.add(tglFps = new Button(130, 20, settings.isShowFps() ? 9 : 7, 0));
-        buttons.add(tglLights = new Button(130, 20, settings.isShowLights() ? 8 : 10, 0));
-        buttons.add(back = new Button(130, 20, 11, 0));
+        buttons.add(tglLang = new Button(130, 20, "lang", 0));
+        buttons.add(tglFps = new Button(130, 20, settings.isShowFps() ? "FPS on" : "FPS off", 0));
+        buttons.add(tglLights = new Button(130, 20, settings.isShowLights() ? "Darkness" : "Full day", 0));
+        buttons.add(back = new Button(130, 20, "Back", 0));
     }
 
     @Override
@@ -43,7 +41,6 @@ public class OptsMenu extends View {
         }
 
         for(Button btn : buttons) {
-            btn.setText(settings.getWords()[btn.getWordsIndex()][settings.getLangIndex()]);
             if (mouseIsHover(gc, btn)) {
                 btn.setBgColor(0xff263238);
                 if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
@@ -55,31 +52,20 @@ public class OptsMenu extends View {
 
         if(mouseIsHover(gc, tglLang)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                if(settings.getLangIndex() < settings.getWords()[0].length - 1) {
-                    settings.setLangIndex(settings.getLangIndex() + 1);
-                } else {
-                    settings.setLangIndex(0);
-                }
+                if(s.getLangIndex() < s.getLang().size() - 1) s.setLangIndex(s.getLangIndex() + 1);
+                else s.setLangIndex(0);
             }
         } else if(mouseIsHover(gc, tglFps)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                if(settings.isShowFps()) {
-                    settings.setShowFps(false);
-                    tglFps.setWordsIndex(7);
-                } else {
-                    settings.setShowFps(true);
-                    tglFps.setWordsIndex(9);
-                }
+                s.setShowFps(!s.isShowFps());
+                if(s.isShowFps()) tglFps.setText("FPS on");
+                else tglFps.setText("FPS off");
             }
         } else if(mouseIsHover(gc, tglLights)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                if(settings.isShowLights()) {
-                    settings.setShowLights(false);
-                    tglLights.setWordsIndex(10);
-                } else {
-                    settings.setShowLights(true);
-                    tglLights.setWordsIndex(8);
-                }
+                s.setShowLights(!s.isShowLights());
+                if(s.isShowLights()) tglLights.setText("Darkness");
+                else tglLights.setText("Full day");
             }
         } else if(mouseIsHover(gc, back)) {
             if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
@@ -94,7 +80,7 @@ public class OptsMenu extends View {
 
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, new Bloc(0));
-            r.drawMenuTitle(gc,gc.getTitle().toUpperCase(), settings.getWords()[1][settings.getLangIndex()]);
+            r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
         }
 
         tglLang.setOffX(gc.getWidth() / 2 - tglLang.getWidth() / 2);
@@ -109,7 +95,7 @@ public class OptsMenu extends View {
         back.setOffX(tglLights.getOffX());
         back.setOffY(tglLights.getOffY() + tglLights.getHeight() + 10);
 
-        for(Button btn : buttons) r.drawButton(btn);
+        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
     }
 
     private void updateOptions() {
@@ -119,15 +105,15 @@ public class OptsMenu extends View {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
-                        switch(settings.getLangIndex()) {
+                        switch(s.getLangIndex()) {
                             case 0: newLines.add(line.replace(sub[1], "en")); break;
                             case 1: newLines.add(line.replace(sub[1], "fr")); break;
                         }
                         break;
                     case "guiScale": newLines.add(line); break;
                     case "maxFPS": newLines.add(line); break;
-                    case "showFPS": newLines.add(line.replace(sub[1], settings.isShowFps() ? "true" : "false")); break;
-                    case "showLights": newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false")); break;
+                    case "showFPS": newLines.add(line.replace(sub[1], s.isShowFps() ? "true" : "false")); break;
+                    case "showLights": newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
                 }
             }
             Files.write(Paths.get(GameManager.APPDATA + "\\options.txt"), newLines, StandardCharsets.UTF_8);
