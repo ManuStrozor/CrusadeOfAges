@@ -401,23 +401,8 @@ public class GameRender {
         drawRect(offX - 2 + (height + 4) * selected, offY - 2, height + 2, height + 2, 0x77ffffff);
         drawRect(offX - 1 + (height + 4) * selected, offY - 1, height, height, 0x33ffffff);
 
-        String name = "";
-        switch(elems[selected]) {
-            case -1: name = s.translate("Spawn"); break;
-            case 1: name = s.translate("Floor"); break;
-            case 2: name = s.translate("Health pill"); break;
-            case 3: name = s.translate("Ground spikes"); break;
-            case 4: name = s.translate("Ceiling spikes"); break;
-            case 5: name = s.translate("Key"); break;
-            case 6: name = s.translate("Check point"); break;
-            case 7: name = s.translate("Coin"); break;
-            case 8:name = s.translate("Ladder"); break;
-            case 11:name = s.translate("Torch"); break;
-            case 12:name = s.translate("Slime bloc"); break;
-            case 13:name = s.translate("Door"); break;
-        }
-        drawText(name, offX + width / 2 - camX - 1, offY - 7 - camY, 0, -1, 0x99636363, Font.STANDARD);
-        drawText(name, offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
+        Bloc b = new Bloc(elems[selected]);
+        drawText(s.translate(b.getName()), offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
     }
 
     public void drawBackground(GameContainer gc, Bloc bloc) {

@@ -32,21 +32,21 @@ public class Bloc {
                 solid = true;
                 break;
             case 0xffff648c:
-                name = "Heart";
+                name = "Health pill";
                 id = 2;
                 tileX = 3;
                 tileY = 2;
                 solid = false;
                 break;
             case 0xffff0000:
-                name = "Ground trap";
+                name = "Ground spikes";
                 id = 3;
                 tileX = 1;
                 tileY = 1;
                 solid = false;
                 break;
             case 0xffff00ff:
-                name = "Ceiling trap";
+                name = "Ceiling spikes";
                 id = 4;
                 tileX = 2;
                 tileY = 1;
@@ -81,14 +81,14 @@ public class Bloc {
                 solid = false;
                 break;
             case 0xff990000:
-                name = "Ground trap blooded";
+                name = "Ground spikes blooded";
                 id = 9;
                 tileX = 1;
                 tileY = 2;
                 solid = false;
                 break;
             case 0xff990099:
-                name = "Ceiling trap blooded";
+                name = "Ceiling spikes blooded";
                 id = 10;
                 tileX = 2;
                 tileY = 2;
@@ -140,19 +140,19 @@ public class Bloc {
                 solid = true;
                 break;
             case 2:
-                name = "Heart";
+                name = "Health pill";
                 tileX = 3;
                 tileY = 2;
                 solid = false;
                 break;
             case 3:
-                name = "Ground trap";
+                name = "Ground spikes";
                 tileX = 1;
                 tileY = 1;
                 solid = false;
                 break;
             case 4:
-                name = "Ceiling trap";
+                name = "Ceiling spikes";
                 tileX = 2;
                 tileY = 1;
                 solid = false;
@@ -182,13 +182,13 @@ public class Bloc {
                 solid = false;
                 break;
             case 9:
-                name = "Ground trap blooded";
+                name = "Ground spikes blooded";
                 tileX = 1;
                 tileY = 2;
                 solid = false;
                 break;
             case 10:
-                name = "Ceiling trap blooded";
+                name = "Ceiling spikes blooded";
                 tileX = 2;
                 tileY = 2;
                 solid = false;
