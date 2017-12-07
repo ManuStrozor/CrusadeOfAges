@@ -6,22 +6,23 @@ import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.GameMap;
+import com.strozor.game.actions.*;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 
 public class Player extends GameObject {
 
+    private Moves moves = new Moves(this);
+
     private GameMap gameMap;
-
     private ImageTile playerImage = new ImageTile("/player.png", GameManager.TS, GameManager.TS);
-
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
+
+    private SoundClip jump, impaled, coin, bonus, checkPoint;
 
     private int tileX, tileY, direction = 0;
     private float offX, offY, anim = 0;
-
-    private SoundClip jump, impaled, coin, bonus, checkPoint;
 
     private int speed, ground = 2;
     private float fallDist = 0;
@@ -64,11 +65,9 @@ public class Player extends GameObject {
         Bloc curr = gameMap.getBloc(tileX, tileY);
         Bloc bottom = gameMap.getBloc(tileX, tileY+1);
 
-        //Bouncing bloc
+        //Slime bloc
         if(bottom.getName().equals("Slime bloc") && fallDist == 0) {
-            fallDist = -10;
-            if(!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1))
-                jump.play();
+            moves.jump(gameMap, 10);
         }
 
         //Events on current bloc
@@ -134,31 +133,10 @@ public class Player extends GameObject {
 
         } else {
             //Left & Right
-            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q)) {
-                if (gameMap.isSolid(tileX - 1, tileY) || gameMap.isSolid(tileX - 1, tileY + (int) Math.signum((int) offY))) {
-                    if (offX > 0) {
-                        offX -= dt * speed;
-                        if (offX < 0) offX = 0;
-                    } else {
-                        offX = 0;
-                    }
-                } else {
-                    offX -= dt * speed;
-                }
-            }
-
-            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D)) {
-                if (gameMap.isSolid(tileX + 1, tileY) || gameMap.isSolid(tileX + 1, tileY + (int) Math.signum((int) offY))) {
-                    if (offX < 0) {
-                        offX += dt * speed;
-                        if (offX > 0) offX = 0;
-                    } else {
-                        offX = 0;
-                    }
-                } else {
-                    offX += dt * speed;
-                }
-            }
+            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
+                moves.toLeft(gameMap, dt, speed);
+            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
+                moves.toRight(gameMap, dt, speed);
 
             if(curr.getName().equals("Ladder") || (bottom.getName().equals("Ladder") && fallDist == 0)) {
                 //Climbing ladders
@@ -166,49 +144,30 @@ public class Player extends GameObject {
                 ground = 0;
                 if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
                     if(!curr.getName().equals("Ladder")) {
-                        fallDist = -5;
-                        if (!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
-                            jump.play();
-                        ground++;
-                    } else if (gameMap.isSolid(tileX, tileY - 1) || gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) {
-                        if (offY > 0) {
-                            offY -= dt * speed;
-                            if (offY < 0) offY = 0;
-                        } else {
-                            offY = 0;
-                        }
+                        moves.jump(gameMap, 5);
                     } else {
-                        offY -= dt * speed;
+                        moves.upStairs(gameMap, dt, speed);
                     }
                 } else if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
-                    if (gameMap.isSolid(tileX, tileY + 1) || gameMap.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) {
-                        if (offY < 0) {
-                            offY += dt * speed;
-                            if (offY > 0) offY = 0;
-                        } else {
-                            offY = 0;
-                        }
-                    } else {
-                        offY += dt * speed;
-                    }
+                    moves.downStairs(gameMap, dt, speed);
                 }
             } else {
                 //Jump & Gravity
                 fallDist += dt * 14;
 
                 if ((gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) && ground <= 1) {
-                    fallDist = -5;
-                    if (!gameMap.isSolid(tileX, tileY - 1) && !gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1))
-                        jump.play();
-                    ground++;
+                    moves.jump(gameMap, 5);
                 }
+
                 offY += fallDist;
+
                 if (fallDist < 0) {
                     if ((gameMap.isSolid(tileX, tileY - 1) || gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY - 1)) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
+
                 if (fallDist > 0) {
                     if ((gameMap.isSolid(tileX, tileY + 1) || gameMap.isSolid(tileX + (int)Math.signum((int) offX), tileY + 1)) && offY > 0) {
                         fallDist = 0;
@@ -298,5 +257,45 @@ public class Player extends GameObject {
         tileY = gameMap.getSpawnY();
         offX = 0;
         offY = 0;
+    }
+
+    public int getTileX() {
+        return tileX;
+    }
+
+    public int getTileY() {
+        return tileY;
+    }
+
+    public float getOffX() {
+        return offX;
+    }
+
+    public void setOffX(float offX) {
+        this.offX = offX;
+    }
+
+    public float getOffY() {
+        return offY;
+    }
+
+    public void setOffY(float offY) {
+        this.offY = offY;
+    }
+
+    public SoundClip getJump() {
+        return jump;
+    }
+
+    public int getGround() {
+        return ground;
+    }
+
+    public void setGround(int ground) {
+        this.ground = ground;
+    }
+
+    public void setFallDist(float fallDist) {
+        this.fallDist = fallDist;
     }
 }
