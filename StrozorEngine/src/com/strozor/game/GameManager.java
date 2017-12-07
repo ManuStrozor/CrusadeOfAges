@@ -48,6 +48,7 @@ public class GameManager extends AbstractGame {
         else load(levelList[currLevel]);
 
         gameOver = new SoundClip("/audio/gameover.wav");
+        gameOver.setVolume(-10f);
         objects.add(new Player("player", gameMap, 1));
         camera = new Camera("player", gameMap);
     }

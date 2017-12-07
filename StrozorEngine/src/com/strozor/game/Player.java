@@ -85,7 +85,7 @@ public class Player extends GameObject {
                     checkPoint.play();
                 }
                 break;
-            case "Heart":
+            case "Health pill":
                 curr.remove();
                 lives++;
                 bonus.play();
@@ -95,19 +95,19 @@ public class Player extends GameObject {
                 keys++;
                 bonus.play();
                 break;
-            case "Ground trap":
+            case "Ground spikes":
                 lives--;
                 impaled.play();
                 break;
-            case "Ceiling trap":
+            case "Ceiling spikes":
                 lives--;
                 impaled.play();
                 break;
-            case "Ground trap blooded":
+            case "Ground spikes blooded":
                 lives--;
                 impaled.play();
                 break;
-            case "Ceiling trap blooded":
+            case "Ceiling spikes blooded":
                 lives--;
                 impaled.play();
                 break;
