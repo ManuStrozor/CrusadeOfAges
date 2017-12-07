@@ -16,7 +16,7 @@ public class OverMenu extends View {
     private SoundClip select;
 
     private ArrayList<Button> buttons = new ArrayList<>();
-    private Button play, menu, exit;
+    private Button play, menu;
 
     public OverMenu(Settings settings) {
         s = settings;
@@ -24,7 +24,6 @@ public class OverMenu extends View {
 
         buttons.add(play = new Button(130, 20, "Try again", 1));
         buttons.add(menu = new Button(130, 20, "Quit to title", 0));
-        buttons.add(exit = new Button(130, 20, "Quit game", -1));
     }
 
     @Override
@@ -53,9 +52,6 @@ public class OverMenu extends View {
 
         menu.setOffX(play.getOffX());
         menu.setOffY(play.getOffY() + play.getHeight() + 10);
-
-        exit.setOffX(menu.getOffX());
-        exit.setOffY(menu.getOffY() + menu.getHeight() + 10);
 
         for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
     }
