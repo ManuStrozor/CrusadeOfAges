@@ -63,19 +63,16 @@ public class Player extends GameObject {
             case "Coin": collect.coin(curr); break;
             case "Health pill": collect.pill(curr); break;
             case "Key": collect.key(curr); break;
-            case "Ground spikes": event.impale(); break;
-            case "Ceiling spikes": event.impale(); break;
-            case "Ground spikes blooded": event.impale(); break;
-            case "Ceiling spikes blooded": event.impale(); break;
+            case "Ground spikes": event.impale(map); break;
+            case "Ceiling spikes": event.impale(map); break;
+            case "Ground spikes blooded": event.impale(map); break;
+            case "Ceiling spikes blooded": event.impale(map); break;
             case "Check point": event.savePosition(map); break;
             case "Door": event.switchLevel(gc, gm); break;
         }
 
         //Hit spikes
         if(curr.getId() == 3 || curr.getId() == 4 || curr.getId() == 9 || curr.getId() == 10) {
-
-            if(curr.getId() == 3) map.setBloc(tileX, tileY, 9);
-            else if(curr.getId() == 4) map.setBloc(tileX, tileY, 10);
 
             if(this.lives == 0) {
                 this.setDead(true);
