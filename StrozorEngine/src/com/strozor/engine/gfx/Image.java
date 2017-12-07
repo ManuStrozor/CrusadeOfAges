@@ -16,9 +16,9 @@ public class Image {
     private int[] p;
     private boolean alpha = false;
 
-    public Image(String path, boolean test) {
+    public Image(String path, boolean ext) {
         try {
-            BufferedImage image = test ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
+            BufferedImage image = ext ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
             w = image.getWidth();
             h = image.getHeight();
             p = image.getRGB(0, 0, w, h, null, 0, w);

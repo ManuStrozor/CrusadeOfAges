@@ -62,7 +62,7 @@ public class GameManager extends AbstractGame {
             try {
                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
                 String filename = sdf.format(new Date()) + ".png";
-                File out = new File(GameManager.APPDATA + "\\screenshots\\" + filename);
+                File out = new File(APPDATA + "\\screenshots\\" + filename);
                 ImageIO.write(gc.getWindow().getImage(), "png", out);
                 notifs.add(new FlashNotif(filename, 3, 100, -1));
             } catch(IOException e) {
@@ -155,6 +155,18 @@ public class GameManager extends AbstractGame {
         //assets
         File smAssets = new File(APPDATA + "\\assets");
         if(!smAssets.exists()) smAssets.mkdir();
+
+        //objects.png (assets)
+        try {
+            File outObjs = new File(APPDATA + "\\assets\\objects.png");
+            File outPl = new File(APPDATA + "\\assets\\player.png");
+            if(!outObjs.exists())
+                ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/objects.png")), "png", outObjs);
+            if(!outPl.exists())
+                ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/player.png")), "png", outPl);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
 
         //screenshots
         File smScreenshots = new File(APPDATA + "\\screenshots");

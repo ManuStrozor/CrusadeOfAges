@@ -4,8 +4,8 @@ public class ImageTile extends Image {
 
     private int tileW, tileH;
 
-    public ImageTile(String path, int tileW, int tileH) {
-        super(path, false);
+    public ImageTile(String path, int tileW, int tileH, boolean ext) {
+        super(path, ext);
         this.tileW = tileW;
         this.tileH = tileH;
     }

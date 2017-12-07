@@ -12,7 +12,7 @@ import java.util.Comparator;
 public class GameRender {
 
     private Settings s;
-    private ImageTile objsImg = new ImageTile("/objects.png", GameManager.TS, GameManager.TS);
+    private ImageTile objsImg;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
     private int pW, pH;
@@ -23,6 +23,8 @@ public class GameRender {
 
     public GameRender(GameContainer gc, Settings settings) {
         s = settings;
+        String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\objects.png";
+        objsImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
         pW = gc.getWidth();
         pH = gc.getHeight();
         p = ((DataBufferInt)gc.getWindow().getImage().getRaster().getDataBuffer()).getData();

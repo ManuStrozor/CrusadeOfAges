@@ -17,7 +17,7 @@ public class Player extends GameObject {
     private Event event = new Event(this);
 
     private GameMap map;
-    private ImageTile playerImage = new ImageTile("/player.png", GameManager.TS, GameManager.TS);
+    private ImageTile playerImage;
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
@@ -27,6 +27,8 @@ public class Player extends GameObject {
     private float fallDist = 0;
 
     Player(String tag, GameMap map, int lives) {
+        String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\player.png";
+        playerImage = new ImageTile(path, GameManager.TS, GameManager.TS, true);
         this.map = map;
         this.tag = tag;
         this.lives = lives;
