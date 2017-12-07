@@ -2,11 +2,13 @@
 Square Monster est un jeu de plate-forme 2d inspiré du magnifique Super-Meat-Boy !
 
 ## Screenshots
-![Screenshot](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/mainMenu.png)
-![Screenshot2](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/credits.png)
+![Screenshot0](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/0.png)
+![Screenshot1](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/1.png)
+![Screenshot2](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/2.png)
 
 ## Versions
-* ![Download the current version](https://github.com/Strozor/Square-Monster/blob/master/SquareMonster.jar?raw=true)
+* ![Download the current .exe version](https://github.com/Strozor/Square-Monster/blob/master/SquareMonster.exe?raw=true)
+* ![Download the current .jar version](https://github.com/Strozor/Square-Monster/blob/master/SquareMonster.jar?raw=true)
 * `04.12.2017` ![Beta 1.9](https://github.com/Strozor/Square-Monster/blob/master/versions/beta1.9.jar?raw=true)
 * `01.12.2017` ![Beta 1.8.1](https://github.com/Strozor/Square-Monster/blob/master/versions/beta1.8.1.jar?raw=true)
 * `30.11.2017` ![Beta 1.8](https://github.com/Strozor/Square-Monster/blob/master/versions/beta1.8.jar?raw=true)
