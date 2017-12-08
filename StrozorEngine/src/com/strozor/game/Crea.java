@@ -19,6 +19,8 @@ public class Crea extends AbstractGame {
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, scroll = 0;
 
+    private boolean once = false;
+
     public Crea(int width, int height) {
         this.gameMap = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
@@ -43,6 +45,11 @@ public class Crea extends AbstractGame {
 
     @Override
     public void render(GameContainer gc, GameRender r) {
+
+        if(!once) {
+            r.setCamX(-GameManager.TS - 4);
+            once = true;
+        }
 
         int mouseX = gc.getInput().getMouseX();
         int mouseY = gc.getInput().getMouseY();
