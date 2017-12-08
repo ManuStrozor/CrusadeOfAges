@@ -15,6 +15,7 @@ public class Crea extends AbstractGame {
     public static Image creaImg;
 
     private GameMap gameMap;
+
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, scroll = 0;
 
@@ -75,6 +76,7 @@ public class Crea extends AbstractGame {
         }
 
         r.drawMap(gameMap);
+        r.drawMiniMap(gc, creaImg);
         r.drawDock(gc, elems, scroll);
         r.drawArrows(gc, creaImg.getW(), creaImg.getH());
     }

@@ -11,7 +11,6 @@ import java.util.Comparator;
 
 public class GameRender {
 
-    private Settings s;
     private ImageTile objsImg;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
@@ -21,8 +20,7 @@ public class GameRender {
     private int zDepth = 0;
     private boolean processing = false;
 
-    public GameRender(GameContainer gc, Settings settings) {
-        s = settings;
+    public GameRender(GameContainer gc) {
         String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\objects.png";
         objsImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
         pW = gc.getWidth();
@@ -392,6 +390,14 @@ public class GameRender {
         drawRect(camX + 1, midH - GameManager.TS/2 - 3, s + 4, s + 4, 0xbbffffff);
         drawRect(camX + 2, midH - GameManager.TS/2 - 2, s + 2, s + 2, 0x77ffffff);
         drawRect(camX + 3, midH - GameManager.TS/2 - 1, s, s, 0x33ffffff);
+    }
+
+    public void drawMiniMap(GameContainer gc, Image img) {
+        int xMMap = camX + gc.getWidth() - img.getW() - 1;
+        int yMMap = camY + gc.getHeight() - img.getH() - 1;
+        fillRect(xMMap, yMMap, img.getW(), img.getH(), 0x99ababab);
+        drawRect(xMMap + camX/32 + 1, yMMap + camY/32, gc.getWidth()/32 - 2, gc.getHeight()/32, 0x99ababab);
+        drawImage(img, xMMap, yMMap);
     }
 
     public void drawArrows(GameContainer gc, int width, int height) {

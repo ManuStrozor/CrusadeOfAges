@@ -36,7 +36,7 @@ public class GameContainer implements Runnable {
     }
 
     private STATE State = STATE.MAINMENU;
-    private int currState = 0, lastState = 0;
+    private int lastState = 0;
 
     public GameContainer(AbstractGame game, Settings settings) {
         this.game = game;
@@ -55,7 +55,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        gameRender = new GameRender(this, s);
+        gameRender = new GameRender(this);
         input = new Input(this);
 
         thread = new Thread(this);
@@ -215,10 +215,6 @@ public class GameContainer implements Runnable {
         return s;
     }
 
-    public int getCurrState() {
-        return currState;
-    }
-
     public int getLastState() {
         return lastState;
     }
@@ -239,6 +235,5 @@ public class GameContainer implements Runnable {
             case 6: State = STATE.CREDITS; break;
             case 7: State = STATE.OVERMENU; break;
         }
-        currState = value;
     }
 }
