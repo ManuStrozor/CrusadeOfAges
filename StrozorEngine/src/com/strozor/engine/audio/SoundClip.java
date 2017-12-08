@@ -38,13 +38,10 @@ public class SoundClip {
     }
 
     public void play() {
-        if(clip == null)
-            return;
+        if(clip == null) return;
         stop();
         clip.setFramePosition(0);
-        while(!clip.isRunning()) {
-            clip.start();
-        }
+        while(!clip.isRunning()) clip.start();
     }
 
     public void stop() {

@@ -80,7 +80,6 @@ public class Player extends GameObject {
                 this.setDead(true);
                 gc.setState(7);
                 gc.setLastState(1);
-                gm.getGameOver().play();
             } else {
                 respawn(gm, false);
             }

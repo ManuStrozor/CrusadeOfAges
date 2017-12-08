@@ -9,19 +9,14 @@ import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class Credits extends View {
 
     private Settings s;
     private SoundClip select;
-
     private String[] devs = {"ManuStrozor"};
     private String[] thanks = {"My family", "Beta testers"};
     private String[] contribs = {"Majoolwip"};
-
-    private ArrayList<Button> buttons = new ArrayList<>();
     private Button back;
 
     public Credits(Settings settings) {
@@ -35,16 +30,15 @@ public class Credits extends View {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
 
+        //Focus control
+        focusCtrl(gc);
+
+        //Button selection
         for(Button btn : buttons) {
-            if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0xff263238);
-                if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                    select.play();
-                    gc.setState(btn.getGoState());
-                    gc.setLastState(6);
-                }
-            } else {
-                btn.setBgColor(0xff424242);
+            if (isSelected(gc, btn)) {
+                select.play();
+                gc.setState(btn.getGoState());
+                gc.setLastState(6);
             }
         }
     }

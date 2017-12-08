@@ -6,7 +6,6 @@ import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,8 +17,6 @@ public class OptsMenu extends View {
 
     private Settings s;
     private SoundClip select;
-
-    private ArrayList<Button> buttons = new ArrayList<>();
     private Button tglLang, tglFps, tglLights, back;
 
     public OptsMenu(Settings settings) {
@@ -40,38 +37,28 @@ public class OptsMenu extends View {
             gc.setState(gc.getLastState());
         }
 
-        for(Button btn : buttons) {
-            if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0xff263238);
-                if(gc.getInput().isButtonDown(MouseEvent.BUTTON1))
-                    select.play();
-            } else {
-                btn.setBgColor(0xff424242);
-            }
-        }
+        //Focus control
+        focusCtrl(gc);
 
-        if(mouseIsHover(gc, tglLang)) {
-            if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                if(s.getLangIndex() < s.getLang().size() - 1) s.setLangIndex(s.getLangIndex() + 1);
-                else s.setLangIndex(0);
-            }
-        } else if(mouseIsHover(gc, tglFps)) {
-            if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                s.setShowFps(!s.isShowFps());
-                if(s.isShowFps()) tglFps.setText("FPS on");
-                else tglFps.setText("FPS off");
-            }
-        } else if(mouseIsHover(gc, tglLights)) {
-            if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                s.setShowLights(!s.isShowLights());
-                if(s.isShowLights()) tglLights.setText("Darkness");
-                else tglLights.setText("Full day");
-            }
-        } else if(mouseIsHover(gc, back)) {
-            if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                updateOptions();
-                gc.setState(gc.getLastState());
-            }
+        //Button selection
+        if(isSelected(gc, tglLang)) {
+            select.play();
+            if(s.getLangIndex() < s.getLang().size() - 1) s.setLangIndex(s.getLangIndex() + 1);
+            else s.setLangIndex(0);
+        } else if(isSelected(gc, tglFps)) {
+            select.play();
+            s.setShowFps(!s.isShowFps());
+            if(s.isShowFps()) tglFps.setText("FPS on");
+            else tglFps.setText("FPS off");
+        } else if(isSelected(gc, tglLights)) {
+            select.play();
+            s.setShowLights(!s.isShowLights());
+            if(s.isShowLights()) tglLights.setText("Darkness");
+            else tglLights.setText("Full day");
+        } else if(isSelected(gc, back)) {
+            select.play();
+            updateOptions();
+            gc.setState(gc.getLastState());
         }
     }
 

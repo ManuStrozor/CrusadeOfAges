@@ -9,15 +9,11 @@ import com.strozor.engine.gfx.Button;
 import com.strozor.game.Crea;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class CreaMenu extends View {
 
     private Settings s;
     private SoundClip select;
-
-    private ArrayList<Button> buttons = new ArrayList<>();
     private Button crea, save, menu;
 
     public CreaMenu(Settings settings) {
@@ -34,17 +30,16 @@ public class CreaMenu extends View {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
 
+        //Focus control
+        focusCtrl(gc);
+
+        //Button selection
         for(Button btn : buttons) {
-            if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0xff263238);
-                if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                    if(btn == save) Crea.creaImg.saveIt();
-                    select.play();
-                    gc.setState(btn.getGoState());
-                    gc.setLastState(5);
-                }
-            } else {
-                btn.setBgColor(0xff424242);
+            if (isSelected(gc, btn)) {
+                if(btn == save) Crea.creaImg.saveIt();
+                select.play();
+                gc.setState(btn.getGoState());
+                gc.setLastState(5);
             }
         }
     }

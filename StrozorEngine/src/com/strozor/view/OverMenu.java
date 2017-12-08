@@ -7,20 +7,18 @@ import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-
 public class OverMenu extends View {
 
     private Settings s;
-    private SoundClip select;
-
-    private ArrayList<Button> buttons = new ArrayList<>();
+    private SoundClip select, gameover;
     private Button play, menu;
+
+    private boolean once = false;
 
     public OverMenu(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
+        gameover = new SoundClip("/audio/gameover.wav");
 
         buttons.add(play = new Button(130, 20, "Try again", 1));
         buttons.add(menu = new Button(130, 20, "Quit to title", 0));
@@ -28,16 +26,24 @@ public class OverMenu extends View {
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        if(gc.getLastState() == 1 && !once) {
+            gameover.play();
+            focus = 0;
+            once = true;
+        }
+
+        //Focus control
+        focusCtrl(gc);
+
+        //Button selection
         for(Button btn : buttons) {
-            if(mouseIsHover(gc, btn)) {
-                btn.setBgColor(0xff263238);
-                if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                    select.play();
-                    gc.setState(btn.getGoState());
-                    gc.setLastState(7);
-                }
-            } else {
-                btn.setBgColor(0xff424242);
+            if(isSelected(gc, btn)) {
+                select.play();
+                gameover.stop();
+                once = false;
+                gc.setState(btn.getGoState());
+                gc.setLastState(7);
             }
         }
     }

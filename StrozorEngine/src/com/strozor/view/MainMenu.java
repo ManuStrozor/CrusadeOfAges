@@ -8,15 +8,12 @@ import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 public class MainMenu extends View {
 
     private Settings s;
     private SoundClip select;
 
-    private ArrayList<Button> buttons = new ArrayList<>();
     private Button play, crea, credits, opt, exit;
 
     public MainMenu(Settings settings) {
@@ -32,16 +29,16 @@ public class MainMenu extends View {
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        //Focus control
+        focusCtrl(gc);
+
+        //Button selection
         for(Button btn : buttons) {
-            if (mouseIsHover(gc, btn)) {
-                btn.setBgColor(0xff263238);
-                if(gc.getInput().isButtonDown(MouseEvent.BUTTON1)) {
-                    select.play();
-                    gc.setState(btn.getGoState());
-                    gc.setLastState(0);
-                }
-            } else {
-                btn.setBgColor(0xff424242);
+            if (isSelected(gc, btn)) {
+                select.play();
+                gc.setState(btn.getGoState());
+                gc.setLastState(0);
             }
         }
     }
