@@ -2,8 +2,13 @@ package com.strozor.engine.gfx;
 
 public class Button {
 
-    private int offX, offY, width, height, bgColor, goState;
+    private int offX, offY, width = 170, height = 20, bgColor, goState;
     private String text;
+
+    public Button(String text, int goState) {
+        this.goState = goState;
+        this.text = text;
+    }
 
     public Button(int width, int height, String text, int goState) {
         this.width = width;

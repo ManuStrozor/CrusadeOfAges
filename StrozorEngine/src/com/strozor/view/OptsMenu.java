@@ -22,11 +22,10 @@ public class OptsMenu extends View {
     public OptsMenu(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
-
-        buttons.add(tglLang = new Button(130, 20, "lang", 0));
-        buttons.add(tglFps = new Button(130, 20, settings.isShowFps() ? "FPS on" : "FPS off", 0));
-        buttons.add(tglLights = new Button(130, 20, settings.isShowLights() ? "Darkness" : "Full day", 0));
-        buttons.add(back = new Button(130, 20, "Back", 0));
+        buttons.add(tglLang = new Button("lang", 0));
+        buttons.add(tglFps = new Button(settings.isShowFps() ? "FPS on" : "FPS off", 0));
+        buttons.add(tglLights = new Button(settings.isShowLights() ? "Darkness" : "Full day", 0));
+        buttons.add(back = new Button("Back", 0));
     }
 
     @Override
@@ -70,19 +69,15 @@ public class OptsMenu extends View {
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
         }
 
-        tglLang.setOffX(gc.getWidth() / 2 - tglLang.getWidth() / 2);
-        tglLang.setOffY(gc.getHeight() / 3 - tglLang.getHeight() / 2);
+        int x = gc.getWidth() / 2 - 170 / 2;
+        int y = gc.getHeight() / 3 - 20 / 2;
 
-        tglFps.setOffX(tglLang.getOffX());
-        tglFps.setOffY(tglLang.getOffY() + tglLang.getHeight() + 20);
-
-        tglLights.setOffX(tglFps.getOffX());
-        tglLights.setOffY(tglFps.getOffY() + tglFps.getHeight() + 10);
-
-        back.setOffX(tglLights.getOffX());
-        back.setOffY(tglLights.getOffY() + tglLights.getHeight() + 10);
-
-        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
+        for(int i = 0; i < buttons.size(); i++) {
+            Button btn = buttons.get(i);
+            btn.setOffX(x);
+            btn.setOffY(y + i * 30);
+            r.drawButton(btn, s.translate(btn.getText()));
+        }
     }
 
     private void updateOptions() {

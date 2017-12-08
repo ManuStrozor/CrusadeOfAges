@@ -12,7 +12,7 @@ public class GameContainer implements Runnable {
     private GameRender gameRender;
     private GameManager gm;
     private Input input;
-    private Settings settings;
+    private Settings s;
     private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu, credits;
     private AbstractGame game, crea;
 
@@ -40,14 +40,14 @@ public class GameContainer implements Runnable {
 
     public GameContainer(AbstractGame game, Settings settings) {
         this.game = game;
-        this.settings = settings;
+        this.s = settings;
 
-        this.mainMenu = new MainMenu(settings);
-        this.optsMenu = new OptsMenu(settings);
-        this.gameMenu = new GameMenu(settings);
-        this.overMenu = new OverMenu(settings);
-        this.creaMenu = new CreaMenu(settings);
-        this.credits = new Credits(settings);
+        this.mainMenu = new MainMenu(s);
+        this.optsMenu = new OptsMenu(s);
+        this.gameMenu = new GameMenu(s);
+        this.overMenu = new OverMenu(s);
+        this.creaMenu = new CreaMenu(s);
+        this.credits = new Credits(s);
 
         this.crea = new Crea(60, 30);
         this.gm = (GameManager) game;
@@ -55,7 +55,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        gameRender = new GameRender(this, settings);
+        gameRender = new GameRender(this, s);
         input = new Input(this);
 
         thread = new Thread(this);
@@ -128,7 +128,7 @@ public class GameContainer implements Runnable {
                 if(State == STATE.GAME || State == STATE.GAMEMENU || State == STATE.OVERMENU || (State == STATE.OPTSMENU && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
-                    if(settings.isShowLights()) gameRender.process();
+                    if(s.isShowLights()) gameRender.process();
                     if(gm.getObject("player") != null)
                         gameRender.drawGameStates(this, gm.getObject("player"));
                 } else if(State == STATE.CREA || State == STATE.CREAMENU) {
@@ -155,7 +155,7 @@ public class GameContainer implements Runnable {
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 
-                if(settings.isShowFps())
+                if(s.isShowFps())
                     gameRender.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
 
                 window.update();
@@ -212,7 +212,7 @@ public class GameContainer implements Runnable {
     }
 
     public Settings getSettings() {
-        return settings;
+        return s;
     }
 
     public int getCurrState() {

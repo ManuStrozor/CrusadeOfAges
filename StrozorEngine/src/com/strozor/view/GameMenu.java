@@ -13,15 +13,13 @@ public class GameMenu extends View {
 
     private Settings s;
     private SoundClip select;
-    private Button play, opt, menu;
 
     public GameMenu(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
-
-        buttons.add(play = new Button(130, 20, "Back to game", 1));
-        buttons.add(opt = new Button(130, 20, "Options", 3));
-        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
+        buttons.add(new Button("Back to game", 1));
+        buttons.add(new Button("Options", 3));
+        buttons.add(new Button("Quit to title", 0));
     }
 
     @Override
@@ -34,7 +32,7 @@ public class GameMenu extends View {
 
         //Button selection
         for(Button btn : buttons) {
-            if (mouseIsHover(gc, btn)) {
+            if (isSelected(gc, btn)) {
                 select.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(2);
@@ -45,12 +43,13 @@ public class GameMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
-        opt.setOffY(play.getOffY() + play.getHeight() + 10);
-        menu.setOffY(opt.getOffY() + opt.getHeight() + 10);
+        int x = gc.getWidth() / 2 - 170 / 2;
+        int y = gc.getHeight() / 3 - 20 / 2;
 
-        for(Button btn : buttons) {
-            btn.setOffX(gc.getWidth() / 2 - btn.getWidth() / 2);
+        for(int i = 0; i < buttons.size(); i++) {
+            Button btn = buttons.get(i);
+            btn.setOffX(x);
+            btn.setOffY(y + i * 30);
             r.drawButton(btn, s.translate(btn.getText()));
         }
     }

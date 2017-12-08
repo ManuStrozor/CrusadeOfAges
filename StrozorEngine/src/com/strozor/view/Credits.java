@@ -14,10 +14,11 @@ public class Credits extends View {
 
     private Settings s;
     private SoundClip select;
+    private Button back;
+
     private String[] devs = {"ManuStrozor"};
     private String[] thanks = {"My family", "Beta testers"};
     private String[] contribs = {"Majoolwip"};
-    private Button back;
 
     public Credits(Settings settings) {
         s = settings;

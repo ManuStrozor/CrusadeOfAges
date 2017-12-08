@@ -11,7 +11,6 @@ public class OverMenu extends View {
 
     private Settings s;
     private SoundClip select, gameover;
-    private Button play, menu;
 
     private boolean once = false;
 
@@ -19,9 +18,8 @@ public class OverMenu extends View {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         gameover = new SoundClip("/audio/gameover.wav");
-
-        buttons.add(play = new Button(130, 20, "Try again", 1));
-        buttons.add(menu = new Button(130, 20, "Quit to title", 0));
+        buttons.add(new Button("Try again", 1));
+        buttons.add(new Button("Quit to title", 0));
     }
 
     @Override
@@ -53,12 +51,14 @@ public class OverMenu extends View {
 
         r.drawMenuTitle(gc, s.translate("GAME OVER"), s.translate("You are dead"));
 
-        play.setOffX(gc.getWidth() / 2 - play.getWidth() / 2);
-        play.setOffY(gc.getHeight() / 3 - play.getHeight() / 2);
+        int x = gc.getWidth() / 2 - 170 / 2;
+        int y = gc.getHeight() / 3 - 20 / 2;
 
-        menu.setOffX(play.getOffX());
-        menu.setOffY(play.getOffY() + play.getHeight() + 10);
-
-        for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
+        for(int i = 0; i < buttons.size(); i++) {
+            Button btn = buttons.get(i);
+            btn.setOffX(x);
+            btn.setOffY(y + i * 30);
+            r.drawButton(btn, s.translate(btn.getText()));
+        }
     }
 }
