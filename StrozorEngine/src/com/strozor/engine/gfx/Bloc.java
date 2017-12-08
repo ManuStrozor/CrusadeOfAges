@@ -2,7 +2,7 @@ package com.strozor.engine.gfx;
 
 public class Bloc {
 
-    private int id;
+    private int id, code;
     private boolean solid;
     private String name;
     private int tileX, tileY;
@@ -122,90 +122,105 @@ public class Bloc {
     public Bloc(int id) {
         switch(id) {
             case -1:
+                code = 0xff00ff00;
                 name = "Spawn";
                 tileX = 2;
                 tileY = 0;
                 solid = false;
                 break;
             case 0:
+                code = 0x00000000;
                 name = "Wall";
                 tileX = 1;
                 tileY = 0;
                 solid = false;
                 break;
             case 1:
+                code = 0xff000000;
                 name = "Floor";
                 tileX = 0;
                 tileY = 0;
                 solid = true;
                 break;
             case 2:
+                code = 0xffff648c;
                 name = "Health pill";
                 tileX = 3;
                 tileY = 2;
                 solid = false;
                 break;
             case 3:
+                code = 0xffff0000;
                 name = "Ground spikes";
                 tileX = 1;
                 tileY = 1;
                 solid = false;
                 break;
             case 4:
+                code = 0xffff00ff;
                 name = "Ceiling spikes";
                 tileX = 2;
                 tileY = 1;
                 solid = false;
                 break;
             case 5:
+                code = 0xff0000ff;
                 name = "Key";
                 tileX = 3;
                 tileY = 1;
                 solid = false;
                 break;
             case 6:
+                code = 0xffff7700;
                 name = "Check point";
                 tileX = 3;
                 tileY = 0;
                 solid = false;
                 break;
             case 7:
+                code = 0xffffff00;
                 name = "Coin";
                 tileX = 5;
                 tileY = 0;
                 solid = false;
                 break;
             case 8:
+                code = 0xff009900;
                 name = "Ladder";
                 tileX = 0;
                 tileY = 1;
                 solid = false;
                 break;
             case 9:
+                code = 0xff690000;
                 name = "Ground spikes blooded";
                 tileX = 1;
                 tileY = 2;
                 solid = false;
                 break;
             case 10:
+                code = 0xff690069;
                 name = "Ceiling spikes blooded";
                 tileX = 2;
                 tileY = 2;
                 solid = false;
                 break;
             case 11:
+                code = 0xff00ffff;
                 name = "Torch";
                 tileX = 4;
                 tileY = 0;
                 solid = false;
                 break;
             case 12:
+                code = 0xff777777;
                 name = "Slime bloc";
                 tileX = 0;
                 tileY = 2;
                 solid = true;
                 break;
             case 13:
+                code = 0xff999999;
                 name = "Door";
                 tileX = 5;
                 tileY = 2;
@@ -245,6 +260,10 @@ public class Bloc {
 
     public void setAnim(float anim) {
         this.anim = anim;
+    }
+
+    public int getCode() {
+        return code;
     }
 
     public void remove() {
