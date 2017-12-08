@@ -230,19 +230,19 @@ public class GameRender {
         }
     }
 
-    private void drawRect(int offX, int offY, int width, int height, int color) {
+    private void drawRect(int x, int y, int w, int h, int col) {
 
-        offX -= camX;
-        offY -= camY;
+        x -= camX;
+        y -= camY;
 
-        for(int y = 0; y <= height; y++) {
-            setPixel(offX, y + offY, color);
-            setPixel(offX + width, y + offY, color);
+        for(int i = 0; i <= h; i++) {
+            setPixel(x, i + y, col);
+            setPixel(x + w, i + y, col);
         }
 
-        for(int x = 0; x <= width; x++) {
-            setPixel(x + offX, offY, color);
-            setPixel(x + offX, offY + height, color);
+        for(int i = 0; i <= w; i++) {
+            setPixel(i + x, y, col);
+            setPixel(i + x, y + h, col);
         }
     }
 
@@ -375,21 +375,34 @@ public class GameRender {
         }
     }
 
-    private void drawBloc(Bloc bloc, int x, int y) {
-        drawImageTile(objsImg, x, y, bloc.getTileX(), bloc.getTileY());
+    private void drawBloc(Bloc b, int x, int y) {
+        drawImageTile(objsImg, x, y, b.getTileX(), b.getTileY());
     }
 
-    public void drawDock(GameContainer gc, int[] elems, int selected) {
-        int size = GameManager.TS + 1;
-        int offY = camY + gc.getHeight()/2 - GameManager.TS/2 - (elems.length * size)/2 + (elems.length/2 - selected) * size;
+    public void drawDock(GameContainer gc, int[] dock, int scroll) {
+        int midH = camY + gc.getHeight() / 2;
+        int s = GameManager.TS + 1;
+        int y = midH - (dock.length * s)/2 + (dock.length/2 - scroll) * s;
 
-        fillRect(camX, camY, size + 4, gc.getHeight(), 0x89000000);
+        fillRect(camX, camY, s + 4, gc.getHeight(), 0x89000000);
 
-        for(int i = 0; i < elems.length; i++) drawBloc(new Bloc(elems[i]), camX + 4, offY + size * i);
+        for(int i = 0; i < dock.length; i++)
+            drawBloc(new Bloc(dock[i]), camX + 4, y - GameManager.TS/2 + s * i);
 
-        drawRect(camX + 1, offY - 3 + size * selected, size + 4, size + 4, 0xbbffffff);
-        drawRect(camX + 2, offY - 2 + size * selected, size + 2, size + 2, 0x77ffffff);
-        drawRect(camX + 3, offY - 1 + size * selected, size, size, 0x33ffffff);
+        drawRect(camX + 1, midH - GameManager.TS/2 - 3, s + 4, s + 4, 0xbbffffff);
+        drawRect(camX + 2, midH - GameManager.TS/2 - 2, s + 2, s + 2, 0x77ffffff);
+        drawRect(camX + 3, midH - GameManager.TS/2 - 1, s, s, 0x33ffffff);
+    }
+
+    public void drawArrows(GameContainer gc, int width, int height) {
+        if(camY > 0)
+            drawBloc(new Bloc(14), camX + gc.getWidth()/2 - GameManager.TS/2, camY);
+        if(camY + gc.getHeight() < height * GameManager.TS)
+            drawBloc(new Bloc(15), camX + gc.getWidth()/2 - GameManager.TS/2, camY + gc.getHeight() - GameManager.TS);
+        if(camX > 0)
+            drawBloc(new Bloc(16), camX, camY + gc.getHeight()/2 - GameManager.TS/2);
+        if(camX + gc.getWidth() < width * GameManager.TS)
+            drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
     public void drawBackground(GameContainer gc, Bloc bloc) {

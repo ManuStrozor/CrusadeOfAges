@@ -43,27 +43,32 @@ public class Crea extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        int mouseTileX = (gc.getInput().getMouseX() + r.getCamX()) / GameManager.TS;
-        int mouseTileY = (gc.getInput().getMouseY() + r.getCamY()) / GameManager.TS;
+        int mouseX = gc.getInput().getMouseX();
+        int mouseY = gc.getInput().getMouseY();
 
-        if(mouseTileX >= 0 && mouseTileX < creaImg.getW() && mouseTileY >= 0 && mouseTileY < creaImg.getH()) {
-            if(gc.getCurrState() == 4) {
-                int speed = 10;
-                if(gc.getInput().getMouseX() == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
-                if(gc.getInput().getMouseX() == 0) r.setCamX(r.getCamX() - speed);
-                if(gc.getInput().getMouseY() == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
-                if(gc.getInput().getMouseY() == 0) r.setCamY(r.getCamY() - speed);
-            }
+        int x = (mouseX + r.getCamX()) / GameManager.TS;
+        int y = (mouseY + r.getCamY()) / GameManager.TS;
 
-            if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
-                creaImg.setP(mouseTileX, mouseTileY, color);
-                gameMap.setBloc(mouseTileX, mouseTileY, elems[scroll]);
-            } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
-                creaImg.setP(mouseTileX, mouseTileY, 0x00000000);
-                gameMap.setBloc(mouseTileX, mouseTileY, 0);
+        if(x >= 0 && x < creaImg.getW() && y >= 0 && y < creaImg.getH() && gc.getCurrState() == 4) {
+            int speed = 10;
+            if(mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
+            if(mouseX == 0) r.setCamX(r.getCamX() - speed);
+            if(mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
+            if(mouseY == 0) r.setCamY(r.getCamY() - speed);
+
+            if(mouseX > GameManager.TS) {
+                if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
+                    creaImg.setP(x, y, color);
+                    gameMap.setBloc(x, y, elems[scroll]);
+                } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
+                    creaImg.setP(x, y, 0x00000000);
+                    gameMap.setBloc(x, y, 0);
+                }
             }
         }
+
         r.drawMap(gameMap);
         r.drawDock(gc, elems, scroll);
+        r.drawArrows(gc, creaImg.getW(), creaImg.getH());
     }
 }

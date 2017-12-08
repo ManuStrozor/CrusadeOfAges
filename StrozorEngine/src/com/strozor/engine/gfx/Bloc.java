@@ -115,6 +115,34 @@ public class Bloc {
                 tileY = 2;
                 solid = false;
                 break;
+            case 0x4200ff00:
+                name = "Arrow up";
+                id = 14;
+                tileX = 6;
+                tileY = 3;
+                solid = false;
+                break;
+            case 0x42000000:
+                name = "Arrow down";
+                id = 15;
+                tileX = 6;
+                tileY = 0;
+                solid = false;
+                break;
+            case 0x42ff0000:
+                name = "Arrow left";
+                id = 16;
+                tileX = 6;
+                tileY = 1;
+                solid = false;
+                break;
+            case 0x420000ff:
+                name = "Arrow right";
+                id = 17;
+                tileX = 6;
+                tileY = 2;
+                solid = false;
+                break;
         }
         anim = 0;
     }
@@ -223,6 +251,34 @@ public class Bloc {
                 code = 0xff999999;
                 name = "Door";
                 tileX = 5;
+                tileY = 2;
+                solid = false;
+                break;
+            case 14:
+                code = 0x4200ff00;
+                name = "Arrow up";
+                tileX = 6;
+                tileY = 3;
+                solid = false;
+                break;
+            case 15:
+                code = 0x42000000;
+                name = "Arrow down";
+                tileX = 6;
+                tileY = 0;
+                solid = false;
+                break;
+            case 16:
+                code = 0x42ff0000;
+                name = "Arrow left";
+                tileX = 6;
+                tileY = 1;
+                solid = false;
+                break;
+            case 17:
+                code = 0x420000ff;
+                name = "Arrow right";
+                tileX = 6;
                 tileY = 2;
                 solid = false;
                 break;
