@@ -399,7 +399,7 @@ public class GameRender {
             drawBloc(new Bloc(14), camX + gc.getWidth()/2 - GameManager.TS/2, camY);
         if(camY + gc.getHeight() < height * GameManager.TS)
             drawBloc(new Bloc(15), camX + gc.getWidth()/2 - GameManager.TS/2, camY + gc.getHeight() - GameManager.TS);
-        if(camX > 0)
+        if(camX > -GameManager.TS)
             drawBloc(new Bloc(16), camX, camY + gc.getHeight()/2 - GameManager.TS/2);
         if(camX + gc.getWidth() < width * GameManager.TS)
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);

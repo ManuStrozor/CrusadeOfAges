@@ -49,21 +49,28 @@ public class Crea extends AbstractGame {
         int x = (mouseX + r.getCamX()) / GameManager.TS;
         int y = (mouseY + r.getCamY()) / GameManager.TS;
 
-        if(x >= 0 && x < creaImg.getW() && y >= 0 && y < creaImg.getH() && gc.getCurrState() == 4) {
-            int speed = 10;
-            if(mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
-            if(mouseX == 0) r.setCamX(r.getCamX() - speed);
-            if(mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
-            if(mouseY == 0) r.setCamY(r.getCamY() - speed);
+        int speed = 10;
 
-            if(mouseX > GameManager.TS) {
-                if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
-                    creaImg.setP(x, y, color);
-                    gameMap.setBloc(x, y, elems[scroll]);
-                } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
-                    creaImg.setP(x, y, 0x00000000);
-                    gameMap.setBloc(x, y, 0);
-                }
+        if(r.getCamX() + gc.getWidth() < creaImg.getW() * GameManager.TS) {
+            if(mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
+        }
+        if(r.getCamX() > -GameManager.TS) {
+            if(mouseX == 0) r.setCamX(r.getCamX() - speed);
+        }
+        if(r.getCamY() + gc.getHeight() < creaImg.getH() * GameManager.TS) {
+            if(mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
+        }
+        if(r.getCamY() > 0) {
+            if(mouseY == 0) r.setCamY(r.getCamY() - speed);
+        }
+
+        if(mouseX > GameManager.TS) {
+            if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
+                creaImg.setP(x, y, color);
+                gameMap.setBloc(x, y, elems[scroll]);
+            } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
+                creaImg.setP(x, y, 0x00000000);
+                gameMap.setBloc(x, y, 0);
             }
         }
 
