@@ -380,29 +380,16 @@ public class GameRender {
     }
 
     public void drawDock(GameContainer gc, int[] elems, int selected) {
-
-        int offX = gc.getWidth() / 2 - (elems.length * (GameManager.TS + 5)) / 2 + camX;
-        int offY = gc.getHeight() - GameManager.TS - 6 + camY;
         int size = GameManager.TS + 1;
-        int width = elems.length * (size + 4);
+        int offY = camY + gc.getHeight()/2 - GameManager.TS/2 - (elems.length * size)/2 + (elems.length/2 - selected) * size;
 
-        for(int i = 0; i < elems.length; i++) {
-            drawRect(offX - 3 + (size + 4) * i, offY - 3, size + 4, size + 4, 0xbbc4c4c4);
-            drawRect(offX - 2 + (size + 4) * i, offY - 2, size + 2, size + 2, 0x77c4c4c4);
-            drawRect(offX - 1 + (size + 4) * i, offY - 1, size, size, 0x33c4c4c4);
+        fillRect(camX, camY, size + 4, gc.getHeight(), 0x89000000);
 
-            fillRect(offX + (size + 4) * i, offY, GameManager.TS, GameManager.TS, 0x99000000);
-            drawBloc(new Bloc(elems[i]), offX + (size + 4) * i, offY);
-        }
-        drawRect(offX - 4, offY - 4, width + 2, size + 6, 0xff000000);
+        for(int i = 0; i < elems.length; i++) drawBloc(new Bloc(elems[i]), camX + 4, offY + size * i);
 
-        drawRect(offX - 4 + (size + 4) * selected, offY - 4, size + 6, size + 5, -1);
-        drawRect(offX - 3 + (size + 4) * selected, offY - 3, size + 4, size + 4, 0xbbffffff);
-        drawRect(offX - 2 + (size + 4) * selected, offY - 2, size + 2, size + 2, 0x77ffffff);
-        drawRect(offX - 1 + (size + 4) * selected, offY - 1, size, size, 0x33ffffff);
-
-        Bloc b = new Bloc(elems[selected]);
-        drawText(s.translate(b.getName()), offX + width / 2 - camX, offY - 6 - camY, 0, -1, 0xffababab, Font.STANDARD);
+        drawRect(camX + 1, offY - 3 + size * selected, size + 4, size + 4, 0xbbffffff);
+        drawRect(camX + 2, offY - 2 + size * selected, size + 2, size + 2, 0x77ffffff);
+        drawRect(camX + 3, offY - 1 + size * selected, size, size, 0x33ffffff);
     }
 
     public void drawBackground(GameContainer gc, Bloc bloc) {
