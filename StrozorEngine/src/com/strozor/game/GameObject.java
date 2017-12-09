@@ -12,7 +12,8 @@ public abstract class GameObject {
     protected boolean dead = false;
 
     public abstract void update(GameContainer gc, GameManager gm, float dt);
-    public abstract void render(GameContainer gc, GameManager gm, GameRender r);
+    public abstract void creativeUpdate(GameContainer gc, float dt);
+    public abstract void render(GameContainer gc, GameRender r);
 
     public String getTag() {
         return tag;

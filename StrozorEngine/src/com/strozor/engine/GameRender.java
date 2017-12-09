@@ -128,12 +128,17 @@ public class GameRender {
         return newA | newR | newG | newB;
     }
 
+    private int textSize(String text, Font font) {
+        int textW = 0;
+        for(int i = 0; i < text.length(); i++)
+            textW += font.getWidths()[text.codePointAt(i)];
+        return textW;
+    }
+
     public void drawText(String text, int offX, int offY, int alignX, int alignY, int color, Font font) {
         if(alignX != 1) {
-            int textW = 0;
-            for(int i = 0; i < text.length(); i++) textW += font.getWidths()[text.codePointAt(i)];
-            if(alignX == 0) offX -= textW / 2;
-            else if(alignX == -1) offX -= textW;
+            if(alignX == 0) offX -= textSize(text, font) / 2;
+            else if(alignX == -1) offX -= textSize(text, font);
         }
 
         if(alignY != 1) {
@@ -244,7 +249,7 @@ public class GameRender {
         }
     }
 
-    private void fillRect(int offX, int offY, int width, int height, int color) {
+    public void fillRect(int offX, int offY, int width, int height, int color) {
 
         offX -= camX;
         offY -= camY;
@@ -411,10 +416,46 @@ public class GameRender {
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
+    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p) {
+
+        int largest = 0;
+        for(int i = 0; i < n.size(); i++) {
+            int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(p.get(i), Font.STANDARD));
+            size = Math.max(size, textSize("Dimensions: "+f.get(i).getW()+"*"+f.get(i).getH(), Font.STANDARD));
+            if(size+f.get(i).getW() > largest) largest = size+f.get(i).getW();
+        }
+
+        int x = gc.getWidth()/2 - largest/2;
+        int y = GameManager.TS+10;
+
+        for(int i = 0; i < n.size(); i++) {
+
+            int w = f.get(i).getW();
+            int h = f.get(i).getH();
+
+            if(i != 0) y += f.get(i-1).getH()+10;
+
+            fillRect(x, y, w, h, -1);
+            drawImage(f.get(i), x, y);
+
+            drawText(n.get(i), x+w+4, y, 1, 1, -1, Font.STANDARD);
+            drawText("Dimensions: "+w+"*"+h, x+w+4, y+h/2, 1, 0, 0xff898989, Font.STANDARD);
+            drawText(p.get(i), x+w+4, y+h, 1, -1, 0xff898989, Font.STANDARD);
+        }
+    }
+
     public void drawBackground(GameContainer gc, Bloc bloc) {
         for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
             for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
                 drawBloc(bloc, x * GameManager.TS, y * GameManager.TS);
+            }
+        }
+    }
+
+    public void drawStripe(GameContainer gc, Bloc bloc, int offY, int n) {
+        for(int y = 0; y < n; y++) {
+            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
+                drawBloc(bloc, x * GameManager.TS, offY + y * GameManager.TS);
             }
         }
     }

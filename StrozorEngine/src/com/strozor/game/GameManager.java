@@ -32,7 +32,6 @@ public class GameManager extends AbstractGame {
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
-    private SoundClip gameOver;
 
     private GameMap gameMap;
     private int currLevel = 0;
@@ -47,8 +46,6 @@ public class GameManager extends AbstractGame {
         if(mapTester) load(mapTest);
         else load(levelList[currLevel]);
 
-        gameOver = new SoundClip("/audio/gameover.wav");
-        gameOver.setVolume(-10f);
         objects.add(new Player("player", gameMap, 1));
         camera = new Camera("player", gameMap);
     }
@@ -94,7 +91,6 @@ public class GameManager extends AbstractGame {
             if(mapTester) load(mapTest);
             else load(levelList[currLevel]);
 
-            gameOver.stop();
             objects.add(new Player("player", gameMap, 1));
 
             camera = null;
@@ -110,23 +106,23 @@ public class GameManager extends AbstractGame {
         r.drawMap(gameMap);
         if(gc.getSettings().isShowLights())
             r.drawMapLights(gameMap, new Light(80, 0xffffff00));
-        for(GameObject obj : objects) obj.render(gc, this, r);
+        for(GameObject obj : objects) obj.render(gc, r);
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
-    void load(String path) {
+    public void load(String path) {
         gameMap.init(new Image(path, mapTester));
     }
 
-    int getCurrLevel() {
+    public int getCurrLevel() {
         return currLevel;
     }
 
-    void setCurrLevel(int currLevel) {
+    public void setCurrLevel(int currLevel) {
         this.currLevel = currLevel;
     }
 
-    String[] getLevelList() {
+    public String[] getLevelList() {
         return levelList;
     }
 
@@ -135,15 +131,11 @@ public class GameManager extends AbstractGame {
         return null;
     }
 
-    SoundClip getGameOver() {
-        return gameOver;
-    }
-
-    boolean isMapTesting() {
+    public boolean isMapTesting() {
         return mapTester;
     }
 
-    static String getMapTest() {
+    public static String getMapTest() {
         return mapTest;
     }
 

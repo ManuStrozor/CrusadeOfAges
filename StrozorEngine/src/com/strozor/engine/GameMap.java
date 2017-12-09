@@ -6,7 +6,7 @@ import com.strozor.engine.gfx.Image;
 public class GameMap {
 
     private Bloc[] blocs;
-    private int width, height, spawnX, spawnY;
+    private int width, height, spawnX = -1, spawnY = -1;
 
     public GameMap() {}
 
@@ -51,7 +51,7 @@ public class GameMap {
     }
 
     public Bloc getBloc(int x, int y) {
-        return blocs[x + y * width];
+        return (x < 0 || x >= width || y < 0 || y >= height) ? new Bloc(1) : blocs[x + y * width];
     }
 
     public boolean isSolid(int x, int y) {
@@ -69,6 +69,10 @@ public class GameMap {
     }
 
     public void setBloc(int x, int y, int id) {
+        if(id == -1) {
+            spawnX = x;
+            spawnY = y;
+        }
         blocs[x + y * width] = null;
         blocs[x + y * width] = new Bloc(id);
     }

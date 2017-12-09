@@ -143,6 +143,20 @@ public class Bloc {
                 tileY = 2;
                 solid = false;
                 break;
+            case 0x66000000:
+                name = "Under shadow";
+                id = 18;
+                tileX = 0;
+                tileY = 3;
+                solid = false;
+                break;
+            case 0x69000000:
+                name = "Above shadow";
+                id = 19;
+                tileX = 0;
+                tileY = 4;
+                solid = false;
+                break;
         }
         anim = 0;
     }
@@ -280,6 +294,20 @@ public class Bloc {
                 name = "Arrow right";
                 tileX = 6;
                 tileY = 2;
+                solid = false;
+                break;
+            case 18:
+                code = 0x66000000;
+                name = "Under shadow";
+                tileX = 0;
+                tileY = 3;
+                solid = false;
+                break;
+            case 19:
+                code = 0x69000000;
+                name = "Above shadow";
+                tileX = 0;
+                tileY = 4;
                 solid = false;
                 break;
         }

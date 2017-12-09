@@ -6,7 +6,7 @@ import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
-import com.strozor.game.Crea;
+import com.strozor.game.CreativeMode;
 
 import java.awt.event.KeyEvent;
 
@@ -20,9 +20,9 @@ public class CreaMenu extends View {
         s = settings;
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(new Button("Keep on", 4));
-        buttons.add(new Button("Quit to title", 0));
-        buttons.add(save = new Button("Save & Quit game", -1));
+        buttons.add(save = new Button("Save", 8));
+        buttons.add(new Button("Cancel", 8));
+        buttons.add(new Button("Back", 4));
     }
 
     @Override
@@ -36,7 +36,10 @@ public class CreaMenu extends View {
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                if(btn == save) Crea.creaImg.saveIt();
+                if(btn == save) {
+                    CreativeMode.creaImg.saveIt();
+                    EditList.once = false;
+                }
                 select.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(5);

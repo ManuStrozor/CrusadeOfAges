@@ -32,7 +32,7 @@ public class Settings {
         en.put("Quit to title", "Quit to title");
         en.put("Try again", "Try again");
         en.put("Keep on", "Keep on");
-        en.put("Save & Quit game", "Save & Quit game");
+        en.put("Save", "Save");
         en.put("Development team", "Development team");
         en.put("MAIN DEVELOPERS", "MAIN DEVELOPERS");
         en.put("THANKS TO", "THANKS TO");
@@ -51,6 +51,13 @@ public class Settings {
         en.put("Ladder", "Ladder");
         en.put("GAME OVER", "GAME OVER");
         en.put("You are dead", "You are dead");
+        en.put("Edit", "Edit");
+        en.put("Select a map", "Select a map");
+        en.put("Rename", "Rename");
+        en.put("Delete", "Delete");
+        en.put("Create", "Create");
+        en.put("Re-create", "Re-create");
+        en.put("Cancel", "Cancel");
         lang.add(en);
         fr.put("lang", "Français");
         fr.put("beta version", "version beta");
@@ -68,7 +75,7 @@ public class Settings {
         fr.put("Quit to title", "Menu principal");
         fr.put("Try again", "Recommencer");
         fr.put("Keep on", "Continuer");
-        fr.put("Save & Quit game", "Enregistrer & quitter");
+        fr.put("Save", "Sauvegarder");
         fr.put("Development team", "Equipe de développement");
         fr.put("MAIN DEVELOPERS", "PRINCIPAUX DEVELOPPEURS");
         fr.put("THANKS TO", "MERCI A");
@@ -87,6 +94,13 @@ public class Settings {
         fr.put("Ladder", "Echelle");
         fr.put("GAME OVER", "MANCHE PERDU");
         fr.put("You are dead", "Vous êtes mort(e)");
+        fr.put("Edit", "Modifier");
+        fr.put("Select a map", "Selectionnez une mappe");
+        fr.put("Rename", "Renommer");
+        fr.put("Delete", "Supprimer");
+        fr.put("Create", "Créer");
+        fr.put("Re-create", "Re-créer");
+        fr.put("Cancel", "Annuler");
         lang.add(fr);
     }
 

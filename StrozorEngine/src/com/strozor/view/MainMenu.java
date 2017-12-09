@@ -18,7 +18,7 @@ public class MainMenu extends View {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         buttons.add(new Button("Single player", 1));
-        buttons.add(new Button("Creative Mode", 4));
+        buttons.add(new Button("Creative Mode", 8));
         buttons.add(new Button("Game credits", 6));
         buttons.add(new Button("Options", 3));
         buttons.add(new Button("Quit game", -1));

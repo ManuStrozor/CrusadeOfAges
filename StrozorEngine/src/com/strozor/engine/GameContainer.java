@@ -2,7 +2,7 @@ package com.strozor.engine;
 
 import com.strozor.engine.gfx.Font;
 import com.strozor.game.GameManager;
-import com.strozor.game.Crea;
+import com.strozor.game.CreativeMode;
 import com.strozor.view.*;
 
 public class GameContainer implements Runnable {
@@ -13,7 +13,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings s;
-    private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu, credits;
+    private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu, credits, editList;
     private AbstractGame game, crea;
 
 
@@ -31,12 +31,13 @@ public class GameContainer implements Runnable {
         OVERMENU,
         CREA,
         CREAMENU,
+        EDITLIST,
         CREDITS,
         EXIT
     }
 
     private STATE State = STATE.MAINMENU;
-    private int lastState = 0;
+    private int currState = 0, lastState = 0;
 
     public GameContainer(AbstractGame game, Settings settings) {
         this.game = game;
@@ -48,8 +49,9 @@ public class GameContainer implements Runnable {
         this.overMenu = new OverMenu(s);
         this.creaMenu = new CreaMenu(s);
         this.credits = new Credits(s);
+        this.editList = new EditList(s);
 
-        this.crea = new Crea(60, 30);
+        this.crea = new CreativeMode(60, 30);
         this.gm = (GameManager) game;
     }
 
@@ -111,6 +113,8 @@ public class GameContainer implements Runnable {
                     game.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.CREA) {
                     crea.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.EDITLIST) {
+                    editList.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -148,10 +152,13 @@ public class GameContainer implements Runnable {
                     creaMenu.render(this, gameRender);
                 } else if(State == STATE.OVERMENU) {
                     overMenu.render(this, gameRender);
+                } else if(State == STATE.EDITLIST) {
+                    editList.render(this, gameRender);
+                    gameRender.setCoorCam(0, 0);
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
-                    gameRender.drawText(title + " Beta2.0", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText(title + " 2.0/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 
@@ -223,6 +230,10 @@ public class GameContainer implements Runnable {
         this.lastState = lastState;
     }
 
+    public int getCurrState() {
+        return currState;
+    }
+
     public void setState(int value) {
         switch(value) {
             case -1: State = STATE.EXIT; break;
@@ -234,6 +245,8 @@ public class GameContainer implements Runnable {
             case 5: State = STATE.CREAMENU; break;
             case 6: State = STATE.CREDITS; break;
             case 7: State = STATE.OVERMENU; break;
+            case 8: State = STATE.EDITLIST; break;
         }
+        currState = value;
     }
 }
