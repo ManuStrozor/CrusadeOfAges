@@ -36,8 +36,7 @@ public class OptsMenu extends View {
             gc.setState(gc.getLastState());
         }
 
-        //Focus control
-        focusCtrl(gc);
+        for(Button btn : buttons) btn.setBgColor(0xff424242);
 
         //Button selection
         if(isSelected(gc, tglLang)) {

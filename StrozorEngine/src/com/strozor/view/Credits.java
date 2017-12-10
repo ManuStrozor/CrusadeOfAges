@@ -31,11 +31,9 @@ public class Credits extends View {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
 
-        //Focus control
-        focusCtrl(gc);
-
         //Button selection
         for(Button btn : buttons) {
+            btn.setBgColor(0xff424242);
             if (isSelected(gc, btn)) {
                 select.play();
                 gc.setState(btn.getGoState());

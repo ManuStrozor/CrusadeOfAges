@@ -27,15 +27,12 @@ public class OverMenu extends View {
 
         if(gc.getLastState() == 1 && !once) {
             gameover.play();
-            focus = 0;
             once = true;
         }
 
-        //Focus control
-        focusCtrl(gc);
-
         //Button selection
         for(Button btn : buttons) {
+            btn.setBgColor(0xff424242);
             if(isSelected(gc, btn)) {
                 select.play();
                 gameover.stop();

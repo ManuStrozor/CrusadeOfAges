@@ -416,7 +416,7 @@ public class GameRender {
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
-    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p, int scroll, String nothing) {
+    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p, int scroll, boolean is, int curr, String nothing) {
 
         if(f.size() == 0)
             drawText(nothing, gc.getWidth()/2, gc.getHeight()/2, 0, 0, 0xffababab, Font.STANDARD);
@@ -439,12 +439,16 @@ public class GameRender {
 
             if(i != 0) y += f.get(i-1).getH() < 30 ? 30+10 : f.get(i-1).getH()+10;
 
+            if(is && i == curr) {
+                drawRect(x-4, y-4, largest+12, f.get(i).getH() < 30 ? 30+8 : f.get(i).getH()+8, 0xff696969);
+            }
+
             fillRect(x, y, w, f.get(i).getH(), -1);
             drawImage(f.get(i), x, y);
 
             drawText(n.get(i), x+w+4, y, 1, 1, -1, Font.STANDARD);
-            drawText("Dimensions: "+w+"*"+h, x+w+4, y+h/2, 1, 0, 0xff898989, Font.STANDARD);
-            drawText(p.get(i), x+w+4, y+h, 1, -1, 0xff898989, Font.STANDARD);
+            drawText("Dimensions: "+w+"*"+f.get(i).getH(), x+w+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
+            drawText(p.get(i), x+w+4, y+30, 1, -1, 0xff898989, Font.STANDARD);
 
             hUsed += h+10;
         }

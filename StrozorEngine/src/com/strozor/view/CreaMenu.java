@@ -30,14 +30,12 @@ public class CreaMenu extends View {
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
 
-        //Focus control
-        focusCtrl(gc);
-
         //Button selection
         for(Button btn : buttons) {
+            btn.setBgColor(0xff424242);
             if (isSelected(gc, btn)) {
                 if(btn == save) {
-                    CreativeMode.creaImg.saveIt();
+                    CreativeMode.creaImg.saveIt(CreativeMode.rename);
                     EditList.once = false;
                 }
                 select.play();

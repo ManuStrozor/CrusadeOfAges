@@ -9,10 +9,14 @@ import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Font;
 import com.strozor.engine.gfx.Image;
+import com.strozor.game.CreativeMode;
 import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class EditList extends View {
@@ -24,20 +28,21 @@ public class EditList extends View {
 
     private ArrayList<Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
+    private ArrayList<String> paths = new ArrayList<>();
     private ArrayList<String> parents = new ArrayList<>();
 
-    private int scroll = 0, scrollMax = 0;
+    private int scroll = 0, scrollMax = 0, currIndex = 0;
 
-    static boolean once = false;
+    static boolean once = false, isHover = false;
 
     public EditList(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
 
-        buttons.add(edit = new Button(170, 20, "Edit", 8));
-        buttons.add(create = new Button(170, 20, "Create", 4));
+        buttons.add(edit = new Button(170, 20, "Edit", 4));
         buttons.add(rename = new Button(80, 20, "Rename", 8));
         buttons.add(delete = new Button(80, 20, "Delete", 8));
+        buttons.add(create = new Button(170, 20, "Create", 4));
         buttons.add(reCreate = new Button(80, 20, "Re-create", 8));
         buttons.add(back = new Button(80, 20, "Back", 0));
     }
@@ -53,6 +58,7 @@ public class EditList extends View {
 
             images.clear();
             names.clear();
+            paths.clear();
             parents.clear();
 
             int hUsed = 10;
@@ -62,6 +68,7 @@ public class EditList extends View {
                     if (file.isFile()) {
                         images.add(new Image(creativeFolder + "\\" + file.getName(), true));
                         names.add(file.getName());
+                        paths.add(file.getPath());
                         parents.add(file.getParentFile().getParentFile().getName()+"\\"+file.getParentFile().getName());
                         hUsed += images.get(j).getH() < 30 ? 30+10 : images.get(j).getH()+10;
                         j++;
@@ -73,6 +80,7 @@ public class EditList extends View {
         }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            isHover = false;
             gc.setLastState(8);
             gc.setState(0);
         }
@@ -88,12 +96,44 @@ public class EditList extends View {
             }
         }
 
-        //Focus control
-        focusCtrl(gc);
+        //Hover control
+        for(int i = 0; i < images.size(); i++) {
+            if(mouseIsOnYPos(gc, images, i, scroll)) {
+                currIndex = i;
+                isHover = true;
+            }
+        }
 
         //Button selection
         for(Button btn : buttons) {
-            if (isSelected(gc, btn)) {
+            btn.setBgColor(0xff424242);
+            if(!isHover && (btn == edit || btn == rename || btn == delete)) {
+                btn.setBgColor(0x99ababab);
+            } else if(isSelected(gc, btn)) {
+                if(btn == back) isHover = false;
+                if(btn == create) {
+                    CreativeMode.once = false;
+                    if(!CreativeMode.newOne) CreativeMode.newOne = true;
+                    CreativeMode.rename = "";
+                    once = false;
+                }
+                if(btn == edit) {
+                    CreativeMode.once = false;
+                    if(CreativeMode.newOne) CreativeMode.newOne = false;
+                    CreativeMode.rename = names.get(currIndex);
+                    CreativeMode.creaImg = null;
+                    CreativeMode.creaImg = images.get(currIndex);
+                    once = false;
+                }
+                if(btn == delete) {
+                    try {
+                        Files.delete(Paths.get(paths.get(currIndex)));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    isHover = false;
+                    once = false;
+                }
                 select.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(8);
@@ -108,7 +148,7 @@ public class EditList extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
 
-        r.drawListOfFiles(gc, images, names, parents, scroll, s.translate("Create your first map !"));
+        r.drawListOfFiles(gc, images, names, parents, scroll, isHover, currIndex, s.translate("Create your first map !"));
 
         r.drawStripe(gc, new Bloc(0), 0, 1);
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);

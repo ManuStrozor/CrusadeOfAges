@@ -54,7 +54,7 @@ public class Image {
         return alpha;
     }
 
-    public void saveIt() {
+    public void saveIt(String rename) {
         BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for(int y = 0; y < h; y++) {
             for(int x = 0; x < w; x++) {
@@ -63,7 +63,10 @@ public class Image {
         }
         try {
             DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
-            File out = new File(GameManager.APPDATA + "\\creative_mode\\" + sdf.format(new Date()) + ".png");
+            String filename;
+            if(rename.equals("")) filename = sdf.format(new Date()) + ".png";
+            else filename = rename;
+            File out = new File(GameManager.APPDATA + "\\creative_mode\\" + filename);
             ImageIO.write(bi, "png", out);
         } catch(IOException e) {
             e.printStackTrace();

@@ -13,10 +13,13 @@ import java.awt.event.MouseEvent;
 public class CreativeMode extends AbstractGame {
 
     public static Image creaImg;
-    public static boolean spawn = false;
+    public static boolean spawn = false, once = false, newOne = false;
+    public static String rename = "";
 
     private GameMap gameMap;
     private Player player;
+
+    private int width, height;
 
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, scroll = 0;
@@ -24,11 +27,21 @@ public class CreativeMode extends AbstractGame {
     public CreativeMode(int width, int height) {
         gameMap = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
-        gameMap.init(creaImg);
+        this.width = width;
+        this.height = height;
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        if(!once) {
+            if(newOne) {
+                creaImg = null;
+                creaImg = new Image(new int[width * height], width, height);
+            }
+            gameMap.init(creaImg);
+            once = true;
+        }
 
         if(!spawn && (gameMap.getSpawnX() != -1 || gameMap.getSpawnY() != -1)) {
             player = new Player("player", gameMap, 1);
