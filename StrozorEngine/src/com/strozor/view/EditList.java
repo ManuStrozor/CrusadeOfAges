@@ -26,6 +26,8 @@ public class EditList extends View {
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> parents = new ArrayList<>();
 
+    private int scroll = 0, scrollMax = 0;
+
     static boolean once = false;
 
     public EditList(Settings settings) {
@@ -44,25 +46,46 @@ public class EditList extends View {
     public void update(GameContainer gc, float dt) {
 
         if(!once) {
+
             String creativeFolder = System.getenv("APPDATA") + "\\.squaremonster\\creative_mode";
             File folder = new File(creativeFolder);
             File[] files = folder.listFiles();
+
             images.clear();
             names.clear();
             parents.clear();
-            for (int i = 0; i < files.length; i++) {
-                if (files[i].isFile()) {
-                    images.add(new Image(creativeFolder + "\\" + files[i].getName(), true));
-                    names.add(files[i].getName());
-                    parents.add(files[i].getParentFile().getParentFile().getName()+"\\"+files[i].getParentFile().getName());
+
+            int hUsed = 10;
+            int j = 0;
+            if(files != null) {
+                for(File file : files) {
+                    if (file.isFile()) {
+                        images.add(new Image(creativeFolder + "\\" + file.getName(), true));
+                        names.add(file.getName());
+                        parents.add(file.getParentFile().getParentFile().getName()+"\\"+file.getParentFile().getName());
+                        hUsed += images.get(j).getH() < 30 ? 30+10 : images.get(j).getH()+10;
+                        j++;
+                    }
                 }
             }
+            scrollMax = hUsed-(gc.getHeight()-3*GameManager.TS);
             once = true;
         }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
             gc.setLastState(8);
             gc.setState(0);
+        }
+
+        //Scroll control
+        if(scrollMax > 0) {
+            if(gc.getInput().getScroll() < 0) {
+                scroll -= 20;
+                if(scroll < 0) scroll = 0;
+            } else if(gc.getInput().getScroll() > 0) {
+                scroll += 20;
+                if(scroll > scrollMax) scroll = scrollMax;
+            }
         }
 
         //Focus control
@@ -85,14 +108,14 @@ public class EditList extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
 
-        r.drawListOfFiles(gc, images, names, parents);
+        r.drawListOfFiles(gc, images, names, parents, scroll, s.translate("Create your first map !"));
 
         r.drawStripe(gc, new Bloc(0), 0, 1);
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
         r.drawStripe(gc, new Bloc(18), GameManager.TS, 1);
 
-        r.drawStripe(gc, new Bloc(19), gc.getHeight() - GameManager.TS*3, 1);
-        r.drawStripe(gc, new Bloc(0), gc.getHeight() - GameManager.TS*2, 2);
+        r.drawStripe(gc, new Bloc(19), gc.getHeight()-GameManager.TS*3, 1);
+        r.drawStripe(gc, new Bloc(0), gc.getHeight()-GameManager.TS*2, 2);
 
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
         edit.setOffY(gc.getHeight()-2*GameManager.TS+10);

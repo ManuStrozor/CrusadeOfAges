@@ -238,40 +238,40 @@ public class GameRender {
         x -= camX;
         y -= camY;
 
-        for(int i = 0; i <= h; i++) {
-            setPixel(x, i + y, col);
-            setPixel(x + w, i + y, col);
+        for(int i = 0; i < w; i++) {
+            setPixel(x+i, y, col);
+            setPixel(x+i, y+h-1, col);
         }
 
-        for(int i = 0; i <= w; i++) {
-            setPixel(i + x, y, col);
-            setPixel(i + x, y + h, col);
+        for(int i = 0; i < h; i++) {
+            setPixel(x, y+i, col);
+            setPixel(x+w-1, y+i, col);
         }
     }
 
-    public void fillRect(int offX, int offY, int width, int height, int color) {
+    public void fillRect(int x, int y, int w, int h, int col) {
 
-        offX -= camX;
-        offY -= camY;
+        x -= camX;
+        y -= camY;
 
-        if(offX < -width) return;
-        if(offY < -height) return;
-        if(offX >= pW) return;
-        if(offY >= pH) return;
+        if(x < -w) return;
+        if(y < -h) return;
+        if(x >= pW) return;
+        if(y >= pH) return;
 
         int newX = 0;
         int newY = 0;
-        int newWidth = width;
-        int newHeight = height;
+        int newWidth = w;
+        int newHeight = h;
 
-        if(offX < 0) newX -= offX;
-        if(offY < 0) newY -= offY;
-        if(offX + newWidth >= pW) newWidth -= newWidth + offX - pW;
-        if(offY + newHeight >= pH) newHeight -= newHeight + offY - pH;
+        if(x < 0) newX -= x;
+        if(y < 0) newY -= y;
+        if(x + newWidth >= pW) newWidth -= newWidth + x - pW;
+        if(y + newHeight >= pH) newHeight -= newHeight + y - pH;
 
-        for(int y = newY; y < newHeight; y++) {
-            for(int x = newX; x < newWidth; x++) {
-                setPixel(x + offX, y + offY, color);
+        for(int j = newY; j < newHeight; j++) {
+            for(int i = newX; i < newWidth; i++) {
+                setPixel(i + x, j + y, col);
             }
         }
     }
@@ -327,9 +327,9 @@ public class GameRender {
 
     public void drawButton(Button b, String text) {
         drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xffababab);
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, b.getHeight() - 1, b.getBgColor());
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 1, 0x99636363);
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 1, 1, 0x99636363);
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-2, b.getHeight()-2, b.getBgColor());
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight()-2, 0x99636363);
+        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-2, 1, 0x99636363);
         drawText(text, b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
     }
 
@@ -416,32 +416,44 @@ public class GameRender {
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
-    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p) {
+    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p, int scroll, String nothing) {
+
+        if(f.size() == 0)
+            drawText(nothing, gc.getWidth()/2, gc.getHeight()/2, 0, 0, 0xffababab, Font.STANDARD);
 
         int largest = 0;
-        for(int i = 0; i < n.size(); i++) {
+        for(int i = 0; i < f.size(); i++) {
             int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(p.get(i), Font.STANDARD));
             size = Math.max(size, textSize("Dimensions: "+f.get(i).getW()+"*"+f.get(i).getH(), Font.STANDARD));
             if(size+f.get(i).getW() > largest) largest = size+f.get(i).getW();
         }
 
-        int x = gc.getWidth()/2 - largest/2;
-        int y = GameManager.TS+10;
+        int x = gc.getWidth()/2-largest/2;
+        int y = GameManager.TS+10-scroll;
 
-        for(int i = 0; i < n.size(); i++) {
+        int hUsed = 10;
+        for(int i = 0; i < f.size(); i++) {
 
             int w = f.get(i).getW();
-            int h = f.get(i).getH();
+            int h = f.get(i).getH() < 30 ? 30 : f.get(i).getH();
 
-            if(i != 0) y += f.get(i-1).getH()+10;
+            if(i != 0) y += f.get(i-1).getH() < 30 ? 30+10 : f.get(i-1).getH()+10;
 
-            fillRect(x, y, w, h, -1);
+            fillRect(x, y, w, f.get(i).getH(), -1);
             drawImage(f.get(i), x, y);
 
             drawText(n.get(i), x+w+4, y, 1, 1, -1, Font.STANDARD);
             drawText("Dimensions: "+w+"*"+h, x+w+4, y+h/2, 1, 0, 0xff898989, Font.STANDARD);
             drawText(p.get(i), x+w+4, y+h, 1, -1, 0xff898989, Font.STANDARD);
+
+            hUsed += h+10;
         }
+
+        int hTotal = gc.getHeight()-3*GameManager.TS;
+        int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
+
+        if(minus > 0)
+            fillRect(gc.getWidth()/2+largest/2+20, GameManager.TS+scroll/4, 4, hTotal-minus/4, -1);
     }
 
     public void drawBackground(GameContainer gc, Bloc bloc) {

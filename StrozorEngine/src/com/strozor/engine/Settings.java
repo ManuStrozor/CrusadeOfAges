@@ -58,6 +58,7 @@ public class Settings {
         en.put("Create", "Create");
         en.put("Re-create", "Re-create");
         en.put("Cancel", "Cancel");
+        en.put("Create your first map !", "Create your first map !");
         lang.add(en);
         fr.put("lang", "Français");
         fr.put("beta version", "version beta");
@@ -101,6 +102,7 @@ public class Settings {
         fr.put("Create", "Créer");
         fr.put("Re-create", "Re-créer");
         fr.put("Cancel", "Annuler");
+        fr.put("Create your first map !", "Créez votre première mappe !");
         lang.add(fr);
     }
 
