@@ -148,13 +148,12 @@ public class EditList extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
 
+        if(scrollMax <= 0) scroll = 0;
+
         r.drawListOfFiles(gc, images, names, parents, scroll, isHover, currIndex, s.translate("Create your first map !"));
 
         r.drawStripe(gc, new Bloc(0), 0, 1);
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
-        r.drawStripe(gc, new Bloc(18), GameManager.TS, 1);
-
-        r.drawStripe(gc, new Bloc(19), gc.getHeight()-GameManager.TS*3, 1);
         r.drawStripe(gc, new Bloc(0), gc.getHeight()-GameManager.TS*2, 2);
 
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);

@@ -456,8 +456,22 @@ public class GameRender {
         int hTotal = gc.getHeight()-3*GameManager.TS;
         int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
 
-        if(minus > 0)
-            fillRect(gc.getWidth()/2+largest/2+20, GameManager.TS+scroll/4, 4, hTotal-minus/4, -1);
+        if(f.size() != 0)
+            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, scroll/4, minus/4);
+    }
+
+    private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {
+        //BackBar
+        fillRect(x, y, w, h, 0x66ffffff);
+        fillRect(x+8, y, 1, h, 0xff444244);
+        //Bar
+        fillRect(x, y+scroll, w, h-minus, 0xffd4d2cc);
+        //Relief
+        fillRect(x+7, y+1+scroll, 1, h-1-minus, 0xff848284);
+        fillRect(x+1, y+h-minus+scroll-1, w-1, 1, 0xff848284);
+        fillRect(x+1, y+1+scroll, w-2, 1, 0xfffcfefc);
+        fillRect(x+1, y+1+scroll, 1, h-2-minus, 0xfffcfefc);
+        fillRect(x, y+h-minus+scroll, w, 1, 0xff444244);
     }
 
     public void drawBackground(GameContainer gc, Bloc bloc) {
