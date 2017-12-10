@@ -33,7 +33,6 @@ public class Credits extends View {
 
         //Button selection
         for(Button btn : buttons) {
-            btn.setBgColor(0xff424242);
             if (isSelected(gc, btn)) {
                 select.play();
                 gc.setState(btn.getGoState());

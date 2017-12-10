@@ -112,18 +112,32 @@ public class GameRender {
         lm[x + y * pW] = maxR << 16 | maxG << 8 | maxB;
     }
 
-    private int darken(int color) {
-        int val = 100;
+    private int darken(int color, int diff) {
 
         int a = (color >> 24) & 0xff;
         int r = (color >> 16) & 0xff;
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
 
-        int newA = (a - val < 0 ? 0 : a - val) << 24;
-        int newR = (r - val < 0 ? 0 : r - val) << 16;
-        int newG = (g - val < 0 ? 0 : g - val) << 8;
-        int newB = b - val < 0 ? 0 : b - val;
+        int newA = (a - diff < 0 ? 0 : a - diff) << 24;
+        int newR = (r - diff < 0 ? 0 : r - diff) << 16;
+        int newG = (g - diff < 0 ? 0 : g - diff) << 8;
+        int newB = b - diff < 0 ? 0 : b - diff;
+
+        return newA | newR | newG | newB;
+    }
+
+    private int lighten(int color, int diff) {
+
+        int a = (color >> 24) & 0xff;
+        int r = (color >> 16) & 0xff;
+        int g = (color >> 8) & 0xff;
+        int b = color & 0xff;
+
+        int newA = (a + diff > 255 ? 255 : a + diff) << 24;
+        int newR = (r + diff > 255 ? 255 : r + diff) << 16;
+        int newG = (g + diff > 255 ? 255 : g + diff) << 8;
+        int newB = b + diff > 255 ? 255 : b + diff;
 
         return newA | newR | newG | newB;
     }
@@ -153,7 +167,7 @@ public class GameRender {
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
                     if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
-                        setPixel(x + offX + offset - 1, y + offY - 1, darken(color));
+                        setPixel(x + offX + offset - 1, y + offY - 1, darken(color, 100));
                     }
                 }
             }
@@ -326,11 +340,17 @@ public class GameRender {
     }
 
     public void drawButton(Button b, String text) {
-        drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xffababab);
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-2, b.getHeight()-2, b.getBgColor());
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight()-2, 0x99636363);
-        fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth()-2, 1, 0x99636363);
-        drawText(text, b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
+        //out border
+        drawRect(b.getOffX()+camX, b.getOffY()+camY, b.getWidth(), b.getHeight(), 0xff333333);
+        //background & text
+        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, b.getWidth()-2, b.getHeight()-2, b.getBgColor());
+        drawText(text, b.getOffX()+b.getWidth()/2, b.getOffY()+b.getHeight()/2, 0, 0, lighten(b.getBgColor(), 150), Font.STANDARD);
+        //Lighten border
+        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, 1, b.getHeight()-2, lighten(b.getBgColor(), 70));
+        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+1, b.getWidth()-4, 1, lighten(b.getBgColor(), 70));
+        //darken border
+        fillRect(b.getOffX()+camX+b.getWidth()-2, b.getOffY()+camY+1, 1, b.getHeight()-2, darken(b.getBgColor(), 70));
+        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+b.getHeight()-2, b.getWidth()-4, 1, darken(b.getBgColor(), 70));
     }
 
     void drawGameStates(GameContainer gc, GameObject obj) {

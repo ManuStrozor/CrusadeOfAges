@@ -36,8 +36,6 @@ public class OptsMenu extends View {
             gc.setState(gc.getLastState());
         }
 
-        for(Button btn : buttons) btn.setBgColor(0xff424242);
-
         //Button selection
         if(isSelected(gc, tglLang)) {
             select.play();

@@ -6,11 +6,13 @@ public class Button {
     private String text;
 
     public Button(String text, int goState) {
+        bgColor = 0xff616E7A;
         this.goState = goState;
         this.text = text;
     }
 
     public Button(int width, int height, String text, int goState) {
+        bgColor = 0xff616E7A;
         this.width = width;
         this.height = height;
         this.goState = goState;

@@ -106,9 +106,9 @@ public class EditList extends View {
 
         //Button selection
         for(Button btn : buttons) {
-            btn.setBgColor(0xff424242);
+            btn.setBgColor(0xff616E7A);
             if(!isHover && (btn == edit || btn == rename || btn == delete)) {
-                btn.setBgColor(0x99ababab);
+                btn.setBgColor(0xffababab);
             } else if(isSelected(gc, btn)) {
                 if(btn == back) isHover = false;
                 if(btn == create) {
