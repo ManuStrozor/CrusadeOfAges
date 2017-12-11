@@ -46,8 +46,8 @@ public class EditList extends View {
         buttons.add(edit = new Button(170, 20, "Edit", 4));
         buttons.add(rename = new Button(80, 20, "Rename", 9));
         buttons.add(delete = new Button(80, 20, "Delete", 8));
-        buttons.add(create = new Button(170, 20, "Create", 4));
-        buttons.add(folder = new Button(80, 20, "Folder", 8));
+        buttons.add(create = new Button(80, 20, "Create", 4));
+        buttons.add(folder = new Button(80, 47, "Folder", 8));
         buttons.add(back = new Button(80, 20, "Back", 0));
 
         creativeFolder = System.getenv("APPDATA") + "\\.squaremonster\\creative_mode";
@@ -177,7 +177,7 @@ public class EditList extends View {
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
         edit.setOffY(gc.getHeight()-2*GameManager.TS+10);
 
-        create.setOffX(gc.getWidth()/2+5);
+        create.setOffX(gc.getWidth()/2+5+create.getWidth()+10);
         create.setOffY(edit.getOffY());
 
         rename.setOffX(edit.getOffX());
@@ -186,8 +186,8 @@ public class EditList extends View {
         delete.setOffX(rename.getOffX()+rename.getWidth()+10);
         delete.setOffY(rename.getOffY());
 
-        folder.setOffX(create.getOffX());
-        folder.setOffY(rename.getOffY());
+        folder.setOffX(gc.getWidth()/2+5);
+        folder.setOffY(create.getOffY());
 
         back.setOffX(folder.getOffX()+folder.getWidth()+10);
         back.setOffY(rename.getOffY());

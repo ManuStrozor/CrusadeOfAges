@@ -54,6 +54,7 @@ public class Rename extends View {
         //Input control
         inputCtrl(gc);
 
+
         //Button selection
         for(Button btn : buttons) {
             if(isSelected(gc, btn)) {

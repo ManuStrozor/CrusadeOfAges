@@ -11,12 +11,12 @@ public class Button {
         this.text = text;
     }
 
-    public Button(int width, int height, String text, int goState) {
+    public Button(int w, int h, String text, int goState) {
         bgColor = 0xff616E7A;
-        this.width = width;
-        this.height = height;
-        this.goState = goState;
+        width = w;
+        height = h;
         this.text = text;
+        this.goState = goState;
     }
 
     public int getOffX() {

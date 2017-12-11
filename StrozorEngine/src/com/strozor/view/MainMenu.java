@@ -20,8 +20,8 @@ public class MainMenu extends View {
         buttons.add(new Button("Single player", 1));
         buttons.add(new Button("Creative Mode", 8));
         buttons.add(new Button("Game credits", 6));
-        buttons.add(new Button("Options", 3));
-        buttons.add(new Button("Quit game", -1));
+        buttons.add(new Button(80, 20, "Options", 3));
+        buttons.add(new Button(80, 20, "Quit game", -1));
     }
 
     @Override
@@ -39,16 +39,18 @@ public class MainMenu extends View {
 
     @Override
     public void render(GameContainer gc, GameRender r) {
+
         r.drawBackground(gc, new Bloc(0));
         r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
 
-        int x = gc.getWidth() / 2 - 170 / 2;
-        int y = gc.getHeight() / 3 - 20 / 2;
+        int startY = gc.getHeight()/4;
 
-        for(int i = 0; i < buttons.size(); i++) {
-            Button btn = buttons.get(i);
-            btn.setOffX(x);
-            btn.setOffY(y + i * 30);
+        for(Button btn : buttons) {
+            if(btn.getText().contains("credits")) startY += 5;
+            btn.setOffX(gc.getWidth()/2-85);
+            if(btn.getText().contains("Quit")) btn.setOffX(gc.getWidth()/2+5);
+            btn.setOffY(startY);
+            if(!btn.getText().contains("Options")) startY += btn.getHeight() + 5;
             r.drawButton(btn, s.translate(btn.getText()));
         }
     }

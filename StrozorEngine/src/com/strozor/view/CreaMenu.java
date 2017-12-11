@@ -49,13 +49,12 @@ public class CreaMenu extends View {
 
         r.fillRect(r.getCamX(), r.getCamY(), gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        int x = gc.getWidth() / 2 - 170 / 2;
-        int y = gc.getHeight() / 3 - 20 / 2;
+        int startY = gc.getHeight()/4;
 
-        for(int i = 0; i < buttons.size(); i++) {
-            Button btn = buttons.get(i);
-            btn.setOffX(x);
-            btn.setOffY(y + i * 30);
+        for(Button btn : buttons) {
+            btn.setOffX(gc.getWidth()/2-85);
+            btn.setOffY(startY);
+            startY += btn.getHeight() + 5;
             r.drawButton(btn, s.translate(btn.getText()));
         }
     }
