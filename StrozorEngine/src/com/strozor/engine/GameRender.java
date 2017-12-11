@@ -8,6 +8,7 @@ import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 public class GameRender {
 
@@ -436,14 +437,14 @@ public class GameRender {
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
-    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<String> p, int scroll, boolean is, int curr, String nothing) {
+    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, int scroll, boolean is, int curr, String nothing) {
 
         if(f.size() == 0)
             drawText(nothing, gc.getWidth()/2, gc.getHeight()/2, 0, 0, 0xffababab, Font.STANDARD);
 
         int largest = 0;
         for(int i = 0; i < f.size(); i++) {
-            int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(p.get(i), Font.STANDARD));
+            int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(d.get(i).toString(), Font.STANDARD));
             size = Math.max(size, textSize("Dimensions: "+f.get(i).getW()+"*"+f.get(i).getH(), Font.STANDARD));
             if(size+f.get(i).getW() > largest) largest = size+f.get(i).getW();
         }
@@ -468,7 +469,7 @@ public class GameRender {
 
             drawText(n.get(i), x+w+4, y, 1, 1, -1, Font.STANDARD);
             drawText("Dimensions: "+w+"*"+f.get(i).getH(), x+w+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
-            drawText(p.get(i), x+w+4, y+30, 1, -1, 0xff898989, Font.STANDARD);
+            drawText(d.get(i).toString(), x+w+4, y+30, 1, -1, 0xff898989, Font.STANDARD);
 
             hUsed += h+10;
         }
@@ -477,7 +478,7 @@ public class GameRender {
         int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
 
         if(f.size() != 0)
-            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, scroll/4, minus/4);
+            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, scroll/8, minus/8);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {

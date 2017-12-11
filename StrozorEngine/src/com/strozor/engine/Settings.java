@@ -56,7 +56,7 @@ public class Settings {
         en.put("Rename", "Rename");
         en.put("Delete", "Delete");
         en.put("Create", "Create");
-        en.put("Re-create", "Re-create");
+        en.put("Folder", "Folder");
         en.put("Cancel", "Cancel");
         en.put("Create your first map !", "Create your first map !");
         lang.add(en);
@@ -100,7 +100,7 @@ public class Settings {
         fr.put("Rename", "Renommer");
         fr.put("Delete", "Supprimer");
         fr.put("Create", "Créer");
-        fr.put("Re-create", "Re-créer");
+        fr.put("Folder", "Dossier");
         fr.put("Cancel", "Annuler");
         fr.put("Create your first map !", "Créez votre première mappe !");
         lang.add(fr);

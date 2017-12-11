@@ -12,24 +12,28 @@ import com.strozor.engine.gfx.Image;
 import com.strozor.game.CreativeMode;
 import com.strozor.game.GameManager;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EditList extends View {
 
     private Settings s;
     private SoundClip select;
+    private Button edit, rename, delete, create, folder, back;
 
-    private Button edit, rename, delete, create, reCreate, back;
+    private String creativeFolder;
+    private File dossier;
 
     private ArrayList<Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> paths = new ArrayList<>();
-    private ArrayList<String> parents = new ArrayList<>();
+    private ArrayList<Date> dates = new ArrayList<>();
 
     private int scroll = 0, scrollMax = 0, currIndex = 0;
 
@@ -43,36 +47,43 @@ public class EditList extends View {
         buttons.add(rename = new Button(80, 20, "Rename", 8));
         buttons.add(delete = new Button(80, 20, "Delete", 8));
         buttons.add(create = new Button(170, 20, "Create", 4));
-        buttons.add(reCreate = new Button(80, 20, "Re-create", 8));
+        buttons.add(folder = new Button(80, 20, "Folder", 8));
         buttons.add(back = new Button(80, 20, "Back", 0));
+
+        creativeFolder = System.getenv("APPDATA") + "\\.squaremonster\\creative_mode";
+        dossier = new File(creativeFolder);
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
+        File[] files = dossier.listFiles();
+
+        //Refresh
+        if(images.size() != files.length) once = false;
+        if(names.size() >= files.length) {
+            for(int i = 0; i < files.length; i++) {
+                if(!files[i].getName().equals(names.get(i)))
+                    once = false;
+            }
+        }
+
         if(!once) {
-
-            String creativeFolder = System.getenv("APPDATA") + "\\.squaremonster\\creative_mode";
-            File folder = new File(creativeFolder);
-            File[] files = folder.listFiles();
-
             images.clear();
             names.clear();
             paths.clear();
-            parents.clear();
+            dates.clear();
 
             int hUsed = 10;
             int j = 0;
-            if(files != null) {
-                for(File file : files) {
-                    if (file.isFile()) {
-                        images.add(new Image(creativeFolder + "\\" + file.getName(), true));
-                        names.add(file.getName());
-                        paths.add(file.getPath());
-                        parents.add(file.getParentFile().getParentFile().getName()+"\\"+file.getParentFile().getName());
-                        hUsed += images.get(j).getH() < 30 ? 30+10 : images.get(j).getH()+10;
-                        j++;
-                    }
+            for(File file : files) {
+                if (file.isFile()) {
+                    images.add(new Image(creativeFolder + "\\" + file.getName(), true));
+                    names.add(file.getName());
+                    paths.add(file.getPath());
+                    dates.add(new Date(file.lastModified()));
+                    hUsed += images.get(j).getH() < 30 ? 30+10 : images.get(j).getH()+10;
+                    j++;
                 }
             }
             scrollMax = hUsed-(gc.getHeight()-3*GameManager.TS);
@@ -108,7 +119,7 @@ public class EditList extends View {
         for(Button btn : buttons) {
             btn.setBgColor(0xff616E7A);
             if(!isHover && (btn == edit || btn == rename || btn == delete)) {
-                btn.setBgColor(0xffababab);
+                btn.setBgColor(0xffdedede);
             } else if(isSelected(gc, btn)) {
                 if(btn == back) isHover = false;
                 if(btn == create) {
@@ -125,6 +136,12 @@ public class EditList extends View {
                     CreativeMode.creaImg = images.get(currIndex);
                     once = false;
                 }
+                if(btn == rename) {
+                    String forbiddenChars = "~#%&*{}\\:<>?/+|\"";
+                    /*
+                    Do not start filename by (_) or (.)
+                     */
+                }
                 if(btn == delete) {
                     try {
                         Files.delete(Paths.get(paths.get(currIndex)));
@@ -133,6 +150,13 @@ public class EditList extends View {
                     }
                     isHover = false;
                     once = false;
+                }
+                if(btn == folder) {
+                    try {
+                        Desktop.getDesktop().open(new File(creativeFolder));
+                    } catch(IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 select.play();
                 gc.setState(btn.getGoState());
@@ -150,7 +174,7 @@ public class EditList extends View {
 
         if(scrollMax <= 0) scroll = 0;
 
-        r.drawListOfFiles(gc, images, names, parents, scroll, isHover, currIndex, s.translate("Create your first map !"));
+        r.drawListOfFiles(gc, images, names, dates, scroll, isHover, currIndex, s.translate("Create your first map !"));
 
         r.drawStripe(gc, new Bloc(0), 0, 1);
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
@@ -168,10 +192,10 @@ public class EditList extends View {
         delete.setOffX(rename.getOffX()+rename.getWidth()+10);
         delete.setOffY(rename.getOffY());
 
-        reCreate.setOffX(create.getOffX());
-        reCreate.setOffY(rename.getOffY());
+        folder.setOffX(create.getOffX());
+        folder.setOffY(rename.getOffY());
 
-        back.setOffX(reCreate.getOffX()+reCreate.getWidth()+10);
+        back.setOffX(folder.getOffX()+folder.getWidth()+10);
         back.setOffY(rename.getOffY());
 
         for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
