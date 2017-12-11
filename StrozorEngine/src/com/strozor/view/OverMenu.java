@@ -45,6 +45,8 @@ public class OverMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
+        r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
+
         r.drawMenuTitle(gc, s.translate("GAME OVER"), s.translate("You are dead"));
 
         int x = gc.getWidth() / 2 - 170 / 2;

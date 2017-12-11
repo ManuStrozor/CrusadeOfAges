@@ -341,17 +341,29 @@ public class GameRender {
     }
 
     public void drawButton(Button b, String text) {
-        //out border
+        //Border-out
         drawRect(b.getOffX()+camX, b.getOffY()+camY, b.getWidth(), b.getHeight(), 0xff333333);
         //background & text
         fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, b.getWidth()-2, b.getHeight()-2, b.getBgColor());
         drawText(text, b.getOffX()+b.getWidth()/2, b.getOffY()+b.getHeight()/2, 0, 0, lighten(b.getBgColor(), 150), Font.STANDARD);
-        //Lighten border
+        //Border-in lighter
         fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, 1, b.getHeight()-2, lighten(b.getBgColor(), 70));
         fillRect(b.getOffX()+camX+2, b.getOffY()+camY+1, b.getWidth()-4, 1, lighten(b.getBgColor(), 70));
-        //darken border
+        //Border-in darker
         fillRect(b.getOffX()+camX+b.getWidth()-2, b.getOffY()+camY+1, 1, b.getHeight()-2, darken(b.getBgColor(), 70));
         fillRect(b.getOffX()+camX+2, b.getOffY()+camY+b.getHeight()-2, b.getWidth()-4, 1, darken(b.getBgColor(), 70));
+    }
+
+    public void drawInput(int x, int y, int w, int h, int color, String text) {
+        //Background & text
+        fillRect(x, y, w, h, color);
+        drawText(text, x+4, y+h/2, 1, 0, -1, Font.STANDARD);
+        //Border-out darker
+        fillRect(x, y, w, 1, darken(color, 40));
+        fillRect(x-1, y+1, 1, h-1, darken(color, 40));
+        //Border-out lighter
+        fillRect(x, y+h, w, 1, lighten(color, 40));
+        fillRect(x+w, y+1, 1, h-1, lighten(color, 40));
     }
 
     void drawGameStates(GameContainer gc, GameObject obj) {
@@ -467,9 +479,9 @@ public class GameRender {
             fillRect(x, y, w, f.get(i).getH(), -1);
             drawImage(f.get(i), x, y);
 
-            drawText(n.get(i), x+w+4, y, 1, 1, -1, Font.STANDARD);
+            drawText(n.get(i), x+w+4, y-2, 1, 1, -1, Font.STANDARD);
             drawText("Dimensions: "+w+"*"+f.get(i).getH(), x+w+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
-            drawText(d.get(i).toString(), x+w+4, y+30, 1, -1, 0xff898989, Font.STANDARD);
+            drawText(d.get(i).toString(), x+w+4, y+30+2, 1, -1, 0xff898989, Font.STANDARD);
 
             hUsed += h+10;
         }
@@ -503,10 +515,10 @@ public class GameRender {
         }
     }
 
-    public void drawStripe(GameContainer gc, Bloc bloc, int offY, int n) {
-        for(int y = 0; y < n; y++) {
-            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                drawBloc(bloc, x * GameManager.TS, offY + y * GameManager.TS);
+    public void fillAreaBloc(int nX, int nY, int nW, int nH, Bloc bloc) {
+        for(int y = 0; y < nH; y++) {
+            for(int x = 0; x < nW; x++) {
+                drawBloc(bloc, nX + x * GameManager.TS, nY + y * GameManager.TS);
             }
         }
     }

@@ -64,6 +64,8 @@ public class OptsMenu extends View {
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, new Bloc(0));
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
+        } else {
+            r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         }
 
         int x = gc.getWidth() / 2 - 170 / 2;

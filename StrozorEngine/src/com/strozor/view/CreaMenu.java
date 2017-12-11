@@ -47,6 +47,8 @@ public class CreaMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
+        r.fillRect(r.getCamX(), r.getCamY(), gc.getWidth(), gc.getHeight(), 0x99000000);
+
         int x = gc.getWidth() / 2 - 170 / 2;
         int y = gc.getHeight() / 3 - 20 / 2;
 

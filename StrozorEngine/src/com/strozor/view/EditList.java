@@ -44,7 +44,7 @@ public class EditList extends View {
         select = new SoundClip("/audio/select.wav");
 
         buttons.add(edit = new Button(170, 20, "Edit", 4));
-        buttons.add(rename = new Button(80, 20, "Rename", 8));
+        buttons.add(rename = new Button(80, 20, "Rename", 9));
         buttons.add(delete = new Button(80, 20, "Delete", 8));
         buttons.add(create = new Button(170, 20, "Create", 4));
         buttons.add(folder = new Button(80, 20, "Folder", 8));
@@ -59,15 +59,6 @@ public class EditList extends View {
 
         File[] files = dossier.listFiles();
 
-        //Refresh
-        if(images.size() != files.length) once = false;
-        if(names.size() >= files.length) {
-            for(int i = 0; i < files.length; i++) {
-                if(!files[i].getName().equals(names.get(i)))
-                    once = false;
-            }
-        }
-
         if(!once) {
             images.clear();
             names.clear();
@@ -77,7 +68,7 @@ public class EditList extends View {
             int hUsed = 10;
             int j = 0;
             for(File file : files) {
-                if (file.isFile()) {
+                if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
                     images.add(new Image(creativeFolder + "\\" + file.getName(), true));
                     names.add(file.getName());
                     paths.add(file.getPath());
@@ -121,7 +112,10 @@ public class EditList extends View {
             if(!isHover && (btn == edit || btn == rename || btn == delete)) {
                 btn.setBgColor(0xffdedede);
             } else if(isSelected(gc, btn)) {
-                if(btn == back) isHover = false;
+                if(btn == back) {
+                    isHover = false;
+                    once = false;
+                }
                 if(btn == create) {
                     CreativeMode.once = false;
                     if(!CreativeMode.newOne) CreativeMode.newOne = true;
@@ -137,10 +131,10 @@ public class EditList extends View {
                     once = false;
                 }
                 if(btn == rename) {
-                    String forbiddenChars = "~#%&*{}\\:<>?/+|\"";
-                    /*
-                    Do not start filename by (_) or (.)
-                     */
+                    Rename.input = names.get(currIndex).substring(0, names.get(currIndex).length() - 4);
+                    Rename.path = paths.get(currIndex);
+                    isHover = false;
+                    once = false;
                 }
                 if(btn == delete) {
                     try {
@@ -176,9 +170,9 @@ public class EditList extends View {
 
         r.drawListOfFiles(gc, images, names, dates, scroll, isHover, currIndex, s.translate("Create your first map !"));
 
-        r.drawStripe(gc, new Bloc(0), 0, 1);
+        r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS, 1, new Bloc(0));
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
-        r.drawStripe(gc, new Bloc(0), gc.getHeight()-GameManager.TS*2, 2);
+        r.fillAreaBloc(0, gc.getHeight()-GameManager.TS*2, gc.getWidth()/GameManager.TS, 2, new Bloc(0));
 
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
         edit.setOffY(gc.getHeight()-2*GameManager.TS+10);

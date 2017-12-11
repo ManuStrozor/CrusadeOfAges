@@ -13,7 +13,15 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings s;
-    private View mainMenu, optsMenu, gameMenu, creaMenu, overMenu, credits, editList;
+    private View
+            mainMenu,
+            optsMenu,
+            gameMenu,
+            creaMenu,
+            overMenu,
+            credits,
+            editList,
+            rename;
     private AbstractGame game, crea;
 
 
@@ -32,6 +40,7 @@ public class GameContainer implements Runnable {
         CREA,
         CREAMENU,
         EDITLIST,
+        RENAME,
         CREDITS,
         EXIT
     }
@@ -50,6 +59,7 @@ public class GameContainer implements Runnable {
         this.creaMenu = new CreaMenu(s);
         this.credits = new Credits(s);
         this.editList = new EditList(s);
+        this.rename = new Rename(s);
 
         this.crea = new CreativeMode(60, 30);
         this.gm = (GameManager) game;
@@ -115,6 +125,8 @@ public class GameContainer implements Runnable {
                     crea.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.EDITLIST) {
                     editList.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.RENAME) {
+                    rename.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -155,6 +167,9 @@ public class GameContainer implements Runnable {
                 } else if(State == STATE.EDITLIST) {
                     editList.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
+                } else if(State == STATE.RENAME) {
+                    editList.render(this, gameRender);
+                    rename.render(this, gameRender);
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
@@ -246,6 +261,7 @@ public class GameContainer implements Runnable {
             case 6: State = STATE.CREDITS; break;
             case 7: State = STATE.OVERMENU; break;
             case 8: State = STATE.EDITLIST; break;
+            case 9: State = STATE.RENAME; break;
         }
         currState = value;
     }
