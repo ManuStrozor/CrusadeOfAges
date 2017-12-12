@@ -10,6 +10,7 @@ Square Monster est un jeu de plate-forme 2d inspiré du magnifique Super-Meat-Bo
 Toutes les versions : <https://turbet.nalo-corp.net/squaremonster/versions>
 * ![Download the current .exe version](https://github.com/Strozor/Square-Monster/blob/master/SquareMonster.exe?raw=true)
 * ![Download the current .jar version](https://github.com/Strozor/Square-Monster/blob/master/SquareMonster.jar?raw=true)
+* `12.12.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta2.0.jar>
 * `04.12.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.9.jar>
 * `01.12.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.8.1.jar>
 * `30.11.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.8.jar>
