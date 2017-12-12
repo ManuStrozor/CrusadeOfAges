@@ -79,7 +79,7 @@ public class CreativeMode extends View {
                     names.add(file.getName());
                     paths.add(file.getPath());
                     dates.add(new Date(file.lastModified()));
-                    sMax += 10+(images.get(count).getH() < 30 ? 30 : images.get(count).getH());
+                    sMax += (images.get(count).getH() < 30 ? 30 : images.get(count).getH())+10;
                     count++;
                 }
             }
@@ -139,7 +139,7 @@ public class CreativeMode extends View {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    int high = images.get(fIndex).getH()+10;
+                    int high = (images.get(fIndex).getH() < 30 ? 30 : images.get(fIndex).getH())+10;
                     if(scroll >= high) scroll -= high;
                     if(fIndex == images.size()-1 && fIndex != 0) fIndex--;
                 }
