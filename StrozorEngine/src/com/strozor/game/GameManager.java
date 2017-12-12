@@ -1,7 +1,6 @@
 package com.strozor.game;
 
 import com.strozor.engine.*;
-import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.*;
 
 import javax.imageio.ImageIO;
@@ -26,9 +25,6 @@ public class GameManager extends AbstractGame {
     public static final int TS = 32;
     public static final String APPDATA = System.getenv("APPDATA") + "\\.squaremonster";
 
-    private static boolean mapTester = false;
-    private static String mapTest;
-
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
@@ -42,10 +38,7 @@ public class GameManager extends AbstractGame {
 
     private GameManager(GameMap gameMap) {
         this.gameMap = gameMap;
-
-        if(mapTester) load(mapTest);
-        else load(levelList[currLevel]);
-
+        load(levelList[currLevel]);
         objects.add(new Player("player", gameMap, 1));
         camera = new Camera("player", gameMap);
     }
@@ -88,8 +81,7 @@ public class GameManager extends AbstractGame {
         //Reload level
         if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
 
-            if(mapTester) load(mapTest);
-            else load(levelList[currLevel]);
+            load(levelList[currLevel]);
 
             objects.add(new Player("player", gameMap, 1));
 
@@ -111,7 +103,7 @@ public class GameManager extends AbstractGame {
     }
 
     public void load(String path) {
-        gameMap.init(new Image(path, mapTester));
+        gameMap.init(new Image(path, false));
     }
 
     public int getCurrLevel() {
@@ -129,14 +121,6 @@ public class GameManager extends AbstractGame {
     public GameObject getObject(String tag) {
         for(GameObject obj : objects) if(obj.getTag().equals(tag)) return obj;
         return null;
-    }
-
-    public boolean isMapTesting() {
-        return mapTester;
-    }
-
-    public static String getMapTest() {
-        return mapTest;
     }
 
     static private void writeAppData() {
@@ -214,10 +198,6 @@ public class GameManager extends AbstractGame {
         Settings settings = new Settings();
         writeAppData();
         readOptions(settings);
-        if(args.length == 1) {
-            mapTester = true;
-            mapTest = args[0];
-        }
         GameContainer gc = new GameContainer(new GameManager(new GameMap()), settings);
         gc.setTitle("Square Monster");
         gc.setScale(settings.getScale());

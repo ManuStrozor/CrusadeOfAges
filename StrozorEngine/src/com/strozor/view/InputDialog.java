@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class Rename extends View {
+public class InputDialog extends View {
 
     public static String input, path;
     public static int blink;
@@ -26,11 +26,11 @@ public class Rename extends View {
 
     private boolean once = false;
 
-    public Rename(Settings settings) {
+    public InputDialog(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         buttons.add(cancel = new Button(80, 20, "Cancel", 8));
-        buttons.add(rename = new Button(80, 20, "Rename", 8));
+        buttons.add(rename = new Button(80, 20, "InputDialog", 8));
     }
 
     @Override

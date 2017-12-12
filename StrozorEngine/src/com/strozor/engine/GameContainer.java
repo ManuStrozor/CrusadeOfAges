@@ -2,7 +2,7 @@ package com.strozor.engine;
 
 import com.strozor.engine.gfx.Font;
 import com.strozor.game.GameManager;
-import com.strozor.game.CreativeMode;
+import com.strozor.game.EditBoard;
 import com.strozor.view.*;
 
 public class GameContainer implements Runnable {
@@ -56,12 +56,12 @@ public class GameContainer implements Runnable {
         this.optsMenu = new OptsMenu(s);
         this.gameMenu = new GameMenu(s);
         this.overMenu = new OverMenu(s);
-        this.creaMenu = new CreaMenu(s);
+        this.creaMenu = new EditMenu(s);
         this.credits = new Credits(s);
-        this.editList = new EditList(s);
-        this.rename = new Rename(s);
+        this.editList = new CreativeMode(s);
+        this.rename = new InputDialog(s);
 
-        this.crea = new CreativeMode(60, 30);
+        this.crea = new EditBoard(60, 30);
         this.gm = (GameManager) game;
     }
 

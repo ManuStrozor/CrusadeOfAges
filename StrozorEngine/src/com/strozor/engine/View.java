@@ -3,7 +3,7 @@ package com.strozor.engine;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Image;
 import com.strozor.game.GameManager;
-import com.strozor.view.Rename;
+import com.strozor.view.InputDialog;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -90,16 +90,16 @@ public abstract class View {
         }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) tmp += ' ';
-        if(gc.getInput().isKeyDown(KeyEvent.VK_BACK_SPACE) && Rename.blink != 0) {
-            Rename.input = Rename.input.substring(0, Rename.blink - 1) + Rename.input.substring(Rename.blink);
-            Rename.blink--;
+        if(gc.getInput().isKeyDown(KeyEvent.VK_BACK_SPACE) && InputDialog.blink != 0) {
+            InputDialog.input = InputDialog.input.substring(0, InputDialog.blink - 1) + InputDialog.input.substring(InputDialog.blink);
+            InputDialog.blink--;
         }
-        if(gc.getInput().isKeyDown(KeyEvent.VK_DELETE) && Rename.blink < Rename.input.length())
-            Rename.input = Rename.input.substring(0, Rename.blink) + Rename.input.substring(Rename.blink + 1);
+        if(gc.getInput().isKeyDown(KeyEvent.VK_DELETE) && InputDialog.blink < InputDialog.input.length())
+            InputDialog.input = InputDialog.input.substring(0, InputDialog.blink) + InputDialog.input.substring(InputDialog.blink + 1);
 
-        if(Rename.blink == 0) Rename.input = tmp + Rename.input;
-        else if(Rename.blink == Rename.input.length()) Rename.input += tmp;
-        else Rename.input = Rename.input.substring(0, Rename.blink) + tmp + Rename.input.substring(Rename.blink);
-        Rename.blink += tmp.length();
+        if(InputDialog.blink == 0) InputDialog.input = tmp + InputDialog.input;
+        else if(InputDialog.blink == InputDialog.input.length()) InputDialog.input += tmp;
+        else InputDialog.input = InputDialog.input.substring(0, InputDialog.blink) + tmp + InputDialog.input.substring(InputDialog.blink);
+        InputDialog.blink += tmp.length();
     }
 }

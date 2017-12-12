@@ -53,7 +53,7 @@ public class Settings {
         en.put("You are dead", "You are dead");
         en.put("Edit", "Edit");
         en.put("Select a map", "Select a map");
-        en.put("Rename", "Rename");
+        en.put("InputDialog", "InputDialog");
         en.put("Delete", "Delete");
         en.put("Create", "Create");
         en.put("Folder", "Folder");
@@ -97,7 +97,7 @@ public class Settings {
         fr.put("You are dead", "Vous êtes mort(e)");
         fr.put("Edit", "Modifier");
         fr.put("Select a map", "Selectionnez une mappe");
-        fr.put("Rename", "Renommer");
+        fr.put("InputDialog", "Renommer");
         fr.put("Delete", "Supprimer");
         fr.put("Create", "Créer");
         fr.put("Folder", "Dossier");

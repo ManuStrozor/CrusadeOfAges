@@ -3,7 +3,8 @@ package com.strozor.engine;
 import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
 import com.strozor.game.GameObject;
-import com.strozor.view.Rename;
+import com.strozor.view.CreativeMode;
+import com.strozor.view.InputDialog;
 
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
@@ -357,9 +358,9 @@ public class GameRender {
 
     public void drawInput(int x, int y, int w, int h, int color) {
 
-        String text = Rename.input;
+        String text = InputDialog.input;
 
-        int position = textSize(text.substring(0, Rename.blink), Font.STANDARD);
+        int position = textSize(text.substring(0, InputDialog.blink), Font.STANDARD);
 
         //Background & text
         fillRect(x, y, w, h, color);
@@ -439,10 +440,10 @@ public class GameRender {
     }
 
     public void drawMiniMap(GameContainer gc, Image img) {
-        int xMMap = camX + gc.getWidth() - img.getW() - 1;
-        int yMMap = camY + gc.getHeight() - img.getH() - 1;
+        int xMMap = camX + gc.getWidth()-img.getW()-2;
+        int yMMap = camY + 1;
         fillRect(xMMap, yMMap, img.getW(), img.getH(), 0x99ababab);
-        drawRect(xMMap + camX/32 + 1, yMMap + camY/32, gc.getWidth()/32 - 2, gc.getHeight()/32, 0x99ababab);
+        drawRect(xMMap + camX/32 + 1, yMMap + camY/32, gc.getWidth()/32-1, gc.getHeight()/32+1, 0x99ababab);
         drawImage(img, xMMap, yMMap);
     }
 
@@ -457,7 +458,7 @@ public class GameRender {
             drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
-    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, int scroll, boolean is, int curr, String nothing) {
+    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
 
         if(f.size() == 0)
             drawText(nothing, gc.getWidth()/2, gc.getHeight()/2, 0, 0, 0xffababab, Font.STANDARD);
@@ -465,12 +466,12 @@ public class GameRender {
         int largest = 0;
         for(int i = 0; i < f.size(); i++) {
             int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(d.get(i).toString(), Font.STANDARD));
-            size = Math.max(size, textSize("Dimensions: "+f.get(i).getW()+"*"+f.get(i).getH(), Font.STANDARD));
+            size = Math.max(size, textSize("Dimensions: "+f.get(i).getW()+"x"+f.get(i).getH(), Font.STANDARD));
             if(size+f.get(i).getW() > largest) largest = size+f.get(i).getW();
         }
 
         int x = gc.getWidth()/2-largest/2;
-        int y = GameManager.TS+10-scroll;
+        int y = GameManager.TS+10-CreativeMode.scroll;
 
         int hUsed = 10;
         for(int i = 0; i < f.size(); i++) {
@@ -480,15 +481,14 @@ public class GameRender {
 
             if(i != 0) y += f.get(i-1).getH() < 30 ? 30+10 : f.get(i-1).getH()+10;
 
-            if(is && i == curr) {
-                drawRect(x-4, y-4, largest+12, f.get(i).getH() < 30 ? 30+8 : f.get(i).getH()+8, 0xff696969);
-            }
+            if(CreativeMode.focus && i == CreativeMode.fIndex)
+                drawRect(x - 4, y - 4, largest + 12, f.get(i).getH() < 30 ? 30 + 8 : f.get(i).getH() + 8, 0xff696969);
 
             fillRect(x, y, w, f.get(i).getH(), -1);
             drawImage(f.get(i), x, y);
 
             drawText(n.get(i), x+w+4, y-2, 1, 1, -1, Font.STANDARD);
-            drawText("Dimensions: "+w+"*"+f.get(i).getH(), x+w+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
+            drawText("Dimensions: "+w+"x"+f.get(i).getH(), x+w+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
             drawText(d.get(i).toString(), x+w+4, y+30+2, 1, -1, 0xff898989, Font.STANDARD);
 
             hUsed += h+10;
@@ -498,7 +498,7 @@ public class GameRender {
         int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
 
         if(f.size() != 0)
-            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, scroll/8, minus/8);
+            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, CreativeMode.scroll/8, minus/8);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {

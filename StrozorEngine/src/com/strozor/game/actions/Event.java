@@ -43,16 +43,11 @@ public class Event {
     public void switchLevel(GameContainer gc, GameManager gm, GameMap map) {
         if(pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             pl.setKeys(pl.getKeys() - 1);
-            if(!gm.isMapTesting()) {
-                if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
-                    gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
-                    gm.setCurrLevel(gm.getCurrLevel() + 1);
-                } else {
-                    gm.load(gm.getLevelList()[0]);
-                    gm.setCurrLevel(0);
-                }
+            if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
+                gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
+                gm.setCurrLevel(gm.getCurrLevel() + 1);
             } else {
-                gm.load(GameManager.getMapTest());
+                gm.load(gm.getLevelList()[0]);
                 gm.setCurrLevel(0);
             }
             pl.respawn(map.getSpawnX(), map.getSpawnY());

@@ -10,7 +10,7 @@ import com.strozor.engine.GameMap;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class CreativeMode extends AbstractGame {
+public class EditBoard extends AbstractGame {
 
     public static Image creaImg;
     public static boolean spawn = false, once = false, newOne = false;
@@ -24,7 +24,7 @@ public class CreativeMode extends AbstractGame {
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, scroll = 0;
 
-    public CreativeMode(int width, int height) {
+    public EditBoard(int width, int height) {
         gameMap = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
         this.width = width;

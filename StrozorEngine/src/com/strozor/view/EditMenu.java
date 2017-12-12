@@ -6,17 +6,17 @@ import com.strozor.engine.Settings;
 import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
-import com.strozor.game.CreativeMode;
+import com.strozor.game.EditBoard;
 
 import java.awt.event.KeyEvent;
 
-public class CreaMenu extends View {
+public class EditMenu extends View {
 
     private Settings s;
     private SoundClip select;
     private Button save;
 
-    public CreaMenu(Settings settings) {
+    public EditMenu(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
 
@@ -34,8 +34,8 @@ public class CreaMenu extends View {
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if(btn == save) {
-                    CreativeMode.creaImg.saveIt(CreativeMode.rename);
-                    EditList.once = false;
+                    EditBoard.creaImg.saveIt(EditBoard.rename);
+                    CreativeMode.once = false;
                 }
                 select.play();
                 gc.setState(btn.getGoState());
