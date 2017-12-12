@@ -6,7 +6,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
     private GameContainer gc;
 
-    private final int NUM_KEYS = 256;
+    private final int NUM_KEYS = 0xffff;
     private boolean[] keys = new boolean[NUM_KEYS];
     private boolean[] keysLast = new boolean[NUM_KEYS];
 

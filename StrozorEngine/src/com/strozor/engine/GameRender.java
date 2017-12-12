@@ -3,6 +3,7 @@ package com.strozor.engine;
 import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
 import com.strozor.game.GameObject;
+import com.strozor.view.Rename;
 
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
@@ -354,10 +355,17 @@ public class GameRender {
         fillRect(b.getOffX()+camX+2, b.getOffY()+camY+b.getHeight()-2, b.getWidth()-4, 1, darken(b.getBgColor(), 70));
     }
 
-    public void drawInput(int x, int y, int w, int h, int color, String text) {
+    public void drawInput(int x, int y, int w, int h, int color) {
+
+        String text = Rename.input;
+
+        int position = textSize(text.substring(0, Rename.blink), Font.STANDARD);
+
         //Background & text
         fillRect(x, y, w, h, color);
         drawText(text, x+4, y+h/2, 1, 0, -1, Font.STANDARD);
+        //Blink bar
+        fillRect(x+4+position, y+3, 1, h-6, -1);
         //Border-out darker
         fillRect(x, y, w, 1, darken(color, 40));
         fillRect(x-1, y+1, 1, h-1, darken(color, 40));

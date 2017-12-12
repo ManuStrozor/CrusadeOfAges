@@ -42,37 +42,64 @@ public abstract class View {
     }
 
     protected void inputCtrl(GameContainer gc) {
+
+        String tmp = "";
+
         if(gc.getInput().isKey(KeyEvent.VK_SHIFT)) {
+            //Majuscules
             for(int k = KeyEvent.VK_A, i = 0; k <= KeyEvent.VK_Z; k++, i++) {
-                if(gc.getInput().isKeyDown(k)) Rename.input += (char) ('A' + i);
+                if(gc.getInput().isKeyDown(k)) tmp += (char) ('A' + i);
             }
+            //Chiffres
             for(int k = KeyEvent.VK_0, i = 0; k <= KeyEvent.VK_9; k++, i++) {
-                if(gc.getInput().isKeyDown(k)) Rename.input += (char) ('0' + i);
+                if(gc.getInput().isKeyDown(k)) tmp += (char) ('0' + i);
             }
-            if(gc.getInput().isKeyDown(KeyEvent.VK_SEMICOLON)) Rename.input += '.';
+            //Point
+            if(gc.getInput().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp += '.';
         } else {
+            //Minuscules
             for(int k = KeyEvent.VK_A, i = 0; k <= KeyEvent.VK_Z; k++, i++) {
-                if(gc.getInput().isKeyDown(k)) Rename.input += (char) ('a' + i);
+                if(gc.getInput().isKeyDown(k)) tmp += (char) ('a' + i);
             }
-            if(gc.getInput().isKeyDown(KeyEvent.VK_0)) Rename.input += 'à';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_2)) Rename.input += 'é';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_4)) Rename.input += '\'';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_5)) Rename.input += '(';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_6)) Rename.input += '-';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_7)) Rename.input += 'è';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_8)) Rename.input += '_';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_9)) Rename.input += 'ç';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_COMMA)) Rename.input += ',';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_EQUALS)) Rename.input += '=';
-            if(gc.getInput().isKeyDown(KeyEvent.VK_SEMICOLON)) Rename.input += ';';
+            //Charactères spéciaux
+            if(gc.getInput().isKeyDown(KeyEvent.VK_0)) {
+                if(gc.getInput().isKey(KeyEvent.VK_ALT)) tmp += '@';
+                else tmp += 'à';
+            }
+            if(gc.getInput().isKeyDown(KeyEvent.VK_5)) {
+                if(gc.getInput().isKey(KeyEvent.VK_ALT)) tmp += '[';
+                else tmp += '(';
+            }
+            if(gc.getInput().isKeyDown(522)) {
+                if(gc.getInput().isKey(KeyEvent.VK_ALT)) tmp += ']';
+                else tmp += ')';
+            }
+            if(gc.getInput().isKeyDown(KeyEvent.VK_2)) tmp += 'é';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_4)) tmp += '\'';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_6)) tmp += '-';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_7)) tmp += 'è';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_8)) tmp += '_';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_9)) tmp += 'ç';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_COMMA)) tmp += ',';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_EQUALS)) tmp += '=';
+            if(gc.getInput().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp += ';';
         }
-
+        //Chiffres (NUMPAD)
         for(int k = KeyEvent.VK_NUMPAD0, i = 0; k <= KeyEvent.VK_NUMPAD9; k++, i++) {
-            if(gc.getInput().isKeyDown(k)) Rename.input += (char) ('0' + i);
+            if(gc.getInput().isKeyDown(k)) tmp += (char) ('0' + i);
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) Rename.input += ' ';
-        if(gc.getInput().isKeyDown(KeyEvent.VK_BACK_SPACE) && Rename.input.length() != 0)
-            Rename.input = Rename.input.substring(0, Rename.input.length() - 1);
+        if(gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) tmp += ' ';
+        if(gc.getInput().isKeyDown(KeyEvent.VK_BACK_SPACE) && Rename.blink != 0) {
+            Rename.input = Rename.input.substring(0, Rename.blink - 1) + Rename.input.substring(Rename.blink);
+            Rename.blink--;
+        }
+        if(gc.getInput().isKeyDown(KeyEvent.VK_DELETE) && Rename.blink < Rename.input.length())
+            Rename.input = Rename.input.substring(0, Rename.blink) + Rename.input.substring(Rename.blink + 1);
+
+        if(Rename.blink == 0) Rename.input = tmp + Rename.input;
+        else if(Rename.blink == Rename.input.length()) Rename.input += tmp;
+        else Rename.input = Rename.input.substring(0, Rename.blink) + tmp + Rename.input.substring(Rename.blink);
+        Rename.blink += tmp.length();
     }
 }

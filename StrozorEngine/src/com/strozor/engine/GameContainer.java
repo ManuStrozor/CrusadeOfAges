@@ -173,7 +173,7 @@ public class GameContainer implements Runnable {
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
-                    gameRender.drawText(title + " 2.0/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    gameRender.drawText(title + " 2.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 

@@ -17,17 +17,18 @@ import java.nio.file.Paths;
 
 public class Rename extends View {
 
-    public static String input;
-    public static String path;
+    public static String input, path;
+    public static int blink;
 
     private Settings s;
     private SoundClip select;
     private Button cancel, rename;
 
+    private boolean once = false;
+
     public Rename(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
-
         buttons.add(cancel = new Button(80, 20, "Cancel", 8));
         buttons.add(rename = new Button(80, 20, "Rename", 8));
     }
@@ -35,9 +36,15 @@ public class Rename extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
+        if(!once) {
+            blink = input.length();
+            once = true;
+        }
+
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
             gc.setLastState(9);
             gc.setState(8);
+            once = false;
         }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
@@ -49,7 +56,18 @@ public class Rename extends View {
             }
             gc.setLastState(9);
             gc.setState(8);
+            once = false;
         }
+
+        //Blinking bar control
+        if(gc.getInput().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
+            blink--;
+        if(gc.getInput().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
+            blink++;
+        if(gc.getInput().isKeyDown(KeyEvent.VK_END))
+            blink = input.length();
+        if(gc.getInput().isKeyDown(KeyEvent.VK_HOME))
+            blink = 0;
 
         //Input control
         inputCtrl(gc);
@@ -69,6 +87,7 @@ public class Rename extends View {
                 select.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(9);
+                once = false;
             }
         }
     }
@@ -82,7 +101,7 @@ public class Rename extends View {
         int y = gc.getHeight()/3-GameManager.TS;
 
         r.fillAreaBloc(x, y, 6, 2, new Bloc(0));
-        r.drawInput(x+6, y+9, GameManager.TS*6-12, GameManager.TS-12, 0xff333333, input);
+        r.drawInput(x+6, y+9, GameManager.TS*6-12, GameManager.TS-12, 0xff333333);
 
         cancel.setOffX(gc.getWidth()/2-cancel.getWidth()-5);
         cancel.setOffY(gc.getHeight()/3+5);
