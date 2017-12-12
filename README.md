@@ -23,4 +23,4 @@ Toutes les versions : <https://turbet.nalo-corp.net/squaremonster/versions/>
 * `14.11.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.4.jar>
 * `13.11.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.3.jar>
 * `12.11.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.2.jar>
-* `11.11.2017` ![1.1] <https://turbet.nalo-corp.net/squaremonster/versions/beta1.1.jar>
+* `11.11.2017` <https://turbet.nalo-corp.net/squaremonster/versions/beta1.1.jar>
