@@ -28,52 +28,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CreativeMode.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java">
+      <file leaf-file-name="GameContainer.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="354">
-              <caret line="63" column="52" lean-forward="true" selection-start-line="63" selection-start-column="52" selection-end-line="63" selection-end-column="52" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameRender.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameRender.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-497">
-              <caret line="460" column="126" lean-forward="false" selection-start-line="460" selection-start-column="126" selection-end-line="460" selection-end-column="126" />
-              <folding>
-                <element signature="method#clear#0;class#GameRender#0" expanded="false" />
-                <element signature="method#process#0;class#GameRender#0" expanded="false" />
-                <element signature="method#setPixel#0;class#GameRender#0" expanded="false" />
-                <element signature="method#setLightMap#0;class#GameRender#0" expanded="false" />
-                <element signature="method#darken#0;class#GameRender#0" expanded="false" />
-                <element signature="method#lighten#0;class#GameRender#0" expanded="false" />
-                <element signature="method#textSize#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawText#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawImage#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawImageTile#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawRect#0;class#GameRender#0" expanded="false" />
-                <element signature="method#fillRect#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawLight#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawLightLine#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawButton#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawInput#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawGameStates#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawMap#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawMapLights#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawDock#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawMiniMap#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawArrows#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawBackground#0;class#GameRender#0" expanded="false" />
-                <element signature="method#fillAreaBloc#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawMenuTitle#0;class#GameRender#0" expanded="false" />
-                <element signature="method#drawList#0;class#GameRender#0" expanded="false" />
-                <element signature="method#setCoorCam#0;class#GameRender#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="374">
+              <caret line="175" column="54" lean-forward="false" selection-start-line="175" selection-start-column="54" selection-end-line="175" selection-end-column="54" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -158,12 +118,12 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Input.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/View.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/Rename.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/InputDialog.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Event.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
       </list>
     </option>
   </component>
@@ -174,7 +134,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1057" />
@@ -443,7 +403,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -722,14 +682,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="175" column="53" lean-forward="false" selection-start-line="175" selection-start-column="53" selection-end-line="175" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/view/InputDialog.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="443">
@@ -765,6 +717,16 @@
             <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
             <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
             <element signature="method#readOptions#0;class#GameManager#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="354">
+          <caret line="63" column="52" lean-forward="true" selection-start-line="63" selection-start-column="52" selection-end-line="63" selection-end-column="52" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -805,13 +767,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java">
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="354">
-          <caret line="63" column="52" lean-forward="true" selection-start-line="63" selection-start-column="52" selection-end-line="63" selection-end-column="52" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="374">
+          <caret line="175" column="54" lean-forward="false" selection-start-line="175" selection-start-column="54" selection-end-line="175" selection-end-column="54" />
+          <folding />
         </state>
       </provider>
     </entry>
