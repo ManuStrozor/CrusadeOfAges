@@ -24,13 +24,14 @@ import java.util.Date;
 public class CreativeMode extends View {
 
     public static boolean focus, once;
-    public static int fIndex, scroll;
+    public static int fIndex, scroll, sMax;
 
     static {
         once = false;
         focus = false;
         fIndex = 0;
         scroll = 0;
+        sMax = 0;
     }
 
     private Settings s;
@@ -38,7 +39,6 @@ public class CreativeMode extends View {
     private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File dossier;
-    private int scrollMax = 0;
 
     private ArrayList<Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
@@ -71,19 +71,20 @@ public class CreativeMode extends View {
             paths.clear();
             dates.clear();
 
-            int hUsed = 10;
-            int j = 0;
+            sMax = 10-(gc.getHeight()-3*GameManager.TS);
+            int count = 0;
             for(File file : files) {
                 if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
                     images.add(new Image(creativeFolder + "\\" + file.getName(), true));
                     names.add(file.getName());
                     paths.add(file.getPath());
                     dates.add(new Date(file.lastModified()));
-                    hUsed += images.get(j).getH() < 30 ? 30+10 : images.get(j).getH()+10;
-                    j++;
+                    sMax += 10+(images.get(count).getH() < 30 ? 30 : images.get(count).getH());
+                    count++;
                 }
             }
-            scrollMax = hUsed-(gc.getHeight()-3*GameManager.TS);
+            if(count == 0) focus = false;
+            if(sMax < 0) sMax = 0;
             once = true;
         }
 
@@ -94,14 +95,12 @@ public class CreativeMode extends View {
             once = false;
         }
         //Scroll control
-        if(scrollMax > 0) {
-            if(gc.getInput().getScroll() < 0) {
-                scroll -= 20;
-                if(scroll < 0) scroll = 0;
-            } else if(gc.getInput().getScroll() > 0) {
-                scroll += 20;
-                if(scroll > scrollMax) scroll = scrollMax;
-            }
+        if(gc.getInput().getScroll() < 0) {
+            scroll -= 20;
+            if(scroll < 0) scroll = 0;
+        } else if(gc.getInput().getScroll() > 0) {
+            scroll += 20;
+            if(scroll > sMax) scroll = sMax;
         }
         //Hover control
         for(int i = 0; i < images.size(); i++) {
@@ -116,15 +115,11 @@ public class CreativeMode extends View {
             if(!focus && (btn == edit || btn == rename || btn == delete)) {
                 btn.setBgColor(0xffdedede);
             } else if(isSelected(gc, btn)) {
-                if(btn == back) {
-                    focus = false;
-                    once = false;
-                }
+                if(btn == back) focus = false;
                 if(btn == create) {
                     EditBoard.once = false;
                     if(!EditBoard.newOne) EditBoard.newOne = true;
                     EditBoard.rename = "";
-                    once = false;
                 }
                 if(btn == edit) {
                     EditBoard.once = false;
@@ -132,13 +127,11 @@ public class CreativeMode extends View {
                     EditBoard.rename = names.get(fIndex);
                     EditBoard.creaImg = null;
                     EditBoard.creaImg = images.get(fIndex);
-                    once = false;
                 }
                 if(btn == rename) {
                     InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
                     InputDialog.path = paths.get(fIndex);
                     focus = false;
-                    once = false;
                 }
                 if(btn == delete) {
                     try {
@@ -146,8 +139,9 @@ public class CreativeMode extends View {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    focus = false;
-                    once = false;
+                    int high = images.get(fIndex).getH()+10;
+                    if(scroll >= high) scroll -= high;
+                    if(fIndex == images.size()-1 && fIndex != 0) fIndex--;
                 }
                 if(btn == folder) {
                     try {
@@ -159,6 +153,7 @@ public class CreativeMode extends View {
                 select.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(8);
+                once = false;
             }
         }
     }
@@ -169,7 +164,7 @@ public class CreativeMode extends View {
         r.drawBackground(gc, new Bloc(0));
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
-        if(scrollMax <= 0) scroll = 0;
+        if(sMax <= 0) scroll = 0;
         r.drawListOfFiles(gc, images, names, dates, s.translate("Create your first map !"));
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS, 1, new Bloc(0));
