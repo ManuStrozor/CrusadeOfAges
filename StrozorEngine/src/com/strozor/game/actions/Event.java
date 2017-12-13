@@ -13,9 +13,11 @@ public class Event {
 
     private Player pl;
     private SoundClip impaled = new SoundClip("/audio/impaled.wav");
+    private SoundClip leverActioned = new SoundClip("/audio/lever.wav");
 
     public Event(Player player) {
         pl = player;
+        leverActioned.setVolume(-10f);
     }
 
     public void impale(GameMap map) {
@@ -52,6 +54,7 @@ public class Event {
             Bloc lever = map.getBloc(pl.getTileX(), pl.getTileY());
             if(lever.getTileX() == 1) lever.setTileX(2);
             else lever.setTileX(1);
+            leverActioned.play();
             return true;
         } else {
             return false;
