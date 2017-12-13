@@ -13,6 +13,7 @@ public class GameContainer implements Runnable {
     private GameManager gm;
     private Input input;
     private Settings s;
+    private Data data;
     private View
             mainMenu,
             options,
@@ -24,8 +25,6 @@ public class GameContainer implements Runnable {
             inputDialog,
             stats;
     private AbstractGame game, edit;
-
-
 
     private boolean running = false;
     private int width, height;
@@ -50,9 +49,10 @@ public class GameContainer implements Runnable {
     private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings, Stats stats) {
+    public GameContainer(AbstractGame game, Settings settings, Data data) {
         this.game = game;
         this.s = settings;
+        this.data = data;
 
         this.mainMenu = new MainMenu(s);
         this.options = new Options(s);
@@ -62,7 +62,7 @@ public class GameContainer implements Runnable {
         this.credits = new Credits(s);
         this.creativeMode = new CreativeMode(s);
         this.inputDialog = new InputDialog(s);
-        this.stats = stats;
+        this.stats = new Stats(s);
 
         this.edit = new Edit(60, 30);
         this.gm = (GameManager) game;
@@ -242,6 +242,10 @@ public class GameContainer implements Runnable {
 
     public Settings getSettings() {
         return s;
+    }
+
+    public Data getData() {
+        return data;
     }
 
     public int getLastState() {

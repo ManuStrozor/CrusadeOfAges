@@ -6,10 +6,7 @@ import com.strozor.view.Stats;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,22 +23,33 @@ public class GameManager extends AbstractGame {
     public static final int TS = 32;
     public static final String APPDATA = System.getenv("APPDATA") + "\\.squaremonster";
 
+    public static String[] dataStates = {
+            "Door opened",
+            "Game over",
+            "Death",
+            "Slime",
+            "Jump",
+            "Check point",
+            "Coin",
+            "Pill",
+            "Key"
+    };
+
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
-    private Stats stats;
     private GameMap gameMap;
     private int currLevel = 0;
+
     private String[] levelList = {
             "/levels/0.png",
             "/levels/1.png"
     };
 
-    private GameManager(GameMap gameMap, Stats stats) {
+    private GameManager(GameMap gameMap) {
         this.gameMap = gameMap;
-        this.stats = stats;
         load(levelList[currLevel]);
-        objects.add(new Player("player", gameMap, stats, 1));
+        objects.add(new Player("player", gameMap, 1));
         camera = new Camera("player", gameMap);
     }
 
@@ -85,7 +93,7 @@ public class GameManager extends AbstractGame {
 
             load(levelList[currLevel]);
 
-            objects.add(new Player("player", gameMap, stats, 1));
+            objects.add(new Player("player", gameMap, 1));
 
             camera = null;
             camera = new Camera("player", gameMap);
@@ -165,25 +173,21 @@ public class GameManager extends AbstractGame {
                 e.printStackTrace();
             }
         }
-        //stats.txt
-        File smStatsFile = new File(APPDATA + "\\stats.txt");
+        //player.dat
+        File smStatsFile = new File(APPDATA + "\\player.dat");
         if(!smStatsFile.exists()) {
             try {
-                List<String> lines = Arrays.asList(
-                        "Door opened:0",
-                        "Game over:0",
-                        "Death:0",
-                        "Slime:0",
-                        "Jump:0",
-                        "Check point:0",
-                        "Coin:0",
-                        "Pill:0",
-                        "Key:0"
-                );
-                Path path = Paths.get(APPDATA + "\\stats.txt");
-                Files.write(path, lines, Charset.forName("UTF-8"));
-                smStatsFile.setReadOnly();
-            } catch(IOException e) {
+                Path path = Paths.get(APPDATA + "\\player.dat");
+                Files.createFile(path);
+
+                FileOutputStream fos = new FileOutputStream(APPDATA + "\\player.dat");
+                ObjectOutputStream oos = new ObjectOutputStream(fos);
+                for(int i = 0; i < dataStates.length; i++) {
+                    oos.writeUTF(dataStates[i]);
+                    oos.writeInt(0);
+                }
+                oos.close();
+            } catch(Exception e) {
                 e.printStackTrace();
             }
         }
@@ -217,8 +221,7 @@ public class GameManager extends AbstractGame {
         Settings settings = new Settings();
         writeAppData();
         readOptions(settings);
-        Stats stats = new Stats(settings);
-        GameContainer gc = new GameContainer(new GameManager(new GameMap(), stats), settings, stats);
+        GameContainer gc = new GameContainer(new GameManager(new GameMap()), settings, new Data());
         gc.setTitle("Square Monster");
         gc.setScale(settings.getScale());
         gc.start();

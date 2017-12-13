@@ -8,20 +8,10 @@ import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Font;
-import com.strozor.game.GameManager;
 
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Stats extends View {
-
-    private Map<String, Integer> statsMap = new HashMap<>();
-    private String[] statsName = new String[9];
-    private int[] statsCount = new int[9];
 
     private Settings s;
     private SoundClip select;
@@ -31,8 +21,6 @@ public class Stats extends View {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         buttons.add(back = new Button(60, 20, "Back", 0));
-
-        readStats();
     }
 
     @Override
@@ -57,41 +45,14 @@ public class Stats extends View {
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(gc, s.translate("Stats").toUpperCase(), "");
 
-        for(int i = 0; i < statsName.length; i++) {
-            r.drawText(statsName[i], gc.getWidth()/2, gc.getHeight()/4+i*15, -1, 1, -1, Font.STANDARD);
-            r.drawText(" = "+statsCount[i], gc.getWidth()/2, gc.getHeight()/4+i*15, 1, 1, -1, Font.STANDARD);
+        for(int i = 0; i < gc.getData().getStates().length; i++) {
+            r.drawText(gc.getData().getStates()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, -1, 1, -1, Font.STANDARD);
+            r.drawText(" = " + gc.getData().getValues()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, 1, 1, -1, Font.STANDARD);
         }
 
         back.setOffX(5);
         back.setOffY(5);
 
         for(Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
-    }
-
-    private void readStats() {
-        try(BufferedReader br = new BufferedReader(new FileReader(GameManager.APPDATA + "\\stats.txt"))) {
-            String line = br.readLine();
-            int i = 0;
-            while (line != null) {
-                String[] sub = line.split(":");
-
-                statsMap.put(sub[0], i);
-                statsName[i] = sub[0];
-                statsCount[i] = Integer.valueOf(sub[1]);
-
-                line = br.readLine();
-                i++;
-            }
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void incStat(String key) {
-        this.statsCount[statsMap.get(key)]++;
-    }
-
-    public void decStat(String key) {
-        this.statsCount[statsMap.get(key)]--;
     }
 }

@@ -16,7 +16,6 @@ public class Player extends GameObject {
     private Move move = new Move(this);
     private Collecting collect = new Collecting(this);
     private Event event = new Event(this);
-    private Stats stats;
     private GameMap map;
     private ImageTile playerImage;
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
@@ -30,23 +29,6 @@ public class Player extends GameObject {
     private float fallDist = 0;
 
     Player(String tag, GameMap map, int lives) {
-        String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\player.png";
-        playerImage = new ImageTile(path, GameManager.TS, GameManager.TS, true);
-        this.map = map;
-        this.tag = tag;
-        this.lives = lives;
-        width = GameManager.TS;
-        height = GameManager.TS;
-        tileX = map.getSpawnX();
-        tileY = map.getSpawnY();
-        posX = tileX * GameManager.TS;
-        posY = tileY * GameManager.TS;
-        offX = 0;
-        offY = 0;
-    }
-
-    Player(String tag, GameMap map, Stats stats, int lives) {
-        this.stats = stats;
         String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\player.png";
         playerImage = new ImageTile(path, GameManager.TS, GameManager.TS, true);
         this.map = map;
@@ -200,30 +182,30 @@ public class Player extends GameObject {
         //Slime bloc
         if(bottom.getName().equals("Slime bloc") && fallDist == 0) {
             move.jump(map, 10);
-            stats.incStat("Slime");
+            gc.getData().upValueOf("Slime");
         }
 
         //Collectings & Events on current bloc
         switch(curr.getName()) {
             case "Coin":
                 collect.coin(curr);
-                stats.incStat("Coin");
+                gc.getData().upValueOf("Coin");
                 break;
             case "Health pill":
                 collect.pill(curr);
-                stats.incStat("Pill");
+                gc.getData().upValueOf("Pill");
                 break;
             case "Key":
                 collect.key(curr);
-                stats.incStat("Key");
+                gc.getData().upValueOf("Key");
                 break;
             case "Check point":
                 event.savePosition(map);
-                stats.incStat("Check point");
+                gc.getData().upValueOf("Check point");
                 break;
             case "Door":
                 if(event.switchLevel(gc, gm, map))
-                    stats.incStat("Door opened");
+                    gc.getData().upValueOf("Door opened");
                 break;
         }
 
@@ -231,10 +213,10 @@ public class Player extends GameObject {
         if(curr.getName().contains("spikes")) {
 
             event.impale(map);
-            stats.incStat("Death");
+            gc.getData().upValueOf("Death");
             if(this.lives == 0) {
                 this.setDead(true);
-                stats.incStat("Game over");
+                gc.getData().upValueOf("Game over");
                 gc.setState(7);
                 gc.setLastState(1);
             } else {
@@ -271,7 +253,7 @@ public class Player extends GameObject {
                 if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
                     if(ground <= 1) {
                         move.jump(map, 5);
-                        stats.incStat("Jump");
+                        gc.getData().upValueOf("Jump");
                     }
                 }
 
