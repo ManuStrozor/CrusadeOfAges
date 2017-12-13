@@ -13,13 +13,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptsMenu extends View {
+public class Options extends View {
 
     private Settings s;
     private SoundClip select;
     private Button tglLang, tglFps, tglLights, back;
 
-    public OptsMenu(Settings settings) {
+    public Options(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         buttons.add(tglLang = new Button("lang", 0));

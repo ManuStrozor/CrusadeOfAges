@@ -19,7 +19,7 @@ public class Settings {
         en.put("lang", "English");
         en.put("beta version", "beta version");
         en.put("Single player", "Single player");
-        en.put("Creative Mode", "Creative Mode");
+        en.put("Creative mode", "Creative Mode");
         en.put("Game credits", "Game credits");
         en.put("Options", "Options");
         en.put("Quit game", "Quit game");
@@ -31,7 +31,6 @@ public class Settings {
         en.put("Back to game", "Back to game");
         en.put("Quit to title", "Quit to title");
         en.put("Try again", "Try again");
-        en.put("Keep on", "Keep on");
         en.put("Save", "Save");
         en.put("Development team", "Development team");
         en.put("MAIN DEVELOPERS", "MAIN DEVELOPERS");
@@ -53,17 +52,19 @@ public class Settings {
         en.put("You are dead", "You are dead");
         en.put("Edit", "Edit");
         en.put("Select a map", "Select a map");
-        en.put("InputDialog", "InputDialog");
+        en.put("Rename", "Rename");
         en.put("Delete", "Delete");
         en.put("Create", "Create");
         en.put("Folder", "Folder");
         en.put("Cancel", "Cancel");
         en.put("Create your first map !", "Create your first map !");
+        en.put("Stats", "Statistics");
+        en.put("Paused", "Paused");
         lang.add(en);
         fr.put("lang", "Français");
         fr.put("beta version", "version beta");
         fr.put("Single player", "Joueur solo");
-        fr.put("Creative Mode", "Mode créatif");
+        fr.put("Creative mode", "Mode créatif");
         fr.put("Game credits", "Credits");
         fr.put("Options", "Options");
         fr.put("Quit game", "Quitter");
@@ -75,7 +76,6 @@ public class Settings {
         fr.put("Back to game", "Retour au jeu");
         fr.put("Quit to title", "Menu principal");
         fr.put("Try again", "Recommencer");
-        fr.put("Keep on", "Continuer");
         fr.put("Save", "Sauvegarder");
         fr.put("Development team", "Equipe de développement");
         fr.put("MAIN DEVELOPERS", "PRINCIPAUX DEVELOPPEURS");
@@ -97,12 +97,14 @@ public class Settings {
         fr.put("You are dead", "Vous êtes mort(e)");
         fr.put("Edit", "Modifier");
         fr.put("Select a map", "Selectionnez une mappe");
-        fr.put("InputDialog", "Renommer");
+        fr.put("Rename", "Renommer");
         fr.put("Delete", "Supprimer");
         fr.put("Create", "Créer");
         fr.put("Folder", "Dossier");
         fr.put("Cancel", "Annuler");
         fr.put("Create your first map !", "Créez votre première mappe !");
+        fr.put("Stats", "Statistiques");
+        fr.put("Paused", "Pause");
         lang.add(fr);
     }
 

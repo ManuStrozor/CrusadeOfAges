@@ -40,7 +40,7 @@ public class Event {
         }
     }
 
-    public void switchLevel(GameContainer gc, GameManager gm, GameMap map) {
+    public boolean switchLevel(GameContainer gc, GameManager gm, GameMap map) {
         if(pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             pl.setKeys(pl.getKeys() - 1);
             if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
@@ -51,6 +51,9 @@ public class Event {
                 gm.setCurrLevel(0);
             }
             pl.respawn(map.getSpawnX(), map.getSpawnY());
+            return true;
+        } else {
+            return false;
         }
     }
 }

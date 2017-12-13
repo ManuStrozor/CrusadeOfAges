@@ -2,7 +2,7 @@ package com.strozor.engine;
 
 import com.strozor.engine.gfx.Font;
 import com.strozor.game.GameManager;
-import com.strozor.game.EditBoard;
+import com.strozor.game.Edit;
 import com.strozor.view.*;
 
 public class GameContainer implements Runnable {
@@ -15,14 +15,15 @@ public class GameContainer implements Runnable {
     private Settings s;
     private View
             mainMenu,
-            optsMenu,
-            gameMenu,
-            creaMenu,
-            overMenu,
+            options,
+            pausedGame,
+            pausedEdit,
+            gameOver,
             credits,
-            editList,
-            rename;
-    private AbstractGame game, crea;
+            creativeMode,
+            inputDialog,
+            stats;
+    private AbstractGame game, edit;
 
 
 
@@ -35,33 +36,35 @@ public class GameContainer implements Runnable {
         MAINMENU,
         OPTSMENU,
         GAME,
-        GAMEMENU,
-        OVERMENU,
-        CREA,
-        CREAMENU,
-        EDITLIST,
-        RENAME,
+        PAUSEDGAME,
+        GAMEOVER,
+        EDIT,
+        PAUSEDEDIT,
+        CREATIVEMODE,
+        INPUTDIALOG,
         CREDITS,
+        STATS,
         EXIT
     }
 
     private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings) {
+    public GameContainer(AbstractGame game, Settings settings, Stats stats) {
         this.game = game;
         this.s = settings;
 
         this.mainMenu = new MainMenu(s);
-        this.optsMenu = new OptsMenu(s);
-        this.gameMenu = new GameMenu(s);
-        this.overMenu = new OverMenu(s);
-        this.creaMenu = new EditMenu(s);
+        this.options = new Options(s);
+        this.pausedGame = new PausedGame(s);
+        this.gameOver = new GameOver(s);
+        this.pausedEdit = new PausedEdit(s);
         this.credits = new Credits(s);
-        this.editList = new CreativeMode(s);
-        this.rename = new InputDialog(s);
+        this.creativeMode = new CreativeMode(s);
+        this.inputDialog = new InputDialog(s);
+        this.stats = stats;
 
-        this.crea = new EditBoard(60, 30);
+        this.edit = new Edit(60, 30);
         this.gm = (GameManager) game;
     }
 
@@ -112,21 +115,23 @@ public class GameContainer implements Runnable {
                 } else if(State == STATE.CREDITS) {
                     credits.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.OPTSMENU) {
-                    optsMenu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.GAMEMENU) {
-                    gameMenu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.CREAMENU) {
-                    creaMenu.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.OVERMENU) {
-                    overMenu.update(this, (float)UPDATE_CAP);
+                    options.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.PAUSEDGAME) {
+                    pausedGame.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.PAUSEDEDIT) {
+                    pausedEdit.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.GAMEOVER) {
+                    gameOver.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.GAME) {
                     game.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.CREA) {
-                    crea.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.EDITLIST) {
-                    editList.update(this, (float)UPDATE_CAP);
-                } else if(State == STATE.RENAME) {
-                    rename.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.EDIT) {
+                    edit.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.CREATIVEMODE) {
+                    creativeMode.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.INPUTDIALOG) {
+                    inputDialog.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.STATS) {
+                    stats.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -141,14 +146,14 @@ public class GameContainer implements Runnable {
             if(render) {
                 gameRender.clear();
 
-                if(State == STATE.GAME || State == STATE.GAMEMENU || State == STATE.OVERMENU || (State == STATE.OPTSMENU && lastState == 2)) {
+                if(State == STATE.GAME || State == STATE.PAUSEDGAME || State == STATE.GAMEOVER || (State == STATE.STATS && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
                     if(s.isShowLights()) gameRender.process();
                     if(gm.getObject("player") != null)
                         gameRender.drawGameStates(this, gm.getObject("player"));
-                } else if(State == STATE.CREA || State == STATE.CREAMENU) {
-                    crea.render(this, gameRender);
+                } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
+                    edit.render(this, gameRender);
                 }
 
                 if(State == STATE.MAINMENU) {
@@ -157,19 +162,21 @@ public class GameContainer implements Runnable {
                 } else if(State == STATE.CREDITS) {
                     credits.render(this, gameRender);
                 } else if(State == STATE.OPTSMENU) {
-                    optsMenu.render(this, gameRender);
-                } else if(State == STATE.GAMEMENU) {
-                    gameMenu.render(this, gameRender);
-                } else if(State == STATE.CREAMENU) {
-                    creaMenu.render(this, gameRender);
-                } else if(State == STATE.OVERMENU) {
-                    overMenu.render(this, gameRender);
-                } else if(State == STATE.EDITLIST) {
-                    editList.render(this, gameRender);
+                    options.render(this, gameRender);
+                } else if(State == STATE.PAUSEDGAME) {
+                    pausedGame.render(this, gameRender);
+                } else if(State == STATE.PAUSEDEDIT) {
+                    pausedEdit.render(this, gameRender);
+                } else if(State == STATE.GAMEOVER) {
+                    gameOver.render(this, gameRender);
+                } else if(State == STATE.CREATIVEMODE) {
+                    creativeMode.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
-                } else if(State == STATE.RENAME) {
-                    editList.render(this, gameRender);
-                    rename.render(this, gameRender);
+                } else if(State == STATE.INPUTDIALOG) {
+                    creativeMode.render(this, gameRender);
+                    inputDialog.render(this, gameRender);
+                } else if(State == STATE.STATS) {
+                    stats.render(this, gameRender);
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
@@ -254,14 +261,15 @@ public class GameContainer implements Runnable {
             case -1: State = STATE.EXIT; break;
             case 0: State = STATE.MAINMENU; break;
             case 1: State = STATE.GAME; break;
-            case 2: State = STATE.GAMEMENU; break;
+            case 2: State = STATE.PAUSEDGAME; break;
             case 3: State = STATE.OPTSMENU; break;
-            case 4: State = STATE.CREA; break;
-            case 5: State = STATE.CREAMENU; break;
+            case 4: State = STATE.EDIT; break;
+            case 5: State = STATE.PAUSEDEDIT; break;
             case 6: State = STATE.CREDITS; break;
-            case 7: State = STATE.OVERMENU; break;
-            case 8: State = STATE.EDITLIST; break;
-            case 9: State = STATE.RENAME; break;
+            case 7: State = STATE.GAMEOVER; break;
+            case 8: State = STATE.CREATIVEMODE; break;
+            case 9: State = STATE.INPUTDIALOG; break;
+            case 10: State = STATE.STATS; break;
         }
         currState = value;
     }

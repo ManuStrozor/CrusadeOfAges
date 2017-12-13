@@ -2,6 +2,7 @@ package com.strozor.game;
 
 import com.strozor.engine.*;
 import com.strozor.engine.gfx.*;
+import com.strozor.view.Stats;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
@@ -28,7 +29,7 @@ public class GameManager extends AbstractGame {
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
-
+    private Stats stats;
     private GameMap gameMap;
     private int currLevel = 0;
     private String[] levelList = {
@@ -36,10 +37,11 @@ public class GameManager extends AbstractGame {
             "/levels/1.png"
     };
 
-    private GameManager(GameMap gameMap) {
+    private GameManager(GameMap gameMap, Stats stats) {
         this.gameMap = gameMap;
+        this.stats = stats;
         load(levelList[currLevel]);
-        objects.add(new Player("player", gameMap, 1));
+        objects.add(new Player("player", gameMap, stats, 1));
         camera = new Camera("player", gameMap);
     }
 
@@ -83,7 +85,7 @@ public class GameManager extends AbstractGame {
 
             load(levelList[currLevel]);
 
-            objects.add(new Player("player", gameMap, 1));
+            objects.add(new Player("player", gameMap, stats, 1));
 
             camera = null;
             camera = new Camera("player", gameMap);
@@ -127,11 +129,9 @@ public class GameManager extends AbstractGame {
         //.squaremonster
         File smFolder = new File(APPDATA);
         if(!smFolder.exists()) smFolder.mkdir();
-
         //assets
         File smAssets = new File(APPDATA + "\\assets");
         if(!smAssets.exists()) smAssets.mkdir();
-
         //objects.png (assets)
         try {
             File outObjs = new File(APPDATA + "\\assets\\objects.png");
@@ -143,15 +143,12 @@ public class GameManager extends AbstractGame {
         } catch(IOException e) {
             e.printStackTrace();
         }
-
         //screenshots
         File smScreenshots = new File(APPDATA + "\\screenshots");
         if(!smScreenshots.exists()) smScreenshots.mkdir();
-
         //creative_mode
         File smCrea = new File(APPDATA + "\\creative_mode");
         if(!smCrea.exists()) smCrea.mkdir();
-
         //options.txt
         File smOptFile = new File(APPDATA + "\\options.txt");
         if(!smOptFile.exists()) {
@@ -162,8 +159,30 @@ public class GameManager extends AbstractGame {
                         "showFPS:false",
                         "showLights:true"
                 );
-                Path file = Paths.get(APPDATA + "\\options.txt");
-                Files.write(file, lines, Charset.forName("UTF-8"));
+                Path path = Paths.get(APPDATA + "\\options.txt");
+                Files.write(path, lines, Charset.forName("UTF-8"));
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //stats.txt
+        File smStatsFile = new File(APPDATA + "\\stats.txt");
+        if(!smStatsFile.exists()) {
+            try {
+                List<String> lines = Arrays.asList(
+                        "Door opened:0",
+                        "Game over:0",
+                        "Death:0",
+                        "Slime:0",
+                        "Jump:0",
+                        "Check point:0",
+                        "Coin:0",
+                        "Pill:0",
+                        "Key:0"
+                );
+                Path path = Paths.get(APPDATA + "\\stats.txt");
+                Files.write(path, lines, Charset.forName("UTF-8"));
+                smStatsFile.setReadOnly();
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -198,7 +217,8 @@ public class GameManager extends AbstractGame {
         Settings settings = new Settings();
         writeAppData();
         readOptions(settings);
-        GameContainer gc = new GameContainer(new GameManager(new GameMap()), settings);
+        Stats stats = new Stats(settings);
+        GameContainer gc = new GameContainer(new GameManager(new GameMap(), stats), settings, stats);
         gc.setTitle("Square Monster");
         gc.setScale(settings.getScale());
         gc.start();

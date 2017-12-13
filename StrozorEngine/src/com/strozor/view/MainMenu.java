@@ -7,6 +7,7 @@ import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
+import com.strozor.game.GameManager;
 
 
 public class MainMenu extends View {
@@ -18,7 +19,8 @@ public class MainMenu extends View {
         s = settings;
         select = new SoundClip("/audio/select.wav");
         buttons.add(new Button("Single player", 1));
-        buttons.add(new Button("Creative Mode", 8));
+        buttons.add(new Button("Stats", 10));
+        buttons.add(new Button("Creative mode", 8));
         buttons.add(new Button("Game credits", 6));
         buttons.add(new Button(80, 20, "Options", 3));
         buttons.add(new Button(80, 20, "Quit game", -1));
@@ -46,7 +48,7 @@ public class MainMenu extends View {
         int startY = gc.getHeight()/4;
 
         for(Button btn : buttons) {
-            if(btn.getText().contains("credits")) startY += 5;
+            if(btn.getText().contains("Creative") || btn.getText().contains("credits")) startY += 10;
             btn.setOffX(gc.getWidth()/2-85);
             if(btn.getText().contains("Quit")) btn.setOffX(gc.getWidth()/2+5);
             btn.setOffY(startY);

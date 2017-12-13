@@ -7,32 +7,37 @@ import com.strozor.engine.View;
 import com.strozor.engine.audio.SoundClip;
 import com.strozor.engine.gfx.Button;
 
-import java.awt.event.KeyEvent;
-
-public class GameMenu extends View {
+public class GameOver extends View {
 
     private Settings s;
-    private SoundClip select;
+    private SoundClip select, gameover;
 
-    public GameMenu(Settings settings) {
+    private boolean once = false;
+
+    public GameOver(Settings settings) {
         s = settings;
         select = new SoundClip("/audio/select.wav");
+        gameover = new SoundClip("/audio/gameover.wav");
+        buttons.add(new Button("Try again", 1));
         buttons.add(new Button("Quit to title", 0));
-        buttons.add(new Button("Options", 3));
-        buttons.add(new Button("Back to game", 1));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
+        if(gc.getLastState() == 1 && !once) {
+            gameover.play();
+            once = true;
+        }
 
         //Button selection
         for(Button btn : buttons) {
-            if (isSelected(gc, btn)) {
+            if(isSelected(gc, btn)) {
                 select.play();
+                gameover.stop();
+                once = false;
                 gc.setState(btn.getGoState());
-                gc.setLastState(2);
+                gc.setLastState(7);
             }
         }
     }
@@ -42,10 +47,11 @@ public class GameMenu extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
+        r.drawMenuTitle(gc, s.translate("GAME OVER"), s.translate("You are dead"));
+
         int startY = gc.getHeight()/4;
 
         for(Button btn : buttons) {
-            if(btn.getText().contains("Back")) startY += 5;
             btn.setOffX(gc.getWidth()/2-85);
             btn.setOffY(startY);
             startY += btn.getHeight() + 5;

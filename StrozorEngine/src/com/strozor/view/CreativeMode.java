@@ -9,7 +9,7 @@ import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Font;
 import com.strozor.engine.gfx.Image;
-import com.strozor.game.EditBoard;
+import com.strozor.game.Edit;
 import com.strozor.game.GameManager;
 
 import java.awt.*;
@@ -50,7 +50,7 @@ public class CreativeMode extends View {
         select = new SoundClip("/audio/select.wav");
 
         buttons.add(edit = new Button(170, 20, "Edit", 4));
-        buttons.add(rename = new Button(80, 20, "InputDialog", 9));
+        buttons.add(rename = new Button(80, 20, "Rename", 9));
         buttons.add(delete = new Button(80, 20, "Delete", 8));
         buttons.add(create = new Button(80, 20, "Create", 4));
         buttons.add(folder = new Button(80, 47, "Folder", 8));
@@ -117,16 +117,16 @@ public class CreativeMode extends View {
             } else if(isSelected(gc, btn)) {
                 if(btn == back) focus = false;
                 if(btn == create) {
-                    EditBoard.once = false;
-                    if(!EditBoard.newOne) EditBoard.newOne = true;
-                    EditBoard.rename = "";
+                    Edit.once = false;
+                    if(!Edit.newOne) Edit.newOne = true;
+                    Edit.rename = "";
                 }
                 if(btn == edit) {
-                    EditBoard.once = false;
-                    if(EditBoard.newOne) EditBoard.newOne = false;
-                    EditBoard.rename = names.get(fIndex);
-                    EditBoard.creaImg = null;
-                    EditBoard.creaImg = images.get(fIndex);
+                    Edit.once = false;
+                    if(Edit.newOne) Edit.newOne = false;
+                    Edit.rename = names.get(fIndex);
+                    Edit.creaImg = null;
+                    Edit.creaImg = images.get(fIndex);
                 }
                 if(btn == rename) {
                     InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);

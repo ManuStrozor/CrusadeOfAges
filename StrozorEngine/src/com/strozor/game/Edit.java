@@ -6,11 +6,12 @@ import com.strozor.engine.GameRender;
 import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Image;
 import com.strozor.engine.GameMap;
+import com.strozor.view.Stats;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class EditBoard extends AbstractGame {
+public class Edit extends AbstractGame {
 
     public static Image creaImg;
     public static boolean spawn = false, once = false, newOne = false;
@@ -24,7 +25,7 @@ public class EditBoard extends AbstractGame {
     private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
     private int color, scroll = 0;
 
-    public EditBoard(int width, int height) {
+    public Edit(int width, int height) {
         gameMap = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
         this.width = width;
