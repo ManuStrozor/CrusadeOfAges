@@ -13,11 +13,9 @@ public class Event {
 
     private Player pl;
     private SoundClip impaled = new SoundClip("/audio/impaled.wav");
-    private SoundClip checkPoint = new SoundClip("/audio/checkpoint.wav");
 
     public Event(Player player) {
         pl = player;
-        checkPoint.setVolume(-15f);
     }
 
     public void impale(GameMap map) {
@@ -32,14 +30,6 @@ public class Event {
         pl.setLives(pl.getLives() - 1);
     }
 
-    public void savePosition(GameMap map) {
-        if(pl.getTileX() != map.getSpawnX() && pl.getTileY() != map.getSpawnY()) {
-            map.setSpawnX(pl.getTileX());
-            map.setSpawnY(pl.getTileY());
-            checkPoint.play();
-        }
-    }
-
     public boolean switchLevel(GameContainer gc, GameManager gm, GameMap map) {
         if(pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             pl.setKeys(pl.getKeys() - 1);
@@ -51,6 +41,17 @@ public class Event {
                 gm.setCurrLevel(0);
             }
             pl.respawn(map.getSpawnX(), map.getSpawnY());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean actionLever(GameContainer gc, GameMap map) {
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+            Bloc lever = map.getBloc(pl.getTileX(), pl.getTileY());
+            if(lever.getTileX() == 1) lever.setTileX(2);
+            else lever.setTileX(1);
             return true;
         } else {
             return false;

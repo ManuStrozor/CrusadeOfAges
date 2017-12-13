@@ -22,7 +22,7 @@ public class Edit extends AbstractGame {
 
     private int width, height;
 
-    private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 11, 13};
+    private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 20, 21, 11, 13};
     private int color, scroll = 0;
 
     public Edit(int width, int height) {

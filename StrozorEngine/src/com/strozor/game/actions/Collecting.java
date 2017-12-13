@@ -28,6 +28,12 @@ public class Collecting {
         bonus.play();
     }
 
+    public void skull(Bloc bloc) {
+        bloc.remove();
+        pl.setSkulls(pl.getSkulls() + 1);
+        bonus.play();
+    }
+
     public void pill(Bloc bloc) {
         bloc.remove();
         pl.setLives(pl.getLives() + 1);

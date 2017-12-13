@@ -8,7 +8,7 @@ public abstract class GameObject {
     protected String tag;
     protected float posX, posY;
     protected int width, height;
-    protected int lives, coins, keys;
+    protected int lives, coins, keys, skulls;
     protected boolean dead = false;
 
     public abstract void update(GameContainer gc, GameManager gm, float dt);
@@ -65,5 +65,13 @@ public abstract class GameObject {
 
     public void setKeys(int keys) {
         this.keys = keys;
+    }
+
+    public int getSkulls() {
+        return skulls;
+    }
+
+    public void setSkulls(int skulls) {
+        this.skulls = skulls;
     }
 }

@@ -25,11 +25,12 @@ public class GameManager extends AbstractGame {
 
     public static String[] dataStates = {
             "Door opened",
+            "Lever actioned",
             "Game over",
             "Death",
             "Slime",
             "Jump",
-            "Check point",
+            "Skull",
             "Coin",
             "Pill",
             "Key"
@@ -43,7 +44,8 @@ public class GameManager extends AbstractGame {
 
     private String[] levelList = {
             "/levels/0.png",
-            "/levels/1.png"
+            "/levels/1.png",
+            "/levels/2.png"
     };
 
     private GameManager(GameMap gameMap) {

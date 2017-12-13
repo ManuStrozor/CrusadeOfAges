@@ -6,7 +6,6 @@ import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.GameMap;
 import com.strozor.game.actions.*;
-import com.strozor.view.Stats;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -66,8 +65,12 @@ public class Player extends GameObject {
             case "Coin": collect.coin(curr); break;
             case "Health pill": collect.pill(curr); break;
             case "Key": collect.key(curr); break;
-            case "Check point": event.savePosition(map); break;
+            case "Skull": collect.skull(curr); break;
         }
+
+        //Levers
+        if(curr.getName().contains("Lever") && event.actionLever(gc, map))
+            gc.getData().upValueOf("Lever actioned");
 
         //Hit spikes
         if(curr.getName().contains("spikes")) {
@@ -179,6 +182,12 @@ public class Player extends GameObject {
         Bloc curr = map.getBloc(tileX, tileY);
         Bloc bottom = map.getBloc(tileX, tileY+1);
 
+        //Last floor
+        if(!curr.getName().contains("spikes") && bottom.getName().equals("Floor") && fallDist == 0) {
+            lastFloorX = tileX;
+            lastFlorrY = tileY;
+        }
+
         //Slime bloc
         if(bottom.getName().equals("Slime bloc") && fallDist == 0) {
             move.jump(map, 10);
@@ -199,15 +208,19 @@ public class Player extends GameObject {
                 collect.key(curr);
                 gc.getData().upValueOf("Key");
                 break;
-            case "Check point":
-                event.savePosition(map);
-                gc.getData().upValueOf("Check point");
+            case "Skull":
+                collect.skull(curr);
+                gc.getData().upValueOf("Skull");
                 break;
             case "Door":
                 if(event.switchLevel(gc, gm, map))
                     gc.getData().upValueOf("Door opened");
                 break;
         }
+
+        //Levers
+        if(curr.getName().contains("Lever") && event.actionLever(gc, map))
+            gc.getData().upValueOf("Lever actioned");
 
         //Hit spikes
         if(curr.getName().contains("spikes")) {
@@ -220,7 +233,7 @@ public class Player extends GameObject {
                 gc.setState(7);
                 gc.setLastState(1);
             } else {
-                respawn(map.getSpawnX(), map.getSpawnY());
+                respawn(lastFloorX, lastFlorrY);
             }
 
         } else {
@@ -238,7 +251,7 @@ public class Player extends GameObject {
                 ground = 0;
 
                 if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
-                    if(!curr.getName().equals("Ladder")) move.jump(map, 3);
+                    if(!curr.getName().equals("Ladder")) move.jump(map, 4);
                     else move.upLadder(map, dt, speed);
                 }
 

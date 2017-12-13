@@ -28,14 +28,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
+      <file leaf-file-name="Edit.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Edit.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="207" column="58" lean-forward="true" selection-start-line="207" selection-start-column="58" selection-end-line="207" selection-end-column="58" />
-              <folding>
-                <element signature="method#creativeUpdate#0;class#Player#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="264">
+              <caret line="24" column="75" lean-forward="true" selection-start-line="24" selection-start-column="75" selection-end-line="24" selection-end-column="75" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -88,7 +86,6 @@
         <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Moves.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Picks.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Move.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Collecting.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Font.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Light.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Window.java" />
@@ -97,8 +94,6 @@
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/ImageTile.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/audio/SoundClip.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Crea.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Bloc.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/GameObject.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameMap.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Image.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/CreativeMode.java" />
@@ -117,14 +112,17 @@
         <option value="$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/MainMenu.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Settings.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/Edit.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Event.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/Stats.java" />
-        <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/PausedGame.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/engine/Data.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/view/GameOver.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/Edit.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Event.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/engine/gfx/Bloc.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/actions/Collecting.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/GameObject.java" />
+        <option value="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" />
         <option value="$PROJECT_DIR$/src/com/strozor/game/Player.java" />
       </list>
     </option>
@@ -136,7 +134,7 @@
       </MavenImportingSettings>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="953" />
     <option name="width" value="974" />
     <option name="height" value="1057" />
@@ -405,7 +403,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -496,13 +494,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/actions/Collecting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="18" column="33" lean-forward="true" selection-start-line="18" selection-start-column="33" selection-end-line="18" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/game/actions/Move.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="299">
@@ -545,13 +536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameObject.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" column="68" lean-forward="true" selection-start-line="14" selection-start-column="68" selection-end-line="14" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/GameMap.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="264">
@@ -573,17 +557,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/gfx/Bloc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="161" column="5" lean-forward="true" selection-start-line="161" selection-start-column="5" selection-end-line="161" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/gfx/Button.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="286">
           <caret line="13" column="18" lean-forward="false" selection-start-line="13" selection-start-column="18" selection-end-line="13" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -599,6 +577,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="902">
           <caret line="45" column="41" lean-forward="false" selection-start-line="45" selection-start-column="41" selection-end-line="45" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -690,26 +669,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Edit.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="47" column="54" lean-forward="true" selection-start-line="47" selection-start-column="54" selection-end-line="47" selection-end-column="54" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/view/CreativeMode.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="464">
           <caret line="68" column="27" lean-forward="true" selection-start-line="68" selection-start-column="27" selection-end-line="68" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/actions/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="623">
-          <caret line="49" column="46" lean-forward="true" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -734,32 +700,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="489">
-          <caret line="217" column="5" lean-forward="true" selection-start-line="217" selection-start-column="5" selection-end-line="217" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
-            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
-            <element signature="method#readOptions#0;class#GameManager#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/Data.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="616">
-          <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#readData#0;class#Data#0" expanded="false" />
-            <element signature="method#saveData#0;class#Data#0" expanded="false" />
-            <element signature="method#upValueOf#0;class#Data#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/view/PausedGame.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="484">
@@ -776,13 +716,89 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/actions/Event.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="17" column="20" lean-forward="false" selection-start-line="17" selection-start-column="20" selection-end-line="17" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#440#441#0" expanded="true" />
+            <element signature="e#467#468#0" expanded="true" />
+            <element signature="method#impale#0;class#Event#0" expanded="false" />
+            <element signature="method#switchLevel#0;class#Event#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameObject.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="548">
+          <caret line="75" column="5" lean-forward="true" selection-start-line="75" selection-start-column="5" selection-end-line="75" selection-end-column="5" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/actions/Collecting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="20" column="39" lean-forward="true" selection-start-line="20" selection-start-column="39" selection-end-line="20" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/Data.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#readData#0;class#Data#0" expanded="false" />
+            <element signature="method#saveData#0;class#Data#0" expanded="false" />
+            <element signature="method#upValueOf#0;class#Data#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/GameManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="32" column="20" lean-forward="true" selection-start-line="32" selection-start-column="20" selection-end-line="32" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#getObject#0;class#GameManager#0" expanded="false" />
+            <element signature="method#writeAppData#0;class#GameManager#0" expanded="false" />
+            <element signature="method#readOptions#0;class#GameManager#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/engine/gfx/Bloc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="175" column="5" lean-forward="true" selection-start-line="175" selection-start-column="5" selection-end-line="175" selection-end-column="5" />
+          <folding>
+            <element signature="method#Bloc#0;class#Bloc#0" expanded="false" />
+            <element signature="method#Bloc#1;class#Bloc#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="207" column="58" lean-forward="true" selection-start-line="207" selection-start-column="58" selection-end-line="207" selection-end-column="58" />
+        <state relative-caret-position="2464">
+          <caret line="235" column="48" lean-forward="true" selection-start-line="235" selection-start-column="48" selection-end-line="235" selection-end-column="48" />
           <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#creativeUpdate#0;class#Player#0" expanded="false" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/strozor/game/Edit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="264">
+          <caret line="24" column="75" lean-forward="true" selection-start-line="24" selection-start-column="75" selection-end-line="24" selection-end-column="75" />
+          <folding />
         </state>
       </provider>
     </entry>

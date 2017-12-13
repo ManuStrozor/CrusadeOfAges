@@ -60,7 +60,7 @@ public class Bloc {
                 solid = false;
                 break;
             case 0xffff7700:
-                name = "Check point";
+                name = "Skull";
                 id = 6;
                 tileX = 3;
                 tileY = 0;
@@ -157,6 +157,20 @@ public class Bloc {
                 tileY = 4;
                 solid = false;
                 break;
+            case 0xe1e1e1e1:
+                name = "Lever left";
+                id = 20;
+                tileX = 1;
+                tileY = 3;
+                solid = false;
+                break;
+            case 0xe2e2e2e2:
+                name = "Lever right";
+                id = 21;
+                tileX = 2;
+                tileY = 3;
+                solid = false;
+                break;
         }
         anim = 0;
     }
@@ -214,7 +228,7 @@ public class Bloc {
                 break;
             case 6:
                 code = 0xffff7700;
-                name = "Check point";
+                name = "Skull";
                 tileX = 3;
                 tileY = 0;
                 solid = false;
@@ -310,12 +324,22 @@ public class Bloc {
                 tileY = 4;
                 solid = false;
                 break;
+            case 20:
+                code = 0xe1e1e1e1;
+                name = "Lever left";
+                tileX = 1;
+                tileY = 3;
+                solid = false;
+                break;
+            case 21:
+                code = 0xe2e2e2e2;
+                name = "Lever right";
+                tileX = 2;
+                tileY = 3;
+                solid = false;
+                break;
         }
         this.id = id;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public boolean isSolid() {
@@ -332,6 +356,10 @@ public class Bloc {
 
     public int getTileY() {
         return tileY;
+    }
+
+    public void setTileX(int tileX) {
+        this.tileX = tileX;
     }
 
     public void setTileY(int tileY) {
