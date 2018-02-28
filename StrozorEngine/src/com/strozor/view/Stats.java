@@ -1,11 +1,7 @@
 package com.strozor.view;
 
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
-import com.strozor.engine.View;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Font;
 
@@ -14,11 +10,13 @@ import java.awt.event.KeyEvent;
 public class Stats extends View {
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
     private Button back;
 
-    public Stats(Settings settings) {
-        s = settings;
+    public Stats(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
         buttons.add(back = new Button(60, 20, "Back", 0));
     }
@@ -41,7 +39,7 @@ public class Stats extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        if(gc.getLastState() == 0) r.drawBackground(gc, new Bloc(0));
+        if(gc.getLastState() == 0) r.drawBackground(gc, map, "wall");
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(gc, s.translate("Stats").toUpperCase(), "");
 

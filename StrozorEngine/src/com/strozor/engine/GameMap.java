@@ -1,28 +1,107 @@
 package com.strozor.engine;
 
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Image;
+
+import java.util.*;
 
 public class GameMap {
 
-    private Bloc[] blocs;
+    private Map<Integer, String> colTag = new HashMap<>();
+    private Map<String, Integer> tagCol = new HashMap<>();
+    private Map<String, int[]> tagPos = new TreeMap<>();
+    private int[] map, solids = {0xff000000, 0xff777777};
     private int width, height, spawnX = -1, spawnY = -1;
 
-    public GameMap() {}
+    public GameMap() {
+        colTag.put(0xff000000, "floor");
+        colTag.put(0xff009900, "ladder");
+        colTag.put(0xff777777, "slime");
+        colTag.put(0x66000000, "under shadow");
+        colTag.put(0x69000000, "above shadow");
+        colTag.put(0, "wall");
+        colTag.put(0xffffff, "wall");
+        colTag.put(0xffff0000, "ground spikes");
+        colTag.put(0xff990000, "ground spikes blooded");
+        colTag.put(0xe1e1e1e1, "lever left");
+        colTag.put(0xff00ff00, "spawn");
+        colTag.put(0xffff00ff, "ceiling spikes");
+        colTag.put(0xff990099, "ceiling spikes blooded");
+        colTag.put(0xe2e2e2e2, "lever right");
+        colTag.put(0xffff7700, "skull");
+        colTag.put(0xff0000ff, "key");
+        colTag.put(0xffff648c, "pill");
+        colTag.put(0xff00ffff, "torch");
+        colTag.put(0xffffff00, "coin");
+        colTag.put(0xff999999, "door");
+        colTag.put(0x42000000, "arrow down");
+        colTag.put(0x42ff0000, "arrow left");
+        colTag.put(0x420000ff, "arrow right");
+        colTag.put(0x4200ff00, "arrow up");
+
+        tagCol.put("floor", 0xff000000);
+        tagCol.put("ladder", 0xff009900);
+        tagCol.put("slime", 0xff777777);
+        tagCol.put("under shadow", 0x66000000);
+        tagCol.put("above shadow", 0x69000000);
+        tagCol.put("wall", 0);
+        tagCol.put("ground spikes", 0xffff0000);
+        tagCol.put("ground spikes blooded", 0xff990000);
+        tagCol.put("lever left", 0xe1e1e1e1);
+        tagCol.put("spawn", 0xff00ff00);
+        tagCol.put("ceiling spikes", 0xffff00ff);
+        tagCol.put("ceiling spikes blooded", 0xff990099);
+        tagCol.put("lever right", 0xe2e2e2e2);
+        tagCol.put("skull", 0xffff7700);
+        tagCol.put("key", 0xff0000ff);
+        tagCol.put("pill", 0xffff648c);
+        tagCol.put("torch", 0xff00ffff);
+        tagCol.put("coin", 0xffffff00);
+        tagCol.put("door", 0xff999999);
+        tagCol.put("arrow down", 0x42000000);
+        tagCol.put("arrow left", 0x42ff0000);
+        tagCol.put("arrow right", 0x420000ff);
+        tagCol.put("arrow up", 0x4200ff00);
+
+        tagPos.put("floor", pos(0, 0));
+        tagPos.put("ladder", pos(0, 1));
+        tagPos.put("slime", pos(0, 2));
+        tagPos.put("under shadow", pos(0, 3));
+        tagPos.put("above shadow", pos(0, 4));
+        tagPos.put("wall", pos(1, 0));
+        tagPos.put("ground spikes", pos(1, 1));
+        tagPos.put("ground spikes blooded", pos(1, 2));
+        tagPos.put("lever left", pos(1, 3));
+        tagPos.put("spawn", pos(2, 0));
+        tagPos.put("ceiling spikes", pos(2, 1));
+        tagPos.put("ceiling spikes blooded", pos(2, 2));
+        tagPos.put("lever right", pos(2, 3));
+        tagPos.put("skull", pos(3, 0));
+        tagPos.put("key", pos(3, 1));
+        tagPos.put("pill", pos(3, 2));
+        tagPos.put("torch", pos(4, 0));
+        tagPos.put("coin", pos(5, 0));
+        tagPos.put("door", pos(5, 2));
+        tagPos.put("arrow down", pos(6, 0));
+        tagPos.put("arrow left", pos(6, 1));
+        tagPos.put("arrow right", pos(6, 2));
+        tagPos.put("arrow up", pos(6, 3));
+    }
+
+    private int[] pos(int x, int y) {
+        return new int[]{x, y};
+    }
 
     public void init(Image img) {
         this.width = img.getW();
         this.height = img.getH();
         int[] p = img.getP();
-
-        blocs = new Bloc[width * height];
-
+        map = new int[width * height];
         for(int i = 0; i < width * height; i++) {
             if(p[i] == 0xff00ff00) {
                 spawnY = i / width;
                 spawnX = i - spawnY * width;
             }
-            blocs[i] = new Bloc(p, i);
+            map[i] = p[i];
         }
     }
 
@@ -38,42 +117,42 @@ public class GameMap {
         return spawnX;
     }
 
-    public void setSpawnX(int spawnX) {
-        this.spawnX = spawnX;
-    }
-
     public int getSpawnY() {
         return spawnY;
     }
 
-    public void setSpawnY(int spawnY) {
-        this.spawnY = spawnY;
-    }
-
-    public Bloc getBloc(int x, int y) {
-        return (x < 0 || x >= width || y < 0 || y >= height) ? new Bloc(1) : blocs[x + y * width];
-    }
-
     public boolean isSolid(int x, int y) {
-        return x < 0 || x >= width || y < 0 || y >= height || blocs[x + y * width].isSolid();
+        if(x >= 0 && x < width && y >= 0 && y < height)
+            for(int s : solids)
+                if(s == map[x + y * width])
+                    return true;
+        return (x < 0 || x >= width || y < 0 || y >= height);
     }
 
-    public void animate(float speed) {
-        for(int i = 0; i < width * height; i++) {
-            blocs[i].setAnim(blocs[i].getAnim() + speed);
-            if(blocs[i].getName().equals("Torch")) {
-                if(blocs[i].getAnim() > 3) blocs[i].setAnim(0);
-                blocs[i].setTileY((int) blocs[i].getAnim());
-            }
-        }
-    }
-
-    public void setBloc(int x, int y, int id) {
-        if(id == -1) {
+    public void setBloc(int x, int y, int col) {
+        if(col == 0xff00ff00) {
             spawnX = x;
             spawnY = y;
         }
-        blocs[x + y * width] = null;
-        blocs[x + y * width] = new Bloc(id);
+        map[x + y * width] = col;
+    }
+
+    public String getTag(int x, int y) {
+        if(x >= 0 && x < width && y >= 0 && y < height)
+            return colTag.get(map[x + y * width]);
+        else
+            return "floor";
+    }
+
+    public int getCol(String tag) {
+        return tagCol.get(tag);
+    }
+
+    public int[] getTile(String tag) {
+        return tagPos.get(tag);
+    }
+
+    public void clean(int x, int y) {
+        this.map[x + y * width] = 0;
     }
 }

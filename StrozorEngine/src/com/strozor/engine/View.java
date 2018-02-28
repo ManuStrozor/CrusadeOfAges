@@ -27,17 +27,31 @@ public abstract class View {
                 gc.getInput().getMouseY() < b.getOffY() + b.getHeight();
     }
 
-    protected boolean mouseIsOnYPos(GameContainer gc, ArrayList<Image> images, int index, int scroll) {
+    protected boolean fileSelected(GameContainer gc, ArrayList<Image> images, int index, int scroll) {
 
-        int heights = GameManager.TS+10-scroll;
+        int highs = GameManager.TS+10-scroll;
         for(int i = 0; i < index; i++) {
-            heights += images.get(i).getH() < 30 ? 30+10 : images.get(i).getH()+10;
+            highs += images.get(i).getH() < 30 ? 30+10 : images.get(i).getH()+10;
         }
-        int imageSize = images.get(index).getH() < 30 ? 30 : images.get(index).getH();
+        int currHigh = images.get(index).getH() < 30 ? 30 : images.get(index).getH();
 
-        return gc.getInput().getMouseY() > heights &&
-                gc.getInput().getMouseY() < heights+imageSize &&
-                gc.getInput().getMouseY() < gc.getHeight()-2*GameManager.TS &&
+        return gc.getInput().getMouseY() > highs &&
+                gc.getInput().getMouseY() < highs + currHigh &&
+                gc.getInput().getMouseY() < gc.getHeight() - 2*GameManager.TS &&
+                gc.getInput().isButtonUp(MouseEvent.BUTTON1);
+    }
+
+    protected boolean levelSelected(GameContainer gc, int index, int scroll) {
+
+        int highs = GameManager.TS+10-scroll;
+        for(int i = 0; i < index; i++) {
+            highs += 30+10;
+        }
+        int currHigh = 30;
+
+        return gc.getInput().getMouseY() > highs &&
+                gc.getInput().getMouseY() < highs + currHigh &&
+                gc.getInput().getMouseY() < gc.getHeight() - 2*GameManager.TS &&
                 gc.getInput().isButtonUp(MouseEvent.BUTTON1);
     }
 

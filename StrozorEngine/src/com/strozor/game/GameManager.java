@@ -2,7 +2,6 @@ package com.strozor.game;
 
 import com.strozor.engine.*;
 import com.strozor.engine.gfx.*;
-import com.strozor.view.Stats;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
@@ -21,38 +20,30 @@ import java.util.List;
 public class GameManager extends AbstractGame {
 
     public static final int TS = 32;
+    public static int current = 0;
     public static final String APPDATA = System.getenv("APPDATA") + "\\.squaremonster";
-
+    public static String[][] levels = {
+            {"/levels/0.png", "Learn to jump"},
+            {"/levels/1.png", "Trampoline room"},
+            {"/levels/2.png", "Go on slowly..."},
+            {"/levels/3.png", "Crown of thorns"}
+    };
     public static String[] dataStates = {
-            "Door opened",
-            "Lever actioned",
-            "Game over",
+            "Level up",
             "Death",
+            "Game over",
+            "Lever pulled",
             "Slime",
-            "Jump",
-            "Skull",
-            "Coin",
-            "Pill",
-            "Key"
+            "Jump"
     };
 
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
-    private GameMap gameMap;
-    private int currLevel = 0;
+    private GameMap map;
 
-    private String[] levelList = {
-            "/levels/0.png",
-            "/levels/1.png",
-            "/levels/2.png"
-    };
-
-    private GameManager(GameMap gameMap) {
-        this.gameMap = gameMap;
-        load(levelList[currLevel]);
-        objects.add(new Player("player", gameMap, 1));
-        camera = new Camera("player", gameMap);
+    private GameManager(GameMap map) {
+        this.map = map;
     }
 
     @Override
@@ -86,20 +77,9 @@ public class GameManager extends AbstractGame {
                 i--;
             }
         }
-
-        //Animations
-        gameMap.animate(dt * 3);
-
         //Reload level
-        if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
-
-            load(levelList[currLevel]);
-
-            objects.add(new Player("player", gameMap, 1));
-
-            camera = null;
-            camera = new Camera("player", gameMap);
-        }
+        if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0))
+            load(levels[current][0]);
 
         camera.update(gc, this, dt);
     }
@@ -107,27 +87,17 @@ public class GameManager extends AbstractGame {
     @Override
     public void render(GameContainer gc, GameRender r) {
         camera.render(r);
-        r.drawMap(gameMap);
-        if(gc.getSettings().isShowLights())
-            r.drawMapLights(gameMap, new Light(80, 0xffffff00));
+        r.drawMap(map);
+        if(gc.getSettings().isShowLights()) r.drawMapLights(map, new Light(80, 0xffffff00));
         for(GameObject obj : objects) obj.render(gc, r);
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 
     public void load(String path) {
-        gameMap.init(new Image(path, false));
-    }
-
-    public int getCurrLevel() {
-        return currLevel;
-    }
-
-    public void setCurrLevel(int currLevel) {
-        this.currLevel = currLevel;
-    }
-
-    public String[] getLevelList() {
-        return levelList;
+        map.init(new Image(path, false));
+        objects.clear();
+        objects.add(new Player("player", map, 1));
+        camera = new Camera("player", map);
     }
 
     public GameObject getObject(String tag) {
@@ -138,10 +108,10 @@ public class GameManager extends AbstractGame {
     static private void writeAppData() {
         //.squaremonster
         File smFolder = new File(APPDATA);
-        if(!smFolder.exists()) smFolder.mkdir();
+        if(!smFolder.exists()) if(!smFolder.mkdir()) System.out.println("Dossier .squaremonster déjà existant");
         //assets
         File smAssets = new File(APPDATA + "\\assets");
-        if(!smAssets.exists()) smAssets.mkdir();
+        if(!smAssets.exists()) if(!smAssets.mkdir()) System.out.println("Dossier assets déjà existant");
         //objects.png (assets)
         try {
             File outObjs = new File(APPDATA + "\\assets\\objects.png");
@@ -155,10 +125,10 @@ public class GameManager extends AbstractGame {
         }
         //screenshots
         File smScreenshots = new File(APPDATA + "\\screenshots");
-        if(!smScreenshots.exists()) smScreenshots.mkdir();
+        if(!smScreenshots.exists()) if(!smScreenshots.mkdir()) System.out.println("Dossier screenshots déjà existant");
         //creative_mode
         File smCrea = new File(APPDATA + "\\creative_mode");
-        if(!smCrea.exists()) smCrea.mkdir();
+        if(!smCrea.exists()) if(!smCrea.mkdir()) System.out.println("Dossier creative_mode déjà existant");
         //options.txt
         File smOptFile = new File(APPDATA + "\\options.txt");
         if(!smOptFile.exists()) {
@@ -184,8 +154,8 @@ public class GameManager extends AbstractGame {
 
                 FileOutputStream fos = new FileOutputStream(APPDATA + "\\player.dat");
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
-                for(int i = 0; i < dataStates.length; i++) {
-                    oos.writeUTF(dataStates[i]);
+                for(String ds : dataStates) {
+                    oos.writeUTF(ds);
                     oos.writeInt(0);
                 }
                 oos.close();
@@ -195,7 +165,7 @@ public class GameManager extends AbstractGame {
         }
     }
 
-    static private void readOptions(Settings settings) {
+    static private void readOptions(Settings s) {
         try(BufferedReader br = new BufferedReader(new FileReader(APPDATA + "\\options.txt"))) {
             String line = br.readLine();
             while (line != null) {
@@ -203,14 +173,14 @@ public class GameManager extends AbstractGame {
                 switch(sub[0]) {
                     case "lang":
                         switch(sub[1]) {
-                            case "en": settings.setLangIndex(0); break;
-                            case "fr": settings.setLangIndex(1); break;
-                            default: settings.setLangIndex(0); break;
+                            case "en": s.setLangIndex(0); break;
+                            case "fr": s.setLangIndex(1); break;
+                            default: s.setLangIndex(0); break;
                         }
                         break;
-                    case "guiScale": settings.setScale(Float.valueOf(sub[1])); break;
-                    case "showFPS": settings.setShowFps(sub[1].equals("true")); break;
-                    case "showLights": settings.setShowLights(sub[1].equals("true")); break;
+                    case "guiScale": s.setScale(Float.valueOf(sub[1])); break;
+                    case "showFPS": s.setShowFps(sub[1].equals("true")); break;
+                    case "showLights": s.setShowLights(sub[1].equals("true")); break;
                 }
                 line = br.readLine();
             }
@@ -220,12 +190,13 @@ public class GameManager extends AbstractGame {
     }
 
     public static void main(String[] args) {
-        Settings settings = new Settings();
+        Settings s = new Settings();
+        GameMap map = new GameMap();
         writeAppData();
-        readOptions(settings);
-        GameContainer gc = new GameContainer(new GameManager(new GameMap()), settings, new Data());
+        readOptions(s);
+        GameContainer gc = new GameContainer(new GameManager(map), s, map, new Data());
         gc.setTitle("Square Monster");
-        gc.setScale(settings.getScale());
+        gc.setScale(s.getScale());
         gc.start();
     }
 }

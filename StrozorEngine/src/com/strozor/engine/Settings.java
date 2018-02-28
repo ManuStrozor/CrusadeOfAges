@@ -60,6 +60,8 @@ public class Settings {
         en.put("Create your first map !", "Create your first map !");
         en.put("Stats", "Statistics");
         en.put("Paused", "Paused");
+        en.put("Play", "Play");
+        en.put("Choose a level", "Choose a level");
         lang.add(en);
         fr.put("lang", "Français");
         fr.put("beta version", "version beta");
@@ -105,6 +107,8 @@ public class Settings {
         fr.put("Create your first map !", "Créez votre première mappe !");
         fr.put("Stats", "Statistiques");
         fr.put("Paused", "Pause");
+        fr.put("Play", "Jouer");
+        fr.put("Choose a level", "Choisissez un niveau");
         lang.add(fr);
     }
 

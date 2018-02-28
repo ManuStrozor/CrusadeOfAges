@@ -3,7 +3,6 @@ package com.strozor.game.actions;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameMap;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.game.GameManager;
 import com.strozor.game.Player;
 
@@ -12,52 +11,55 @@ import java.awt.event.KeyEvent;
 public class Event {
 
     private Player pl;
+    private GameMap map;
     private SoundClip impaled = new SoundClip("/audio/impaled.wav");
     private SoundClip leverActioned = new SoundClip("/audio/lever.wav");
 
-    public Event(Player player) {
-        pl = player;
+    public Event(Player pl, GameMap map) {
+        this.pl = pl;
+        this.map = map;
         leverActioned.setVolume(-10f);
     }
 
-    public void impale(GameMap map) {
-        Bloc b = map.getBloc(pl.getTileX(), pl.getTileY());
+    public void impale() {
+        String tag = map.getTag(pl.getTileX(), pl.getTileY());
 
-        if(b.getName().equals("Ground spikes"))
-            map.setBloc(pl.getTileX(), pl.getTileY(), 9);
-        else if(b.getName().equals("Ceiling spikes"))
-            map.setBloc(pl.getTileX(), pl.getTileY(), 10);
+        if(tag.contains("ground"))
+            map.setBloc(pl.getTileX(), pl.getTileY(), map.getCol("ground spikes blooded"));
+        else if(tag.contains("ceiling"))
+            map.setBloc(pl.getTileX(), pl.getTileY(), map.getCol("ceiling spikes blooded"));
 
         impaled.play();
         pl.setLives(pl.getLives() - 1);
     }
 
-    public boolean switchLevel(GameContainer gc, GameManager gm, GameMap map) {
+    public void respawn(int x, int y) {
+        pl.setDirection(0);
+        pl.setFallDist(0);
+        pl.setTileX(x);
+        pl.setTileY(y);
+        pl.setOffX(0);
+        pl.setOffY(0);
+    }
+
+    public void switchLevel(GameContainer gc, GameManager gm) {
         if(pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            pl.setKeys(pl.getKeys() - 1);
-            if(gm.getCurrLevel() + 1 < gm.getLevelList().length) {
-                gm.load(gm.getLevelList()[gm.getCurrLevel() + 1]);
-                gm.setCurrLevel(gm.getCurrLevel() + 1);
-            } else {
-                gm.load(gm.getLevelList()[0]);
-                gm.setCurrLevel(0);
+            if(gc.getData().getValueOf("Level up") <= GameManager.current) {
+                gc.getData().upValueOf("Level up");
             }
-            pl.respawn(map.getSpawnX(), map.getSpawnY());
-            return true;
-        } else {
-            return false;
+            pl.setKeys(pl.getKeys() - 1);
+            if(GameManager.current < GameManager.levels.length - 1) GameManager.current++;
+            else GameManager.current = 0;
+            gm.load(GameManager.levels[GameManager.current][0]);
+            respawn(map.getSpawnX(), map.getSpawnY());
         }
     }
 
-    public boolean actionLever(GameContainer gc, GameMap map) {
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            Bloc lever = map.getBloc(pl.getTileX(), pl.getTileY());
-            if(lever.getTileX() == 1) lever.setTileX(2);
-            else lever.setTileX(1);
+    public void actionLever(GameContainer gc, String tag) {
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ENTER) && tag.contains("left")) {
+            map.setBloc(pl.getTileX(), pl.getTileY(), map.getCol("lever right"));
+            gc.getData().upValueOf("Lever pulled");
             leverActioned.play();
-            return true;
-        } else {
-            return false;
         }
     }
 }

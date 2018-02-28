@@ -1,11 +1,7 @@
 package com.strozor.view;
 
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
-import com.strozor.engine.View;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
@@ -13,6 +9,7 @@ import java.awt.event.KeyEvent;
 public class Credits extends View {
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
     private Button back;
 
@@ -20,8 +17,9 @@ public class Credits extends View {
     private String[] thanks = {"My family", "Beta testers"};
     private String[] contribs = {"Majoolwip"};
 
-    public Credits(Settings settings) {
-        s = settings;
+    public Credits(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
         buttons.add(back = new Button(60, 20, "Back", 0));
     }
@@ -44,7 +42,7 @@ public class Credits extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawBackground(gc, new Bloc(0));
+        r.drawBackground(gc, map, "wall");
         r.drawMenuTitle(gc, s.translate("Game credits").toUpperCase(), s.translate("Development team"));
 
         r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("MAIN DEVELOPERS"), devs);

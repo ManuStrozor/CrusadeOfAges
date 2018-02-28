@@ -23,7 +23,8 @@ public class GameContainer implements Runnable {
             credits,
             creativeMode,
             inputDialog,
-            stats;
+            stats,
+            gameSelection;
     private AbstractGame game, edit;
 
     private boolean running = false;
@@ -43,29 +44,31 @@ public class GameContainer implements Runnable {
         INPUTDIALOG,
         CREDITS,
         STATS,
+        GAMESELECTION,
         EXIT
     }
 
     private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings, Data data) {
+    public GameContainer(AbstractGame game, Settings settings, GameMap map, Data data) {
         this.game = game;
+        this.gm = (GameManager) game;
         this.s = settings;
         this.data = data;
 
-        this.mainMenu = new MainMenu(s);
-        this.options = new Options(s);
+        this.mainMenu = new MainMenu(s, map);
+        this.options = new Options(s, map);
         this.pausedGame = new PausedGame(s);
         this.gameOver = new GameOver(s);
         this.pausedEdit = new PausedEdit(s);
-        this.credits = new Credits(s);
-        this.creativeMode = new CreativeMode(s);
-        this.inputDialog = new InputDialog(s);
-        this.stats = new Stats(s);
+        this.credits = new Credits(s, map);
+        this.creativeMode = new CreativeMode(s, map);
+        this.inputDialog = new InputDialog(s, map);
+        this.stats = new Stats(s, map);
+        this.gameSelection = new GameSelection(s, map, game);
 
         this.edit = new Edit(60, 30);
-        this.gm = (GameManager) game;
     }
 
     public synchronized void start() {
@@ -97,7 +100,7 @@ public class GameContainer implements Runnable {
         running = true;
 
         while(running && State != STATE.EXIT) {
-            render = false;
+            render = true;
 
             startTime = System.nanoTime() / 1000000000.0;
             passedTime = startTime - lastTime;
@@ -132,6 +135,8 @@ public class GameContainer implements Runnable {
                     inputDialog.update(this, (float)UPDATE_CAP);
                 } else if(State == STATE.STATS) {
                     stats.update(this, (float)UPDATE_CAP);
+                } else if(State == STATE.GAMESELECTION) {
+                    gameSelection.update(this, (float)UPDATE_CAP);
                 }
 
                 input.update();
@@ -177,6 +182,8 @@ public class GameContainer implements Runnable {
                     inputDialog.render(this, gameRender);
                 } else if(State == STATE.STATS) {
                     stats.render(this, gameRender);
+                } else if(State == STATE.GAMESELECTION) {
+                    gameSelection.render(this, gameRender);
                 }
 
                 if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
@@ -274,6 +281,7 @@ public class GameContainer implements Runnable {
             case 8: State = STATE.CREATIVEMODE; break;
             case 9: State = STATE.INPUTDIALOG; break;
             case 10: State = STATE.STATS; break;
+            case 11: State = STATE.GAMESELECTION; break;
         }
         currState = value;
     }

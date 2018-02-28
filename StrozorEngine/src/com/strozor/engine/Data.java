@@ -54,6 +54,13 @@ public class Data {
         return values;
     }
 
+    public int getValueOf(String state) {
+        for(int i = 0; i < states.length; i++) {
+            if(states[i].equals(state)) return values[i];
+        }
+        return 0;
+    }
+
     public void upValueOf(String state) {
         for(int i = 0; i < states.length; i++) {
             if(states[i].equals(state)) values[i]++;

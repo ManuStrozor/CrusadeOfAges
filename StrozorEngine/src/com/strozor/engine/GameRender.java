@@ -4,6 +4,7 @@ import com.strozor.engine.gfx.*;
 import com.strozor.game.GameManager;
 import com.strozor.game.GameObject;
 import com.strozor.view.CreativeMode;
+import com.strozor.view.GameSelection;
 import com.strozor.view.InputDialog;
 
 import java.awt.image.DataBufferInt;
@@ -379,60 +380,66 @@ public class GameRender {
         int width = GameManager.TS * 6;
         int x = gc.getWidth() / 2 - width / 2;
         fillRect(x, 0, width, GameManager.TS, 0x99000000);
-        drawBloc(new Bloc(2), x, 0);
-        drawBloc(new Bloc(7), x + GameManager.TS * 2, 0);
-        drawBloc(new Bloc(5), x + GameManager.TS * 4, 0);
+
+        drawImageTile(objsImg, x, 0, 3, 2);
+        drawImageTile(objsImg, x + GameManager.TS * 2, 0, 5, 0);
+        drawImageTile(objsImg, x + GameManager.TS * 4, 0, 3, 1);
+
         drawText("x" + obj.getLives(), x + GameManager.TS-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getCoins(), x + GameManager.TS * 3-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getKeys(), x + GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawMap(GameMap gameMap) {
-        for(int y = 0; y < gameMap.getHeight(); y++) {
-            for(int x = 0; x < gameMap.getWidth(); x++) {
+    public void drawMap(GameMap map) {
+        for(int y = 0; y < map.getHeight(); y++) {
+            for(int x = 0; x < map.getWidth(); x++) {
 
-                Bloc curr = gameMap.getBloc(x, y);
+                int tileX = map.getTile(map.getTag(x, y))[0];
+                int tileY = map.getTile(map.getTag(x, y))[1];
 
                 //draw wall behind non-solid bloc
-                if(!curr.isSolid() && !curr.getName().equals("Wall"))
+                if(!map.isSolid(x, y) && !map.getTag(x, y).equals("wall"))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 1, 0);
 
                 //draw bloc
-                drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, curr.getTileX(), curr.getTileY());
+                drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, tileX, tileY);
 
                 //draw shadow under solid bloc
-                if(!curr.isSolid() && gameMap.isSolid(x, y-1))
+                if(!map.isSolid(x, y) && map.isSolid(x, y-1))
                     drawImageTile(objsImg, x * GameManager.TS, y * GameManager.TS, 0, 3);
 
                 //draw top part of the door
-                if(curr.getName().equals("Door"))
-                    drawImageTile(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, curr.getTileX(), curr.getTileY()-1);
+                if(map.getTag(x, y).equals("door"))
+                    drawImageTile(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, tileX, tileY-1);
             }
         }
     }
 
-    public void drawMapLights(GameMap gameMap, Light lamp) {
-        for(int y = 0; y < gameMap.getHeight(); y++) {
-            for(int x = 0; x < gameMap.getWidth(); x++) {
-                if(gameMap.getBloc(x, y).getName().equals("Torch"))
+    public void drawMapLights(GameMap map, Light lamp) {
+        for(int y = 0; y < map.getHeight(); y++) {
+            for(int x = 0; x < map.getWidth(); x++) {
+                if(map.getTag(x, y).equals("torch"))
                     drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 3);
             }
         }
     }
 
-    private void drawBloc(Bloc b, int x, int y) {
-        drawImageTile(objsImg, x, y, b.getTileX(), b.getTileY());
+    private void drawBloc(GameMap map, String tag, int x, int y) {
+        drawImageTile(objsImg, x, y, map.getTile(tag)[0], map.getTile(tag)[1]);
     }
 
-    public void drawDock(GameContainer gc, int[] dock, int scroll) {
+    public void drawDock(GameContainer gc, GameMap map, String[] dock, int scroll) {
         int midH = camY + gc.getHeight() / 2;
         int s = GameManager.TS + 1;
         int y = midH - (dock.length * s)/2 + (dock.length/2 - scroll) * s;
 
+        if(dock.length % 2 != 0)
+            y += GameManager.TS/2;
+
         fillRect(camX, camY, s + 4, gc.getHeight(), 0x89000000);
 
         for(int i = 0; i < dock.length; i++)
-            drawBloc(new Bloc(dock[i]), camX + 4, y - GameManager.TS/2 + s * i);
+            drawBloc(map, dock[i], camX + 4, y - GameManager.TS/2 + s * i);
 
         drawRect(camX + 1, midH - GameManager.TS/2 - 3, s + 4, s + 4, 0xbbffffff);
         drawRect(camX + 2, midH - GameManager.TS/2 - 2, s + 2, s + 2, 0x77ffffff);
@@ -441,21 +448,57 @@ public class GameRender {
 
     public void drawMiniMap(GameContainer gc, Image img) {
         int xMMap = camX + gc.getWidth()-img.getW()-2;
-        int yMMap = camY + 1;
+        int yMMap = camY + gc.getHeight()-img.getH()-2;
         fillRect(xMMap, yMMap, img.getW(), img.getH(), 0x99ababab);
         drawRect(xMMap + camX/32 + 1, yMMap + camY/32, gc.getWidth()/32-1, gc.getHeight()/32+1, 0x99ababab);
         drawImage(img, xMMap, yMMap);
     }
 
-    public void drawArrows(GameContainer gc, int width, int height) {
+    public void drawArrows(GameContainer gc, GameMap map, int width, int height) {
         if(camY > 0)
-            drawBloc(new Bloc(14), camX + gc.getWidth()/2 - GameManager.TS/2, camY);
+            drawBloc(map, "arrow up", camX + gc.getWidth()/2 - GameManager.TS/2, camY);
         if(camY + gc.getHeight() < height * GameManager.TS)
-            drawBloc(new Bloc(15), camX + gc.getWidth()/2 - GameManager.TS/2, camY + gc.getHeight() - GameManager.TS);
+            drawBloc(map, "arrow down", camX + gc.getWidth()/2 - GameManager.TS/2, camY + gc.getHeight() - GameManager.TS);
         if(camX > -GameManager.TS)
-            drawBloc(new Bloc(16), camX, camY + gc.getHeight()/2 - GameManager.TS/2);
+            drawBloc(map, "arrow left", camX, camY + gc.getHeight()/2 - GameManager.TS/2);
         if(camX + gc.getWidth() < width * GameManager.TS)
-            drawBloc(new Bloc(17), camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
+            drawBloc(map, "arrow right", camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
+    }
+
+    public void drawLevels(GameContainer gc, String[][] levels) {
+
+        int largest = 0;
+        for(int i = 0; i < levels.length; i++) {
+            int len = textSize(levels[i][1], Font.STANDARD);
+            if(len+30 > largest) largest = len+30;
+        }
+
+        int x = gc.getWidth()/2-largest/2;
+        int y = GameManager.TS+10-GameSelection.scroll;
+
+        int hUsed = 10;
+        for(int i = 0; i < gc.getData().getValueOf("Level up") + 1; i++) {
+
+            int size = 30;
+
+            if(i != 0) y += 30+10;
+
+            if(i < levels.length) {
+                if(GameSelection.focus && i == GameSelection.fIndex)
+                    drawRect(x - 4, y - 4, largest + 12, 30 + 8, 0xff696969);
+
+                fillRect(x, y, size, size, -1);
+                drawText(""+i, x+size/2, y+size/2, 0, 0, 0xff000000, Font.STANDARD);
+                drawText(levels[i][1], x+size+4, y+15, 1, 0, 0xff898989, Font.STANDARD);
+            }
+
+            hUsed += size+10;
+        }
+
+        int hTotal = gc.getHeight()-3*GameManager.TS;
+        int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
+
+        drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, GameSelection.scroll/8, minus/8);
     }
 
     public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
@@ -515,18 +558,18 @@ public class GameRender {
         fillRect(x, y+h-minus+scroll, w, 1, 0xff444244);
     }
 
-    public void drawBackground(GameContainer gc, Bloc bloc) {
+    public void drawBackground(GameContainer gc, GameMap map, String tag) {
         for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
             for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
-                drawBloc(bloc, x * GameManager.TS, y * GameManager.TS);
+                drawBloc(map, tag, x * GameManager.TS, y * GameManager.TS);
             }
         }
     }
 
-    public void fillAreaBloc(int nX, int nY, int nW, int nH, Bloc bloc) {
+    public void fillAreaBloc(int nX, int nY, int nW, int nH, GameMap map, String tag) {
         for(int y = 0; y < nH; y++) {
             for(int x = 0; x < nW; x++) {
-                drawBloc(bloc, nX + x * GameManager.TS, nY + y * GameManager.TS);
+                drawBloc(map, tag, nX + x * GameManager.TS, nY + y * GameManager.TS);
             }
         }
     }

@@ -3,10 +3,8 @@ package com.strozor.game;
 import com.strozor.engine.AbstractGame;
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Image;
 import com.strozor.engine.GameMap;
-import com.strozor.view.Stats;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -17,16 +15,30 @@ public class Edit extends AbstractGame {
     public static boolean spawn = false, once = false, newOne = false;
     public static String rename = "";
 
-    private GameMap gameMap;
+    private GameMap map;
     private Player player;
 
     private int width, height;
 
-    private int[] elems = {-1, 1, 12, 8, 3, 4, 2, 7, 5, 6, 20, 21, 11, 13};
+    private String[] elems = {
+            "spawn",
+            "floor",
+            "slime",
+            "ladder",
+            "ground spikes",
+            "ceiling spikes",
+            "pill",
+            "coin",
+            "key",
+            "skull",
+            "lever left",
+            "torch",
+            "door"
+    };
     private int color, scroll = 0;
 
     public Edit(int width, int height) {
-        gameMap = new GameMap();
+        map = new GameMap();
         creaImg = new Image(new int[width * height], width, height);
         this.width = width;
         this.height = height;
@@ -40,31 +52,27 @@ public class Edit extends AbstractGame {
                 creaImg = null;
                 creaImg = new Image(new int[width * height], width, height);
             }
-            gameMap.init(creaImg);
+            map.init(creaImg);
             once = true;
         }
 
-        if(!spawn && (gameMap.getSpawnX() != -1 || gameMap.getSpawnY() != -1)) {
-            player = new Player("player", gameMap, 1);
+        if(!spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1)) {
+            player = new Player("player", map, 1);
             spawn = true;
         }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
 
         //Player update
-        if(spawn && (gameMap.getSpawnX() != -1 || gameMap.getSpawnY() != -1))
+        if(spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1))
             player.creativeUpdate(gc, dt);
-
-        //Animations
-        gameMap.animate(dt * 3);
 
         if(gc.getInput().getScroll() > 0)
             scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
         else if(gc.getInput().getScroll() < 0)
             scroll = (scroll == 0) ? elems.length - 1 : scroll - 1;
 
-        Bloc bloc = new Bloc(elems[scroll]);
-        color = bloc.getCode();
+        color = map.getCol(elems[scroll]);
     }
 
     @Override
@@ -95,36 +103,36 @@ public class Edit extends AbstractGame {
             if(mouseX > GameManager.TS) {
                 if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
 
-                    if(elems[scroll] == -1 && gameMap.getSpawnX() != -1 && gameMap.getSpawnY() != -1) {
+                    if(elems[scroll].equals("spawn") && map.getSpawnX() != -1 && map.getSpawnY() != -1) {
 
                         //Delete previous spawn
-                        creaImg.setP(gameMap.getSpawnX(), gameMap.getSpawnY(), 0x00000000);
-                        gameMap.setBloc(gameMap.getSpawnX(), gameMap.getSpawnY(), 0);
+                        creaImg.setP(map.getSpawnX(), map.getSpawnY(), 0x00000000);
+                        map.setBloc(map.getSpawnX(), map.getSpawnY(), 0);
 
                         //create new spawn
                         creaImg.setP(x, y, color);
 
                         //Reset player position
-                        player.respawn(gameMap.getSpawnX(), gameMap.getSpawnY());
+                        player.getEvent().respawn(map.getSpawnX(), map.getSpawnY());
                     } else {
                         creaImg.setP(x, y, color);
                     }
 
-                    gameMap.setBloc(x, y, elems[scroll]);
+                    map.setBloc(x, y, map.getCol(elems[scroll]));
 
                 } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
                     creaImg.setP(x, y, 0x00000000);
-                    gameMap.setBloc(x, y, 0);
+                    map.setBloc(x, y, 0);
                 }
             }
         }
 
-        r.drawMap(gameMap);
+        r.drawMap(map);
         r.drawMiniMap(gc, creaImg);
-        r.drawDock(gc, elems, scroll);
-        r.drawArrows(gc, creaImg.getW(), creaImg.getH());
+        r.drawDock(gc, map, elems, scroll);
+        r.drawArrows(gc, map, creaImg.getW(), creaImg.getH());
 
-        if(spawn && (gameMap.getSpawnX() != -1 || gameMap.getSpawnY() != -1))
+        if(spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1))
             player.render(gc, r);
     }
 }

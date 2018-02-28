@@ -16,15 +16,17 @@ import java.util.List;
 public class Options extends View {
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
     private Button tglLang, tglFps, tglLights, back;
 
-    public Options(Settings settings) {
-        s = settings;
+    public Options(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
         buttons.add(tglLang = new Button("lang", 0));
-        buttons.add(tglFps = new Button(settings.isShowFps() ? "FPS on" : "FPS off", 0));
-        buttons.add(tglLights = new Button(settings.isShowLights() ? "Darkness" : "Full day", 0));
+        buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", 0));
+        buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", 0));
         buttons.add(back = new Button("Back", 0));
     }
 
@@ -62,7 +64,7 @@ public class Options extends View {
     public void render(GameContainer gc, GameRender r) {
 
         if(gc.getLastState() == 0) {
-            r.drawBackground(gc, new Bloc(0));
+            r.drawBackground(gc, map, "wall");
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);

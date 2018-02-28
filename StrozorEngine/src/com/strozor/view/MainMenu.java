@@ -1,24 +1,21 @@
 package com.strozor.view;
 
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
-import com.strozor.engine.View;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
-import com.strozor.game.GameManager;
 
 
 public class MainMenu extends View {
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
 
-    public MainMenu(Settings settings) {
-        s = settings;
+    public MainMenu(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
-        buttons.add(new Button("Single player", 1));
+        buttons.add(new Button("Single player", 11));
         buttons.add(new Button("Stats", 10));
         buttons.add(new Button("Creative mode", 8));
         buttons.add(new Button("Game credits", 6));
@@ -42,7 +39,7 @@ public class MainMenu extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
 
-        r.drawBackground(gc, new Bloc(0));
+        r.drawBackground(gc, map, "wall");
         r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
 
         int startY = gc.getHeight()/4;

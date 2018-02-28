@@ -1,11 +1,7 @@
 package com.strozor.view;
 
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
-import com.strozor.engine.View;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.game.GameManager;
 
@@ -21,16 +17,18 @@ public class InputDialog extends View {
     public static int blink;
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
     private Button cancel, rename;
 
     private boolean once = false;
 
-    public InputDialog(Settings settings) {
-        s = settings;
+    public InputDialog(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
         buttons.add(cancel = new Button(80, 20, "Cancel", 8));
-        buttons.add(rename = new Button(80, 20, "InputDialog", 8));
+        buttons.add(rename = new Button(80, 20, "Rename", 8));
     }
 
     @Override
@@ -100,7 +98,7 @@ public class InputDialog extends View {
         int x = gc.getWidth()/2-GameManager.TS*3;
         int y = gc.getHeight()/3-GameManager.TS;
 
-        r.fillAreaBloc(x, y, 6, 2, new Bloc(0));
+        r.fillAreaBloc(x, y, 6, 2, map, "wall");
         r.drawInput(x+6, y+9, GameManager.TS*6-12, GameManager.TS-12, 0xff333333);
 
         cancel.setOffX(gc.getWidth()/2-cancel.getWidth()-5);

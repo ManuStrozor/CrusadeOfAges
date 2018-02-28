@@ -1,11 +1,7 @@
 package com.strozor.view;
 
-import com.strozor.engine.GameContainer;
-import com.strozor.engine.GameRender;
-import com.strozor.engine.Settings;
-import com.strozor.engine.View;
+import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
-import com.strozor.engine.gfx.Bloc;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Font;
 import com.strozor.engine.gfx.Image;
@@ -35,6 +31,7 @@ public class CreativeMode extends View {
     }
 
     private Settings s;
+    private GameMap map;
     private SoundClip select;
     private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
@@ -45,8 +42,9 @@ public class CreativeMode extends View {
     private ArrayList<String> paths = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
 
-    public CreativeMode(Settings settings) {
-        s = settings;
+    public CreativeMode(Settings s, GameMap map) {
+        this.s = s;
+        this.map = map;
         select = new SoundClip("/audio/select.wav");
 
         buttons.add(edit = new Button(170, 20, "Edit", 4));
@@ -104,7 +102,7 @@ public class CreativeMode extends View {
         }
         //Hover control
         for(int i = 0; i < images.size(); i++) {
-            if(mouseIsOnYPos(gc, images, i, scroll)) {
+            if(fileSelected(gc, images, i, scroll)) {
                 fIndex = i;
                 focus = true;
             }
@@ -161,16 +159,16 @@ public class CreativeMode extends View {
     @Override
     public void render(GameContainer gc, GameRender r) {
         //Fill general background
-        r.drawBackground(gc, new Bloc(0));
+        r.drawBackground(gc, map, "wall");
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if(sMax <= 0) scroll = 0;
         r.drawListOfFiles(gc, images, names, dates, s.translate("Create your first map !"));
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS, 1, new Bloc(0));
+        r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS+1, 1, map, "wall");
         r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight()-GameManager.TS*2, gc.getWidth()/GameManager.TS, 2, new Bloc(0));
+        r.fillAreaBloc(0, gc.getHeight()-GameManager.TS*2, gc.getWidth()/GameManager.TS+1, 2, map, "wall");
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
         edit.setOffY(gc.getHeight()-2*GameManager.TS+10);
 
