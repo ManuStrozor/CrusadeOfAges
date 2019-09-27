@@ -6,47 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="work in progress">
-      <change afterPath="$PROJECT_DIR$/src/sm/server/ClientThread.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sm/server/Server.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/AbstractGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/AbstractGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Data.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/GameRender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameRender.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Input.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/View.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Window.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/audio/SoundClip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/audio/SoundClip.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/Font.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Font.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Image.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/ImageRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/ImageRequest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/ImageTile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/ImageTile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/gfx/Light.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Light.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/CreativeMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/Credits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/GameOver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/GameSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/InputDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Options.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/PausedEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/PausedGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/engine/view/Stats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/Edit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Edit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/FlashNotif.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/FlashNotif.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/actions/Collecting.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/actions/Collecting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/actions/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/actions/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/strozor/game/actions/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/actions/Move.java" afterDir="false" />
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment=" Server Client">
+      <change beforePath="$PROJECT_DIR$/src/sm/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/server/Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -260,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569601401960</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary=" Server Client">
+      <created>1569614888952</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1569614888952</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -287,6 +255,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="work in progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="work in progress" />
+    <MESSAGE value=" Server Client" />
+    <option name="LAST_COMMIT_MESSAGE" value=" Server Client" />
   </component>
 </project>

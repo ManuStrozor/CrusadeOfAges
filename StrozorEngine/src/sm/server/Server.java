@@ -20,7 +20,7 @@ public class Server {
             e.printStackTrace();
         }
 
-        while (ss != null) { // 10 clients max !
+        while (ss != null) {
             try {
                 s = ss.accept();
             } catch (IOException e) {
