@@ -4,6 +4,7 @@ import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
 import com.strozor.engine.gfx.ImageTile;
 import com.strozor.engine.GameMap;
+import com.strozor.engine.gfx.Light;
 import com.strozor.game.actions.*;
 
 import java.awt.event.KeyEvent;
@@ -27,7 +28,7 @@ public class Player extends GameObject {
     private int speed, ground = 2;
     private float fallDist = 0;
 
-    Player(String tag, GameMap map, int lives) {
+    public Player(String tag, GameMap map, int lives) {
         String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\player.png";
         plImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
 
@@ -122,19 +123,19 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if(offY > GameManager.TS / 2) {
+        if(offY > GameManager.TS / 2.0) {
             tileY++;
             offY -= GameManager.TS;
         }
-        if(offY < -GameManager.TS / 2) {
+        if(offY < -GameManager.TS / 2.0) {
             tileY--;
             offY += GameManager.TS;
         }
-        if(offX > GameManager.TS / 2) {
+        if(offX > GameManager.TS / 2.0) {
             tileX++;
             offX -= GameManager.TS;
         }
-        if(offX < -GameManager.TS / 2) {
+        if(offX < -GameManager.TS / 2.0) {
             tileX--;
             offX += GameManager.TS;
         }
@@ -269,19 +270,19 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if(offY > GameManager.TS / 2) {
+        if(offY > GameManager.TS / 2.0) {
             tileY++;
             offY -= GameManager.TS;
         }
-        if(offY < -GameManager.TS / 2) {
+        if(offY < -GameManager.TS / 2.0) {
             tileY--;
             offY += GameManager.TS;
         }
-        if(offX > GameManager.TS / 2) {
+        if(offX > GameManager.TS / 2.0) {
             tileX++;
             offX -= GameManager.TS;
         }
-        if(offX < -GameManager.TS / 2) {
+        if(offX < -GameManager.TS / 2.0) {
             tileX--;
             offX += GameManager.TS;
         }
@@ -313,6 +314,7 @@ public class Player extends GameObject {
 
     @Override
     public void render(GameContainer gc, GameRender r) {
+        r.drawLight(new Light(200, 0xffffff99),(int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
         r.drawImageTile(plImg, (int)posX, (int)posY, direction, (int)anim);
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }

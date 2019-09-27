@@ -3,7 +3,7 @@ package com.strozor.engine;
 import com.strozor.engine.gfx.Button;
 import com.strozor.engine.gfx.Image;
 import com.strozor.game.GameManager;
-import com.strozor.view.InputDialog;
+import com.strozor.engine.view.InputDialog;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -17,10 +17,10 @@ public abstract class View {
     public abstract void render(GameContainer gc, GameRender r);
 
     protected boolean isSelected(GameContainer gc, Button b) {
-        return mouseIsHover(gc, b) && gc.getInput().isButtonUp(MouseEvent.BUTTON1);
+        return isHover(gc, b) && gc.getInput().isButtonUp(MouseEvent.BUTTON1);
     }
 
-    private boolean mouseIsHover(GameContainer gc, Button b) {
+    protected boolean isHover(GameContainer gc, Button b) {
         return gc.getInput().getMouseX() > b.getOffX() &&
                 gc.getInput().getMouseX() < b.getOffX() + b.getWidth() &&
                 gc.getInput().getMouseY() > b.getOffY() &&

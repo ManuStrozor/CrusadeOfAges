@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
@@ -32,7 +32,7 @@ public class CreativeMode extends View {
 
     private Settings s;
     private GameMap map;
-    private SoundClip select;
+    private SoundClip hover, click;
     private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File dossier;
@@ -45,7 +45,8 @@ public class CreativeMode extends View {
     public CreativeMode(Settings s, GameMap map) {
         this.s = s;
         this.map = map;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
 
         buttons.add(edit = new Button(170, 20, "Edit", 4));
         buttons.add(rename = new Button(80, 20, "Rename", 9));
@@ -77,7 +78,7 @@ public class CreativeMode extends View {
                     names.add(file.getName());
                     paths.add(file.getPath());
                     dates.add(new Date(file.lastModified()));
-                    sMax += (images.get(count).getH() < 30 ? 30 : images.get(count).getH())+10;
+                    sMax += Math.max(images.get(count).getH(), 30) + 10;
                     count++;
                 }
             }
@@ -137,7 +138,7 @@ public class CreativeMode extends View {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    int high = (images.get(fIndex).getH() < 30 ? 30 : images.get(fIndex).getH())+10;
+                    int high = Math.max(images.get(fIndex).getH(), 30) + 10;
                     if(scroll >= high) scroll -= high;
                     if(fIndex == images.size()-1 && fIndex != 0) fIndex--;
                 }
@@ -148,10 +149,19 @@ public class CreativeMode extends View {
                         e.printStackTrace();
                     }
                 }
-                select.play();
+                click.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(8);
                 once = false;
+            }
+
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
             }
         }
     }

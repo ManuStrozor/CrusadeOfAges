@@ -13,13 +13,9 @@ public class Light {
         for(int y = 0; y < diameter; y++) {
             for(int x = 0; x < diameter; x++) {
                 double dist = Math.sqrt((x - radius) * (x - radius) + (y - radius) * (y - radius));
-
-                if(dist < radius) {
-                    double power = 1 - dist / radius;
-                    lm[x + y * diameter] = (int)(((color >> 16) & 255) * power) << 16 | (int)(((color >> 8) & 255) * power) << 8 | (int)((color & 255) * power);
-                } else {
-                    lm[x + y * diameter] = 0;
-                }
+                double dim = 1 / Math.pow(dist/radius + 1, 2) - .25; // Atténuation lumière
+                dim = Math.max(dim, 0);
+                lm[x + y * diameter] = (int)(((color >> 16) & 255) * dim) << 16 | (int)(((color >> 8) & 255) * dim) << 8 | (int)((color & 255) * dim);
             }
         }
     }

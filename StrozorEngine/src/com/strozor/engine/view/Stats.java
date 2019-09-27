@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
@@ -11,13 +11,14 @@ public class Stats extends View {
 
     private Settings s;
     private GameMap map;
-    private SoundClip select;
+    private SoundClip hover, click;
     private Button back;
 
     public Stats(Settings s, GameMap map) {
         this.s = s;
         this.map = map;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
         buttons.add(back = new Button(60, 20, "Back", 0));
     }
 
@@ -29,9 +30,18 @@ public class Stats extends View {
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                select.play();
+                click.play();
                 gc.setState(btn.getGoState());
                 gc.setState(gc.getLastState());
+            }
+
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
             }
         }
     }

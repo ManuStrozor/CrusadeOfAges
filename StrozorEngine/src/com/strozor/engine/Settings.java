@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Settings {
 
-    private ArrayList<Map> lang = new ArrayList<>();
+    private ArrayList<Map<String, String>> lang = new ArrayList<>();
 
     private int langIndex = 0;
     private float scale = 3f;
@@ -104,7 +104,7 @@ public class Settings {
         fr.put("Create", "Créer");
         fr.put("Folder", "Dossier");
         fr.put("Cancel", "Annuler");
-        fr.put("Create your first map !", "Créez votre première mappe !");
+        fr.put("Create your first map !", "Créez votre première map !");
         fr.put("Stats", "Statistiques");
         fr.put("Paused", "Pause");
         fr.put("Play", "Jouer");
@@ -112,7 +112,7 @@ public class Settings {
         lang.add(fr);
     }
 
-    public ArrayList<Map> getLang() {
+    public ArrayList<Map<String, String>> getLang() {
         return lang;
     }
 

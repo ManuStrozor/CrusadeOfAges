@@ -4,6 +4,7 @@ public class Button {
 
     private int offX, offY, width = 170, height = 20, bgColor, goState;
     private String text;
+    private boolean hover, hoverSounded = false;
 
     public Button(String text, int goState) {
         bgColor = 0xff616E7A;
@@ -61,5 +62,22 @@ public class Button {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public boolean setHover(boolean hover) {
+        this.hover = hover;
+        return hover;
+    }
+
+    public boolean isHover() {
+        return hover;
+    }
+
+    public boolean isHoverSounded() {
+        return hoverSounded;
+    }
+
+    public void setHoverSounded(boolean hoverSounded) {
+        this.hoverSounded = hoverSounded;
     }
 }

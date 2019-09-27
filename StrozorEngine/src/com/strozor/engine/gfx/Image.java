@@ -16,9 +16,14 @@ public class Image {
     private int[] p;
     private boolean alpha = false;
 
-    public Image(String path, boolean ext) {
+    /**
+     * Creates Image object using image from : [True] AppData or [False] game assets
+     * @param path
+     * @param appdata True / False
+     */
+    public Image(String path, boolean appdata) {
         try {
-            BufferedImage image = ext ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
+            BufferedImage image = appdata ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
             w = image.getWidth();
             h = image.getHeight();
             p = image.getRGB(0, 0, w, h, null, 0, w);
@@ -42,6 +47,10 @@ public class Image {
         return h;
     }
 
+    /**
+     * Returns pixels (array of rgba codes) of Image
+     * @return int[]
+     */
     public int[] getP() {
         return p;
     }

@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
@@ -13,12 +13,13 @@ import java.awt.event.KeyEvent;
 public class PausedEdit extends View {
 
     private Settings s;
-    private SoundClip select;
+    private SoundClip hover, click;
     private Button save;
 
     public PausedEdit(Settings settings) {
         s = settings;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
 
         buttons.add(save = new Button("Save", 8));
         buttons.add(new Button("Cancel", 8));
@@ -37,9 +38,18 @@ public class PausedEdit extends View {
                     Edit.creaImg.saveIt(Edit.rename);
                     CreativeMode.once = false;
                 }
-                select.play();
+                click.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(5);
+            }
+
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
             }
         }
     }

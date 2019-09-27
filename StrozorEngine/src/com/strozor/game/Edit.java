@@ -39,6 +39,7 @@ public class Edit extends AbstractGame {
 
     public Edit(int width, int height) {
         map = new GameMap();
+        player = new Player("Tester", map, 999);
         creaImg = new Image(new int[width * height], width, height);
         this.width = width;
         this.height = height;

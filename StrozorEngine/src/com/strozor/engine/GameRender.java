@@ -1,15 +1,19 @@
 package com.strozor.engine;
 
-import com.strozor.engine.gfx.*;
+import com.strozor.engine.gfx.Button;
+import com.strozor.engine.gfx.Font;
+import com.strozor.engine.gfx.Image;
+import com.strozor.engine.gfx.ImageRequest;
+import com.strozor.engine.gfx.ImageTile;
+import com.strozor.engine.gfx.Light;
 import com.strozor.game.GameManager;
 import com.strozor.game.GameObject;
-import com.strozor.view.CreativeMode;
-import com.strozor.view.GameSelection;
-import com.strozor.view.InputDialog;
+import com.strozor.engine.view.CreativeMode;
+import com.strozor.engine.view.GameSelection;
+import com.strozor.engine.view.InputDialog;
 
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -22,6 +26,7 @@ public class GameRender {
     private int[] p, zb, lm;
     private int camX, camY;
     private int zDepth = 0;
+    private int ambientColor = 0xff020202;
     private boolean processing = false;
 
     public GameRender(GameContainer gc) {
@@ -38,14 +43,14 @@ public class GameRender {
         for(int i = 0; i < p.length; i++) {
             p[i] = 0;
             zb[i] = 0;
-            lm[i] = 0xff898989;
+            lm[i] = ambientColor;
         }
     }
 
     void process() {
         processing = true;
 
-        Collections.sort(imageRequest, new Comparator<ImageRequest>(){
+        imageRequest.sort(new Comparator<ImageRequest>() {
             @Override
             public int compare(ImageRequest i0, ImageRequest i1) {
                 return Integer.compare(i0.zDepth, i1.zDepth);
@@ -123,10 +128,10 @@ public class GameRender {
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
 
-        int newA = (a - diff < 0 ? 0 : a - diff) << 24;
-        int newR = (r - diff < 0 ? 0 : r - diff) << 16;
-        int newG = (g - diff < 0 ? 0 : g - diff) << 8;
-        int newB = b - diff < 0 ? 0 : b - diff;
+        int newA = (Math.max(a - diff, 0)) << 24;
+        int newR = (Math.max(r - diff, 0)) << 16;
+        int newG = (Math.max(g - diff, 0)) << 8;
+        int newB = Math.max(b - diff, 0);
 
         return newA | newR | newG | newB;
     }
@@ -138,10 +143,10 @@ public class GameRender {
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
 
-        int newA = (a + diff > 255 ? 255 : a + diff) << 24;
-        int newR = (r + diff > 255 ? 255 : r + diff) << 16;
-        int newG = (g + diff > 255 ? 255 : g + diff) << 8;
-        int newB = b + diff > 255 ? 255 : b + diff;
+        int newA = (Math.min(a + diff, 255)) << 24;
+        int newR = (Math.min(r + diff, 255)) << 16;
+        int newG = (Math.min(g + diff, 255)) << 8;
+        int newB = Math.min(b + diff, 255);
 
         return newA | newR | newG | newB;
     }
@@ -167,7 +172,7 @@ public class GameRender {
         int offset = 0;
         for(int i = 0; i < text.length(); i++) {
             int unicode = text.codePointAt(i);
-            //With darker color
+            // With darker color
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
                     if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
@@ -175,7 +180,7 @@ public class GameRender {
                     }
                 }
             }
-            //With normal color
+            // With normal color
             for(int y = 0; y < font.getFontImage().getH(); y++) {
                 for(int x = 0; x < font.getWidths()[unicode]; x++) {
                     if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
@@ -294,20 +299,24 @@ public class GameRender {
         }
     }
 
-    private void drawLight(Light l, int offX, int offY) {
+    public void drawLight(Light l, int offX, int offY) {
 
         offX -= camX;
         offY -= camY;
 
         for(int i = 0; i < l.getDiameter(); i++) {
-            drawLightLine(l, l.getRadius(), l.getRadius(), i, 0, offX, offY);
-            drawLightLine(l, l.getRadius(), l.getRadius(), i, l.getDiameter(), offX, offY);
-            drawLightLine(l, l.getRadius(), l.getRadius(), 0, i, offX, offY);
-            drawLightLine(l, l.getRadius(), l.getRadius(), l.getDiameter(), i, offX, offY);
+            // North
+            drawLightCard(l, l.getRadius(), l.getRadius(), i, 0, offX, offY);
+            // South
+            drawLightCard(l, l.getRadius(), l.getRadius(), i, l.getDiameter()-1, offX, offY); // -1 : quelques pixels manquent
+            // West
+            drawLightCard(l, l.getRadius(), l.getRadius(), 0, i, offX, offY);
+            // Est
+            drawLightCard(l, l.getRadius(), l.getRadius(), l.getDiameter(), i, offX, offY);
         }
     }
 
-    private void drawLightLine(Light l, int x0, int y0, int x1, int y1, int offX, int offY) {
+    private void drawLightCard(Light l, int x0, int y0, int x1, int y1, int offX, int offY) {
         int dx = Math.abs(x1 - x0);
         int dy = Math.abs(y1 - y0);
 
@@ -344,17 +353,18 @@ public class GameRender {
     }
 
     public void drawButton(Button b, String text) {
+        int col = b.isHover() ? darken(b.getBgColor(),20) : b.getBgColor();
         //Border-out
         drawRect(b.getOffX()+camX, b.getOffY()+camY, b.getWidth(), b.getHeight(), 0xff333333);
         //background & text
-        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, b.getWidth()-2, b.getHeight()-2, b.getBgColor());
-        drawText(text, b.getOffX()+b.getWidth()/2, b.getOffY()+b.getHeight()/2, 0, 0, lighten(b.getBgColor(), 150), Font.STANDARD);
+        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, b.getWidth()-2, b.getHeight()-2, col);
+        drawText(text, b.getOffX()+b.getWidth()/2, b.getOffY()+b.getHeight()/2, 0, 0, lighten(col, 100), Font.STANDARD);
         //Border-in lighter
-        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, 1, b.getHeight()-2, lighten(b.getBgColor(), 70));
-        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+1, b.getWidth()-4, 1, lighten(b.getBgColor(), 70));
+        fillRect(b.getOffX()+camX+1, b.getOffY()+camY+1, 1, b.getHeight()-2, lighten(col, 40));
+        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+1, b.getWidth()-4, 1, lighten(col, 40));
         //Border-in darker
-        fillRect(b.getOffX()+camX+b.getWidth()-2, b.getOffY()+camY+1, 1, b.getHeight()-2, darken(b.getBgColor(), 70));
-        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+b.getHeight()-2, b.getWidth()-4, 1, darken(b.getBgColor(), 70));
+        fillRect(b.getOffX()+camX+b.getWidth()-2, b.getOffY()+camY+1, 1, b.getHeight()-2, darken(col, 40));
+        fillRect(b.getOffX()+camX+2, b.getOffY()+camY+b.getHeight()-2, b.getWidth()-4, 1, darken(col, 40));
     }
 
     public void drawInput(int x, int y, int w, int h, int color) {
@@ -468,16 +478,16 @@ public class GameRender {
     public void drawLevels(GameContainer gc, String[][] levels) {
 
         int largest = 0;
-        for(int i = 0; i < levels.length; i++) {
-            int len = textSize(levels[i][1], Font.STANDARD);
-            if(len+30 > largest) largest = len+30;
+        for (String[] level : levels) {
+            int len = textSize(level[1], Font.STANDARD);
+            if (len + 30 > largest) largest = len + 30;
         }
 
         int x = gc.getWidth()/2-largest/2;
         int y = GameManager.TS+10-GameSelection.scroll;
 
         int hUsed = 10;
-        for(int i = 0; i < gc.getData().getValueOf("Level up") + 1; i++) {
+        for(int i = 0; i <= gc.getData().getValueOf("Level up") + 1; i++) {
 
             int size = 30;
 
@@ -496,7 +506,7 @@ public class GameRender {
         }
 
         int hTotal = gc.getHeight()-3*GameManager.TS;
-        int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
+        int minus = Math.max(hUsed - hTotal, 0);
 
         drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, GameSelection.scroll/8, minus/8);
     }
@@ -520,7 +530,7 @@ public class GameRender {
         for(int i = 0; i < f.size(); i++) {
 
             int w = f.get(i).getW();
-            int h = f.get(i).getH() < 30 ? 30 : f.get(i).getH();
+            int h = Math.max(f.get(i).getH(), 30);
 
             if(i != 0) y += f.get(i-1).getH() < 30 ? 30+10 : f.get(i-1).getH()+10;
 
@@ -538,7 +548,7 @@ public class GameRender {
         }
 
         int hTotal = gc.getHeight()-3*GameManager.TS;
-        int minus = hUsed-hTotal < 0 ? 0 : hUsed-hTotal;
+        int minus = Math.max(hUsed - hTotal, 0);
 
         if(f.size() != 0)
             drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, CreativeMode.scroll/8, minus/8);

@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
@@ -17,13 +17,14 @@ public class Options extends View {
 
     private Settings s;
     private GameMap map;
-    private SoundClip select;
+    private SoundClip hover, click;
     private Button tglLang, tglFps, tglLights, back;
 
     public Options(Settings s, GameMap map) {
         this.s = s;
         this.map = map;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
         buttons.add(tglLang = new Button("lang", 0));
         buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", 0));
         buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", 0));
@@ -40,23 +41,43 @@ public class Options extends View {
 
         //Button selection
         if(isSelected(gc, tglLang)) {
-            select.play();
-            if(s.getLangIndex() < s.getLang().size() - 1) s.setLangIndex(s.getLangIndex() + 1);
-            else s.setLangIndex(0);
+            click.play();
+            if(s.getLangIndex() < s.getLang().size() - 1) {
+                s.setLangIndex(s.getLangIndex() + 1);
+            } else {
+                s.setLangIndex(0);
+            }
         } else if(isSelected(gc, tglFps)) {
-            select.play();
+            click.play();
             s.setShowFps(!s.isShowFps());
-            if(s.isShowFps()) tglFps.setText("FPS on");
-            else tglFps.setText("FPS off");
+            if(s.isShowFps()) {
+                tglFps.setText("FPS on");
+            } else {
+                tglFps.setText("FPS off");
+            }
         } else if(isSelected(gc, tglLights)) {
-            select.play();
+            click.play();
             s.setShowLights(!s.isShowLights());
-            if(s.isShowLights()) tglLights.setText("Darkness");
-            else tglLights.setText("Full day");
+            if(s.isShowLights()) {
+                tglLights.setText("Darkness");
+            } else {
+                tglLights.setText("Full day");
+            }
         } else if(isSelected(gc, back)) {
-            select.play();
+            click.play();
             updateOptions();
             gc.setState(gc.getLastState());
+        }
+
+        for(Button btn : buttons) {
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
+            }
         }
     }
 
@@ -89,14 +110,19 @@ public class Options extends View {
                 switch(sub[0]) {
                     case "lang":
                         switch(s.getLangIndex()) {
-                            case 0: newLines.add(line.replace(sub[1], "en")); break;
-                            case 1: newLines.add(line.replace(sub[1], "fr")); break;
+                            case 0:
+                                newLines.add(line.replace(sub[1], "en")); break;
+                            case 1:
+                                newLines.add(line.replace(sub[1], "fr")); break;
                         }
                         break;
-                    case "guiScale": newLines.add(line); break;
-                    case "maxFPS": newLines.add(line); break;
-                    case "showFPS": newLines.add(line.replace(sub[1], s.isShowFps() ? "true" : "false")); break;
-                    case "showLights": newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
+                    case "guiScale":
+                    case "maxFPS":
+                        newLines.add(line); break;
+                    case "showFPS":
+                        newLines.add(line.replace(sub[1], s.isShowFps() ? "true" : "false")); break;
+                    case "showLights":
+                        newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
                 }
             }
             Files.write(Paths.get(GameManager.APPDATA + "\\options.txt"), newLines, StandardCharsets.UTF_8);

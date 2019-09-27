@@ -1,9 +1,20 @@
 package com.strozor.engine;
 
 import com.strozor.engine.gfx.Font;
+import com.strozor.engine.gfx.Light;
 import com.strozor.game.GameManager;
+import com.strozor.engine.view.CreativeMode;
+import com.strozor.engine.view.Credits;
+import com.strozor.engine.view.GameOver;
+import com.strozor.engine.view.GameSelection;
+import com.strozor.engine.view.InputDialog;
+import com.strozor.engine.view.MainMenu;
+import com.strozor.engine.view.Options;
+import com.strozor.engine.view.PausedEdit;
+import com.strozor.engine.view.PausedGame;
+import com.strozor.engine.view.Stats;
 import com.strozor.game.Edit;
-import com.strozor.view.*;
+
 
 public class GameContainer implements Runnable {
 
@@ -154,7 +165,7 @@ public class GameContainer implements Runnable {
                 if(State == STATE.GAME || State == STATE.PAUSEDGAME || State == STATE.GAMEOVER || (State == STATE.STATS && lastState == 2)) {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
-                    if(s.isShowLights()) gameRender.process();
+                    //if(s.isShowLights()) gameRender.process();
                     if(gm.getObject("player") != null)
                         gameRender.drawGameStates(this, gm.getObject("player"));
                 } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
@@ -186,7 +197,14 @@ public class GameContainer implements Runnable {
                     gameSelection.render(this, gameRender);
                 }
 
-                if(State == STATE.MAINMENU || (State == STATE.OPTSMENU && lastState == 0)) {
+                if(s.isShowLights() && State != STATE.CREATIVEMODE && State != STATE.EDIT && State != STATE.PAUSEDEDIT && State != STATE.INPUTDIALOG) {
+                    if (State != STATE.GAME && State != STATE.GAMEOVER && State != STATE.PAUSEDGAME) {
+                        gameRender.drawLight(new Light(150, 0xffffff99), this.getInput().getMouseX(), this.getInput().getMouseY());
+                    }
+                    gameRender.process();
+                }
+
+                if(State == STATE.MAINMENU || State == STATE.OPTSMENU || State == STATE.STATS || State == STATE.CREDITS) {
                     gameRender.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                     gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }

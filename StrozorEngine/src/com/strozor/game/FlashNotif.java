@@ -10,7 +10,7 @@ public class FlashNotif {
     private float duration, elapsed = 0;
     private int color, distance;
 
-    FlashNotif(String message, float duration, int distance, int color) {
+    public FlashNotif(String message, float duration, int distance, int color) {
         this.message = message;
         this.duration = duration;
         this.distance = distance;

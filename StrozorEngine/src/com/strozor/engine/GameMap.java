@@ -1,18 +1,21 @@
 package com.strozor.engine;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 import com.strozor.engine.gfx.Image;
 
-import java.util.*;
 
 public class GameMap {
 
-    private Map<Integer, String> colTag = new HashMap<>();
-    private Map<String, Integer> tagCol = new HashMap<>();
-    private Map<String, int[]> tagPos = new TreeMap<>();
+    private Map<Integer, String> colTag;
+    private Map<String, Integer> tagCol;
+    private Map<String, int[]> tagPos;
     private int[] map, solids = {0xff000000, 0xff777777};
     private int width, height, spawnX = -1, spawnY = -1;
 
     public GameMap() {
+        colTag = new HashMap<>();
         colTag.put(0xff000000, "floor");
         colTag.put(0xff009900, "ladder");
         colTag.put(0xff777777, "slime");
@@ -38,6 +41,7 @@ public class GameMap {
         colTag.put(0x420000ff, "arrow right");
         colTag.put(0x4200ff00, "arrow up");
 
+        tagCol = new HashMap<>();
         tagCol.put("floor", 0xff000000);
         tagCol.put("ladder", 0xff009900);
         tagCol.put("slime", 0xff777777);
@@ -62,6 +66,7 @@ public class GameMap {
         tagCol.put("arrow right", 0x420000ff);
         tagCol.put("arrow up", 0x4200ff00);
 
+        tagPos = new TreeMap<>();
         tagPos.put("floor", pos(0, 0));
         tagPos.put("ladder", pos(0, 1));
         tagPos.put("slime", pos(0, 2));
@@ -87,10 +92,20 @@ public class GameMap {
         tagPos.put("arrow up", pos(6, 3));
     }
 
+    /**
+     * Returns an array containing (x, y) coordinates in the object's sprite
+     * @param x Width coordinate
+     * @param y Height coordinate
+     * @return int[] Array
+     */
     private int[] pos(int x, int y) {
         return new int[]{x, y};
     }
 
+    /**
+     * Initialize GameMap with all pixels of img
+     * @param img
+     */
     public void init(Image img) {
         this.width = img.getW();
         this.height = img.getH();
@@ -113,14 +128,28 @@ public class GameMap {
         return height;
     }
 
+    /**
+     * X coordinate of Spawn point in the map
+     * @return the x coor of the spawn
+     */
     public int getSpawnX() {
         return spawnX;
     }
 
+    /**
+     * Y coordinate of Spawn point in the map
+     * @return the y coor of the spawn
+     */
     public int getSpawnY() {
         return spawnY;
     }
 
+    /**
+     * Verify if a bloc is solid (can't walk throw) or not
+     * @param x Width coordinate
+     * @param y Height coordinate
+     * @return True if the bloc is solid and False if it's not
+     */
     public boolean isSolid(int x, int y) {
         if(x >= 0 && x < width && y >= 0 && y < height)
             for(int s : solids)
@@ -129,6 +158,12 @@ public class GameMap {
         return (x < 0 || x >= width || y < 0 || y >= height);
     }
 
+    /**
+     * Define one bloc with a rgba code
+     * @param x Width coordinate
+     * @param y Height coordinate
+     * @param col Rgba code
+     */
     public void setBloc(int x, int y, int col) {
         if(col == 0xff00ff00) {
             spawnX = x;
@@ -137,13 +172,24 @@ public class GameMap {
         map[x + y * width] = col;
     }
 
+    /**
+     * Get the bloc's tag at (x, y) coordinates on the map
+     * @param x Width coordinate
+     * @param y Height coordinate
+     * @return String : the bloc's tag (ex: floor, spikes, spawn, etc...)
+     */
     public String getTag(int x, int y) {
-        if(x >= 0 && x < width && y >= 0 && y < height)
+        if(x >= 0 && x < width && y >= 0 && y < height && colTag.containsKey(map[x + y * width]))
             return colTag.get(map[x + y * width]);
         else
             return "floor";
     }
 
+    /**
+     * Get a tag's rgba code
+     * @param tag
+     * @return Rgba code
+     */
     public int getCol(String tag) {
         return tagCol.get(tag);
     }
@@ -152,6 +198,11 @@ public class GameMap {
         return tagPos.get(tag);
     }
 
+    /**
+     * Remove the bloc at (x, y) position in the map
+     * @param x With coordinate
+     * @param y Height coordinate
+     */
     public void clean(int x, int y) {
         this.map[x + y * width] = 0;
     }

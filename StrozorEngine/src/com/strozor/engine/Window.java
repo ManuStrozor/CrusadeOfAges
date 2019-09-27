@@ -1,9 +1,15 @@
 package com.strozor.engine;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Canvas;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import javax.swing.JFrame;
+import javax.swing.WindowConstants;
+
 
 public class Window {
 
@@ -12,13 +18,15 @@ public class Window {
     private BufferStrategy bs;
     private Graphics g;
 
-    Window(GameContainer gc) {
+    private GameContainer gc;
 
-        JFrame frame = new JFrame(gc.getTitle());
+    public Window(GameContainer gc) {
+
+        this.gc = gc;
+        JFrame frame = new JFrame(this.gc.getTitle());
         frame.setUndecorated(true);
         frame.setResizable(false);
-        frame.setVisible(true);
-
+        
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
@@ -27,37 +35,38 @@ public class Window {
         int h = (int) tk.getScreenSize().getHeight();
 
         Dimension d = new Dimension(w, h);
-        canvas = new Canvas();
-        canvas.setPreferredSize(d);
-        canvas.setMaximumSize(d);
-        canvas.setMinimumSize(d);
+        this.canvas = new Canvas();
+        this.canvas.setPreferredSize(d);
+        this.canvas.setMaximumSize(d);
+        this.canvas.setMinimumSize(d);
 
-        frame.add(canvas, BorderLayout.CENTER);
+        frame.add(this.canvas, BorderLayout.CENTER);
         frame.pack();
 
-        gc.setWidth((int)(w / gc.getScale()));
-        gc.setHeight((int)(h / gc.getScale()));
+        this.gc.setWidth((int)(w / this.gc.getScale()));
+        this.gc.setHeight((int)(h / this.gc.getScale()));
 
-        image  = new BufferedImage(gc.getWidth(), gc.getHeight(), BufferedImage.TYPE_INT_RGB);
+        this.image = new BufferedImage(this.gc.getWidth(), this.gc.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         frame.setSize(w, h);
+        frame.setVisible(true);
 
-        canvas.createBufferStrategy(3);
-        bs = canvas.getBufferStrategy();
-        g = bs.getDrawGraphics();
-        canvas.requestFocus();
+        this.canvas.createBufferStrategy(3);
+        this.bs = this.canvas.getBufferStrategy();
+        this.g = this.bs.getDrawGraphics();
+        this.canvas.requestFocus();
     }
 
     public void update() {
-        g.drawImage(image,0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        bs.show();
+        this.g.drawImage(this.image, 0, 0, this.canvas.getWidth(), this.canvas.getHeight(), null);
+        this.bs.show();
     }
 
     public BufferedImage getImage() {
-        return image;
+        return this.image;
     }
 
     Canvas getCanvas() {
-        return canvas;
+        return this.canvas;
     }
 }

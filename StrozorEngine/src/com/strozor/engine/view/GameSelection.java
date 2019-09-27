@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.*;
 import com.strozor.engine.audio.SoundClip;
@@ -15,7 +15,7 @@ public class GameSelection extends View {
 
     static {
         once = false;
-        focus = false;
+        focus = true;
         fIndex = 0;
         scroll = 0;
         sMax = 0;
@@ -25,13 +25,14 @@ public class GameSelection extends View {
     private GameMap map;
     private GameManager game;
     private Button play, back;
-    private SoundClip select;
+    private SoundClip hover, click;
 
     public GameSelection(Settings s, GameMap map, AbstractGame game) {
         this.s = s;
         this.map = map;
         this.game = (GameManager) game;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
         buttons.add(play = new Button(170, 20, "Play", 1));
         buttons.add(back = new Button(170, 20, "Back", 0));
     }
@@ -63,7 +64,7 @@ public class GameSelection extends View {
             if(scroll > sMax) scroll = sMax;
         }
         //Selected control
-        for(int i = 0; i < gc.getData().getValueOf("Level up"); i++) {
+        for(int i = 0; i <= gc.getData().getValueOf("Level up"); i++) {
             if(levelSelected(gc, i, scroll)) {
                 fIndex = i;
                 focus = true;
@@ -80,10 +81,19 @@ public class GameSelection extends View {
                     GameManager.current = fIndex;
                     game.load(GameManager.levels[fIndex][0]);
                 }
-                select.play();
+                click.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(11);
                 once = false;
+            }
+
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
             }
         }
     }
@@ -99,7 +109,6 @@ public class GameSelection extends View {
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS, 1, map, "wall");
         r.drawText(s.translate("Choose a level"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
-        r.drawText(""+scroll, 0, 0, 1, 1, -1, Font.STANDARD);
         //Draw background & buttons
         r.fillAreaBloc(0, gc.getHeight()-GameManager.TS*2, gc.getWidth()/GameManager.TS, 2, map, "wall");
         play.setOffX(gc.getWidth()/2-play.getWidth()/2);

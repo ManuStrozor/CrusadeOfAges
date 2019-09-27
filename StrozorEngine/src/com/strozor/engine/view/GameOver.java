@@ -1,4 +1,4 @@
-package com.strozor.view;
+package com.strozor.engine.view;
 
 import com.strozor.engine.GameContainer;
 import com.strozor.engine.GameRender;
@@ -10,13 +10,14 @@ import com.strozor.engine.gfx.Button;
 public class GameOver extends View {
 
     private Settings s;
-    private SoundClip select, gameover;
+    private SoundClip hover, click, gameover;
 
     private boolean once = false;
 
     public GameOver(Settings settings) {
         s = settings;
-        select = new SoundClip("/audio/select.wav");
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
         gameover = new SoundClip("/audio/gameover.wav");
         buttons.add(new Button("Try again", 1));
         buttons.add(new Button("Quit to title", 0));
@@ -34,11 +35,20 @@ public class GameOver extends View {
         for(Button btn : buttons) {
             if(isSelected(gc, btn)) {
                 if(btn.getText().contains("Quit")) gc.getData().saveData();
-                select.play();
+                click.play();
                 gameover.stop();
                 once = false;
                 gc.setState(btn.getGoState());
                 gc.setLastState(7);
+            }
+
+            if (btn.setHover(isHover(gc, btn))) {
+                if (!btn.isHoverSounded()) {
+                    if (!hover.isRunning()) hover.play();
+                    btn.setHoverSounded(true);
+                }
+            } else {
+                btn.setHoverSounded(false);
             }
         }
     }
