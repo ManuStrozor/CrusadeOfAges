@@ -7,6 +7,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment=" Server Client">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/server/Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -94,7 +95,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GameManager (1)">
+  <component name="RunManager" selected="Application.Server">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -196,8 +197,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GameManager (1)" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.GameManager (1)" />
         <item itemvalue="Application.GameManager" />
         <item itemvalue="Application.GameContainer" />
       </list>
@@ -228,7 +229,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569614888952</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary=" Server Client">
+      <created>1569615081043</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1569615081043</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
