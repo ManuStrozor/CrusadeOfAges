@@ -241,17 +241,18 @@ public class GameManager extends AbstractGame {
 
         String OS = (System.getProperty("os.name")).toUpperCase();
         if (OS.contains("WIN")) {
-            APPDATA = System.getenv("AppData") + "\\.squaremonster";
+            APPDATA = System.getenv("AppData");
         } else {
-            APPDATA = System.getProperty("user.home") + "\\.squaremonster";
+            APPDATA = System.getProperty("user.home");
         }
+        APPDATA += "\\.squaremonster";
         System.out.println("Appdata: " + APPDATA);
 
         Settings s = new Settings();
         GameMap map = new GameMap();
         writeAppData();
         readOptions(s);
-        GameContainer gc = new GameContainer(new GameManager(new Socket("192.168.0.16", 5338), map), s, map, new Data());
+        GameContainer gc = new GameContainer(new GameManager(new Socket("localhost", 5338), map), s, map, new Data());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();

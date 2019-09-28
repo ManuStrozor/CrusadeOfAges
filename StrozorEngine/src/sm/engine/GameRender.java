@@ -30,7 +30,7 @@ public class GameRender {
     private boolean processing = false;
 
     public GameRender(GameContainer gc) {
-        String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\objects.png";
+        String path = GameManager.APPDATA + "\\assets\\objects.png";
         objsImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
         pW = gc.getWidth();
         pH = gc.getHeight();
