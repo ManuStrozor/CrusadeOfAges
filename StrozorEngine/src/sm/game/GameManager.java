@@ -1,8 +1,6 @@
 package sm.game;
 
 import sm.engine.*;
-import sm.engine.gfx.*;
-import sm.engine.*;
 import sm.engine.gfx.Image;
 import sm.engine.gfx.Light;
 
@@ -30,7 +28,7 @@ public class GameManager extends AbstractGame {
 
     public static final int TS = 32;
     public static int current = 0;
-    public static final String APPDATA = System.getenv("APPDATA") + "\\.squaremonster";
+    public static String APPDATA;
     public static String[][] levels = {
             {"/levels/0.png", "Learn to jump"},
             {"/levels/1.png", "Trampoline room"},
@@ -207,7 +205,8 @@ public class GameManager extends AbstractGame {
      * @param s
      */
     private static void readOptions(Settings s) {
-        try(BufferedReader br = new BufferedReader(new FileReader(APPDATA + "\\options.txt"))) {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(APPDATA + "\\options.txt"));
             String line = br.readLine();
             while (line != null) {
                 String[] sub = line.split(":");
@@ -239,11 +238,20 @@ public class GameManager extends AbstractGame {
      * @param args
      */
     public static void main(String[] args) throws IOException {
+
+        String OS = (System.getProperty("os.name")).toUpperCase();
+        if (OS.contains("WIN")) {
+            APPDATA = System.getenv("AppData") + "\\.squaremonster";
+        } else {
+            APPDATA = System.getProperty("user.home") + "\\.squaremonster";
+        }
+        System.out.println("Appdata: " + APPDATA);
+
         Settings s = new Settings();
         GameMap map = new GameMap();
         writeAppData();
         readOptions(s);
-        GameContainer gc = new GameContainer(new GameManager(new Socket("localhost", 4999), map), s, map, new Data());
+        GameContainer gc = new GameContainer(new GameManager(new Socket("192.168.0.16", 5338), map), s, map, new Data());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();
