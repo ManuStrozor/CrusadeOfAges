@@ -133,39 +133,68 @@ public class GameManager extends AbstractGame {
     /**
      * Writes all game files in AppData
      */
-    private static void writeAppData() {
-        
-        //.squaremonster
-        File smFolder = new File(APPDATA);
-        if(!smFolder.exists()) if(!smFolder.mkdir()) System.out.println("Dossier .squaremonster déjà existant");
-        
+    private static boolean writeAppData(File appdata) {
+
+        // .squaremonster
+        File smFolder = new File(APPDATA + "/.squaremonster");
+        if(!smFolder.exists()) {
+            if (!appdata.canWrite()) {
+                System.out.println("Impossible de créer le dossier .squaremonster");
+                return false;
+            } else if(!smFolder.mkdir()) {
+                System.out.println("Dossier .squaremonster déjà existant");
+            }
+        }
+        APPDATA += "/.squaremonster";
+
         //assets
-        File smAssets = new File(APPDATA + "\\assets");
-        if(!smAssets.exists()) if(!smAssets.mkdir()) System.out.println("Dossier assets déjà existant");
-        
+        File smAssets = new File(APPDATA + "/assets");
+        if(!smAssets.exists()) {
+            if (!smFolder.canWrite()) {
+                System.out.println("Impossible de créer le dossier assets");
+                return false;
+            } else if(!smAssets.mkdir()) {
+                System.out.println("Dossier assets déjà existant");
+            }
+        }
+
+        //screenshots
+        File smScreenshots = new File(APPDATA + "/screenshots");
+        if(!smScreenshots.exists()) {
+            if (!smFolder.canWrite()) {
+                System.out.println("Impossible de créer le dossier screenshots");
+                return false;
+            } else if (!smScreenshots.mkdir()) {
+                System.out.println("Dossier screenshots déjà existant");
+            }
+        }
+
+        //creative_mode
+        File smCrea = new File(APPDATA + "/creative_mode");
+        if(!smCrea.exists()) {
+            if (!smFolder.canWrite()) {
+                System.out.println("Impossible de créer le dossier creative_mode");
+                return false;
+            } else if (!smCrea.mkdir()) {
+                System.out.println("Dossier creative_mode déjà existant");
+            }
+        }
+
         //objects.png (assets)
-        File outObjs = new File(APPDATA + "\\assets\\objects.png");
-        File outPl = new File(APPDATA + "\\assets\\player.png");
+        File outObjs = new File(APPDATA + "/assets/objects.png");
+        File outPl = new File(APPDATA + "/assets/player.png");
         try {
-            if(!outObjs.exists())
+            if(!outObjs.exists() && smAssets.canWrite())
                 ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/objects.png")), "png", outObjs);
-            if(!outPl.exists())
+            if(!outPl.exists() && smAssets.canWrite())
                 ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/player.png")), "png", outPl);
         } catch(IOException e) {
             e.printStackTrace();
         }
-        
-        //screenshots
-        File smScreenshots = new File(APPDATA + "\\screenshots");
-        if(!smScreenshots.exists()) if(!smScreenshots.mkdir()) System.out.println("Dossier screenshots déjà existant");
-        
-        //creative_mode
-        File smCrea = new File(APPDATA + "\\creative_mode");
-        if(!smCrea.exists()) if(!smCrea.mkdir()) System.out.println("Dossier creative_mode déjà existant");
-        
+
         //options.txt
-        File smOptFile = new File(APPDATA + "\\options.txt");
-        if(!smOptFile.exists()) {
+        File smOptFile = new File(APPDATA + "/options.txt");
+        if(!smOptFile.exists() && smFolder.canWrite()) {
             try {
                 List<String> lines = Arrays.asList(
                         "lang:fr",
@@ -173,7 +202,7 @@ public class GameManager extends AbstractGame {
                         "showFPS:false",
                         "showLights:true"
                 );
-                Path path = Paths.get(APPDATA + "\\options.txt");
+                Path path = Paths.get(APPDATA + "/options.txt");
                 Files.write(path, lines, StandardCharsets.UTF_8);
             } catch(IOException e) {
                 e.printStackTrace();
@@ -181,13 +210,13 @@ public class GameManager extends AbstractGame {
         }
         
         //player.dat
-        File smStatsFile = new File(APPDATA + "\\player.dat");
-        if(!smStatsFile.exists()) {
+        File smStatsFile = new File(APPDATA + "/player.dat");
+        if(!smStatsFile.exists() && smFolder.canWrite()) {
             try {
-                Path path = Paths.get(APPDATA + "\\player.dat");
+                Path path = Paths.get(APPDATA + "/player.dat");
                 Files.createFile(path);
 
-                FileOutputStream fos = new FileOutputStream(APPDATA + "\\player.dat");
+                FileOutputStream fos = new FileOutputStream(APPDATA + "/player.dat");
                 ObjectOutputStream oos = new ObjectOutputStream(fos);
                 for(String ds : dataStates) {
                     oos.writeUTF(ds);
@@ -198,6 +227,8 @@ public class GameManager extends AbstractGame {
                 e.printStackTrace();
             }
         }
+
+        return true;
     }
 
     /**
@@ -206,7 +237,7 @@ public class GameManager extends AbstractGame {
      */
     private static void readOptions(Settings s) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(APPDATA + "\\options.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(APPDATA + "/options.txt"));
             String line = br.readLine();
             while (line != null) {
                 String[] sub = line.split(":");
@@ -243,16 +274,16 @@ public class GameManager extends AbstractGame {
         if (OS.contains("WIN")) {
             APPDATA = System.getenv("AppData");
         } else {
-            APPDATA = System.getProperty("user.home");
+            APPDATA = System.getProperty("user.dir");
         }
-        APPDATA += "\\.squaremonster";
-        System.out.println("Appdata: " + APPDATA);
+        File appdata = new File(APPDATA);
+        System.out.println("Game Folder: " + APPDATA);
 
         Settings s = new Settings();
         GameMap map = new GameMap();
-        writeAppData();
+        if (!writeAppData(appdata)) return;
         readOptions(s);
-        GameContainer gc = new GameContainer(new GameManager(new Socket("localhost", 5338), map), s, map, new Data());
+        GameContainer gc = new GameContainer(new GameManager(new Socket("192.168.0.11", 5338), map), s, map, new Data());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();

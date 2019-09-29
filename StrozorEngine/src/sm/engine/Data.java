@@ -20,7 +20,7 @@ public class Data {
 
     private void readData() {
         try {
-            FileInputStream fis = new FileInputStream(GameManager.APPDATA + "\\player.dat");
+            FileInputStream fis = new FileInputStream(GameManager.APPDATA + "/player.dat");
             ObjectInputStream ois = new ObjectInputStream(fis);
             for(int i = 0; i < states.length; i++) {
                 states[i] = ois.readUTF();
@@ -34,7 +34,7 @@ public class Data {
 
     public void saveData() {
         try {
-            FileOutputStream fos = new FileOutputStream(GameManager.APPDATA + "\\player.dat");
+            FileOutputStream fos = new FileOutputStream(GameManager.APPDATA + "/player.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             for(int i = 0; i < states.length; i++) {
                 oos.writeUTF(states[i]);

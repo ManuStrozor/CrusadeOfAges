@@ -6,11 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="modif Server">
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="encore un probleme de droits d'acces pour linux">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/Data.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Data.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/GameRender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameRender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Options.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/server/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/server/Server.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Player.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -97,7 +99,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Server">
+  <component name="RunManager" selected="Application.GameManager (1)">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -199,8 +201,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Server" />
         <item itemvalue="Application.GameManager (1)" />
+        <item itemvalue="Application.Server" />
         <item itemvalue="Application.GameManager" />
         <item itemvalue="Application.GameContainer" />
       </list>
@@ -252,7 +254,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569665120691</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="encore un probleme de droits d'acces pour linux">
+      <created>1569703291105</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1569703291105</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -281,6 +290,7 @@
     <MESSAGE value="work in progress" />
     <MESSAGE value=" Server Client" />
     <MESSAGE value="modif Server" />
-    <option name="LAST_COMMIT_MESSAGE" value="modif Server" />
+    <MESSAGE value="encore un probleme de droits d'acces pour linux" />
+    <option name="LAST_COMMIT_MESSAGE" value="encore un probleme de droits d'acces pour linux" />
   </component>
 </project>

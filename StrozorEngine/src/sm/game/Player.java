@@ -31,7 +31,7 @@ public class Player extends GameObject {
     private float fallDist = 0;
 
     public Player(String tag, GameMap map, int lives) {
-        String path = System.getenv("APPDATA") + "\\.squaremonster\\assets\\player.png";
+        String path = GameManager.APPDATA + "/assets/player.png";
         plImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
 
         move = new Move(this, map);

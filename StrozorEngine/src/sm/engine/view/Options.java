@@ -105,7 +105,7 @@ public class Options extends View {
     private void updateOptions() {
         try {
             List<String> newLines = new ArrayList<>();
-            for (String line : Files.readAllLines(Paths.get(GameManager.APPDATA + "\\options.txt"), StandardCharsets.UTF_8)) {
+            for (String line : Files.readAllLines(Paths.get(GameManager.APPDATA + "/options.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
@@ -125,7 +125,7 @@ public class Options extends View {
                         newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
                 }
             }
-            Files.write(Paths.get(GameManager.APPDATA + "\\options.txt"), newLines, StandardCharsets.UTF_8);
+            Files.write(Paths.get(GameManager.APPDATA + "/options.txt"), newLines, StandardCharsets.UTF_8);
         } catch(IOException e) {
             e.printStackTrace();
         }
