@@ -10,6 +10,7 @@ import sm.game.actions.Event;
 import sm.game.actions.Move;
 
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Player extends GameObject {
@@ -23,7 +24,7 @@ public class Player extends GameObject {
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
-    private float offX, offY, anim = 0;
+    private float upPosX, upPosY, offX, offY, anim = 0;
 
     private int lastFloorX, lastFlorrY;
 
@@ -48,6 +49,8 @@ public class Player extends GameObject {
         tileY = map.getSpawnY();
         posX = tileX * GameManager.TS;
         posY = tileY * GameManager.TS;
+        upPosX = posX;
+        upPosY = posY;
         offX = 0;
         offY = 0;
     }
@@ -170,10 +173,22 @@ public class Player extends GameObject {
     @Override
     public void update(GameContainer gc, GameManager gm, float dt) {
 
+        try {
+            if (upPosX != posX || upPosY != posY) {
+                upPosX = posX;
+                upPosY = posY;
+                gm.getDos().writeUTF("Player: " + upPosX + " " + upPosY + " anim:" + anim);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         //Notifications update
         for(int i = 0; i < notifs.size(); i++) {
             notifs.get(i).update(dt);
-            if(notifs.get(i).isEnded()) notifs.remove(i);
+            if(notifs.get(i).isEnded()) {
+                notifs.remove(i--);
+            }
         }
 
         String currTag = map.getTag(tileX, tileY);

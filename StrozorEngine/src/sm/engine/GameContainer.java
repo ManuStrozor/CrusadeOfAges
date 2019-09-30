@@ -16,12 +16,10 @@ import sm.engine.view.Stats;
 import sm.game.Edit;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 
 public class GameContainer implements Runnable {
 
-    private PrintWriter pr;
     private Thread thread;
     private Window window;
     private GameRender gameRender;
@@ -66,10 +64,9 @@ public class GameContainer implements Runnable {
     private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings, GameMap map, Data data) throws IOException {
+    public GameContainer(AbstractGame game, Settings settings, GameMap map, Data data) {
         this.game = game;
         gm = (GameManager) game;
-        pr = new PrintWriter(gm.getSo().getOutputStream());
         this.s = settings;
         this.data = data;
 
@@ -107,7 +104,7 @@ public class GameContainer implements Runnable {
     }
 
     public void run() {
-        STATE printState = STATE.EXIT;
+        STATE upState = STATE.EXIT;
         boolean render;
         double startTime, passedTime, frameTime = 0, unprocessedTime = 0;
         double lastTime = System.nanoTime() / 1000000000.0;
@@ -117,6 +114,7 @@ public class GameContainer implements Runnable {
         running = true;
 
         while(running && State != STATE.EXIT) {
+
             render = true;
 
             startTime = System.nanoTime() / 1000000000.0;
@@ -125,6 +123,7 @@ public class GameContainer implements Runnable {
 
             unprocessedTime += passedTime;
             frameTime += passedTime;
+
 
             while(unprocessedTime >= UPDATE_CAP) {
                 unprocessedTime -= UPDATE_CAP;
@@ -221,10 +220,13 @@ public class GameContainer implements Runnable {
                 window.update();
                 frames++;
 
-                if (printState != State) {
-                    printState = State;
-                    pr.println("State: " + printState);
-                    pr.flush();
+                if (upState != State) {
+                    upState = State;
+                    try {
+                        gm.getDos().writeUTF("State: " + upState);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 try {
@@ -234,9 +236,11 @@ public class GameContainer implements Runnable {
                 }
             }
         }
-        pr.close();
+
         try {
-            gm.getSo().close();
+            gm.getDis().close();
+            gm.getDos().close();
+            gm.getSocket().close();
         } catch (IOException e) {
             e.printStackTrace();
         }

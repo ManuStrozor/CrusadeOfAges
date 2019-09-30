@@ -151,7 +151,7 @@ public class GameRender {
         return newA | newR | newG | newB;
     }
 
-    private int textSize(String text, Font font) {
+    public int textSize(String text, Font font) {
         int textW = 0;
         for(int i = 0; i < text.length(); i++)
             textW += font.getWidths()[text.codePointAt(i)];

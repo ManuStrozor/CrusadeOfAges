@@ -5,13 +5,9 @@ import sm.engine.gfx.Image;
 import sm.engine.gfx.Light;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -44,20 +40,44 @@ public class GameManager extends AbstractGame {
             "Jump"
     };
 
-    private Socket so;
+    private Socket socket;
+    private DataInputStream dis;
+    private DataOutputStream dos;
 
     private ArrayList<GameObject> objects = new ArrayList<>();
     private ArrayList<FlashNotif> notifs = new ArrayList<>();
     private Camera camera;
     private GameMap map;
 
-    private GameManager(Socket so, GameMap map) {
-        this.so = so;
+    private GameManager(Socket socket, GameMap map) throws IOException {
+        this.socket = socket;
+        dis = new DataInputStream(socket.getInputStream());
+        dos = new DataOutputStream(socket.getOutputStream());
         this.map = map;
+    }
+
+    public Socket getSocket() {
+        return socket;
+    }
+
+    public DataInputStream getDis() {
+        return dis;
+    }
+
+    public DataOutputStream getDos() {
+        return dos;
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        try {
+            if (dis.available() > 0) {
+                notifs.add(new FlashNotif(dis.readUTF(), 2, 50, -1));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
 
@@ -258,10 +278,6 @@ public class GameManager extends AbstractGame {
         } catch(IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public Socket getSo() {
-        return so;
     }
 
     /**
