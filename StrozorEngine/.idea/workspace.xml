@@ -6,15 +6,13 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="Acces linux OK">
-      <change afterPath="$PROJECT_DIR$/src/sm/network/Server.java" afterDir="false" />
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="client-&gt;server-&gt;client OK ....Linux ?">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/GameRender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameRender.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/game/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/server/ClientThread.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/server/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/network/Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -101,7 +99,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.GameManager (1)">
+  <component name="RunManager" selected="Application.Server">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -203,8 +201,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.GameManager (1)" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.GameManager (1)" />
         <item itemvalue="Application.GameManager" />
         <item itemvalue="Application.GameContainer" />
       </list>
@@ -270,7 +268,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569762548778</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="client-&gt;server-&gt;client OK ....Linux ?">
+      <created>1569881358826</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1569881358826</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TodoView" selected-index="2">
@@ -301,6 +306,7 @@
     <MESSAGE value="modif Server" />
     <MESSAGE value="encore un probleme de droits d'acces pour linux" />
     <MESSAGE value="Acces linux OK" />
-    <option name="LAST_COMMIT_MESSAGE" value="Acces linux OK" />
+    <MESSAGE value="client-&gt;server-&gt;client OK ....Linux ?" />
+    <option name="LAST_COMMIT_MESSAGE" value="client-&gt;server-&gt;client OK ....Linux ?" />
   </component>
 </project>

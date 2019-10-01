@@ -5,7 +5,6 @@ import sm.engine.gfx.Image;
 import sm.engine.gfx.Light;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.net.Socket;
@@ -73,7 +72,7 @@ public class GameManager extends AbstractGame {
 
         try {
             if (dis.available() > 0) {
-                notifs.add(new FlashNotif(dis.readUTF(), 2, 50, -1));
+                notifs.add(new FlashNotif(dis.readUTF(), 1, 300, -1));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,7 +112,7 @@ public class GameManager extends AbstractGame {
         }
 
         // Reload level
-        if(getObject("player") == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
+        if(getObject(""+socket.getLocalPort()) == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
             load(levels[current][0]);
         }
 
@@ -136,8 +135,8 @@ public class GameManager extends AbstractGame {
     public void load(String path) {
         map.init(new Image(path, false));
         objects.clear();
-        objects.add(new Player("player", map, 1));
-        camera = new Camera("player", map);
+        objects.add(new Player(""+socket.getLocalPort(), map, 1));
+        camera = new Camera(""+socket.getLocalPort(), map);
     }
 
     /**

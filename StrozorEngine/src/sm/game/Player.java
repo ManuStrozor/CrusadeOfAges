@@ -2,6 +2,7 @@ package sm.game;
 
 import sm.engine.GameContainer;
 import sm.engine.GameRender;
+import sm.engine.gfx.Font;
 import sm.engine.gfx.ImageTile;
 import sm.engine.GameMap;
 import sm.engine.gfx.Light;
@@ -177,7 +178,7 @@ public class Player extends GameObject {
             if (upPosX != posX || upPosY != posY) {
                 upPosX = posX;
                 upPosY = posY;
-                gm.getDos().writeUTF("Player: " + upPosX + " " + upPosY + " anim:" + anim);
+                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + "] Pos: " + upPosX + " " + upPosY + " anim: " + anim);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -333,6 +334,7 @@ public class Player extends GameObject {
     public void render(GameContainer gc, GameRender r) {
         r.drawLight(new Light(200, 0xffffff99),(int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
         r.drawImageTile(plImg, (int)posX, (int)posY, direction, (int)anim);
+        r.drawText(tag, gc.getWidth()/2-width/2, gc.getHeight()/2-height/2, 1, -1, -1, Font.STANDARD);
         for(FlashNotif notif : notifs) notif.render(gc, r);
     }
 

@@ -171,8 +171,8 @@ public class GameContainer implements Runnable {
                     game.render(this, gameRender);
                     gameRender.setCoorCam(0, 0);
                     //if(s.isShowLights()) gameRender.process();
-                    if(gm.getObject("player") != null)
-                        gameRender.drawGameStates(this, gm.getObject("player"));
+                    if(gm.getObject(""+gm.getSocket().getLocalPort()) != null)
+                        gameRender.drawGameStates(this, gm.getObject(""+gm.getSocket().getLocalPort()));
                 } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
                     edit.render(this, gameRender);
                 }
@@ -223,7 +223,7 @@ public class GameContainer implements Runnable {
                 if (upState != State) {
                     upState = State;
                     try {
-                        gm.getDos().writeUTF("State: " + upState);
+                        gm.getDos().writeUTF(gm.getSocket().getLocalPort() + "] " + upState);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

@@ -79,7 +79,10 @@ class ClientHandler extends Thread {
             try {
                 received = dis.readUTF();
                 print(id, received);
-                dos.writeUTF("["+id+"]" + received);
+                int i = 0;
+                while (tab[i] != null) {
+                    tab[i++].dos.writeUTF(received);
+                }
                 if(received.equals("Exit")) {
                     remove(id, socket);
                     break;
@@ -99,7 +102,7 @@ class ClientHandler extends Thread {
     }
 
     private void print(int id, String msg) {
-        System.out.println("["+id+"] " + msg);
+        System.out.println("["+id+":" + msg);
     }
 
     private void remove(int id, Socket s) throws IOException {
