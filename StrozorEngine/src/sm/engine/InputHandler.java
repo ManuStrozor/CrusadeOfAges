@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-public class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
+public class InputHandler implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener {
 
     private GameContainer gc;
 
@@ -23,7 +23,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
     private int mouseX, mouseY;
     private int scroll;
 
-    Input(GameContainer gc) {
+    InputHandler(GameContainer gc) {
         this.gc = gc;
         mouseX = 0;
         mouseY = 0;

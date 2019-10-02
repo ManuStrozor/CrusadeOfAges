@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import sm.engine.gfx.Image;
 
 
-public class GameMap {
+public class World {
 
     private Map<Integer, String> colTag;
     private Map<String, Integer> tagCol;
@@ -14,7 +14,7 @@ public class GameMap {
     private int[] map, solids = {0xff000000, 0xff777777};
     private int width, height, spawnX = -1, spawnY = -1;
 
-    public GameMap() {
+    public World() {
         colTag = new HashMap<>();
         colTag.put(0xff000000, "floor");
         colTag.put(0xff009900, "ladder");

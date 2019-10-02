@@ -1,21 +1,21 @@
 package sm.game;
 
-import sm.engine.AbstractGame;
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.gfx.Image;
-import sm.engine.GameMap;
+import sm.engine.World;
+import sm.game.objects.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-public class Edit extends AbstractGame {
+public class Editor extends AbstractGame {
 
     public static Image creaImg;
     public static boolean spawn = false, once = false, newOne = false;
     public static String rename = "";
 
-    private GameMap map;
+    private World world;
     private Player player;
 
     private int width, height;
@@ -37,9 +37,9 @@ public class Edit extends AbstractGame {
     };
     private int color, scroll = 0;
 
-    public Edit(int width, int height) {
-        map = new GameMap();
-        player = new Player("Tester", map, 999);
+    public Editor(int width, int height) {
+        world = new World();
+        player = new Player("Tester", world, 999);
         creaImg = new Image(new int[width * height], width, height);
         this.width = width;
         this.height = height;
@@ -53,87 +53,87 @@ public class Edit extends AbstractGame {
                 creaImg = null;
                 creaImg = new Image(new int[width * height], width, height);
             }
-            map.init(creaImg);
+            world.init(creaImg);
             once = true;
         }
 
-        if(!spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1)) {
-            player = new Player("player", map, 1);
+        if(!spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1)) {
+            player = new Player("player", world, 1);
             spawn = true;
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
 
         //Player update
-        if(spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1))
+        if(spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1))
             player.creativeUpdate(gc, dt);
 
-        if(gc.getInput().getScroll() > 0)
+        if(gc.getInputHandler().getScroll() > 0)
             scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
-        else if(gc.getInput().getScroll() < 0)
+        else if(gc.getInputHandler().getScroll() < 0)
             scroll = (scroll == 0) ? elems.length - 1 : scroll - 1;
 
-        color = map.getCol(elems[scroll]);
+        color = world.getCol(elems[scroll]);
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         if(gc.getCurrState() == 4) {
-            int mouseX = gc.getInput().getMouseX();
-            int mouseY = gc.getInput().getMouseY();
+            int mouseX = gc.getInputHandler().getMouseX();
+            int mouseY = gc.getInputHandler().getMouseY();
 
-            int x = (mouseX + r.getCamX()) / GameManager.TS;
-            int y = (mouseY + r.getCamY()) / GameManager.TS;
+            int x = (mouseX + r.getCamX()) / Game.TS;
+            int y = (mouseY + r.getCamY()) / Game.TS;
 
             int speed = 10;
 
-            if(r.getCamX() + gc.getWidth() < creaImg.getW() * GameManager.TS) {
+            if(r.getCamX() + gc.getWidth() < creaImg.getW() * Game.TS) {
                 if(mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
             }
-            if(r.getCamX() > -GameManager.TS) {
+            if(r.getCamX() > -Game.TS) {
                 if(mouseX == 0) r.setCamX(r.getCamX() - speed);
             }
-            if(r.getCamY() + gc.getHeight() < creaImg.getH() * GameManager.TS) {
+            if(r.getCamY() + gc.getHeight() < creaImg.getH() * Game.TS) {
                 if(mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
             }
             if(r.getCamY() > 0) {
                 if(mouseY == 0) r.setCamY(r.getCamY() - speed);
             }
 
-            if(mouseX > GameManager.TS) {
-                if(gc.getInput().isButton(MouseEvent.BUTTON1)) {
+            if(mouseX > Game.TS) {
+                if(gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
 
-                    if(elems[scroll].equals("spawn") && map.getSpawnX() != -1 && map.getSpawnY() != -1) {
+                    if(elems[scroll].equals("spawn") && world.getSpawnX() != -1 && world.getSpawnY() != -1) {
 
                         //Delete previous spawn
-                        creaImg.setP(map.getSpawnX(), map.getSpawnY(), 0x00000000);
-                        map.setBloc(map.getSpawnX(), map.getSpawnY(), 0);
+                        creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000);
+                        world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
 
                         //create new spawn
                         creaImg.setP(x, y, color);
 
                         //Reset player position
-                        player.getEvent().respawn(map.getSpawnX(), map.getSpawnY());
+                        player.getEvent().respawn(world.getSpawnX(), world.getSpawnY());
                     } else {
                         creaImg.setP(x, y, color);
                     }
 
-                    map.setBloc(x, y, map.getCol(elems[scroll]));
+                    world.setBloc(x, y, world.getCol(elems[scroll]));
 
-                } else if(gc.getInput().isButton(MouseEvent.BUTTON3)) {
+                } else if(gc.getInputHandler().isButton(MouseEvent.BUTTON3)) {
                     creaImg.setP(x, y, 0x00000000);
-                    map.setBloc(x, y, 0);
+                    world.setBloc(x, y, 0);
                 }
             }
         }
 
-        r.drawMap(map);
+        r.drawMap(world);
         r.drawMiniMap(gc, creaImg);
-        r.drawDock(gc, map, elems, scroll);
-        r.drawArrows(gc, map, creaImg.getW(), creaImg.getH());
+        r.drawDock(gc, world, elems, scroll);
+        r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
 
-        if(spawn && (map.getSpawnX() != -1 || map.getSpawnY() != -1))
+        if(spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1))
             player.render(gc, r);
     }
 }

@@ -17,7 +17,7 @@ public class Server {
 
         try {
             ss = new ServerSocket(PORT, MAX);
-            System.out.println("Server is listening at port [" + ss.getLocalPort() + "]");
+            System.out.println("Server is listening at port " + ss.getLocalPort());
         } catch (IOException e) {
             e.printStackTrace();
             return;
@@ -102,7 +102,7 @@ class ClientHandler extends Thread {
     }
 
     private void print(int id, String msg) {
-        System.out.println("["+id+":" + msg);
+        System.out.println(id + " " + msg);
     }
 
     private void remove(int id, Socket s) throws IOException {

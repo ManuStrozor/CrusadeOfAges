@@ -1,44 +1,46 @@
 package sm.game.actions;
 
 import sm.engine.GameContainer;
-import sm.engine.GameMap;
+import sm.engine.World;
 import sm.engine.audio.SoundClip;
-import sm.game.Player;
+import sm.game.objects.Player;
 
-public class Collecting {
+public class Collect {
 
     private Player pl;
-    private GameMap map;
-    private SoundClip coin = new SoundClip("/audio/getcoin.wav");
-    private SoundClip bonus = new SoundClip("/audio/getlife.wav");
+    private World world;
+    private SoundClip coin;
+    private SoundClip bonus;
 
-    public Collecting(Player pl, GameMap map) {
+    public Collect(Player pl, World world) {
         this.pl = pl;
-        this.map = map;
+        this.world = world;
+        coin = new SoundClip("/audio/getcoin.wav");
+        bonus = new SoundClip("/audio/getlife.wav");
         coin.setVolume(-20f);
         bonus.setVolume(-15f);
     }
 
     public void coin(GameContainer gc) {
-        map.clean(pl.getTileX(), pl.getTileY());
+        world.clean(pl.getTileX(), pl.getTileY());
         pl.setCoins(pl.getCoins() + 1);
         coin.play();
     }
 
     public void key(GameContainer gc) {
-        map.clean(pl.getTileX(), pl.getTileY());
+        world.clean(pl.getTileX(), pl.getTileY());
         pl.setKeys(pl.getKeys() + 1);
         bonus.play();
     }
 
     public void skull(GameContainer gc) {
-        map.clean(pl.getTileX(), pl.getTileY());
+        world.clean(pl.getTileX(), pl.getTileY());
         pl.setSkulls(pl.getSkulls() + 1);
         bonus.play();
     }
 
     public void pill(GameContainer gc) {
-        map.clean(pl.getTileX(), pl.getTileY());
+        world.clean(pl.getTileX(), pl.getTileY());
         pl.setLives(pl.getLives() + 1);
         bonus.play();
     }

@@ -2,7 +2,7 @@ package sm.engine.view;
 
 import sm.engine.*;
 import sm.engine.audio.SoundClip;
-import sm.game.GameManager;
+import sm.game.Game;
 import sm.engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
@@ -16,13 +16,13 @@ import java.util.List;
 public class Options extends View {
 
     private Settings s;
-    private GameMap map;
+    private World world;
     private SoundClip hover, click;
     private Button tglLang, tglFps, tglLights, back;
 
-    public Options(Settings s, GameMap map) {
+    public Options(Settings s, World world) {
         this.s = s;
-        this.map = map;
+        this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
         buttons.add(tglLang = new Button("lang", 0));
@@ -34,7 +34,7 @@ public class Options extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             updateOptions();
             gc.setState(gc.getLastState());
         }
@@ -82,10 +82,10 @@ public class Options extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         if(gc.getLastState() == 0) {
-            r.drawBackground(gc, map, "wall");
+            r.drawBackground(gc, world, "wall");
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
@@ -105,7 +105,7 @@ public class Options extends View {
     private void updateOptions() {
         try {
             List<String> newLines = new ArrayList<>();
-            for (String line : Files.readAllLines(Paths.get(GameManager.APPDATA + "/options.txt"), StandardCharsets.UTF_8)) {
+            for (String line : Files.readAllLines(Paths.get(Game.APPDATA + "/options.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
@@ -125,7 +125,7 @@ public class Options extends View {
                         newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
                 }
             }
-            Files.write(Paths.get(GameManager.APPDATA + "/options.txt"), newLines, StandardCharsets.UTF_8);
+            Files.write(Paths.get(Game.APPDATA + "/options.txt"), newLines, StandardCharsets.UTF_8);
         } catch(IOException e) {
             e.printStackTrace();
         }

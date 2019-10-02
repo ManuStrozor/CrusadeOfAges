@@ -1,10 +1,9 @@
 package sm.engine.view;
 
 import sm.engine.GameContainer;
-import sm.engine.GameMap;
-import sm.engine.GameRender;
+import sm.engine.World;
+import sm.engine.Renderer;
 import sm.engine.Settings;
-import sm.engine.View;
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
 
@@ -12,12 +11,12 @@ import sm.engine.gfx.Button;
 public class MainMenu extends View {
 
     private Settings s;
-    private GameMap map;
+    private World world;
     private SoundClip hover, click;
 
-    public MainMenu(Settings s, GameMap map) {
+    public MainMenu(Settings s, World world) {
         this.s = s;
-        this.map = map;
+        this.world = world;
 
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
@@ -52,8 +51,8 @@ public class MainMenu extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
-        r.drawBackground(gc, map, "wall");
+    public void render(GameContainer gc, Renderer r) {
+        r.drawBackground(gc, world, "wall");
         r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
 
         int startY = gc.getHeight()/4;

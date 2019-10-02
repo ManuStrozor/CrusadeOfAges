@@ -9,7 +9,7 @@ import java.awt.event.KeyEvent;
 public class Credits extends View {
 
     private Settings s;
-    private GameMap map;
+    private World world;
     private SoundClip hover, click;
     private Button back;
 
@@ -17,9 +17,9 @@ public class Credits extends View {
     private String[] thanks = {"My family", "Beta testers"};
     private String[] contribs = {"Majoolwip"};
 
-    public Credits(Settings s, GameMap map) {
+    public Credits(Settings s, World world) {
         this.s = s;
-        this.map = map;
+        this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
         buttons.add(back = new Button(60, 20, "Back", 0));
@@ -28,7 +28,7 @@ public class Credits extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
 
         //Button selection
         for(Button btn : buttons) {
@@ -50,9 +50,9 @@ public class Credits extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
-        r.drawBackground(gc, map, "wall");
+        r.drawBackground(gc, world, "wall");
         r.drawMenuTitle(gc, s.translate("Game credits").toUpperCase(), s.translate("Development team"));
 
         r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("MAIN DEVELOPERS"), devs);

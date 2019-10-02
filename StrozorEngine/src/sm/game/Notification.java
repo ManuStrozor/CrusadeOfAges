@@ -1,16 +1,16 @@
 package sm.game;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.gfx.Font;
 
-public class FlashNotif {
+public class Notification {
 
     private String message;
     private float duration, elapsed = 0;
     private int color, distance;
 
-    public FlashNotif(String message, float duration, int distance, int color) {
+    public Notification(String message, float duration, int distance, int color) {
         this.message = message;
         this.duration = duration;
         this.distance = distance;
@@ -22,7 +22,7 @@ public class FlashNotif {
         if(elapsed >= duration) elapsed = duration;
     }
 
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
         float percent = elapsed / duration;
         float offset = gc.getHeight() - percent * distance;
 
@@ -32,7 +32,7 @@ public class FlashNotif {
         r.drawText(message, 1, (int) offset, 1, -1, newColor, Font.STANDARD);
     }
 
-    boolean isEnded() {
+    public boolean isEnded() {
         return elapsed == duration;
     }
 }

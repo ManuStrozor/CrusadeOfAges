@@ -1,24 +1,24 @@
 package sm.game.actions;
 
-import sm.engine.GameMap;
+import sm.engine.World;
 import sm.engine.audio.SoundClip;
-import sm.game.Player;
+import sm.game.objects.Player;
 
 public class Move {
 
     private Player pl;
-    private GameMap map;
+    private World world;
     private SoundClip jump = new SoundClip("/audio/jump.wav");
 
-    public Move(Player pl, GameMap map) {
+    public Move(Player pl, World world) {
         this.pl = pl;
-        this.map = map;
+        this.world = world;
         jump.setVolume(-10f);
     }
 
     public void toLeft(float dt, float speed) {
         pl.setDirection(2);
-        if (map.isSolid(pl.getTileX() - 1, pl.getTileY()) || map.isSolid(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
+        if (world.isSolid(pl.getTileX() - 1, pl.getTileY()) || world.isSolid(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
             if (pl.getOffX() > 0) {
                 pl.setOffX(pl.getOffX() - dt * speed);
                 if (pl.getOffX() < 0) pl.setOffX(0);
@@ -32,7 +32,7 @@ public class Move {
 
     public void toRight(float dt, float speed) {
         pl.setDirection(1);
-        if (map.isSolid(pl.getTileX() + 1, pl.getTileY()) || map.isSolid(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
+        if (world.isSolid(pl.getTileX() + 1, pl.getTileY()) || world.isSolid(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
             if (pl.getOffX() < 0) {
                 pl.setOffX(pl.getOffX() + dt * speed);
                 if (pl.getOffX() > 0) pl.setOffX(0);
@@ -47,15 +47,15 @@ public class Move {
     public void jump(int power) {
         pl.setDirection(3);
         pl.setFallDist(-power);
-        if (!map.isSolid(pl.getTileX(), pl.getTileY()-1) && !map.isSolid(pl.getTileX() + (int)Math.signum((int) pl.getOffX()), pl.getTileY() - 1))
+        if (!world.isSolid(pl.getTileX(), pl.getTileY()-1) && !world.isSolid(pl.getTileX() + (int)Math.signum((int) pl.getOffX()), pl.getTileY() - 1))
             jump.play();
         pl.setGround(pl.getGround() + 1);
     }
 
     public void upLadder(float dt, float speed) {
         pl.setDirection(3);
-        if (map.isSolid(pl.getTileX(), pl.getTileY()-1) ||
-                map.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY()-1)) {
+        if (world.isSolid(pl.getTileX(), pl.getTileY()-1) ||
+                world.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY()-1)) {
             pl.setOffY(pl.getOffY() - dt * speed);
             if (pl.getOffY() < 0) pl.setOffY(0);
         } else {
@@ -65,7 +65,7 @@ public class Move {
 
     public void downLadder(float dt, float speed) {
         pl.setDirection(3);
-        if (map.isSolid(pl.getTileX(), pl.getTileY() + 1) || map.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() + 1)) {
+        if (world.isSolid(pl.getTileX(), pl.getTileY() + 1) || world.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() + 1)) {
             if (pl.getOffY() < 0) {
                 pl.setOffY(pl.getOffY() + dt * speed);
                 if (pl.getOffY() > 0) pl.setOffY(0);

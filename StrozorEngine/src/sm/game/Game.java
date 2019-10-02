@@ -3,6 +3,8 @@ package sm.game;
 import sm.engine.*;
 import sm.engine.gfx.Image;
 import sm.engine.gfx.Light;
+import sm.game.objects.GameObject;
+import sm.game.objects.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class GameManager extends AbstractGame {
+public class Game extends AbstractGame {
 
     public static final int TS = 32;
     public static int current = 0;
@@ -44,15 +46,19 @@ public class GameManager extends AbstractGame {
     private DataOutputStream dos;
 
     private ArrayList<GameObject> objects = new ArrayList<>();
-    private ArrayList<FlashNotif> notifs = new ArrayList<>();
+    private ArrayList<Notification> notifs = new ArrayList<>();
     private Camera camera;
-    private GameMap map;
+    private World world;
 
-    private GameManager(Socket socket, GameMap map) throws IOException {
+    private Game(Socket socket, World world) throws IOException {
         this.socket = socket;
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        this.map = map;
+        this.world = world;
+    }
+
+    public ArrayList<Notification> getNotifs() {
+        return notifs;
     }
 
     public Socket getSocket() {
@@ -72,22 +78,22 @@ public class GameManager extends AbstractGame {
 
         try {
             if (dis.available() > 0) {
-                notifs.add(new FlashNotif(dis.readUTF(), 1, 300, -1));
+                notifs.add(new Notification(dis.readUTF(), 1, 300, -1));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
 
         // Screenshots
-        if(gc.getInput().isKeyDown(KeyEvent.VK_F12)) {
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_F12)) {
             try {
                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
                 String filename = sdf.format(new Date()) + ".png";
                 File out = new File(APPDATA + "\\screenshots\\" + filename);
                 ImageIO.write(gc.getWindow().getImage(), "png", out);
-                notifs.add(new FlashNotif(filename, 3, 100, -1));
+                notifs.add(new Notification(filename, 3, 100, -1));
             } catch(IOException e) {
                 e.printStackTrace();
             }
@@ -120,12 +126,12 @@ public class GameManager extends AbstractGame {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
         camera.render(r);
-        r.drawMap(map);
-        if(gc.getSettings().isShowLights()) r.drawMapLights(map, new Light(30, 0xffffff99));
+        r.drawMap(world);
+        if(gc.getSettings().isShowLights()) r.drawMapLights(world, new Light(30, 0xffffff99));
         for(GameObject obj : objects) obj.render(gc, r);
-        for(FlashNotif notif : notifs) notif.render(gc, r);
+        for(Notification notif : notifs) notif.render(gc, r);
     }
 
     /**
@@ -133,10 +139,10 @@ public class GameManager extends AbstractGame {
      * @param path of the level image
      */
     public void load(String path) {
-        map.init(new Image(path, false));
+        world.init(new Image(path, false));
         objects.clear();
-        objects.add(new Player(""+socket.getLocalPort(), map, 1));
-        camera = new Camera(""+socket.getLocalPort(), map);
+        objects.add(new Player(""+socket.getLocalPort(), world, 1));
+        camera = new Camera(""+socket.getLocalPort(), world);
     }
 
     /**
@@ -150,7 +156,9 @@ public class GameManager extends AbstractGame {
     }
 
     /**
-     * Writes all game files in AppData
+     * Writes all game files in the right place
+     * Windows : AppData
+     * Linux : Current directory
      */
     private static boolean writeAppData(File appdata) {
 
@@ -251,7 +259,7 @@ public class GameManager extends AbstractGame {
     }
 
     /**
-     * Reads AppData/options file and write the content in the object Settings
+     * Reads options file and serialize the content
      * @param s
      */
     private static void readOptions(Settings s) {
@@ -291,14 +299,13 @@ public class GameManager extends AbstractGame {
         } else {
             APPDATA = System.getProperty("user.dir");
         }
-        File appdata = new File(APPDATA);
-        System.out.println("Game Folder: " + APPDATA);
+        //System.out.println("Game Folder: " + APPDATA);
 
         Settings s = new Settings();
-        GameMap map = new GameMap();
-        if (!writeAppData(appdata)) return;
+        World world = new World();
+        if (!writeAppData(new File(APPDATA))) return;
         readOptions(s);
-        GameContainer gc = new GameContainer(new GameManager(new Socket("192.168.0.11", 5338), map), s, map, new Data());
+        GameContainer gc = new GameContainer(new Game(new Socket("192.168.0.11", 5338), world), s, world, new DataStats());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();

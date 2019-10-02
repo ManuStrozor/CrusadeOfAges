@@ -1,12 +1,11 @@
 package sm.engine.view;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.Settings;
-import sm.engine.View;
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
-import sm.game.Edit;
+import sm.game.Editor;
 
 import java.awt.event.KeyEvent;
 
@@ -29,13 +28,13 @@ public class PausedEdit extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
 
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if(btn == save) {
-                    Edit.creaImg.saveIt(Edit.rename);
+                    Editor.creaImg.saveIt(Editor.rename);
                     CreativeMode.once = false;
                 }
                 click.play();
@@ -55,7 +54,7 @@ public class PausedEdit extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(r.getCamX(), r.getCamY(), gc.getWidth(), gc.getHeight(), 0x99000000);
 

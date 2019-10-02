@@ -1,6 +1,6 @@
 package sm.engine.gfx;
 
-import sm.game.GameManager;
+import sm.game.Game;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -63,6 +63,10 @@ public class Image {
         return alpha;
     }
 
+    public void setAlpha(boolean alpha) {
+        this.alpha = alpha;
+    }
+
     public void saveIt(String rename) {
         BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for(int y = 0; y < h; y++) {
@@ -75,7 +79,7 @@ public class Image {
             String filename;
             if(rename.equals("")) filename = sdf.format(new Date()) + ".png";
             else filename = rename;
-            File out = new File(GameManager.APPDATA + "\\creative_mode\\" + filename);
+            File out = new File(Game.APPDATA + "\\creative_mode\\" + filename);
             ImageIO.write(bi, "png", out);
         } catch(IOException e) {
             e.printStackTrace();

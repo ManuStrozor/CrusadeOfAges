@@ -1,9 +1,8 @@
 package sm.engine.view;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.Settings;
-import sm.engine.View;
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
 
@@ -26,12 +25,12 @@ public class PausedGame extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
 
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                if(btn.getText().contains("Quit")) gc.getData().saveData();
+                if(btn.getText().contains("Quit")) gc.getDataStats().saveData();
                 click.play();
                 gc.setState(btn.getGoState());
                 gc.setLastState(2);
@@ -49,7 +48,7 @@ public class PausedGame extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(gc, s.translate("Paused").toUpperCase(), "");

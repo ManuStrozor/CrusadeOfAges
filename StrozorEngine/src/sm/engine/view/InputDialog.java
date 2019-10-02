@@ -2,7 +2,7 @@ package sm.engine.view;
 
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
-import sm.game.GameManager;
+import sm.game.Game;
 import sm.engine.*;
 
 import java.awt.event.KeyEvent;
@@ -17,15 +17,15 @@ public class InputDialog extends View {
     public static int blink;
 
     private Settings s;
-    private GameMap map;
+    private World world;
     private SoundClip hover, click;
     private Button cancel, rename;
 
     private boolean once = false;
 
-    public InputDialog(Settings s, GameMap map) {
+    public InputDialog(Settings s, World world) {
         this.s = s;
-        this.map = map;
+        this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
         buttons.add(cancel = new Button(80, 20, "Cancel", 8));
@@ -40,13 +40,13 @@ public class InputDialog extends View {
             once = true;
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             gc.setLastState(9);
             gc.setState(8);
             once = false;
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER)) {
             try {
                 Path src = Paths.get(path);
                 Files.move(src, src.resolveSibling(input+".png"));
@@ -59,13 +59,13 @@ public class InputDialog extends View {
         }
 
         //Blinking bar control
-        if(gc.getInput().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
             blink--;
-        if(gc.getInput().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
             blink++;
-        if(gc.getInput().isKeyDown(KeyEvent.VK_END))
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_END))
             blink = input.length();
-        if(gc.getInput().isKeyDown(KeyEvent.VK_HOME))
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_HOME))
             blink = 0;
 
         //Input control
@@ -101,15 +101,15 @@ public class InputDialog extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        int x = gc.getWidth()/2- GameManager.TS*3;
-        int y = gc.getHeight()/3-GameManager.TS;
+        int x = gc.getWidth()/2- Game.TS*3;
+        int y = gc.getHeight()/3- Game.TS;
 
-        r.fillAreaBloc(x, y, 6, 2, map, "wall");
-        r.drawInput(x+6, y+9, GameManager.TS*6-12, GameManager.TS-12, 0xff333333);
+        r.fillAreaBloc(x, y, 6, 2, world, "wall");
+        r.drawInput(x+6, y+9, Game.TS*6-12, Game.TS-12, 0xff333333);
 
         cancel.setOffX(gc.getWidth()/2-cancel.getWidth()-5);
         cancel.setOffY(gc.getHeight()/3+5);

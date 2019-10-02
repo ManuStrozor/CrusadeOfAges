@@ -2,8 +2,8 @@ package sm.engine.view;
 
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
-import sm.game.Edit;
-import sm.game.GameManager;
+import sm.game.Editor;
+import sm.game.Game;
 import sm.engine.*;
 
 import java.awt.*;
@@ -29,7 +29,7 @@ public class CreativeMode extends View {
     }
 
     private Settings s;
-    private GameMap map;
+    private World world;
     private SoundClip hover, click;
     private sm.engine.gfx.Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
@@ -40,9 +40,9 @@ public class CreativeMode extends View {
     private ArrayList<String> paths = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
 
-    public CreativeMode(Settings s, GameMap map) {
+    public CreativeMode(Settings s, World world) {
         this.s = s;
-        this.map = map;
+        this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
@@ -68,7 +68,7 @@ public class CreativeMode extends View {
             paths.clear();
             dates.clear();
 
-            sMax = 10-(gc.getHeight()-3* GameManager.TS);
+            sMax = 10-(gc.getHeight()-3* Game.TS);
             int count = 0;
             assert files != null;
             for(File file : files) {
@@ -86,17 +86,17 @@ public class CreativeMode extends View {
             once = true;
         }
 
-        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
             gc.setLastState(8);
             gc.setState(0);
             once = false;
         }
         //Scroll control
-        if(gc.getInput().getScroll() < 0) {
+        if(gc.getInputHandler().getScroll() < 0) {
             scroll -= 20;
             if(scroll < 0) scroll = 0;
-        } else if(gc.getInput().getScroll() > 0) {
+        } else if(gc.getInputHandler().getScroll() > 0) {
             scroll += 20;
             if(scroll > sMax) scroll = sMax;
         }
@@ -115,16 +115,16 @@ public class CreativeMode extends View {
             } else if(isSelected(gc, btn)) {
                 if(btn == back) focus = false;
                 if(btn == create) {
-                    Edit.once = false;
-                    if(!Edit.newOne) Edit.newOne = true;
-                    Edit.rename = "";
+                    Editor.once = false;
+                    if(!Editor.newOne) Editor.newOne = true;
+                    Editor.rename = "";
                 }
                 if(btn == edit) {
-                    Edit.once = false;
-                    if(Edit.newOne) Edit.newOne = false;
-                    Edit.rename = names.get(fIndex);
-                    Edit.creaImg = null;
-                    Edit.creaImg = images.get(fIndex);
+                    Editor.once = false;
+                    if(Editor.newOne) Editor.newOne = false;
+                    Editor.rename = names.get(fIndex);
+                    Editor.creaImg = null;
+                    Editor.creaImg = images.get(fIndex);
                 }
                 if(btn == rename) {
                     InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
@@ -166,26 +166,26 @@ public class CreativeMode extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(gc, map, "wall");
+        r.drawBackground(gc, world, "wall");
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if(sMax <= 0) scroll = 0;
         r.drawListOfFiles(gc, images, names, dates, s.translate("Create your first map !"));
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth()/GameManager.TS+1, 1, map, "wall");
-        r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, sm.engine.gfx.Font.STANDARD);
+        r.fillAreaBloc(0, 0, gc.getWidth()/ Game.TS+1, 1, world, "wall");
+        r.drawText(s.translate("Select a map"), gc.getWidth()/2, Game.TS/2, 0, 0, -1, sm.engine.gfx.Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight()-GameManager.TS*2, gc.getWidth()/GameManager.TS+1, 2, map, "wall");
+        r.fillAreaBloc(0, gc.getHeight()- Game.TS*2, gc.getWidth()/ Game.TS+1, 2, world, "wall");
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
-        edit.setOffY(gc.getHeight()-2*GameManager.TS+10);
+        edit.setOffY(gc.getHeight()-2* Game.TS+10);
 
         create.setOffX(gc.getWidth()/2+5+create.getWidth()+10);
         create.setOffY(edit.getOffY());
 
         rename.setOffX(edit.getOffX());
-        rename.setOffY(gc.getHeight()-GameManager.TS+5);
+        rename.setOffY(gc.getHeight()- Game.TS+5);
 
         delete.setOffX(rename.getOffX()+rename.getWidth()+10);
         delete.setOffY(rename.getOffY());

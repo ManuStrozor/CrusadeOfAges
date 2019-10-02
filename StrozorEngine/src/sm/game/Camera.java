@@ -1,22 +1,23 @@
 package sm.game;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
-import sm.engine.GameMap;
+import sm.engine.Renderer;
+import sm.engine.World;
+import sm.game.objects.GameObject;
 
 public class Camera {
 
     private float offX, offY;
-    private GameMap gameMap;
+    private World world;
     private String targetTag;
     private GameObject target = null;
 
-    Camera(String tag, GameMap gameMap) {
+    Camera(String tag, World world) {
         this.targetTag = tag;
-        this.gameMap = gameMap;
+        this.world = world;
     }
 
-    public void update(GameContainer gc, GameManager gm, float dt) {
+    public void update(GameContainer gc, Game gm, float dt) {
 
         if(target == null) target = gm.getObject(targetTag);
         if(target == null) return;
@@ -29,11 +30,11 @@ public class Camera {
 
         if(offX < 0) offX = 0;
         if(offY < 0) offY = 0;
-        if(offX + gc.getWidth() > gameMap.getWidth() * GameManager.TS) offX = gameMap.getWidth() * GameManager.TS - gc.getWidth();
-        if(offY + gc.getHeight() > gameMap.getHeight() * GameManager.TS) offY = gameMap.getHeight() * GameManager.TS - gc.getHeight();
+        if(offX + gc.getWidth() > world.getWidth() * Game.TS) offX = world.getWidth() * Game.TS - gc.getWidth();
+        if(offY + gc.getHeight() > world.getHeight() * Game.TS) offY = world.getHeight() * Game.TS - gc.getHeight();
     }
 
-    public void render(GameRender r) {
+    public void render(Renderer r) {
         r.setCoorCam((int)offX, (int)offY);
     }
 }

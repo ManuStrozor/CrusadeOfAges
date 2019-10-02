@@ -1,9 +1,8 @@
 package sm.engine.view;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.Settings;
-import sm.engine.View;
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
 
@@ -34,7 +33,7 @@ public class GameOver extends View {
         //Button selection
         for(Button btn : buttons) {
             if(isSelected(gc, btn)) {
-                if(btn.getText().contains("Quit")) gc.getData().saveData();
+                if(btn.getText().contains("Quit")) gc.getDataStats().saveData();
                 click.play();
                 gameover.stop();
                 once = false;
@@ -54,7 +53,7 @@ public class GameOver extends View {
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
+    public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 

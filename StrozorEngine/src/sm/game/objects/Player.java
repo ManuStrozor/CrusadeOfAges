@@ -1,12 +1,14 @@
-package sm.game;
+package sm.game.objects;
 
 import sm.engine.GameContainer;
-import sm.engine.GameRender;
+import sm.engine.Renderer;
 import sm.engine.gfx.Font;
-import sm.engine.gfx.ImageTile;
-import sm.engine.GameMap;
+import sm.engine.gfx.Sprite;
+import sm.engine.World;
 import sm.engine.gfx.Light;
-import sm.game.actions.Collecting;
+import sm.game.Notification;
+import sm.game.Game;
+import sm.game.actions.Collect;
 import sm.game.actions.Event;
 import sm.game.actions.Move;
 
@@ -17,12 +19,12 @@ import java.util.ArrayList;
 public class Player extends GameObject {
 
     private Move move;
-    private Collecting collect;
+    private Collect collect;
     private Event event;
 
-    private GameMap map;
-    private ImageTile plImg;
-    private ArrayList<FlashNotif> notifs = new ArrayList<>();
+    private World world;
+    private Sprite plImg;
+    private ArrayList<Notification> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
     private float upPosX, upPosY, offX, offY, anim = 0;
@@ -32,35 +34,34 @@ public class Player extends GameObject {
     private int speed, ground = 2;
     private float fallDist = 0;
 
-    public Player(String tag, GameMap map, int lives) {
-        String path = GameManager.APPDATA + "/assets/player.png";
-        plImg = new ImageTile(path, GameManager.TS, GameManager.TS, true);
+    public Player(String tag, World world, int lives) {
+        String path = Game.APPDATA + "/assets/player.png";
+        plImg = new Sprite(path, Game.TS, Game.TS, true);
 
-        move = new Move(this, map);
-        collect = new Collecting(this, map);
-        event = new Event(this, map);
+        move = new Move(this, world);
+        collect = new Collect(this, world);
+        event = new Event(this, world);
 
-        this.map = map;
+        this.world = world;
         this.tag = tag;
         this.lives = lives;
 
-        width = GameManager.TS;
-        height = GameManager.TS;
-        tileX = map.getSpawnX();
-        tileY = map.getSpawnY();
-        posX = tileX * GameManager.TS;
-        posY = tileY * GameManager.TS;
+        width = Game.TS;
+        height = Game.TS;
+        tileX = world.getSpawnX();
+        tileY = world.getSpawnY();
+        posX = tileX * Game.TS;
+        posY = tileY * Game.TS;
         upPosX = posX;
         upPosY = posY;
         offX = 0;
         offY = 0;
     }
 
-    @Override
     public void creativeUpdate(GameContainer gc, float dt) {
 
-        String currTag = map.getTag(tileX, tileY);
-        String botTag = map.getTag(tileX, tileY+1);
+        String currTag = world.getTag(tileX, tileY);
+        String botTag = world.getTag(tileX, tileY+1);
 
         //Last floor
         if(!currTag.contains("spikes") && botTag.equals("floor")) {
@@ -70,7 +71,7 @@ public class Player extends GameObject {
 
         //Slime bloc
         if(botTag.equals("slime") && fallDist == 0) {
-            if(!gc.getInput().isKey(KeyEvent.VK_DOWN) && !gc.getInput().isKey(KeyEvent.VK_S))
+            if(!gc.getInputHandler().isKey(KeyEvent.VK_DOWN) && !gc.getInputHandler().isKey(KeyEvent.VK_S))
                 move.jump(10);
         }
 
@@ -81,9 +82,9 @@ public class Player extends GameObject {
         } else {
 
             //Left & Right
-            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
+            if (gc.getInputHandler().isKey(KeyEvent.VK_LEFT) || gc.getInputHandler().isKey(KeyEvent.VK_Q))
                 move.toLeft(dt, speed);
-            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
+            if (gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) || gc.getInputHandler().isKey(KeyEvent.VK_D))
                 move.toRight(dt, speed);
 
             //Up & Down ladders
@@ -92,33 +93,33 @@ public class Player extends GameObject {
                 fallDist = 0;
                 ground = 0;
 
-                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
+                if ((gc.getInputHandler().isKey(KeyEvent.VK_UP) || gc.getInputHandler().isKey(KeyEvent.VK_Z) || gc.getInputHandler().isKey(KeyEvent.VK_SPACE))) {
                     if(!currTag.equals("ladder")) move.jump(4);
                     else move.upLadder(dt, speed);
                 }
 
-                if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
+                if ((gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S))) {
                     move.downLadder(dt, speed);
                 }
             } else {
                 //Jump & Gravity
                 fallDist += dt * 14;
 
-                if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
+                if (gc.getInputHandler().isKeyDown(KeyEvent.VK_UP) || gc.getInputHandler().isKeyDown(KeyEvent.VK_Z) || gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) {
                     if(ground <= 1) move.jump(5);
                 }
 
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((map.isSolid(tileX, tileY-1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY-1)) && offY < 0) {
+                    if ((world.isSolid(tileX, tileY-1) || world.isSolid(tileX + (int)Math.signum((int) offX), tileY-1)) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((map.isSolid(tileX, tileY+1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY+1)) && offY > 0) {
+                    if ((world.isSolid(tileX, tileY+1) || world.isSolid(tileX + (int)Math.signum((int) offX), tileY+1)) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -129,28 +130,28 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if(offY > GameManager.TS / 2.0) {
+        if(offY > Game.TS / 2.0) {
             tileY++;
-            offY -= GameManager.TS;
+            offY -= Game.TS;
         }
-        if(offY < -GameManager.TS / 2.0) {
+        if(offY < -Game.TS / 2.0) {
             tileY--;
-            offY += GameManager.TS;
+            offY += Game.TS;
         }
-        if(offX > GameManager.TS / 2.0) {
+        if(offX > Game.TS / 2.0) {
             tileX++;
-            offX -= GameManager.TS;
+            offX -= Game.TS;
         }
-        if(offX < -GameManager.TS / 2.0) {
+        if(offX < -Game.TS / 2.0) {
             tileX--;
-            offX += GameManager.TS;
+            offX += Game.TS;
         }
 
         //Snick -> Slow
         if(currTag.equals("ladder")) {
             speed = 140;
             anim += dt * 14;
-        } else if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
+        } else if(gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S)) {
             speed = 40;
             anim += dt * 4;
         } else {
@@ -158,27 +159,27 @@ public class Player extends GameObject {
             anim += dt * 18;
         }
 
-        if((!gc.getInput().isKey(KeyEvent.VK_RIGHT) &&
-                !gc.getInput().isKey(KeyEvent.VK_D) &&
-                !gc.getInput().isKey(KeyEvent.VK_LEFT) &&
-                !gc.getInput().isKey(KeyEvent.VK_Q)) || anim > 4) {
+        if((!gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_D) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_LEFT) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_Q)) || anim > 4) {
             anim = 0;
         }
 
         if(fallDist != 0) anim = 3;
 
-        posX = tileX * GameManager.TS + offX;
-        posY = tileY * GameManager.TS + offY;
+        posX = tileX * Game.TS + offX;
+        posY = tileY * Game.TS + offY;
     }
 
     @Override
-    public void update(GameContainer gc, GameManager gm, float dt) {
+    public void update(GameContainer gc, Game gm, float dt) {
 
         try {
             if (upPosX != posX || upPosY != posY) {
                 upPosX = posX;
                 upPosY = posY;
-                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + "] Pos: " + upPosX + " " + upPosY + " anim: " + anim);
+                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upPosX + " " + upPosY + " " + anim);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -192,8 +193,8 @@ public class Player extends GameObject {
             }
         }
 
-        String currTag = map.getTag(tileX, tileY);
-        String botTag = map.getTag(tileX, tileY+1);
+        String currTag = world.getTag(tileX, tileY);
+        String botTag = world.getTag(tileX, tileY+1);
 
         //Last floor
         if(!currTag.contains("spikes") && botTag.equals("floor") && fallDist == 0) {
@@ -203,14 +204,14 @@ public class Player extends GameObject {
 
         //Slime bloc
         if(botTag.equals("slime") && fallDist == 0) {
-            if(!gc.getInput().isKey(KeyEvent.VK_DOWN) && !gc.getInput().isKey(KeyEvent.VK_S)) {
+            if(!gc.getInputHandler().isKey(KeyEvent.VK_DOWN) && !gc.getInputHandler().isKey(KeyEvent.VK_S)) {
                 move.jump(10);
-                gc.getData().upValueOf("Slime");
+                gc.getDataStats().upValueOf("Slime");
             }
         }
 
         //Collectings & Events on current bloc
-        switch(map.getTag(tileX, tileY)) {
+        switch(world.getTag(tileX, tileY)) {
             case "coin": collect.coin(gc); break;
             case "pill": collect.pill(gc); break;
             case "key": collect.key(gc); break;
@@ -223,10 +224,10 @@ public class Player extends GameObject {
         if(currTag.contains("spikes")) {
 
             event.impale();
-            gc.getData().upValueOf("Death");
+            gc.getDataStats().upValueOf("Death");
             if(this.lives == 0) {
                 this.setDead(true);
-                gc.getData().upValueOf("Game over");
+                gc.getDataStats().upValueOf("Game over");
                 gc.setState(7);
                 gc.setLastState(1);
             } else {
@@ -236,9 +237,9 @@ public class Player extends GameObject {
         } else {
 
             //Left & Right
-            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
+            if (gc.getInputHandler().isKey(KeyEvent.VK_LEFT) || gc.getInputHandler().isKey(KeyEvent.VK_Q))
                 move.toLeft(dt, speed);
-            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
+            if (gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) || gc.getInputHandler().isKey(KeyEvent.VK_D))
                 move.toRight(dt, speed);
 
             //Up & Down ladders
@@ -247,12 +248,12 @@ public class Player extends GameObject {
                 fallDist = 0;
                 ground = 0;
 
-                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
+                if ((gc.getInputHandler().isKey(KeyEvent.VK_UP) || gc.getInputHandler().isKey(KeyEvent.VK_Z) || gc.getInputHandler().isKey(KeyEvent.VK_SPACE))) {
                     if(!currTag.equals("ladder")) move.jump(4);
                     else move.upLadder(dt, speed);
                 }
 
-                if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
+                if ((gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S))) {
                     move.downLadder(dt, speed);
                 }
 
@@ -260,24 +261,24 @@ public class Player extends GameObject {
             } else {
                 fallDist += dt * 14;
 
-                if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
+                if (gc.getInputHandler().isKeyDown(KeyEvent.VK_UP) || gc.getInputHandler().isKeyDown(KeyEvent.VK_Z) || gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) {
                     if(ground <= 1) {
                         move.jump(5);
-                        gc.getData().upValueOf("Jump");
+                        gc.getDataStats().upValueOf("Jump");
                     }
                 }
 
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((map.isSolid(tileX, tileY-1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY-1)) && offY < 0) {
+                    if ((world.isSolid(tileX, tileY-1) || world.isSolid(tileX + (int)Math.signum((int) offX), tileY-1)) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((map.isSolid(tileX, tileY+1) || map.isSolid(tileX + (int)Math.signum((int) offX), tileY+1)) && offY > 0) {
+                    if ((world.isSolid(tileX, tileY+1) || world.isSolid(tileX + (int)Math.signum((int) offX), tileY+1)) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -288,28 +289,28 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if(offY > GameManager.TS / 2.0) {
+        if(offY > Game.TS / 2.0) {
             tileY++;
-            offY -= GameManager.TS;
+            offY -= Game.TS;
         }
-        if(offY < -GameManager.TS / 2.0) {
+        if(offY < -Game.TS / 2.0) {
             tileY--;
-            offY += GameManager.TS;
+            offY += Game.TS;
         }
-        if(offX > GameManager.TS / 2.0) {
+        if(offX > Game.TS / 2.0) {
             tileX++;
-            offX -= GameManager.TS;
+            offX -= Game.TS;
         }
-        if(offX < -GameManager.TS / 2.0) {
+        if(offX < -Game.TS / 2.0) {
             tileX--;
-            offX += GameManager.TS;
+            offX += Game.TS;
         }
 
         //Snick -> Slow
         if(currTag.equals("ladder")) {
             speed = 140;
             anim += dt * 14;
-        } else if(gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
+        } else if(gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S)) {
             speed = 40;
             anim += dt * 4;
         } else {
@@ -317,25 +318,25 @@ public class Player extends GameObject {
             anim += dt * 18;
         }
 
-        if((!gc.getInput().isKey(KeyEvent.VK_RIGHT) &&
-                !gc.getInput().isKey(KeyEvent.VK_D) &&
-                !gc.getInput().isKey(KeyEvent.VK_LEFT) &&
-                !gc.getInput().isKey(KeyEvent.VK_Q)) || anim > 4) {
+        if((!gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_D) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_LEFT) &&
+                !gc.getInputHandler().isKey(KeyEvent.VK_Q)) || anim > 4) {
             anim = 0;
         }
 
         if(fallDist != 0) anim = 3;
 
-        posX = tileX * GameManager.TS + offX;
-        posY = tileY * GameManager.TS + offY;
+        posX = tileX * Game.TS + offX;
+        posY = tileY * Game.TS + offY;
     }
 
     @Override
-    public void render(GameContainer gc, GameRender r) {
-        r.drawLight(new Light(200, 0xffffff99),(int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
+    public void render(GameContainer gc, Renderer r) {
+        r.drawLight(new Light(200, 0xffffff99),(int)posX + Game.TS / 2, (int)posY + Game.TS / 2);
         r.drawImageTile(plImg, (int)posX, (int)posY, direction, (int)anim);
         r.drawText(tag, gc.getWidth()/2-width/2, gc.getHeight()/2-height/2, 1, -1, -1, Font.STANDARD);
-        for(FlashNotif notif : notifs) notif.render(gc, r);
+        for(Notification notif : notifs) notif.render(gc, r);
     }
 
     public int getTileX() {

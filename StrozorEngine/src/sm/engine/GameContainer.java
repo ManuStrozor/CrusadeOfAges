@@ -2,18 +2,10 @@ package sm.engine;
 
 import sm.engine.gfx.Font;
 import sm.engine.gfx.Light;
-import sm.game.GameManager;
-import sm.engine.view.CreativeMode;
-import sm.engine.view.Credits;
-import sm.engine.view.GameOver;
-import sm.engine.view.GameSelection;
-import sm.engine.view.InputDialog;
-import sm.engine.view.MainMenu;
-import sm.engine.view.Options;
-import sm.engine.view.PausedEdit;
-import sm.engine.view.PausedGame;
-import sm.engine.view.Stats;
-import sm.game.Edit;
+import sm.engine.view.*;
+import sm.game.AbstractGame;
+import sm.game.Game;
+import sm.game.Editor;
 
 import java.io.IOException;
 
@@ -22,11 +14,11 @@ public class GameContainer implements Runnable {
 
     private Thread thread;
     private Window window;
-    private GameRender gameRender;
-    private GameManager gm;
-    private Input input;
+    private Renderer renderer;
+    private Game gm;
+    private InputHandler inputHandler;
     private Settings s;
-    private Data data;
+    private DataStats dataStats;
     private View
             mainMenu,
             options,
@@ -64,30 +56,30 @@ public class GameContainer implements Runnable {
     private STATE State = STATE.MAINMENU;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings, GameMap map, Data data) {
+    public GameContainer(AbstractGame game, Settings settings, World world, DataStats dataStats) {
         this.game = game;
-        gm = (GameManager) game;
+        gm = (Game) game;
         this.s = settings;
-        this.data = data;
+        this.dataStats = dataStats;
 
-        this.mainMenu = new MainMenu(s, map);
-        this.options = new Options(s, map);
+        this.mainMenu = new MainMenu(s, world);
+        this.options = new Options(s, world);
         this.pausedGame = new PausedGame(s);
         this.gameOver = new GameOver(s);
         this.pausedEdit = new PausedEdit(s);
-        this.credits = new Credits(s, map);
-        this.creativeMode = new CreativeMode(s, map);
-        this.inputDialog = new InputDialog(s, map);
-        this.stats = new Stats(s, map);
-        this.gameSelection = new GameSelection(s, map, game);
+        this.credits = new Credits(s, world);
+        this.creativeMode = new CreativeMode(s, world);
+        this.inputDialog = new InputDialog(s, world);
+        this.stats = new Stats(s, world);
+        this.gameSelection = new GameSelection(s, world, game);
 
-        this.edit = new Edit(60, 30);
+        this.edit = new Editor(60, 30);
     }
 
     public synchronized void start() {
         window = new Window(this);
-        gameRender = new GameRender(this);
-        input = new Input(this);
+        renderer = new Renderer(this);
+        inputHandler = new InputHandler(this);
 
         thread = new Thread(this);
         thread.run();
@@ -155,7 +147,7 @@ public class GameContainer implements Runnable {
                     gameSelection.update(this, (float)UPDATE_CAP);
                 }
 
-                input.update();
+                inputHandler.update();
 
                 if(frameTime >= 1.0) {
                     frameTime = 0;
@@ -165,57 +157,56 @@ public class GameContainer implements Runnable {
             }
 
             if(render) {
-                gameRender.clear();
+                renderer.clear();
 
                 if(State == STATE.GAME || State == STATE.PAUSEDGAME || State == STATE.GAMEOVER || (State == STATE.STATS && lastState == 2)) {
-                    game.render(this, gameRender);
-                    gameRender.setCoorCam(0, 0);
-                    //if(s.isShowLights()) gameRender.process();
+                    game.render(this, renderer);
+                    renderer.setCoorCam(0, 0);
                     if(gm.getObject(""+gm.getSocket().getLocalPort()) != null)
-                        gameRender.drawGameStates(this, gm.getObject(""+gm.getSocket().getLocalPort()));
+                        renderer.drawGameStates(this, gm.getObject(""+gm.getSocket().getLocalPort()));
                 } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
-                    edit.render(this, gameRender);
+                    edit.render(this, renderer);
                 }
 
                 if(State == STATE.MAINMENU) {
-                    mainMenu.render(this, gameRender);
-                    gameRender.setCoorCam(0, 0);
+                    mainMenu.render(this, renderer);
+                    renderer.setCoorCam(0, 0);
                 } else if(State == STATE.CREDITS) {
-                    credits.render(this, gameRender);
+                    credits.render(this, renderer);
                 } else if(State == STATE.OPTSMENU) {
-                    options.render(this, gameRender);
+                    options.render(this, renderer);
                 } else if(State == STATE.PAUSEDGAME) {
-                    pausedGame.render(this, gameRender);
+                    pausedGame.render(this, renderer);
                 } else if(State == STATE.PAUSEDEDIT) {
-                    pausedEdit.render(this, gameRender);
+                    pausedEdit.render(this, renderer);
                 } else if(State == STATE.GAMEOVER) {
-                    gameOver.render(this, gameRender);
+                    gameOver.render(this, renderer);
                 } else if(State == STATE.CREATIVEMODE) {
-                    creativeMode.render(this, gameRender);
-                    gameRender.setCoorCam(0, 0);
+                    creativeMode.render(this, renderer);
+                    renderer.setCoorCam(0, 0);
                 } else if(State == STATE.INPUTDIALOG) {
-                    creativeMode.render(this, gameRender);
-                    inputDialog.render(this, gameRender);
+                    creativeMode.render(this, renderer);
+                    inputDialog.render(this, renderer);
                 } else if(State == STATE.STATS) {
-                    stats.render(this, gameRender);
+                    stats.render(this, renderer);
                 } else if(State == STATE.GAMESELECTION) {
-                    gameSelection.render(this, gameRender);
+                    gameSelection.render(this, renderer);
                 }
 
                 if(s.isShowLights() && State != STATE.CREATIVEMODE && State != STATE.EDIT && State != STATE.PAUSEDEDIT && State != STATE.INPUTDIALOG) {
                     if (State != STATE.GAME && State != STATE.GAMEOVER && State != STATE.PAUSEDGAME) {
-                        gameRender.drawLight(new Light(150, 0xffffff99), this.getInput().getMouseX(), this.getInput().getMouseY());
+                        renderer.drawLight(new Light(150, 0xffffff99), this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
                     }
-                    gameRender.process();
+                    renderer.process();
                 }
 
                 if(State == STATE.MAINMENU || State == STATE.OPTSMENU || State == STATE.STATS || State == STATE.CREDITS) {
-                    gameRender.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                    gameRender.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+                    renderer.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    renderer.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                 }
 
                 if(s.isShowFps())
-                    gameRender.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
+                    renderer.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
 
                 window.update();
                 frames++;
@@ -223,7 +214,7 @@ public class GameContainer implements Runnable {
                 if (upState != State) {
                     upState = State;
                     try {
-                        gm.getDos().writeUTF(gm.getSocket().getLocalPort() + "] " + upState);
+                        gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upState);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -283,16 +274,16 @@ public class GameContainer implements Runnable {
         return window;
     }
 
-    public Input getInput() {
-        return input;
+    public InputHandler getInputHandler() {
+        return inputHandler;
     }
 
     public Settings getSettings() {
         return s;
     }
 
-    public Data getData() {
-        return data;
+    public DataStats getDataStats() {
+        return dataStats;
     }
 
     public int getLastState() {
