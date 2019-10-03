@@ -34,6 +34,7 @@ public class CreativeMode extends View {
     private sm.engine.gfx.Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File dossier;
+    private File[] files;
 
     private ArrayList<sm.engine.gfx.Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
@@ -53,14 +54,12 @@ public class CreativeMode extends View {
         buttons.add(folder = new sm.engine.gfx.Button(80, 47, "Folder", 8));
         buttons.add(back = new sm.engine.gfx.Button(80, 20, "Back", 0));
 
-        creativeFolder = Game.APPDATA + "/.squaremonster/creative_mode";
+        creativeFolder = Game.APPDATA + "/creative_mode";
         dossier = new File(creativeFolder);
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
-
-        File[] files = dossier.listFiles();
 
         if(!once) {
             images.clear();
@@ -70,15 +69,17 @@ public class CreativeMode extends View {
 
             sMax = 10-(gc.getHeight()-3* Game.TS);
             int count = 0;
-            assert files != null;
-            for(File file : files) {
-                if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
-                    images.add(new sm.engine.gfx.Image(creativeFolder + "/" + file.getName(), true));
-                    names.add(file.getName());
-                    paths.add(file.getPath());
-                    dates.add(new Date(file.lastModified()));
-                    sMax += Math.max(images.get(count).getH(), 30) + 10;
-                    count++;
+            files = dossier.listFiles();
+            if (files != null) {
+                for(File file : files) {
+                    if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
+                        images.add(new sm.engine.gfx.Image(creativeFolder + "/" + file.getName(), true));
+                        names.add(file.getName());
+                        paths.add(file.getPath());
+                        dates.add(new Date(file.lastModified()));
+                        sMax += Math.max(images.get(count).getH(), 30) + 10;
+                        count++;
+                    }
                 }
             }
             if(count == 0) focus = false;

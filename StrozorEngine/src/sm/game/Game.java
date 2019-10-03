@@ -317,7 +317,7 @@ public class Game extends AbstractGame {
         World world = new World();
         if (!writeAppData(new File(APPDATA))) return;
         readOptions(s);
-        GameContainer gc = new GameContainer(new Game(new Socket("localhost", 5338), world), s, world, new DataStats());
+        GameContainer gc = new GameContainer(new Game(new Socket("192.168.0.11", 5338), world), s, world, new DataStats());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();
