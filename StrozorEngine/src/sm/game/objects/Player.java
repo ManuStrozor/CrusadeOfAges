@@ -38,13 +38,13 @@ public class Player extends GameObject {
         String path = Game.APPDATA + "/assets/player.png";
         plSprite = new Sprite(path, Game.TS, Game.TS, true);
 
-        move = new Move(this, world);
-        collect = new Collect(this, world);
-        event = new Event(this, world);
-
         this.world = world;
         this.tag = tag;
         this.lives = lives;
+
+        move = new Move(this, world);
+        collect = new Collect(this, world);
+        event = new Event(this, world);
 
         width = Game.TS;
         height = Game.TS;
@@ -179,7 +179,7 @@ public class Player extends GameObject {
             if (upPosX != posX || upPosY != posY) {
                 upPosX = posX;
                 upPosY = posY;
-                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upPosX + " " + upPosY + " " + anim);
+                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + ":" + upPosX + ":" + upPosY + ":" + anim);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -335,7 +335,7 @@ public class Player extends GameObject {
     public void render(GameContainer gc, Renderer r) {
         r.drawLight(new Light(200, 0xffffff99),(int)posX + Game.TS / 2, (int)posY + Game.TS / 2);
         r.drawSprite(plSprite, (int)posX, (int)posY, direction, (int)anim);
-        r.drawText(tag, gc.getWidth()/2-width/2, gc.getHeight()/2-height/2, 1, -1, -1, Font.STANDARD);
+        r.drawText(tag, (int)posX / Game.TS, (int)posY / Game.TS, 1, -1, -1, Font.STANDARD);
         for(Notification notif : notifs) notif.render(gc, r);
     }
 

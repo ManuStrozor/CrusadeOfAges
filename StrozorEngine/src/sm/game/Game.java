@@ -4,6 +4,7 @@ import sm.engine.*;
 import sm.engine.gfx.Image;
 import sm.engine.gfx.Light;
 import sm.game.objects.GameObject;
+import sm.game.objects.NetworkPlayer;
 import sm.game.objects.Player;
 
 import javax.imageio.ImageIO;
@@ -50,6 +51,8 @@ public class Game extends AbstractGame {
     private Camera camera;
     private World world;
 
+    private String data;
+
     private Game(Socket socket, World world) throws IOException {
         this.socket = socket;
         dis = new DataInputStream(socket.getInputStream());
@@ -78,7 +81,16 @@ public class Game extends AbstractGame {
 
         try {
             if (dis.available() > 0) {
-                notifs.add(new Notification(dis.readUTF(), 1, 300, -1));
+                data = dis.readUTF();
+                //notifs.add(new Notification(data, 1, 300, -1));
+                if (data.contains(":") && Integer.parseInt(data.split(":")[0]) != socket.getLocalPort()) {
+                    if (getObject(data.split(":")[0]) == null) {
+                        objects.add(new NetworkPlayer(data.split(":")[0], world, 1));
+                    } else {
+                        getObject(data.split(":")[0]).setPosX(Float.parseFloat(data.split(":")[1]));
+                        getObject(data.split(":")[0]).setPosY(Float.parseFloat(data.split(":")[2]));
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,7 +129,7 @@ public class Game extends AbstractGame {
             }
         }
 
-        // Reload level
+        // Load level
         if(getObject(""+socket.getLocalPort()) == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
             load(levels[current][0]);
         }
@@ -305,7 +317,7 @@ public class Game extends AbstractGame {
         World world = new World();
         if (!writeAppData(new File(APPDATA))) return;
         readOptions(s);
-        GameContainer gc = new GameContainer(new Game(new Socket("192.168.0.11", 5338), world), s, world, new DataStats());
+        GameContainer gc = new GameContainer(new Game(new Socket("localhost", 5338), world), s, world, new DataStats());
         gc.setTitle("Square Monster");
         gc.setScale(s.getScale());
         gc.start();

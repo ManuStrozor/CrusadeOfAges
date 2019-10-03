@@ -53,7 +53,7 @@ public class CreativeMode extends View {
         buttons.add(folder = new sm.engine.gfx.Button(80, 47, "Folder", 8));
         buttons.add(back = new sm.engine.gfx.Button(80, 20, "Back", 0));
 
-        creativeFolder = System.getenv("APPDATA") + "\\.squaremonster\\creative_mode";
+        creativeFolder = Game.APPDATA + "/.squaremonster/creative_mode";
         dossier = new File(creativeFolder);
     }
 
@@ -73,7 +73,7 @@ public class CreativeMode extends View {
             assert files != null;
             for(File file : files) {
                 if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
-                    images.add(new sm.engine.gfx.Image(creativeFolder + "\\" + file.getName(), true));
+                    images.add(new sm.engine.gfx.Image(creativeFolder + "/" + file.getName(), true));
                     names.add(file.getName());
                     paths.add(file.getPath());
                     dates.add(new Date(file.lastModified()));
