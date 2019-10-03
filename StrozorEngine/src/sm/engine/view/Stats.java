@@ -31,8 +31,8 @@ public class Stats extends View {
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 click.play();
-                gc.setState(btn.getGoState());
                 gc.setState(gc.getLastState());
+                gc.setLastState(gc.getCurrState());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

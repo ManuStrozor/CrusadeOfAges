@@ -23,7 +23,7 @@ public class Player extends GameObject {
     private Event event;
 
     private World world;
-    private Sprite plImg;
+    private Sprite plSprite;
     private ArrayList<Notification> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
@@ -36,7 +36,7 @@ public class Player extends GameObject {
 
     public Player(String tag, World world, int lives) {
         String path = Game.APPDATA + "/assets/player.png";
-        plImg = new Sprite(path, Game.TS, Game.TS, true);
+        plSprite = new Sprite(path, Game.TS, Game.TS, true);
 
         move = new Move(this, world);
         collect = new Collect(this, world);
@@ -334,7 +334,7 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, Renderer r) {
         r.drawLight(new Light(200, 0xffffff99),(int)posX + Game.TS / 2, (int)posY + Game.TS / 2);
-        r.drawImageTile(plImg, (int)posX, (int)posY, direction, (int)anim);
+        r.drawSprite(plSprite, (int)posX, (int)posY, direction, (int)anim);
         r.drawText(tag, gc.getWidth()/2-width/2, gc.getHeight()/2-height/2, 1, -1, -1, Font.STANDARD);
         for(Notification notif : notifs) notif.render(gc, r);
     }

@@ -109,7 +109,7 @@ public class Renderer {
         }
     }
 
-    private void setLightMap(int x, int y, int value) {
+    private void setLightWorld(int x, int y, int value) {
 
         if(x < 0 || x >= pW || y < 0 || y >= pH) return;
 
@@ -227,7 +227,7 @@ public class Renderer {
         }
     }
 
-    public void drawImageTile(Sprite image, int offX, int offY, int tileX, int tileY) {
+    public void drawSprite(Sprite image, int offX, int offY, int tileX, int tileY) {
 
         offX -= camX;
         offY -= camY;
@@ -337,7 +337,7 @@ public class Renderer {
             int lightColor = l.getLightValue(x0, y0);
             if(lightColor == 0) return;
 
-            setLightMap(screenX, screenY, lightColor);
+            setLightWorld(screenX, screenY, lightColor);
 
             if(x0 == x1 && y0 == y1) break;
 
@@ -394,16 +394,16 @@ public class Renderer {
         int x = gc.getWidth() / 2 - width / 2;
         fillRect(x, 0, width, Game.TS, 0x99000000);
 
-        drawImageTile(objsImg, x, 0, 3, 2);
-        drawImageTile(objsImg, x + Game.TS * 2, 0, 5, 0);
-        drawImageTile(objsImg, x + Game.TS * 4, 0, 3, 1);
+        drawSprite(objsImg, x, 0, 3, 2);
+        drawSprite(objsImg, x + Game.TS * 2, 0, 5, 0);
+        drawSprite(objsImg, x + Game.TS * 4, 0, 3, 1);
 
         drawText("x" + obj.getLives(), x + Game.TS-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getCoins(), x + Game.TS * 3-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getKeys(), x + Game.TS * 5-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawMap(World world) {
+    public void drawWorld(World world) {
         for(int y = 0; y < world.getHeight(); y++) {
             for(int x = 0; x < world.getWidth(); x++) {
 
@@ -412,23 +412,23 @@ public class Renderer {
 
                 //draw wall behind non-solid bloc
                 if(!world.isSolid(x, y) && !world.getTag(x, y).equals("wall"))
-                    drawImageTile(objsImg, x * Game.TS, y * Game.TS, 1, 0);
+                    drawSprite(objsImg, x * Game.TS, y * Game.TS, 1, 0);
 
                 //draw bloc
-                drawImageTile(objsImg, x * Game.TS, y * Game.TS, tileX, tileY);
+                drawSprite(objsImg, x * Game.TS, y * Game.TS, tileX, tileY);
 
                 //draw shadow under solid bloc
                 if(!world.isSolid(x, y) && world.isSolid(x, y-1))
-                    drawImageTile(objsImg, x * Game.TS, y * Game.TS, 0, 3);
+                    drawSprite(objsImg, x * Game.TS, y * Game.TS, 0, 3);
 
                 //draw top part of the door
                 if(world.getTag(x, y).equals("door"))
-                    drawImageTile(objsImg, x * Game.TS, (y - 1) * Game.TS, tileX, tileY-1);
+                    drawSprite(objsImg, x * Game.TS, (y - 1) * Game.TS, tileX, tileY-1);
             }
         }
     }
 
-    public void drawMapLights(World world, Light lamp) {
+    public void drawWorldLights(World world, Light lamp) {
         for(int y = 0; y < world.getHeight(); y++) {
             for(int x = 0; x < world.getWidth(); x++) {
                 if(world.getTag(x, y).equals("torch"))
@@ -438,7 +438,7 @@ public class Renderer {
     }
 
     private void drawBloc(World world, String tag, int x, int y) {
-        drawImageTile(objsImg, x, y, world.getTile(tag)[0], world.getTile(tag)[1]);
+        drawSprite(objsImg, x, y, world.getTile(tag)[0], world.getTile(tag)[1]);
     }
 
     public void drawDock(GameContainer gc, World world, String[] dock, int scroll) {

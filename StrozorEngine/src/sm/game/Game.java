@@ -128,8 +128,8 @@ public class Game extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
         camera.render(r);
-        r.drawMap(world);
-        if(gc.getSettings().isShowLights()) r.drawMapLights(world, new Light(30, 0xffffff99));
+        r.drawWorld(world);
+        if(gc.getSettings().isShowLights()) r.drawWorldLights(world, new Light(30, 0xffffff99));
         for(GameObject obj : objects) obj.render(gc, r);
         for(Notification notif : notifs) notif.render(gc, r);
     }

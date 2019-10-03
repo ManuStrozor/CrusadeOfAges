@@ -17,7 +17,7 @@ public class GameContainer implements Runnable {
     private Renderer renderer;
     private Game gm;
     private InputHandler inputHandler;
-    private Settings s;
+    private Settings settings;
     private DataStats dataStats;
     private View
             mainMenu,
@@ -53,27 +53,28 @@ public class GameContainer implements Runnable {
         EXIT
     }
 
-    private STATE State = STATE.MAINMENU;
+    private STATE State;
     private int currState = 0, lastState = 0;
 
     public GameContainer(AbstractGame game, Settings settings, World world, DataStats dataStats) {
         this.game = game;
         gm = (Game) game;
-        this.s = settings;
+        this.settings = settings;
         this.dataStats = dataStats;
 
-        this.mainMenu = new MainMenu(s, world);
-        this.options = new Options(s, world);
-        this.pausedGame = new PausedGame(s);
-        this.gameOver = new GameOver(s);
-        this.pausedEdit = new PausedEdit(s);
-        this.credits = new Credits(s, world);
-        this.creativeMode = new CreativeMode(s, world);
-        this.inputDialog = new InputDialog(s, world);
-        this.stats = new Stats(s, world);
-        this.gameSelection = new GameSelection(s, world, game);
-
+        this.mainMenu = new MainMenu(this.settings, world);
+        this.options = new Options(this.settings, world);
+        this.pausedGame = new PausedGame(this.settings);
+        this.gameOver = new GameOver(this.settings);
+        this.pausedEdit = new PausedEdit(this.settings);
+        this.credits = new Credits(this.settings, world);
+        this.creativeMode = new CreativeMode(this.settings, world);
+        this.inputDialog = new InputDialog(this.settings, world);
+        this.stats = new Stats(this.settings, world);
+        this.gameSelection = new GameSelection(this.settings, world, game);
         this.edit = new Editor(60, 30);
+
+        State = STATE.MAINMENU;
     }
 
     public synchronized void start() {
@@ -97,7 +98,6 @@ public class GameContainer implements Runnable {
 
     public void run() {
         STATE upState = STATE.EXIT;
-        boolean render;
         double startTime, passedTime, frameTime = 0, unprocessedTime = 0;
         double lastTime = System.nanoTime() / 1000000000.0;
         int fps = 0, frames = 0;
@@ -106,8 +106,6 @@ public class GameContainer implements Runnable {
         running = true;
 
         while(running && State != STATE.EXIT) {
-
-            render = true;
 
             startTime = System.nanoTime() / 1000000000.0;
             passedTime = startTime - lastTime;
@@ -119,7 +117,6 @@ public class GameContainer implements Runnable {
 
             while(unprocessedTime >= UPDATE_CAP) {
                 unprocessedTime -= UPDATE_CAP;
-                render = true;
 
                 if(State == STATE.MAINMENU) {
                     mainMenu.update(this, (float)UPDATE_CAP);
@@ -156,73 +153,65 @@ public class GameContainer implements Runnable {
                 }
             }
 
-            if(render) {
-                renderer.clear();
+            renderer.clear();
 
-                if(State == STATE.GAME || State == STATE.PAUSEDGAME || State == STATE.GAMEOVER || (State == STATE.STATS && lastState == 2)) {
-                    game.render(this, renderer);
-                    renderer.setCoorCam(0, 0);
-                    if(gm.getObject(""+gm.getSocket().getLocalPort()) != null)
-                        renderer.drawGameStates(this, gm.getObject(""+gm.getSocket().getLocalPort()));
-                } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
-                    edit.render(this, renderer);
+            if(State == STATE.GAME || State == STATE.PAUSEDGAME || State == STATE.GAMEOVER || (State == STATE.STATS && lastState == 2)) {
+                game.render(this, renderer);
+                renderer.setCoorCam(0, 0);
+                if(gm.getObject(""+gm.getSocket().getLocalPort()) != null)
+                    renderer.drawGameStates(this, gm.getObject(""+gm.getSocket().getLocalPort()));
+            } else if(State == STATE.EDIT || State == STATE.PAUSEDEDIT) {
+                edit.render(this, renderer);
+            }
+
+            if(State == STATE.MAINMENU) {
+                mainMenu.render(this, renderer);
+                renderer.setCoorCam(0, 0);
+            } else if(State == STATE.CREDITS) {
+                credits.render(this, renderer);
+            } else if(State == STATE.OPTSMENU) {
+                options.render(this, renderer);
+            } else if(State == STATE.PAUSEDGAME) {
+                pausedGame.render(this, renderer);
+            } else if(State == STATE.PAUSEDEDIT) {
+                pausedEdit.render(this, renderer);
+            } else if(State == STATE.GAMEOVER) {
+                gameOver.render(this, renderer);
+            } else if(State == STATE.CREATIVEMODE) {
+                creativeMode.render(this, renderer);
+                renderer.setCoorCam(0, 0);
+            } else if(State == STATE.INPUTDIALOG) {
+                creativeMode.render(this, renderer);
+                inputDialog.render(this, renderer);
+            } else if(State == STATE.STATS) {
+                stats.render(this, renderer);
+            } else if(State == STATE.GAMESELECTION) {
+                gameSelection.render(this, renderer);
+            }
+
+            if(settings.isShowLights() && State != STATE.CREATIVEMODE && State != STATE.EDIT && State != STATE.PAUSEDEDIT && State != STATE.INPUTDIALOG) {
+                if (State != STATE.GAME && State != STATE.PAUSEDGAME) {
+                    renderer.drawLight(new Light(150, 0xffffff99), this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
                 }
+                renderer.process();
+            }
 
-                if(State == STATE.MAINMENU) {
-                    mainMenu.render(this, renderer);
-                    renderer.setCoorCam(0, 0);
-                } else if(State == STATE.CREDITS) {
-                    credits.render(this, renderer);
-                } else if(State == STATE.OPTSMENU) {
-                    options.render(this, renderer);
-                } else if(State == STATE.PAUSEDGAME) {
-                    pausedGame.render(this, renderer);
-                } else if(State == STATE.PAUSEDEDIT) {
-                    pausedEdit.render(this, renderer);
-                } else if(State == STATE.GAMEOVER) {
-                    gameOver.render(this, renderer);
-                } else if(State == STATE.CREATIVEMODE) {
-                    creativeMode.render(this, renderer);
-                    renderer.setCoorCam(0, 0);
-                } else if(State == STATE.INPUTDIALOG) {
-                    creativeMode.render(this, renderer);
-                    inputDialog.render(this, renderer);
-                } else if(State == STATE.STATS) {
-                    stats.render(this, renderer);
-                } else if(State == STATE.GAMESELECTION) {
-                    gameSelection.render(this, renderer);
-                }
+            if(State == STATE.MAINMENU || State == STATE.OPTSMENU || State == STATE.STATS || State == STATE.CREDITS) {
+                renderer.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                renderer.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+            }
 
-                if(s.isShowLights() && State != STATE.CREATIVEMODE && State != STATE.EDIT && State != STATE.PAUSEDEDIT && State != STATE.INPUTDIALOG) {
-                    if (State != STATE.GAME && State != STATE.GAMEOVER && State != STATE.PAUSEDGAME) {
-                        renderer.drawLight(new Light(150, 0xffffff99), this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
-                    }
-                    renderer.process();
-                }
+            if(settings.isShowFps())
+                renderer.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
 
-                if(State == STATE.MAINMENU || State == STATE.OPTSMENU || State == STATE.STATS || State == STATE.CREDITS) {
-                    renderer.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                    renderer.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
-                }
+            window.update();
+            frames++;
 
-                if(s.isShowFps())
-                    renderer.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
-
-                window.update();
-                frames++;
-
-                if (upState != State) {
-                    upState = State;
-                    try {
-                        gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upState);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
+            if (upState != State) {
+                upState = State;
                 try {
-                    Thread.sleep(1);
-                } catch(InterruptedException e) {
+                    gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upState);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -279,7 +268,7 @@ public class GameContainer implements Runnable {
     }
 
     public Settings getSettings() {
-        return s;
+        return settings;
     }
 
     public DataStats getDataStats() {
@@ -298,22 +287,27 @@ public class GameContainer implements Runnable {
         return currState;
     }
 
+    public void setCurrState(int currState) {
+        this.currState = currState;
+    }
+
     public void setState(int value) {
+        setLastState(currState);
+        setCurrState(value);
         switch(value) {
             case -1: State = STATE.EXIT; break;
-            case 0: State = STATE.MAINMENU; break;
-            case 1: State = STATE.GAME; break;
-            case 2: State = STATE.PAUSEDGAME; break;
-            case 3: State = STATE.OPTSMENU; break;
-            case 4: State = STATE.EDIT; break;
-            case 5: State = STATE.PAUSEDEDIT; break;
-            case 6: State = STATE.CREDITS; break;
-            case 7: State = STATE.GAMEOVER; break;
-            case 8: State = STATE.CREATIVEMODE; break;
-            case 9: State = STATE.INPUTDIALOG; break;
+            case  0: State = STATE.MAINMENU; break;
+            case  1: State = STATE.GAME; break;
+            case  2: State = STATE.PAUSEDGAME; break;
+            case  3: State = STATE.OPTSMENU; break;
+            case  4: State = STATE.EDIT; break;
+            case  5: State = STATE.PAUSEDEDIT; break;
+            case  6: State = STATE.CREDITS; break;
+            case  7: State = STATE.GAMEOVER; break;
+            case  8: State = STATE.CREATIVEMODE; break;
+            case  9: State = STATE.INPUTDIALOG; break;
             case 10: State = STATE.STATS; break;
             case 11: State = STATE.GAMESELECTION; break;
         }
-        currState = value;
     }
 }
