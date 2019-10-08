@@ -1,3 +1,4 @@
+flag;en
 lang;English
 beta version;beta version
 Single player;Single player
@@ -15,7 +16,7 @@ Quit to title;Quit to title
 Try again;Try again
 Save;Save
 Development team;Development team
-MAIN DEVELOPERS;MAIN DEVELOPERS
+DEVELOPERS;DEVELOPERS
 THANKS TO;THANKS TO
 CONTRIBUTORS;CONTRIBUTORS
 Spawn;Spawn

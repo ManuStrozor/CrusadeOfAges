@@ -1,3 +1,4 @@
+flag;fr
 lang;Français
 beta version;version beta
 Single player;Joueur solo
@@ -15,7 +16,7 @@ Quit to title;Menu principal
 Try again;Recommencer
 Save;Sauvegarder
 Development team;Equipe de développement
-MAIN DEVELOPERS;PRINCIPAUX DEVELOPPEURS
+DEVELOPERS;DEVELOPPEURS
 THANKS TO;MERCI A
 CONTRIBUTORS;CONTRIBUTEURS
 Spawn;Point d'apparition

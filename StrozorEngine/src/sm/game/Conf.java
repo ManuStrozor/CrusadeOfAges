@@ -51,13 +51,7 @@ public class Conf {
             while (line != null) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
-                    case "lang":
-                        if ("fr".equals(sub[1])) {
-                            s.setLang(1);
-                        } else {
-                            s.setLang(0);
-                        }
-                        break;
+                    case "lang": s.setFlag(sub[1]); break;
                     case "guiScale": s.setScale(Float.parseFloat(sub[1])); break;
                     case "showFPS": s.setShowFps(sub[1].equals("true")); break;
                     case "showLights": s.setShowLights(sub[1].equals("true")); break;

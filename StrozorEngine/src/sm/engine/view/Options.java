@@ -42,10 +42,10 @@ public class Options extends View {
         //Button selection
         if(isSelected(gc, tglLang)) {
             click.play();
-            if(s.getLang() < s.getLangs().size() - 1) {
-                s.setLang(s.getLang() + 1);
+            if(s.getIndexFromFlag(s.getFlag()) < s.getLangs().size() - 1) {
+                s.setFlag(s.getFlagFromIndex(s.getIndexFromFlag(s.getFlag()) + 1));
             } else {
-                s.setLang(0);
+                s.setFlag(s.getFlagFromIndex(0));
             }
         } else if(isSelected(gc, tglFps)) {
             click.play();
@@ -109,13 +109,7 @@ public class Options extends View {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
-                        switch(s.getLang()) {
-                            case 0:
-                                newLines.add(line.replace(sub[1], "en")); break;
-                            case 1:
-                                newLines.add(line.replace(sub[1], "fr")); break;
-                        }
-                        break;
+                        newLines.add(line.replace(sub[1], s.getFlag())); break;
                     case "guiScale":
                     case "maxFPS":
                         newLines.add(line); break;

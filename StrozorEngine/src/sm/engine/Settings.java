@@ -8,28 +8,34 @@ import java.util.Map;
 public class Settings {
 
     private ArrayList<Map<String, String>> langs;
-    private int lang = 1;
+    private String flag = "fr";
     private float scale = 3f;
     private boolean showFps = true;
     private boolean showLights = false;
 
-    public Settings() throws IOException {
-        Map<String, String> en = new HashMap<>();
-        Map<String, String> fr = new HashMap<>();
-        populateLang(en, "lang/en.txt");
-        populateLang(fr, "lang/fr.txt");
+    public Settings() {
         langs = new ArrayList<>();
-        langs.add(0, en);
-        langs.add(1, fr);
+        parseAllLangs(langs);
     }
 
     public String translate(String key) {
         try {
-            return langs.get(lang).get(key);
+            return langs.get(getIndexFromFlag(flag)).get(key);
         } catch(Exception e) {
-            e.printStackTrace();
+            System.out.println("The sentence '" + key + "' could not be translated");
             return null;
         }
+    }
+
+    public int getIndexFromFlag(String flag) {
+        for (int i = 0; i < langs.size(); i++) {
+            if (langs.get(i).get("flag").equals(flag)) return i;
+        }
+        return 0;
+    }
+
+    public String getFlagFromIndex(int index) {
+        return langs.get(index).get("flag");
     }
 
     private void populateLang(Map<String, String> langMap, String path) throws IOException {
@@ -46,16 +52,31 @@ public class Settings {
         }
     }
 
+    private void parseAllLangs(ArrayList<Map<String, String>> langs) {
+        ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+        try (InputStream is = classLoader.getResourceAsStream("lang");
+             BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+            String file;
+            Map<String, String> map;
+            while ((file = br.readLine()) != null) {
+                populateLang(map = new HashMap<>(), "lang/"+file);
+                langs.add(map);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public ArrayList<Map<String, String>> getLangs() {
         return langs;
     }
 
-    public int getLang() {
-        return lang;
+    public String getFlag() {
+        return flag;
     }
 
-    public void setLang(int lang) {
-        this.lang = lang;
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 
     public float getScale() {

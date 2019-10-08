@@ -156,8 +156,9 @@ public class Renderer {
     private int textSize(String text, Font font) {
 
         int textW = 0;
-        for(int i = 0; i < text.length(); i++)
-            textW += font.getWidths()[text.codePointAt(i)];
+        for(int i = 0; i < text.length(); i++) {
+            textW += font.getWidths()[Math.min(text.codePointAt(i), 255)];
+        }
         return textW;
     }
 
@@ -178,21 +179,21 @@ public class Renderer {
             int unicode = text.codePointAt(i);
             // With darker color
             for(int y = 0; y < font.getFontImage().getH(); y++) {
-                for(int x = 0; x < font.getWidths()[unicode]; x++) {
-                    if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
+                for(int x = 0; x < font.getWidths()[Math.min(unicode, 255)]; x++) {
+                    if(font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getW()] == 0xff000000) {
                         setPixel(x + offX + offset - 1, y + offY - 1, darken(color, 100));
                     }
                 }
             }
             // With normal color
             for(int y = 0; y < font.getFontImage().getH(); y++) {
-                for(int x = 0; x < font.getWidths()[unicode]; x++) {
-                    if(font.getFontImage().getP()[(x + font.getOffsets()[unicode]) + y * font.getFontImage().getW()] == 0xff000000) {
+                for(int x = 0; x < font.getWidths()[Math.min(unicode, 255)]; x++) {
+                    if(font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getW()] == 0xff000000) {
                         setPixel(x + offX + offset, y + offY, color);
                     }
                 }
             }
-            offset += font.getWidths()[unicode];
+            offset += font.getWidths()[Math.min(unicode, 255)];
         }
     }
 

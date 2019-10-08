@@ -7,44 +7,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="Big refacto">
-      <change afterPath="$PROJECT_DIR$/assets/lang/en.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/lang/fr.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sm/exceptions/ConfException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sm/game/Conf.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/lang/es.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/lang/ru.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.squaremonster/assets/objects.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.squaremonster/assets/player.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.squaremonster/creative_mode/2019-10-03_18.51.52.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.squaremonster/creative_mode/2019-10-03_18.55.10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.squaremonster/options.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.squaremonster/player.dat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/DataStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/PlayerStats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/lang/en.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/lang/en.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/lang/fr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/lang/fr.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Renderer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Image.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Options.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/View.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Camera.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/Editor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Editor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/Game.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/actions/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/actions/Event.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/Enemy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/GameObject.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/NetworkPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/NetworkPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Conf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Conf.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -89,6 +62,7 @@
     <property name="Downloaded.Files.Path.Enabled" value="true" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="TODO_SCOPE" value="All Places" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -318,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570119779270</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Big refacto">
+      <created>1570571289074</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1570571289074</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">

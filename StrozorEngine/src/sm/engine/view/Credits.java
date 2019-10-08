@@ -13,9 +13,9 @@ public class Credits extends View {
     private SoundClip hover, click;
     private Button back;
 
-    private String[] devs = {"ManuStrozor"};
-    private String[] thanks = {"My family", "Beta testers"};
-    private String[] contribs = {"Majoolwip"};
+    private String[] devs = {"Majoolwip", "Manu TD"};
+    private String[] thanks = {"Marguerite Turbet", "Marie Lys Turbet", "Martin Turbet-Delof"};
+    private String[] contribs = {"Anne Sospedra", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
 
     public Credits(Settings s, World world) {
         this.s = s;
@@ -55,9 +55,9 @@ public class Credits extends View {
         r.drawBackground(gc, world, "wall");
         r.drawMenuTitle(gc, s.translate("Game credits").toUpperCase(), s.translate("Development team"));
 
-        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("MAIN DEVELOPERS"), devs);
-        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, s.translate("THANKS TO"), thanks);
-        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, s.translate("CONTRIBUTORS"), contribs);
+        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("DEVELOPERS"), devs);
+        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, s.translate("CONTRIBUTORS"), contribs);
+        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, s.translate("THANKS TO"), thanks);
 
         back.setOffX(5);
         back.setOffY(5);
