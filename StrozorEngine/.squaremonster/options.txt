@@ -1,4 +1,0 @@
-lang:en
-guiScale:3
-showFPS:true
-showLights:false

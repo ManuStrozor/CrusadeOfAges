@@ -2,8 +2,9 @@ package sm.engine.view;
 
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
+import sm.game.Conf;
 import sm.game.Editor;
-import sm.game.Game;
+import sm.game.GameManager;
 import sm.engine.*;
 
 import java.awt.*;
@@ -54,7 +55,7 @@ public class CreativeMode extends View {
         buttons.add(folder = new sm.engine.gfx.Button(80, 47, "Folder", 8));
         buttons.add(back = new sm.engine.gfx.Button(80, 20, "Back", 0));
 
-        creativeFolder = Game.APPDATA + "/creative_mode";
+        creativeFolder = Conf.SM_FOLDER + "/creative_mode";
         dossier = new File(creativeFolder);
     }
 
@@ -67,7 +68,7 @@ public class CreativeMode extends View {
             paths.clear();
             dates.clear();
 
-            sMax = 10-(gc.getHeight()-3* Game.TS);
+            sMax = 10-(gc.getHeight()-3* GameManager.TS);
             int count = 0;
             files = dossier.listFiles();
             if (files != null) {
@@ -175,18 +176,18 @@ public class CreativeMode extends View {
         if(sMax <= 0) scroll = 0;
         r.drawListOfFiles(gc, images, names, dates, s.translate("Create your first map !"));
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth()/ Game.TS+1, 1, world, "wall");
-        r.drawText(s.translate("Select a map"), gc.getWidth()/2, Game.TS/2, 0, 0, -1, sm.engine.gfx.Font.STANDARD);
+        r.fillAreaBloc(0, 0, gc.getWidth()/ GameManager.TS+1, 1, world, "wall");
+        r.drawText(s.translate("Select a map"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, sm.engine.gfx.Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight()- Game.TS*2, gc.getWidth()/ Game.TS+1, 2, world, "wall");
+        r.fillAreaBloc(0, gc.getHeight()- GameManager.TS*2, gc.getWidth()/ GameManager.TS+1, 2, world, "wall");
         edit.setOffX(gc.getWidth()/2-edit.getWidth()-5);
-        edit.setOffY(gc.getHeight()-2* Game.TS+10);
+        edit.setOffY(gc.getHeight()-2* GameManager.TS+10);
 
         create.setOffX(gc.getWidth()/2+5+create.getWidth()+10);
         create.setOffY(edit.getOffY());
 
         rename.setOffX(edit.getOffX());
-        rename.setOffY(gc.getHeight()- Game.TS+5);
+        rename.setOffY(gc.getHeight()- GameManager.TS+5);
 
         delete.setOffX(rename.getOffX()+rename.getWidth()+10);
         delete.setOffY(rename.getOffY());

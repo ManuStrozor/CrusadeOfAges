@@ -1,0 +1,47 @@
+lang;Français
+beta version;version beta
+Single player;Joueur solo
+Creative mode;Mode créatif
+Game credits;Credits
+Options;Options
+Quit game;Quitter
+FPS off;FPS off
+Darkness;Obscurité
+FPS on;FPS on
+Full day;Plein jour
+Back;Retour
+Back to game;Retour au jeu
+Quit to title;Menu principal
+Try again;Recommencer
+Save;Sauvegarder
+Development team;Equipe de développement
+MAIN DEVELOPERS;PRINCIPAUX DEVELOPPEURS
+THANKS TO;MERCI A
+CONTRIBUTORS;CONTRIBUTEURS
+Spawn;Point d'apparition
+Floor;Sol
+Health pill;Pillule de santé
+Ground spikes;Pics au sol
+Ceiling spikes;Pics au plafond
+Key;Clé
+Check point;Point de sauvegarde
+Coin;Pièce
+Torch;Torche
+Slime bloc;Bloc de slime
+Door;Porte
+Ladder;Echelle
+GAME OVER;MANCHE PERDU
+You are dead;Vous êtes mort(e)
+Edit;Modifier
+Select a map;Selectionnez une mappe
+Rename;Renommer
+Delete;Supprimer
+Create;Créer
+Folder;Dossier
+Cancel;Annuler
+Create your first map !;Créez votre première map !
+Stats;Statistiques
+Paused;Pause
+Play;Jouer
+Choose a level;Choisissez un niveau
+The Time Traveller;Le Voyageur du Temps

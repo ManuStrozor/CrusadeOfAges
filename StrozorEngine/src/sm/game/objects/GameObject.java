@@ -2,7 +2,7 @@ package sm.game.objects;
 
 import sm.engine.GameContainer;
 import sm.engine.Renderer;
-import sm.game.Game;
+import sm.game.GameManager;
 
 public abstract class GameObject {
 
@@ -12,7 +12,7 @@ public abstract class GameObject {
     protected int lives, coins, keys, skulls;
     protected boolean dead = false;
 
-    public abstract void update(GameContainer gc, Game gm, float dt);
+    public abstract void update(GameContainer gc, GameManager gm, float dt);
     //public abstract void creativeUpdate(GameContainer gc, float dt);
     public abstract void render(GameContainer gc, Renderer r);
 

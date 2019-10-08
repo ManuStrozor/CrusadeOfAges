@@ -1,6 +1,6 @@
 package sm.engine.gfx;
 
-import sm.game.Game;
+import sm.game.Conf;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -79,7 +79,7 @@ public class Image {
             String filename;
             if(rename.equals("")) filename = sdf.format(new Date()) + ".png";
             else filename = rename;
-            File out = new File(Game.APPDATA + "/creative_mode/" + filename);
+            File out = new File(Conf.SM_FOLDER + "/creative_mode/" + filename);
             ImageIO.write(bi, "png", out);
         } catch(IOException e) {
             e.printStackTrace();

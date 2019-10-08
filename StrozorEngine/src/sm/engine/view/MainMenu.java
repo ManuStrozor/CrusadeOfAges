@@ -53,7 +53,7 @@ public class MainMenu extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         r.drawBackground(gc, world, "wall");
-        r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
+        r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
 
         int startY = gc.getHeight()/4;
 

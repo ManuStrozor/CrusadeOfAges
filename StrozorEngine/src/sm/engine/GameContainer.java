@@ -4,7 +4,7 @@ import sm.engine.gfx.Font;
 import sm.engine.gfx.Light;
 import sm.engine.view.*;
 import sm.game.AbstractGame;
-import sm.game.Game;
+import sm.game.GameManager;
 import sm.game.Editor;
 
 import java.io.IOException;
@@ -15,10 +15,10 @@ public class GameContainer implements Runnable {
     private Thread thread;
     private Window window;
     private Renderer renderer;
-    private Game gm;
+    private GameManager gm;
     private InputHandler inputHandler;
     private Settings settings;
-    private DataStats dataStats;
+    private PlayerStats playerStats;
     private View
             mainMenu,
             options,
@@ -56,11 +56,11 @@ public class GameContainer implements Runnable {
     private STATE State;
     private int currState = 0, lastState = 0;
 
-    public GameContainer(AbstractGame game, Settings settings, World world, DataStats dataStats) {
+    public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
         this.game = game;
-        gm = (Game) game;
+        gm = (GameManager) game;
         this.settings = settings;
-        this.dataStats = dataStats;
+        this.playerStats = playerStats;
 
         this.mainMenu = new MainMenu(this.settings, world);
         this.options = new Options(this.settings, world);
@@ -271,8 +271,8 @@ public class GameContainer implements Runnable {
         return settings;
     }
 
-    public DataStats getDataStats() {
-        return dataStats;
+    public PlayerStats getPlayerStats() {
+        return playerStats;
     }
 
     public int getLastState() {

@@ -2,7 +2,7 @@ package sm.game.objects;
 
 import sm.engine.GameContainer;
 import sm.engine.Renderer;
-import sm.game.Game;
+import sm.game.GameManager;
 
 public class Enemy extends GameObject {
 
@@ -11,7 +11,7 @@ public class Enemy extends GameObject {
     }
 
     @Override
-    public void update(GameContainer gc, Game gm, float dt) {
+    public void update(GameContainer gc, GameManager gm, float dt) {
 
     }
 

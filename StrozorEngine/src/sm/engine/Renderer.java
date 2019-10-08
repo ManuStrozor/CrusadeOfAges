@@ -6,7 +6,8 @@ import sm.engine.gfx.Image;
 import sm.engine.gfx.ImageRequest;
 import sm.engine.gfx.Sprite;
 import sm.engine.gfx.Light;
-import sm.game.Game;
+import sm.game.Conf;
+import sm.game.GameManager;
 import sm.game.objects.GameObject;
 import sm.engine.view.CreativeMode;
 import sm.engine.view.GameSelection;
@@ -30,8 +31,8 @@ public class Renderer {
     private boolean processing = false;
 
     public Renderer(GameContainer gc) {
-        String path = Game.APPDATA + "/assets/objects.png";
-        objsImg = new Sprite(path, Game.TS, Game.TS, true);
+        String path = Conf.SM_FOLDER + "/assets/objects.png";
+        objsImg = new Sprite(path, GameManager.TS, GameManager.TS, true);
         pW = gc.getWidth();
         pH = gc.getHeight();
         p = ((DataBufferInt)gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
@@ -390,17 +391,17 @@ public class Renderer {
     }
 
     void drawGameStates(GameContainer gc, GameObject obj) {
-        int width = Game.TS * 6;
+        int width = GameManager.TS * 6;
         int x = gc.getWidth() / 2 - width / 2;
-        fillRect(x, 0, width, Game.TS, 0x99000000);
+        fillRect(x, 0, width, GameManager.TS, 0x99000000);
 
         drawSprite(objsImg, x, 0, 3, 2);
-        drawSprite(objsImg, x + Game.TS * 2, 0, 5, 0);
-        drawSprite(objsImg, x + Game.TS * 4, 0, 3, 1);
+        drawSprite(objsImg, x + GameManager.TS * 2, 0, 5, 0);
+        drawSprite(objsImg, x + GameManager.TS * 4, 0, 3, 1);
 
-        drawText("x" + obj.getLives(), x + Game.TS-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getCoins(), x + Game.TS * 3-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getKeys(), x + Game.TS * 5-4, Game.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getLives(), x + GameManager.TS-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getCoins(), x + GameManager.TS * 3-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getKeys(), x + GameManager.TS * 5-4, GameManager.TS, 1, -1,0xffcdcdcd, Font.BIG_STANDARD);
     }
 
     public void drawWorld(World world) {
@@ -412,18 +413,18 @@ public class Renderer {
 
                 //draw wall behind non-solid bloc
                 if(!world.isSolid(x, y) && !world.getTag(x, y).equals("wall"))
-                    drawSprite(objsImg, x * Game.TS, y * Game.TS, 1, 0);
+                    drawSprite(objsImg, x * GameManager.TS, y * GameManager.TS, 1, 0);
 
                 //draw bloc
-                drawSprite(objsImg, x * Game.TS, y * Game.TS, tileX, tileY);
+                drawSprite(objsImg, x * GameManager.TS, y * GameManager.TS, tileX, tileY);
 
                 //draw shadow under solid bloc
                 if(!world.isSolid(x, y) && world.isSolid(x, y-1))
-                    drawSprite(objsImg, x * Game.TS, y * Game.TS, 0, 3);
+                    drawSprite(objsImg, x * GameManager.TS, y * GameManager.TS, 0, 3);
 
                 //draw top part of the door
                 if(world.getTag(x, y).equals("door"))
-                    drawSprite(objsImg, x * Game.TS, (y - 1) * Game.TS, tileX, tileY-1);
+                    drawSprite(objsImg, x * GameManager.TS, (y - 1) * GameManager.TS, tileX, tileY-1);
             }
         }
     }
@@ -432,7 +433,7 @@ public class Renderer {
         for(int y = 0; y < world.getHeight(); y++) {
             for(int x = 0; x < world.getWidth(); x++) {
                 if(world.getTag(x, y).equals("torch"))
-                    drawLight(lamp, x * Game.TS + Game.TS / 2, y * Game.TS + Game.TS / 3);
+                    drawLight(lamp, x * GameManager.TS + GameManager.TS / 2, y * GameManager.TS + GameManager.TS / 3);
             }
         }
     }
@@ -443,20 +444,20 @@ public class Renderer {
 
     public void drawDock(GameContainer gc, World world, String[] dock, int scroll) {
         int midH = camY + gc.getHeight() / 2;
-        int s = Game.TS + 1;
+        int s = GameManager.TS + 1;
         int y = midH - (dock.length * s)/2 + (dock.length/2 - scroll) * s;
 
         if(dock.length % 2 != 0)
-            y += Game.TS/2;
+            y += GameManager.TS/2;
 
         fillRect(camX, camY, s + 4, gc.getHeight(), 0x89000000);
 
         for(int i = 0; i < dock.length; i++)
-            drawBloc(world, dock[i], camX + 4, y - Game.TS/2 + s * i);
+            drawBloc(world, dock[i], camX + 4, y - GameManager.TS/2 + s * i);
 
-        drawRect(camX + 1, midH - Game.TS/2 - 3, s + 4, s + 4, 0xbbffffff);
-        drawRect(camX + 2, midH - Game.TS/2 - 2, s + 2, s + 2, 0x77ffffff);
-        drawRect(camX + 3, midH - Game.TS/2 - 1, s, s, 0x33ffffff);
+        drawRect(camX + 1, midH - GameManager.TS/2 - 3, s + 4, s + 4, 0xbbffffff);
+        drawRect(camX + 2, midH - GameManager.TS/2 - 2, s + 2, s + 2, 0x77ffffff);
+        drawRect(camX + 3, midH - GameManager.TS/2 - 1, s, s, 0x33ffffff);
     }
 
     public void drawMiniMap(GameContainer gc, Image img) {
@@ -469,13 +470,13 @@ public class Renderer {
 
     public void drawArrows(GameContainer gc, World world, int width, int height) {
         if(camY > 0)
-            drawBloc(world, "arrow up", camX + gc.getWidth()/2 - Game.TS/2, camY);
-        if(camY + gc.getHeight() < height * Game.TS)
-            drawBloc(world, "arrow down", camX + gc.getWidth()/2 - Game.TS/2, camY + gc.getHeight() - Game.TS);
-        if(camX > -Game.TS)
-            drawBloc(world, "arrow left", camX, camY + gc.getHeight()/2 - Game.TS/2);
-        if(camX + gc.getWidth() < width * Game.TS)
-            drawBloc(world, "arrow right", camX + gc.getWidth() - Game.TS, camY + gc.getHeight()/2 - Game.TS/2);
+            drawBloc(world, "arrow up", camX + gc.getWidth()/2 - GameManager.TS/2, camY);
+        if(camY + gc.getHeight() < height * GameManager.TS)
+            drawBloc(world, "arrow down", camX + gc.getWidth()/2 - GameManager.TS/2, camY + gc.getHeight() - GameManager.TS);
+        if(camX > -GameManager.TS)
+            drawBloc(world, "arrow left", camX, camY + gc.getHeight()/2 - GameManager.TS/2);
+        if(camX + gc.getWidth() < width * GameManager.TS)
+            drawBloc(world, "arrow right", camX + gc.getWidth() - GameManager.TS, camY + gc.getHeight()/2 - GameManager.TS/2);
     }
 
     public void drawLevels(GameContainer gc, String[][] levels) {
@@ -487,10 +488,10 @@ public class Renderer {
         }
 
         int x = gc.getWidth()/2-largest/2;
-        int y = Game.TS+10-GameSelection.scroll;
+        int y = GameManager.TS+10-GameSelection.scroll;
 
         int hUsed = 10;
-        for(int i = 0; i <= gc.getDataStats().getValueOf("Level up") + 1; i++) {
+        for(int i = 0; i <= gc.getPlayerStats().getValueOf("Level up") + 1; i++) {
 
             int size = 30;
 
@@ -508,10 +509,10 @@ public class Renderer {
             hUsed += size+10;
         }
 
-        int hTotal = gc.getHeight()-3* Game.TS;
+        int hTotal = gc.getHeight()-3* GameManager.TS;
         int minus = Math.max(hUsed - hTotal, 0);
 
-        drawScrollBar(gc.getWidth()/2+largest/2+20, Game.TS, 8, hTotal, GameSelection.scroll/8, minus/8);
+        drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, GameSelection.scroll/8, minus/8);
     }
 
     public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
@@ -527,7 +528,7 @@ public class Renderer {
         }
 
         int x = gc.getWidth()/2-largest/2;
-        int y = Game.TS+10-CreativeMode.scroll;
+        int y = GameManager.TS+10-CreativeMode.scroll;
 
         int hUsed = 10;
         for(int i = 0; i < f.size(); i++) {
@@ -550,11 +551,11 @@ public class Renderer {
             hUsed += h+10;
         }
 
-        int hTotal = gc.getHeight()-3* Game.TS;
+        int hTotal = gc.getHeight()-3* GameManager.TS;
         int minus = Math.max(hUsed - hTotal, 0);
 
         if(f.size() != 0)
-            drawScrollBar(gc.getWidth()/2+largest/2+20, Game.TS, 8, hTotal, CreativeMode.scroll/8, minus/8);
+            drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, CreativeMode.scroll/8, minus/8);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {
@@ -572,9 +573,9 @@ public class Renderer {
     }
 
     public void drawBackground(GameContainer gc, World world, String tag) {
-        for(int y = 0; y <= gc.getHeight() / Game.TS; y++) {
-            for(int x = 0; x <= gc.getWidth() / Game.TS; x++) {
-                drawBloc(world, tag, x * Game.TS, y * Game.TS);
+        for(int y = 0; y <= gc.getHeight() / GameManager.TS; y++) {
+            for(int x = 0; x <= gc.getWidth() / GameManager.TS; x++) {
+                drawBloc(world, tag, x * GameManager.TS, y * GameManager.TS);
             }
         }
     }
@@ -582,7 +583,7 @@ public class Renderer {
     public void fillAreaBloc(int nX, int nY, int nW, int nH, World world, String tag) {
         for(int y = 0; y < nH; y++) {
             for(int x = 0; x < nW; x++) {
-                drawBloc(world, tag, nX + x * Game.TS, nY + y * Game.TS);
+                drawBloc(world, tag, nX + x * GameManager.TS, nY + y * GameManager.TS);
             }
         }
     }

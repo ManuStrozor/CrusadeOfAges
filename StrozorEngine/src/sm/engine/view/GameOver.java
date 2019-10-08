@@ -33,7 +33,7 @@ public class GameOver extends View {
         //Button selection
         for(Button btn : buttons) {
             if(isSelected(gc, btn)) {
-                if(btn.getText().contains("Quit")) gc.getDataStats().saveData();
+                if(btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
                 click.play();
                 gameover.stop();
                 once = false;

@@ -83,25 +83,25 @@ public class Editor extends AbstractGame {
             int mouseX = gc.getInputHandler().getMouseX();
             int mouseY = gc.getInputHandler().getMouseY();
 
-            int x = (mouseX + r.getCamX()) / Game.TS;
-            int y = (mouseY + r.getCamY()) / Game.TS;
+            int x = (mouseX + r.getCamX()) / GameManager.TS;
+            int y = (mouseY + r.getCamY()) / GameManager.TS;
 
             int speed = 10;
 
-            if(r.getCamX() + gc.getWidth() < creaImg.getW() * Game.TS) {
+            if(r.getCamX() + gc.getWidth() < creaImg.getW() * GameManager.TS) {
                 if(mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
             }
-            if(r.getCamX() > -Game.TS) {
+            if(r.getCamX() > -GameManager.TS) {
                 if(mouseX == 0) r.setCamX(r.getCamX() - speed);
             }
-            if(r.getCamY() + gc.getHeight() < creaImg.getH() * Game.TS) {
+            if(r.getCamY() + gc.getHeight() < creaImg.getH() * GameManager.TS) {
                 if(mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
             }
             if(r.getCamY() > 0) {
                 if(mouseY == 0) r.setCamY(r.getCamY() - speed);
             }
 
-            if(mouseX > Game.TS) {
+            if(mouseX > GameManager.TS) {
                 if(gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
 
                     if(elems[scroll].equals("spawn") && world.getSpawnX() != -1 && world.getSpawnY() != -1) {

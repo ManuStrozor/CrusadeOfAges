@@ -17,7 +17,7 @@ public class Camera {
         this.world = world;
     }
 
-    public void update(GameContainer gc, Game gm, float dt) {
+    public void update(GameContainer gc, GameManager gm, float dt) {
 
         if(target == null) target = gm.getObject(targetTag);
         if(target == null) return;
@@ -30,8 +30,8 @@ public class Camera {
 
         if(offX < 0) offX = 0;
         if(offY < 0) offY = 0;
-        if(offX + gc.getWidth() > world.getWidth() * Game.TS) offX = world.getWidth() * Game.TS - gc.getWidth();
-        if(offY + gc.getHeight() > world.getHeight() * Game.TS) offY = world.getHeight() * Game.TS - gc.getHeight();
+        if(offX + gc.getWidth() > world.getWidth() * GameManager.TS) offX = world.getWidth() * GameManager.TS - gc.getWidth();
+        if(offY + gc.getHeight() > world.getHeight() * GameManager.TS) offY = world.getHeight() * GameManager.TS - gc.getHeight();
     }
 
     public void render(Renderer r) {

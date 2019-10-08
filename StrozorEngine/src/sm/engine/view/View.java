@@ -4,7 +4,7 @@ import sm.engine.GameContainer;
 import sm.engine.Renderer;
 import sm.engine.gfx.Button;
 import sm.engine.gfx.Image;
-import sm.game.Game;
+import sm.game.GameManager;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -30,21 +30,21 @@ public abstract class View {
 
     protected boolean fileSelected(GameContainer gc, ArrayList<Image> images, int index, int scroll) {
 
-        int highs = Game.TS+10-scroll;
+        int highs = GameManager.TS+10-scroll;
         for(int i = 0; i < index; i++) {
             highs += images.get(i).getH() < 30 ? 30+10 : images.get(i).getH()+10;
         }
-        int currHigh = images.get(index).getH() < 30 ? 30 : images.get(index).getH();
+        int currHigh = Math.max(images.get(index).getH(), 30);
 
         return gc.getInputHandler().getMouseY() > highs &&
                 gc.getInputHandler().getMouseY() < highs + currHigh &&
-                gc.getInputHandler().getMouseY() < gc.getHeight() - 2* Game.TS &&
+                gc.getInputHandler().getMouseY() < gc.getHeight() - 2* GameManager.TS &&
                 gc.getInputHandler().isButtonUp(MouseEvent.BUTTON1);
     }
 
     protected boolean levelSelected(GameContainer gc, int index, int scroll) {
 
-        int highs = Game.TS+10-scroll;
+        int highs = GameManager.TS+10-scroll;
         for(int i = 0; i < index; i++) {
             highs += 30+10;
         }
@@ -52,59 +52,59 @@ public abstract class View {
 
         return gc.getInputHandler().getMouseY() > highs &&
                 gc.getInputHandler().getMouseY() < highs + currHigh &&
-                gc.getInputHandler().getMouseY() < gc.getHeight() - 2* Game.TS &&
+                gc.getInputHandler().getMouseY() < gc.getHeight() - 2* GameManager.TS &&
                 gc.getInputHandler().isButtonUp(MouseEvent.BUTTON1);
     }
 
     protected void inputCtrl(GameContainer gc) {
 
-        String tmp = "";
+        StringBuilder tmp = new StringBuilder();
 
         if(gc.getInputHandler().isKey(KeyEvent.VK_SHIFT)) {
             //Majuscules
             for(int k = KeyEvent.VK_A, i = 0; k <= KeyEvent.VK_Z; k++, i++) {
-                if(gc.getInputHandler().isKeyDown(k)) tmp += (char) ('A' + i);
+                if(gc.getInputHandler().isKeyDown(k)) tmp.append((char) ('A' + i));
             }
             //Chiffres
             for(int k = KeyEvent.VK_0, i = 0; k <= KeyEvent.VK_9; k++, i++) {
-                if(gc.getInputHandler().isKeyDown(k)) tmp += (char) ('0' + i);
+                if(gc.getInputHandler().isKeyDown(k)) tmp.append((char) ('0' + i));
             }
             //Point
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp += '.';
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp.append('.');
         } else {
             //Minuscules
             for(int k = KeyEvent.VK_A, i = 0; k <= KeyEvent.VK_Z; k++, i++) {
-                if(gc.getInputHandler().isKeyDown(k)) tmp += (char) ('a' + i);
+                if(gc.getInputHandler().isKeyDown(k)) tmp.append((char) ('a' + i));
             }
             //Charactères spéciaux
             if(gc.getInputHandler().isKeyDown(KeyEvent.VK_0)) {
-                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp += '@';
-                else tmp += 'à';
+                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp.append('@');
+                else tmp.append('à');
             }
             if(gc.getInputHandler().isKeyDown(KeyEvent.VK_5)) {
-                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp += '[';
-                else tmp += '(';
+                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp.append('[');
+                else tmp.append('(');
             }
             if(gc.getInputHandler().isKeyDown(522)) {
-                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp += ']';
-                else tmp += ')';
+                if(gc.getInputHandler().isKey(KeyEvent.VK_ALT)) tmp.append(']');
+                else tmp.append(')');
             }
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_2)) tmp += 'é';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_4)) tmp += '\'';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_6)) tmp += '-';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_7)) tmp += 'è';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_8)) tmp += '_';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_9)) tmp += 'ç';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_COMMA)) tmp += ',';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_EQUALS)) tmp += '=';
-            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp += ';';
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_2)) tmp.append('é');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_4)) tmp.append('\'');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_6)) tmp.append('-');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_7)) tmp.append('è');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_8)) tmp.append('_');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_9)) tmp.append('ç');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_COMMA)) tmp.append(',');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_EQUALS)) tmp.append('=');
+            if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SEMICOLON)) tmp.append(';');
         }
         //Chiffres (NUMPAD)
         for(int k = KeyEvent.VK_NUMPAD0, i = 0; k <= KeyEvent.VK_NUMPAD9; k++, i++) {
-            if(gc.getInputHandler().isKeyDown(k)) tmp += (char) ('0' + i);
+            if(gc.getInputHandler().isKeyDown(k)) tmp.append((char) ('0' + i));
         }
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) tmp += ' ';
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) tmp.append(' ');
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_BACK_SPACE) && InputDialog.blink != 0) {
             InputDialog.input = InputDialog.input.substring(0, InputDialog.blink - 1) + InputDialog.input.substring(InputDialog.blink);
             InputDialog.blink--;

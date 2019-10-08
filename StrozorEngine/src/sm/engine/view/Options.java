@@ -2,7 +2,7 @@ package sm.engine.view;
 
 import sm.engine.*;
 import sm.engine.audio.SoundClip;
-import sm.game.Game;
+import sm.game.Conf;
 import sm.engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
@@ -35,17 +35,17 @@ public class Options extends View {
     public void update(GameContainer gc, float dt) {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            updateOptions();
+            upSettings();
             gc.setState(gc.getLastState());
         }
 
         //Button selection
         if(isSelected(gc, tglLang)) {
             click.play();
-            if(s.getLangIndex() < s.getLang().size() - 1) {
-                s.setLangIndex(s.getLangIndex() + 1);
+            if(s.getLang() < s.getLangs().size() - 1) {
+                s.setLang(s.getLang() + 1);
             } else {
-                s.setLangIndex(0);
+                s.setLang(0);
             }
         } else if(isSelected(gc, tglFps)) {
             click.play();
@@ -65,7 +65,7 @@ public class Options extends View {
             }
         } else if(isSelected(gc, back)) {
             click.play();
-            updateOptions();
+            upSettings();
             gc.setState(gc.getLastState());
         }
 
@@ -86,7 +86,7 @@ public class Options extends View {
 
         if(gc.getLastState() == 0) {
             r.drawBackground(gc, world, "wall");
-            r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("beta version"));
+            r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         }
@@ -102,14 +102,14 @@ public class Options extends View {
         }
     }
 
-    private void updateOptions() {
+    private void upSettings() {
         try {
             List<String> newLines = new ArrayList<>();
-            for (String line : Files.readAllLines(Paths.get(Game.APPDATA + "/options.txt"), StandardCharsets.UTF_8)) {
+            for (String line : Files.readAllLines(Paths.get(Conf.SM_FOLDER + "/settings.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch(sub[0]) {
                     case "lang":
-                        switch(s.getLangIndex()) {
+                        switch(s.getLang()) {
                             case 0:
                                 newLines.add(line.replace(sub[1], "en")); break;
                             case 1:
@@ -125,7 +125,7 @@ public class Options extends View {
                         newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false")); break;
                 }
             }
-            Files.write(Paths.get(Game.APPDATA + "/options.txt"), newLines, StandardCharsets.UTF_8);
+            Files.write(Paths.get(Conf.SM_FOLDER + "/settings.txt"), newLines, StandardCharsets.UTF_8);
         } catch(IOException e) {
             e.printStackTrace();
         }

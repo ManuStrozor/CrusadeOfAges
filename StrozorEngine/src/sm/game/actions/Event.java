@@ -3,7 +3,7 @@ package sm.game.actions;
 import sm.engine.GameContainer;
 import sm.engine.World;
 import sm.engine.audio.SoundClip;
-import sm.game.Game;
+import sm.game.GameManager;
 import sm.game.objects.Player;
 
 import java.awt.event.KeyEvent;
@@ -42,15 +42,15 @@ public class Event {
         pl.setOffY(0);
     }
 
-    public void switchLevel(GameContainer gc, Game gm) {
+    public void switchLevel(GameContainer gc, GameManager gm) {
         if(pl.getKeys() >= 1 && gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER)) {
-            if(gc.getDataStats().getValueOf("Level up") <= Game.current) {
-                gc.getDataStats().upValueOf("Level up");
+            if(gc.getPlayerStats().getValueOf("Level up") <= GameManager.current) {
+                gc.getPlayerStats().upValueOf("Level up");
             }
             pl.setKeys(pl.getKeys() - 1);
-            if(Game.current < Game.levels.length - 1) Game.current++;
-            else Game.current = 0;
-            gm.load(Game.levels[Game.current][0]);
+            if(GameManager.current < GameManager.levels.length - 1) GameManager.current++;
+            else GameManager.current = 0;
+            gm.load(GameManager.levels[GameManager.current][0]);
             respawn(world.getSpawnX(), world.getSpawnY());
         }
     }
@@ -58,7 +58,7 @@ public class Event {
     public void actionLever(GameContainer gc, String tag) {
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER) && tag.contains("left")) {
             world.setBloc(pl.getTileX(), pl.getTileY(), world.getCol("lever right"));
-            gc.getDataStats().upValueOf("Lever pulled");
+            gc.getPlayerStats().upValueOf("Lever pulled");
             leverActioned.play();
         }
     }

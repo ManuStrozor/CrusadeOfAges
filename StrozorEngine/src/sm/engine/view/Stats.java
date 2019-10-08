@@ -53,9 +53,9 @@ public class Stats extends View {
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(gc, s.translate("Stats").toUpperCase(), "");
 
-        for(int i = 0; i < gc.getDataStats().getStates().length; i++) {
-            r.drawText(gc.getDataStats().getStates()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, -1, 1, -1, Font.STANDARD);
-            r.drawText(" = " + gc.getDataStats().getValues()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, 1, 1, -1, Font.STANDARD);
+        for(int i = 0; i < gc.getPlayerStats().getStates().length; i++) {
+            r.drawText(gc.getPlayerStats().getStates()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, -1, 1, -1, Font.STANDARD);
+            r.drawText(" = " + gc.getPlayerStats().getValues()[i], gc.getWidth()/2, gc.getHeight()/4+i*15, 1, 1, -1, Font.STANDARD);
         }
 
         back.setOffX(5);

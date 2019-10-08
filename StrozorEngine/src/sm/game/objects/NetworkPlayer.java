@@ -8,7 +8,8 @@ import sm.engine.World;
 import sm.engine.gfx.Font;
 import sm.engine.gfx.Light;
 import sm.engine.gfx.Sprite;
-import sm.game.Game;
+import sm.game.Conf;
+import sm.game.GameManager;
 import sm.game.Notification;
 import sm.game.actions.Move;
 
@@ -29,8 +30,8 @@ public class NetworkPlayer extends GameObject {
     private float fallDist = 0;
 
     public NetworkPlayer(String tag, World world, int lives) {
-        String path = Game.APPDATA + "/assets/player.png";
-        plSprite = new Sprite(path, Game.TS, Game.TS, true);
+        String path = Conf.APPDATA + "/assets/player.png";
+        plSprite = new Sprite(path, GameManager.TS, GameManager.TS, true);
 
         this.world = world;
         this.tag = tag;
@@ -38,12 +39,12 @@ public class NetworkPlayer extends GameObject {
 
         move = new Move(this, world);
 
-        width = Game.TS;
-        height = Game.TS;
+        width = GameManager.TS;
+        height = GameManager.TS;
         tileX = world.getSpawnX();
         tileY = world.getSpawnY();
-        posX = tileX * Game.TS;
-        posY = tileY * Game.TS;
+        posX = tileX * GameManager.TS;
+        posY = tileY * GameManager.TS;
         upPosX = posX;
         upPosY = posY;
         offX = 0;
@@ -51,15 +52,15 @@ public class NetworkPlayer extends GameObject {
     }
 
     @Override
-    public void update(GameContainer gc, Game gm, float dt) {
+    public void update(GameContainer gc, GameManager gm, float dt) {
 
     }
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawLight(new Light(200, 0xffffff99),(int)posX + Game.TS / 2, (int)posY + Game.TS / 2);
+        r.drawLight(new Light(200, 0xffffff99),(int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
         r.drawSprite(plSprite, (int)posX, (int)posY, direction, (int)anim);
-        r.drawText(tag, (int)posX / Game.TS, (int)posY / Game.TS, 1, -1, -1, Font.STANDARD);
+        r.drawText(tag, (int)posX / GameManager.TS, (int)posY / GameManager.TS, 1, -1, -1, Font.STANDARD);
     }
 
     public int getTileX() {

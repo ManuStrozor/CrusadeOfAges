@@ -1,26 +1,26 @@
 package sm.engine;
 
-import sm.game.Game;
+import sm.game.Conf;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class DataStats {
+public class PlayerStats {
 
     private String[] states;
     private int[] values;
 
-    public DataStats() {
-        states = new String[Game.dataStates.length];
-        values = new int[Game.dataStates.length];
+    public PlayerStats() {
+        states = new String[Conf.STATS.length];
+        values = new int[Conf.STATS.length];
         readData();
     }
 
     private void readData() {
         try {
-            FileInputStream fis = new FileInputStream(Game.APPDATA + "/player.dat");
+            FileInputStream fis = new FileInputStream(Conf.SM_FOLDER + "/stats.dat");
             ObjectInputStream ois = new ObjectInputStream(fis);
             for(int i = 0; i < states.length; i++) {
                 states[i] = ois.readUTF();
@@ -34,7 +34,7 @@ public class DataStats {
 
     public void saveData() {
         try {
-            FileOutputStream fos = new FileOutputStream(Game.APPDATA + "/player.dat");
+            FileOutputStream fos = new FileOutputStream(Conf.SM_FOLDER + "/stats.dat");
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             for(int i = 0; i < states.length; i++) {
                 oos.writeUTF(states[i]);

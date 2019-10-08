@@ -2,7 +2,7 @@ package sm.engine.view;
 
 import sm.engine.audio.SoundClip;
 import sm.engine.gfx.Button;
-import sm.game.Game;
+import sm.game.GameManager;
 import sm.engine.*;
 
 import java.awt.event.KeyEvent;
@@ -105,11 +105,11 @@ public class InputDialog extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        int x = gc.getWidth()/2- Game.TS*3;
-        int y = gc.getHeight()/3- Game.TS;
+        int x = gc.getWidth()/2- GameManager.TS*3;
+        int y = gc.getHeight()/3- GameManager.TS;
 
         r.fillAreaBloc(x, y, 6, 2, world, "wall");
-        r.drawInput(x+6, y+9, Game.TS*6-12, Game.TS-12, 0xff333333);
+        r.drawInput(x+6, y+9, GameManager.TS*6-12, GameManager.TS-12, 0xff333333);
 
         cancel.setOffX(gc.getWidth()/2-cancel.getWidth()-5);
         cancel.setOffY(gc.getHeight()/3+5);
