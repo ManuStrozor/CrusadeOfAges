@@ -36,7 +36,7 @@ public class Options extends View {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             upSettings();
-            gc.setState(gc.getLastState());
+            gc.setActiView(gc.getPrevView());
         }
 
         //Button selection
@@ -66,7 +66,7 @@ public class Options extends View {
         } else if(isSelected(gc, back)) {
             click.play();
             upSettings();
-            gc.setState(gc.getLastState());
+            gc.setActiView(gc.getPrevView());
         }
 
         for(Button btn : buttons) {
@@ -84,7 +84,7 @@ public class Options extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if(gc.getLastState().equals("mainMenu")) {
+        if(gc.getPrevView().equals("mainMenu")) {
             r.drawBackground(gc, world, "wall");
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
         } else {

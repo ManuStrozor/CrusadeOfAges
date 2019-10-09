@@ -391,7 +391,7 @@ public class Renderer {
         fillRect(x+w, y+1, 1, h-1, lighten(color, 40));
     }
 
-    void drawGameStates(GameContainer gc, GameObject obj) {
+    void drawHUD(GameContainer gc, GameObject obj) {
         int width = GameManager.TS * 6;
         int x = gc.getWidth() / 2 - width / 2;
         fillRect(x, 0, width, GameManager.TS, 0x99000000);
@@ -492,10 +492,9 @@ public class Renderer {
         int y = GameManager.TS+10-GameSelection.scroll;
 
         int hUsed = 10;
-        for(int i = 0; i < gc.getPlayerStats().getValueOf("Level up"); i++) {
+        for(int i = 0; i < Math.min(gc.getPlayerStats().getValueOf("Level up"), levels.length) + 1; i++) {
 
             int size = 30;
-
             if(i != 0) y += 30+10;
 
             if(i < levels.length) {

@@ -3,21 +3,21 @@ package sm.engine.gfx;
 public class Button {
 
     private int offX, offY, width = 170, height = 20, bgColor;
-    private String text, goState;
+    private String text, targetView;
     private boolean hover, hoverSounded = false;
 
-    public Button(String text, String goState) {
+    public Button(String text, String targetView) {
         bgColor = 0xff616E7A;
-        this.goState = goState;
+        this.targetView = targetView;
         this.text = text;
     }
 
-    public Button(int w, int h, String text, String goState) {
+    public Button(int w, int h, String text, String targetView) {
         bgColor = 0xff616E7A;
         width = w;
         height = h;
         this.text = text;
-        this.goState = goState;
+        this.targetView = targetView;
     }
 
     public int getOffX() {
@@ -52,8 +52,8 @@ public class Button {
         this.bgColor = bgColor;
     }
 
-    public String getGoState() {
-        return goState;
+    public String getTargetView() {
+        return targetView;
     }
 
     public String getText() {

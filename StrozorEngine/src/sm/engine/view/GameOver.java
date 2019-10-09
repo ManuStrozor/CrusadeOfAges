@@ -25,7 +25,7 @@ public class GameOver extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getLastState().equals("game") && !once) {
+        if(gc.getPrevView().equals("game") && !once) {
             gameover.play();
             once = true;
         }
@@ -37,8 +37,8 @@ public class GameOver extends View {
                 click.play();
                 gameover.stop();
                 once = false;
-                gc.setState(btn.getGoState());
-                gc.setLastState("gameOver");
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView("gameOver");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

@@ -41,8 +41,8 @@ public class InputDialog extends View {
         }
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            gc.setLastState("inputDialog");
-            gc.setState("creativeMode");
+            gc.setPrevView("inputDialog");
+            gc.setActiView("creativeMode");
             once = false;
         }
 
@@ -53,8 +53,8 @@ public class InputDialog extends View {
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            gc.setLastState("inputDialog");
-            gc.setState("creativeMode");
+            gc.setPrevView("inputDialog");
+            gc.setActiView("creativeMode");
             once = false;
         }
 
@@ -84,8 +84,8 @@ public class InputDialog extends View {
                     }
                 }
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState("inputDialog");
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView("inputDialog");
                 once = false;
             }
 

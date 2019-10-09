@@ -52,8 +52,8 @@ public class GameSelection extends View {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
-            gc.setState("mainMenu");
-            gc.setLastState(gc.getLastState());
+            gc.setActiView("mainMenu");
+            gc.setPrevView(gc.getPrevView());
             once = false;
         }
         //Scroll control
@@ -83,8 +83,8 @@ public class GameSelection extends View {
                     gameManager.load(GameManager.levels[fIndex][0]);
                 }
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState(gc.getLastState());
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView(gc.getPrevView());
                 once = false;
             }
 

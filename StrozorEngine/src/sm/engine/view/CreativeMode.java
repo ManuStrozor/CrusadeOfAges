@@ -89,8 +89,8 @@ public class CreativeMode extends View {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
-            gc.setLastState("creativeMode");
-            gc.setState("mainMenu");
+            gc.setPrevView("creativeMode");
+            gc.setActiView("mainMenu");
             once = false;
         }
         //Scroll control
@@ -150,8 +150,8 @@ public class CreativeMode extends View {
                     }
                 }
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState("creativeMode");
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView("creativeMode");
                 once = false;
             }
 

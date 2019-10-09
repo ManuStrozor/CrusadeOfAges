@@ -25,15 +25,15 @@ public class PausedGame extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("game");
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("game");
 
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if(btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState(gc.getLastState());
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView(gc.getPrevView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

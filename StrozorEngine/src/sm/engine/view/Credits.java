@@ -28,14 +28,14 @@ public class Credits extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(gc.getLastState());
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView(gc.getPrevView());
 
         //Button selection
         for(Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState("credits");
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView("credits");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

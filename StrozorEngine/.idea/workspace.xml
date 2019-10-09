@@ -6,10 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="Add espagnol + credits">
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="refacto GameContainer + [port] au dessus du joueur + repair scroll bar">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.squaremonster/creative_mode/2019-10-03_18.51.52.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Renderer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" afterDir="false" />
@@ -101,7 +100,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.Server">
+  <component name="RunManager" selected="Application.CrusadeOfAges">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -299,7 +298,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570577916295</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="refacto GameContainer + [port] au dessus du joueur + repair scroll bar">
+      <created>1570655862564</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1570655862564</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -338,6 +344,7 @@
     <MESSAGE value="Multi : ca commence" />
     <MESSAGE value="Big refacto" />
     <MESSAGE value="Add espagnol + credits" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add espagnol + credits" />
+    <MESSAGE value="refacto GameContainer + [port] au dessus du joueur + repair scroll bar" />
+    <option name="LAST_COMMIT_MESSAGE" value="refacto GameContainer + [port] au dessus du joueur + repair scroll bar" />
   </component>
 </project>

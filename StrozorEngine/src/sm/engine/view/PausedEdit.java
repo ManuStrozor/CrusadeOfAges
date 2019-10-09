@@ -28,7 +28,7 @@ public class PausedEdit extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("edit");
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("edit");
 
         //Button selection
         for(Button btn : buttons) {
@@ -38,8 +38,8 @@ public class PausedEdit extends View {
                     CreativeMode.once = false;
                 }
                 click.play();
-                gc.setState(btn.getGoState());
-                gc.setLastState("pausedEdit");
+                gc.setActiView(btn.getTargetView());
+                gc.setPrevView("pausedEdit");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

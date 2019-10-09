@@ -28,7 +28,9 @@ public class GameContainer implements Runnable {
     private boolean running = false;
     private int width, height;
     private float scale;
-    private String title, lastState, currState;
+    private String title;
+    private String prevView = null; // Doit être un écran précédent possible !
+    private String actiView = "mainMenu"; // Ecran de départ !
 
     public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
 
@@ -36,9 +38,6 @@ public class GameContainer implements Runnable {
         gm = (GameManager) game;
         this.settings = settings;
         this.playerStats = playerStats;
-
-        lastState = "mainMenu"; // Doit être un écran précédent possible !
-        currState = "gameSelection"; // Ecran de départ !
 
         edit = new Editor(60, 30);
 
@@ -82,7 +81,7 @@ public class GameContainer implements Runnable {
 
         running = true;
 
-        while(running && !currState.equals("exit")) {
+        while(running && !actiView.equals("exit")) {
 
             startTime = System.nanoTime() / 1000000000.0;
             passedTime = startTime - lastTime;
@@ -95,11 +94,11 @@ public class GameContainer implements Runnable {
             while(unprocessedTime >= UPDATE_CAP) {
                 unprocessedTime -= UPDATE_CAP;
 
-                switch(currState) {
+                switch(actiView) {
                     case "edit": edit.update(this, (float)UPDATE_CAP); break;
                     case "game": game.update(this, (float)UPDATE_CAP); break;
                     case "exit": break;
-                    default: v.get(currState).update(this, (float)UPDATE_CAP);
+                    default: v.get(actiView).update(this, (float)UPDATE_CAP);
                 }
 
                 inputHandler.update();
@@ -111,30 +110,30 @@ public class GameContainer implements Runnable {
                 }
             }
 
-            GameObject go = gm.getObject(""+gm.getSocket().getLocalPort());
+            GameObject go = gm.getObject(""+gm.getSocket().getLocalPort()); // Utile pour afficher le hud
             renderer.clear();
 
             // Affichage du jeu en arrière plan
-            switch(currState) {
+            switch(actiView) {
                 case "gameOver":
                 case "pausedGame":
                     game.render(this, renderer);
                     renderer.setCoorCam(0, 0);
                     if (settings.isShowLights()) renderer.process();
-                    if(go != null) renderer.drawGameStates(this, go);
+                    if(go != null) renderer.drawHUD(this, go);
                     break;
                 case "stats":
-                    if (lastState.equals("pausedGame")) {
+                    if (prevView.equals("pausedGame")) {
                         game.render(this, renderer);
                         renderer.setCoorCam(0, 0);
                         if (settings.isShowLights()) renderer.process();
-                        if(go != null) renderer.drawGameStates(this, go);
+                        if(go != null) renderer.drawHUD(this, go);
                     }
                     break;
             }
 
-            // Affichage de l'écran en cours
-            switch(currState) {
+            // Affichage de la view active
+            switch(actiView) {
                 case "edit":        edit.render(this, renderer); break;
                 case "pausedEdit":  edit.render(this, renderer);
                                     v.get("pausedEdit").render(this, renderer);
@@ -142,7 +141,7 @@ public class GameContainer implements Runnable {
                 case "game":        game.render(this, renderer);
                                     renderer.setCoorCam(0, 0);
                                     if (settings.isShowLights()) renderer.process();
-                                    if(go != null) renderer.drawGameStates(this, go);
+                                    if(go != null) renderer.drawHUD(this, go);
                                     break;
                 case "creativeMode":v.get("creativeMode").render(this, renderer);
                                     renderer.setCoorCam(0, 0);
@@ -151,11 +150,11 @@ public class GameContainer implements Runnable {
                                     v.get("inputDialog").render(this, renderer);
                                     break;
                 case "exit": break;
-                default: v.get(currState).render(this, renderer);
+                default: v.get(actiView).render(this, renderer);
             }
 
             // SI Lights = ON ALORS : Affichage d'une source de lumière à la position du curseur de la souris
-            switch(currState) {
+            switch(actiView) {
                 case "credits":
                 case "mainMenu":
                 case "options":
@@ -166,7 +165,7 @@ public class GameContainer implements Runnable {
                     if (settings.isShowLights()) renderer.process();
                     break;
                 case "stats":
-                    if (lastState.equals("mainMenu")) {
+                    if (prevView.equals("mainMenu")) {
                         if (settings.isShowLights()) {
                             renderer.drawLight(new Light(150, 0xffffff99),
                                     this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
@@ -177,7 +176,7 @@ public class GameContainer implements Runnable {
             }
 
             // Affichage des infos du programme en bas de l'écran
-            switch(currState) {
+            switch(actiView) {
                 case "credits":
                 case "mainMenu":
                 case "options":
@@ -185,7 +184,7 @@ public class GameContainer implements Runnable {
                     renderer.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                     break;
                 case "stats":
-                    if (lastState.equals("mainMenu")) {
+                    if (prevView.equals("mainMenu")) {
                         renderer.drawText(title + " 2.0.1/beta", 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
                         renderer.drawText("Strozor Inc.", getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                     }
@@ -200,8 +199,9 @@ public class GameContainer implements Runnable {
             window.update();
             frames++;
 
-            if (!upState.equals(currState)) {
-                upState = currState;
+            // Envoi au serveur la view active
+            if (!upState.equals(actiView)) {
+                upState = actiView;
                 try {
                     gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upState.toUpperCase());
                 } catch (IOException e) {
@@ -268,20 +268,20 @@ public class GameContainer implements Runnable {
         return playerStats;
     }
 
-    public String getLastState() {
-        return lastState;
+    public String getPrevView() {
+        return prevView;
     }
 
-    public void setLastState(String lastState) {
-        this.lastState = lastState;
+    public void setPrevView(String prevView) {
+        this.prevView = prevView;
     }
 
-    public String getCurrState() {
-        return currState;
+    public String getActiView() {
+        return actiView;
     }
 
-    public void setState(String value) {
-        setLastState(currState);
-        currState = value;
+    public void setActiView(String value) {
+        setPrevView(actiView);
+        actiView = value;
     }
 }

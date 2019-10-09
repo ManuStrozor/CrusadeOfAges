@@ -19,31 +19,9 @@ public class GameManager extends AbstractGame {
     public static int current = 0;
     public static String[][] levels = {
             {"/levels/0.png", "Learn to jump0"},
-            {"/levels/0.png", "Learn to jump1"},
-            {"/levels/0.png", "Learn to jump2"},
-            {"/levels/0.png", "Learn to jump3"},
-            {"/levels/0.png", "Learn to jump4"},
-            {"/levels/0.png", "Learn to jump5"},
-            {"/levels/0.png", "Learn to jump6"},
-            {"/levels/0.png", "Learn to jump7"},
-            {"/levels/0.png", "Learn to jump8"},
-            {"/levels/0.png", "Learn to jump9"},
-            {"/levels/0.png", "Learn to jump10"},
-            {"/levels/0.png", "Learn to jump11"},
-            {"/levels/0.png", "Learn to jump12"},
-            {"/levels/0.png", "Learn to jump13"},
-            {"/levels/0.png", "Learn to jump14"},
-            {"/levels/0.png", "Learn to jump15"},
-            {"/levels/0.png", "Learn to jump16"},
-            {"/levels/0.png", "Learn to jump17"},
-            {"/levels/0.png", "Learn to jump18"},
-            {"/levels/0.png", "Learn to jump19"},
-            {"/levels/0.png", "Learn to jump20"},
-            {"/levels/0.png", "Learn to jump21"},
-            {"/levels/0.png", "Learn to jump22"}
-            //{"/levels/1.png", "Trampoline room"},
-            //{"/levels/2.png", "Go on slowly..."},
-            //{"/levels/3.png", "Crown of thorns"}
+            {"/levels/1.png", "Trampoline room"},
+            {"/levels/2.png", "Go on slowly..."},
+            {"/levels/3.png", "Crown of thorns"}
     };
 
     private Socket socket;
@@ -94,7 +72,7 @@ public class GameManager extends AbstractGame {
             e.printStackTrace();
         }
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("pausedGame");
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedGame");
 
         // Screenshots
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_F12)) {
@@ -128,7 +106,7 @@ public class GameManager extends AbstractGame {
         }
 
         // Load level
-        if(getObject(""+socket.getLocalPort()) == null && (gc.getLastState().equals("gameOver") || gc.getLastState().equals("mainMenu"))) {
+        if(getObject(""+socket.getLocalPort()) == null && (gc.getPrevView().equals("gameOver") || gc.getPrevView().equals("mainMenu"))) {
             load(levels[current][0]);
         }
 
