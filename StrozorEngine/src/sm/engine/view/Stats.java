@@ -19,7 +19,7 @@ public class Stats extends View {
         this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(back = new Button(60, 20, "Back", 0));
+        buttons.add(back = new Button(60, 20, "Back", "mainMenu"));
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Stats extends View {
             if (isSelected(gc, btn)) {
                 click.play();
                 gc.setState(gc.getLastState());
-                gc.setLastState(gc.getCurrState());
+                gc.setLastState(gc.getLastState());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
@@ -49,7 +49,7 @@ public class Stats extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if(gc.getLastState() == 0) r.drawBackground(gc, world, "wall");
+        if(gc.getLastState().equals("mainMenu")) r.drawBackground(gc, world, "wall");
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(gc, s.translate("Stats").toUpperCase(), "");
 

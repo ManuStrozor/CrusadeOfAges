@@ -21,12 +21,12 @@ public class MainMenu extends View {
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
-        buttons.add(new Button("Single player", 11));
-        buttons.add(new Button("Stats", 10));
-        buttons.add(new Button("Creative mode", 8));
-        buttons.add(new Button("Game credits", 6));
-        buttons.add(new Button(80, 20, "Options", 3));
-        buttons.add(new Button(80, 20, "Quit game", -1));
+        buttons.add(new Button("Single player", "gameSelection"));
+        buttons.add(new Button("Stats", "stats"));
+        buttons.add(new Button("Creative mode", "creativeMode"));
+        buttons.add(new Button("Game credits", "credits"));
+        buttons.add(new Button(80, 20, "Options", "options"));
+        buttons.add(new Button(80, 20, "Quit game", "exit"));
     }
 
     @Override
@@ -36,7 +36,7 @@ public class MainMenu extends View {
             if (isSelected(gc, btn)) {
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(0);
+                gc.setLastState("mainMenu");
             }
             // Button Hover
             if (btn.setHover(isHover(gc, btn))) {

@@ -17,15 +17,15 @@ public class PausedGame extends View {
         s = settings;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(new Button("Back to game", 1));
-        buttons.add(new Button("Stats", 10));
-        buttons.add(new Button("Quit to title", 0));
+        buttons.add(new Button("Back to game", "game"));
+        buttons.add(new Button("Stats", "stats"));
+        buttons.add(new Button("Quit to title", "mainMenu"));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(1);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("game");
 
         //Button selection
         for(Button btn : buttons) {
@@ -33,7 +33,7 @@ public class PausedGame extends View {
                 if(btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(1);
+                gc.setLastState(gc.getLastState());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

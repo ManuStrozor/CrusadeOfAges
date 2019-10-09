@@ -20,15 +20,15 @@ public class PausedEdit extends View {
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
-        buttons.add(save = new Button("Save", 8));
-        buttons.add(new Button("Cancel", 8));
-        buttons.add(new Button("Back", 4));
+        buttons.add(save = new Button("Save", "creativeMode"));
+        buttons.add(new Button("Cancel", "creativeMode"));
+        buttons.add(new Button("Back", "edit"));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(4);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("edit");
 
         //Button selection
         for(Button btn : buttons) {
@@ -39,7 +39,7 @@ public class PausedEdit extends View {
                 }
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(5);
+                gc.setLastState("pausedEdit");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

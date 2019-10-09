@@ -6,18 +6,26 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="Big refacto">
-      <change afterPath="$PROJECT_DIR$/assets/lang/es.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/lang/ru.txt" afterDir="false" />
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="Add espagnol + credits">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.squaremonster/creative_mode/2019-10-03_18.51.52.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/lang/en.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/lang/en.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/lang/fr.txt" beforeDir="false" afterPath="$PROJECT_DIR$/assets/lang/fr.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Renderer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Options.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/Conf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Conf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Editor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Editor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/Player.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -93,7 +101,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.CrusadeOfAges">
+  <component name="RunManager" selected="Application.Server">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
@@ -106,20 +114,6 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="sm.exceptions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GameManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="com.strozor.game.GameManager" />
-      <module name="StrozorEngine" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.strozor.engine.view.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -193,7 +187,6 @@
       <list>
         <item itemvalue="Application.CrusadeOfAges" />
         <item itemvalue="Application.Server" />
-        <item itemvalue="Application.GameManager" />
       </list>
     </recent_temporary>
   </component>
@@ -299,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570571289074</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Add espagnol + credits">
+      <created>1570577916295</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1570577916295</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -337,6 +337,7 @@
     <MESSAGE value="Some Refactors" />
     <MESSAGE value="Multi : ca commence" />
     <MESSAGE value="Big refacto" />
-    <option name="LAST_COMMIT_MESSAGE" value="Big refacto" />
+    <MESSAGE value="Add espagnol + credits" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add espagnol + credits" />
   </component>
 </project>

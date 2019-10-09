@@ -28,8 +28,8 @@ public class InputDialog extends View {
         this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(cancel = new Button(80, 20, "Cancel", 8));
-        buttons.add(rename = new Button(80, 20, "Rename", 8));
+        buttons.add(cancel = new Button(80, 20, "Cancel", "creativeMode"));
+        buttons.add(rename = new Button(80, 20, "Rename", "creativeMode"));
     }
 
     @Override
@@ -41,8 +41,8 @@ public class InputDialog extends View {
         }
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            gc.setLastState(9);
-            gc.setState(8);
+            gc.setLastState("inputDialog");
+            gc.setState("creativeMode");
             once = false;
         }
 
@@ -53,8 +53,8 @@ public class InputDialog extends View {
             } catch(IOException e) {
                 e.printStackTrace();
             }
-            gc.setLastState(9);
-            gc.setState(8);
+            gc.setLastState("inputDialog");
+            gc.setState("creativeMode");
             once = false;
         }
 
@@ -85,7 +85,7 @@ public class InputDialog extends View {
                 }
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(9);
+                gc.setLastState("inputDialog");
                 once = false;
             }
 

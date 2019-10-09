@@ -2,17 +2,17 @@ package sm.engine.gfx;
 
 public class Button {
 
-    private int offX, offY, width = 170, height = 20, bgColor, goState;
-    private String text;
+    private int offX, offY, width = 170, height = 20, bgColor;
+    private String text, goState;
     private boolean hover, hoverSounded = false;
 
-    public Button(String text, int goState) {
+    public Button(String text, String goState) {
         bgColor = 0xff616E7A;
         this.goState = goState;
         this.text = text;
     }
 
-    public Button(int w, int h, String text, int goState) {
+    public Button(int w, int h, String text, String goState) {
         bgColor = 0xff616E7A;
         width = w;
         height = h;
@@ -52,7 +52,7 @@ public class Button {
         this.bgColor = bgColor;
     }
 
-    public int getGoState() {
+    public String getGoState() {
         return goState;
     }
 

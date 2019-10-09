@@ -34,8 +34,8 @@ public class GameSelection extends View {
         this.gameManager = (GameManager) game;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(play = new Button(170, 20, "Play", 1));
-        buttons.add(back = new Button(170, 20, "Back", 0));
+        buttons.add(play = new Button(170, 20, "Play", "game"));
+        buttons.add(back = new Button(170, 20, "Back", "mainMenu"));
     }
 
     @Override
@@ -52,8 +52,8 @@ public class GameSelection extends View {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
-            gc.setLastState(11);
-            gc.setState(0);
+            gc.setState("mainMenu");
+            gc.setLastState(gc.getLastState());
             once = false;
         }
         //Scroll control
@@ -84,7 +84,7 @@ public class GameSelection extends View {
                 }
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(11);
+                gc.setLastState(gc.getLastState());
                 once = false;
             }
 
@@ -108,10 +108,10 @@ public class GameSelection extends View {
         if(sMax <= 0) scroll = 0;
         r.drawLevels(gc, GameManager.levels);
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth()/ GameManager.TS, 1, world, "wall");
+        r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
         r.drawText(s.translate("Choose a level"), gc.getWidth()/2, GameManager.TS/2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight()- GameManager.TS*2, gc.getWidth()/ GameManager.TS, 2, world, "wall");
+        r.fillAreaBloc(0, gc.getHeight()- GameManager.TS*2, gc.getWidth() / GameManager.TS + 1, 2, world, "wall");
         play.setOffX(gc.getWidth()/2-play.getWidth()/2);
         play.setOffY(gc.getHeight()-2* GameManager.TS+10);
         back.setOffX(play.getOffX());

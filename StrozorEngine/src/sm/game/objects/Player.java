@@ -229,8 +229,8 @@ public class Player extends GameObject {
             if(this.lives == 0) {
                 this.setDead(true);
                 gc.getPlayerStats().upValueOf("Game over");
-                gc.setState(7);
-                gc.setLastState(1);
+                gc.setState("gameOver");
+                gc.setLastState("game");
             } else {
                 event.respawn(lastFloorX, lastFlorrY);
             }
@@ -336,7 +336,7 @@ public class Player extends GameObject {
     public void render(GameContainer gc, Renderer r) {
         r.drawLight(new Light(200, 0xffffff99),(int)posX + GameManager.TS / 2, (int)posY + GameManager.TS / 2);
         r.drawSprite(plSprite, (int)posX, (int)posY, direction, (int)anim);
-        r.drawText(tag, (int)posX / GameManager.TS, (int)posY / GameManager.TS, 1, -1, -1, Font.STANDARD);
+        r.drawText(tag, (int)posX - r.getCamX(), (int)posY - r.getCamY(), 1, -1, -1, Font.STANDARD);
         for(Notification notif : notifs) notif.render(gc, r);
     }
 

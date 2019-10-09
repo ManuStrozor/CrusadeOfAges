@@ -62,7 +62,7 @@ public class Editor extends AbstractGame {
             spawn = true;
         }
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(5);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("pausedEdit");
 
         //Player update
         if(spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1))
@@ -79,7 +79,7 @@ public class Editor extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if(gc.getCurrState() == 4) {
+        if(gc.getCurrState().equals("edit")) {
             int mouseX = gc.getInputHandler().getMouseX();
             int mouseY = gc.getInputHandler().getMouseY();
 

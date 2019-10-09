@@ -35,7 +35,6 @@ public class CreativeMode extends View {
     private sm.engine.gfx.Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File dossier;
-    private File[] files;
 
     private ArrayList<sm.engine.gfx.Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
@@ -48,12 +47,12 @@ public class CreativeMode extends View {
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
-        buttons.add(edit = new sm.engine.gfx.Button(170, 20, "Edit", 4));
-        buttons.add(rename = new sm.engine.gfx.Button(80, 20, "Rename", 9));
-        buttons.add(delete = new sm.engine.gfx.Button(80, 20, "Delete", 8));
-        buttons.add(create = new sm.engine.gfx.Button(80, 20, "Create", 4));
-        buttons.add(folder = new sm.engine.gfx.Button(80, 47, "Folder", 8));
-        buttons.add(back = new sm.engine.gfx.Button(80, 20, "Back", 0));
+        buttons.add(edit = new sm.engine.gfx.Button(170, 20, "Edit", "edit"));
+        buttons.add(rename = new sm.engine.gfx.Button(80, 20, "Rename", "inputDialog"));
+        buttons.add(delete = new sm.engine.gfx.Button(80, 20, "Delete", "creativeMode"));
+        buttons.add(create = new sm.engine.gfx.Button(80, 20, "Create", "edit"));
+        buttons.add(folder = new sm.engine.gfx.Button(80, 47, "Folder", "creativeMode"));
+        buttons.add(back = new sm.engine.gfx.Button(80, 20, "Back", "mainMenu"));
 
         creativeFolder = Conf.SM_FOLDER + "/creative_mode";
         dossier = new File(creativeFolder);
@@ -70,7 +69,7 @@ public class CreativeMode extends View {
 
             sMax = 10-(gc.getHeight()-3* GameManager.TS);
             int count = 0;
-            files = dossier.listFiles();
+            File[] files = dossier.listFiles();
             if (files != null) {
                 for(File file : files) {
                     if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
@@ -90,8 +89,8 @@ public class CreativeMode extends View {
 
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
-            gc.setLastState(8);
-            gc.setState(0);
+            gc.setLastState("creativeMode");
+            gc.setState("mainMenu");
             once = false;
         }
         //Scroll control
@@ -152,7 +151,7 @@ public class CreativeMode extends View {
                 }
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(8);
+                gc.setLastState("creativeMode");
                 once = false;
             }
 

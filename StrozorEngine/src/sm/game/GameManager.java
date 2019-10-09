@@ -18,26 +18,49 @@ public class GameManager extends AbstractGame {
     public static final int TS = 32;
     public static int current = 0;
     public static String[][] levels = {
-            {"/levels/0.png", "Learn to jump"},
-            {"/levels/1.png", "Trampoline room"},
-            {"/levels/2.png", "Go on slowly..."},
-            {"/levels/3.png", "Crown of thorns"}
+            {"/levels/0.png", "Learn to jump0"},
+            {"/levels/0.png", "Learn to jump1"},
+            {"/levels/0.png", "Learn to jump2"},
+            {"/levels/0.png", "Learn to jump3"},
+            {"/levels/0.png", "Learn to jump4"},
+            {"/levels/0.png", "Learn to jump5"},
+            {"/levels/0.png", "Learn to jump6"},
+            {"/levels/0.png", "Learn to jump7"},
+            {"/levels/0.png", "Learn to jump8"},
+            {"/levels/0.png", "Learn to jump9"},
+            {"/levels/0.png", "Learn to jump10"},
+            {"/levels/0.png", "Learn to jump11"},
+            {"/levels/0.png", "Learn to jump12"},
+            {"/levels/0.png", "Learn to jump13"},
+            {"/levels/0.png", "Learn to jump14"},
+            {"/levels/0.png", "Learn to jump15"},
+            {"/levels/0.png", "Learn to jump16"},
+            {"/levels/0.png", "Learn to jump17"},
+            {"/levels/0.png", "Learn to jump18"},
+            {"/levels/0.png", "Learn to jump19"},
+            {"/levels/0.png", "Learn to jump20"},
+            {"/levels/0.png", "Learn to jump21"},
+            {"/levels/0.png", "Learn to jump22"}
+            //{"/levels/1.png", "Trampoline room"},
+            //{"/levels/2.png", "Go on slowly..."},
+            //{"/levels/3.png", "Crown of thorns"}
     };
 
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-
-    private ArrayList<GameObject> objects = new ArrayList<>();
-    private ArrayList<Notification> notifs = new ArrayList<>();
+    private ArrayList<GameObject> objects;
+    private ArrayList<Notification> notifs;
     private Camera camera;
     private World world;
 
     public GameManager(Socket socket, World world) throws IOException {
         this.socket = socket;
+        this.world = world;
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        this.world = world;
+        objects = new ArrayList<>();
+        notifs = new ArrayList<>();
     }
 
     public Socket getSocket() {
@@ -71,7 +94,7 @@ public class GameManager extends AbstractGame {
             e.printStackTrace();
         }
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState(2);
+        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setState("pausedGame");
 
         // Screenshots
         if(gc.getInputHandler().isKeyDown(KeyEvent.VK_F12)) {
@@ -105,7 +128,7 @@ public class GameManager extends AbstractGame {
         }
 
         // Load level
-        if(getObject(""+socket.getLocalPort()) == null && (gc.getLastState() == 7 || gc.getLastState() == 0)) {
+        if(getObject(""+socket.getLocalPort()) == null && (gc.getLastState().equals("gameOver") || gc.getLastState().equals("mainMenu"))) {
             load(levels[current][0]);
         }
 

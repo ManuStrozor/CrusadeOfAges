@@ -492,7 +492,7 @@ public class Renderer {
         int y = GameManager.TS+10-GameSelection.scroll;
 
         int hUsed = 10;
-        for(int i = 0; i <= gc.getPlayerStats().getValueOf("Level up") + 1; i++) {
+        for(int i = 0; i < gc.getPlayerStats().getValueOf("Level up"); i++) {
 
             int size = 30;
 
@@ -510,10 +510,10 @@ public class Renderer {
             hUsed += size+10;
         }
 
-        int hTotal = gc.getHeight()-3* GameManager.TS;
+        int hTotal = gc.getHeight() - (3 * GameManager.TS);
         int minus = Math.max(hUsed - hTotal, 0);
 
-        drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 8, hTotal, GameSelection.scroll/8, minus/8);
+        drawScrollBar(gc.getWidth()/2+largest/2+20, GameManager.TS, 10, hTotal, GameSelection.scroll, minus);
     }
 
     public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
@@ -562,11 +562,11 @@ public class Renderer {
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {
         //BackBar
         fillRect(x, y, w, h, 0x66ffffff);
-        fillRect(x+8, y, 1, h, 0xff444244);
+        fillRect(x+w, y, 1, h, 0xff444244);
         //Bar
         fillRect(x, y+scroll, w, h-minus, 0xffd4d2cc);
         //Relief
-        fillRect(x+7, y+1+scroll, 1, h-1-minus, 0xff848284);
+        fillRect(x+(w-1), y+1+scroll, 1, h-1-minus, 0xff848284);
         fillRect(x+1, y+h-minus+scroll-1, w-1, 1, 0xff848284);
         fillRect(x+1, y+1+scroll, w-2, 1, 0xfffcfefc);
         fillRect(x+1, y+1+scroll, 1, h-2-minus, 0xfffcfefc);

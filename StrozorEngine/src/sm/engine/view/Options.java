@@ -25,10 +25,10 @@ public class Options extends View {
         this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(tglLang = new Button("lang", 0));
-        buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", 0));
-        buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", 0));
-        buttons.add(back = new Button("Back", 0));
+        buttons.add(tglLang = new Button("lang", "mainMenu"));
+        buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", "mainMenu"));
+        buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", "mainMenu"));
+        buttons.add(back = new Button("Back", "mainMenu"));
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Options extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if(gc.getLastState() == 0) {
+        if(gc.getLastState().equals("mainMenu")) {
             r.drawBackground(gc, world, "wall");
             r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
         } else {

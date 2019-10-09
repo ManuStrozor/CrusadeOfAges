@@ -15,14 +15,14 @@ public class Credits extends View {
 
     private String[] devs = {"Majoolwip", "Manu TD"};
     private String[] thanks = {"Marguerite Turbet", "Marie Lys Turbet", "Martin Turbet-Delof"};
-    private String[] contribs = {"Anne Sospedra", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
+    private String[] contribs = {"Anne Sospedra", "Firas Htm", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
 
     public Credits(Settings s, World world) {
         this.s = s;
         this.world = world;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
-        buttons.add(back = new Button(60, 20, "Back", 0));
+        buttons.add(back = new Button(60, 20, "Back", "mainMenu"));
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Credits extends View {
             if (isSelected(gc, btn)) {
                 click.play();
                 gc.setState(btn.getGoState());
-                gc.setLastState(6);
+                gc.setLastState("credits");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

@@ -24,13 +24,7 @@ public class CrusadeOfAges {
      */
     public static void main(String[] args) throws IOException {
 
-        String OS = (System.getProperty("os.name")).toUpperCase();
-        if (OS.contains("WIN")) {
-            appdata = System.getenv("AppData");
-        } else {
-            appdata = System.getProperty("user.dir");
-        }
-
+        appdata = setAppdata();
         manageArgs(args);
 
         Settings settings = new Settings();
@@ -63,6 +57,15 @@ public class CrusadeOfAges {
                 case "-h": host = args[i+1]; break;
                 case "-p": port = Integer.parseInt(args[i+1]); break;
             }
+        }
+    }
+
+    private static String setAppdata() {
+        String OS = (System.getProperty("os.name")).toUpperCase();
+        if (OS.contains("WIN")) {
+            return System.getenv("AppData");
+        } else {
+            return System.getProperty("user.dir");
         }
     }
 }

@@ -18,14 +18,14 @@ public class GameOver extends View {
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
         gameover = new SoundClip("/audio/gameover.wav");
-        buttons.add(new Button("Try again", 1));
-        buttons.add(new Button("Quit to title", 0));
+        buttons.add(new Button("Try again", "game"));
+        buttons.add(new Button("Quit to title", "mainMenu"));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if(gc.getLastState() == 1 && !once) {
+        if(gc.getLastState().equals("game") && !once) {
             gameover.play();
             once = true;
         }
@@ -38,7 +38,7 @@ public class GameOver extends View {
                 gameover.stop();
                 once = false;
                 gc.setState(btn.getGoState());
-                gc.setLastState(7);
+                gc.setLastState("gameOver");
             }
 
             if (btn.setHover(isHover(gc, btn))) {
