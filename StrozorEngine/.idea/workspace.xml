@@ -6,25 +6,53 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="refacto GameContainer + [port] au dessus du joueur + repair scroll bar">
+    <list default="true" id="dad33462-3643-4856-99c7-32db9d7ed900" name="Default" comment="refacto names method">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.squaremonster/creative_mode/2019-10-03_18.51.52.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/Renderer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Options.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/Editor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/Editor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/GameManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sm/game/objects/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/StrozorEngine/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/CrusadeOfAges.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Launcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/GameContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/GameContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/InputHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/InputHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/PlayerStats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/PlayerStats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/World.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/World.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/audio/SoundClip.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/audio/SoundClip.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Button.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/Button.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Font.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/Font.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Image.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/Image.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/ImageRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/ImageRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Light.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/Light.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/gfx/Sprite.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/gfx/Sprite.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/CreativeMode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/CreativeMode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Credits.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/Credits.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameOver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/GameOver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/GameSelection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/GameSelection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/InputDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/InputDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Options.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/Options.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedEdit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/PausedEdit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/PausedGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/PausedGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/Stats.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/Stats.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/engine/view/View.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/engine/view/View.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/exceptions/ConfException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/exceptions/ConfException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/AbstractGame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/AbstractGame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Conf.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Conf.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Editor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Editor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/GameManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/GameManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/Notification.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/actions/Collect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/actions/Collect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/actions/Event.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/actions/Event.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/actions/Move.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/actions/Move.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/objects/Enemy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/GameObject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/objects/GameObject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/NetworkPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/objects/NetworkPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/game/objects/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/game/objects/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sm/network/Server.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/network/Server.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -79,6 +107,7 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
       <recent name="sm.exceptions" />
       <recent name="sm" />
       <recent name="com.strozor.engine" />
@@ -100,32 +129,27 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.CrusadeOfAges">
+  <component name="RunManager" selected="Application.Launcher">
     <configuration default="true" type="Applet">
       <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CrusadeOfAges" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="sm.CrusadeOfAges" />
+    <configuration name="Launcher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Launcher" />
       <module name="StrozorEngine" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="sm.exceptions.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="GameManager" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="sm.game.GameManager" />
+    <configuration name="Launcher" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Launcher" />
       <module name="StrozorEngine" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sm.game.objects.*" />
+          <option name="PATTERN" value="exceptions.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -134,12 +158,12 @@
       </method>
     </configuration>
     <configuration name="Server" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="sm.network.Server" />
+      <option name="MAIN_CLASS_NAME" value="network.Server" />
       <module name="StrozorEngine" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="sm.network.*" />
+          <option name="PATTERN" value="network.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -180,12 +204,13 @@
     </configuration>
     <list>
       <item itemvalue="Application.Server" />
-      <item itemvalue="Application.CrusadeOfAges" />
+      <item itemvalue="Application.Launcher" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.CrusadeOfAges" />
+        <item itemvalue="Application.Launcher" />
         <item itemvalue="Application.Server" />
+        <item itemvalue="Application.Launcher" />
       </list>
     </recent_temporary>
   </component>
@@ -305,7 +330,14 @@
       <option name="project" value="LOCAL" />
       <updated>1570655862564</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="refacto names method">
+      <created>1570657981778</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1570657981778</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -345,6 +377,7 @@
     <MESSAGE value="Big refacto" />
     <MESSAGE value="Add espagnol + credits" />
     <MESSAGE value="refacto GameContainer + [port] au dessus du joueur + repair scroll bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="refacto GameContainer + [port] au dessus du joueur + repair scroll bar" />
+    <MESSAGE value="refacto names method" />
+    <option name="LAST_COMMIT_MESSAGE" value="refacto names method" />
   </component>
 </project>
