@@ -1,5 +1,5 @@
-## Square Monster
-Square Monster est un jeu de plate-forme 2d inspiré du magnifique Super-Meat-Boy !
+## Crusade Of Ages
+Crusade Of Ages est un jeu de plate-forme 2d inspiré de Super-Meat-Boy !
 
 ## Screenshots
 ![Screenshot0](https://raw.githubusercontent.com/Strozor/Square-Monster/master/screenshots/0.png)
