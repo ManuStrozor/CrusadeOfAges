@@ -1,0 +1,48 @@
+flag;es
+lang;Español
+beta version;versión beta
+Single player;Un solo jugador
+Creative mode;Modo creativo
+Game credits;Créditos del juego
+Options;Opciones
+Quit game;Deja el juego
+FPS off;FPS apagado
+Darkness;Oscuridad
+FPS on;FPS encendido
+Full day;Todo el día
+Back;Atrás
+Back to game;De vuelta al juego
+Quit to title;Salir al título
+Try again;Inténtalo de nuevo
+Save;Grabar
+Development team;Equipo de desarrollo
+DEVELOPERS;DESARROLLADORES
+THANKS TO;GRACIAS A
+CONTRIBUTORS;CONTRIBUIDORES
+Spawn;Spawn
+Floor;Piso
+Health pill;Pastillas para la salud
+Ground spikes;Puntas de tierra
+Ceiling spikes;Puntas de techo
+Key;Llave
+Check point;Punto de control
+Coin;Moneda
+Torch;Antorcha
+Slime bloc;Bloque de lodo
+Door;Puerta
+Ladder;Escalera
+GAME OVER;SE ACABÓ EL JUEGO
+You are dead;Estás muerto
+Edit;Tratar
+Select a map;Seleccione un mapa
+Rename;Renombrar
+Delete;Borrar
+Create;Crea
+Folder;Carpeta
+Cancel;Cancelar
+Create your first map !;Crea tu primer mapa
+Stats;Estadísticas
+Paused;Pausado
+Play;Juega
+Choose a level;Seleccione un nivel
+The Time Traveller;El Viajero del Tiempo

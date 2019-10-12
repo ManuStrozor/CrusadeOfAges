@@ -1,0 +1,48 @@
+flag;en
+lang;English
+beta version;beta version
+Single player;Single player
+Creative mode;Creative Mode
+Game credits;Game credits
+Options;Options
+Quit game;Quit game
+FPS off;FPS off
+Darkness;Darkness
+FPS on;FPS on
+Full day;Full day
+Back;Back
+Back to game;Back to game
+Quit to title;Quit to title
+Try again;Try again
+Save;Save
+Development team;Development team
+DEVELOPERS;DEVELOPERS
+THANKS TO;THANKS TO
+CONTRIBUTORS;CONTRIBUTORS
+Spawn;Spawn
+Floor;Floor
+Health pill;Health pill
+Ground spikes;Ground spikes
+Ceiling spikes;Ceiling spikes
+Key;Key
+Check point;Check point
+Coin;Coin
+Torch;Torch
+Slime bloc;Slime bloc
+Door;Door
+Ladder;Ladder
+GAME OVER;GAME OVER
+You are dead;You are dead
+Edit;Edit
+Select a map;Select a map
+Rename;Rename
+Delete;Delete
+Create;Create
+Folder;Folder
+Cancel;Cancel
+Create your first map !;Create your first map !
+Stats;Statistics
+Paused;Paused
+Play;Play
+Choose a level;Choose a level
+The Time Traveller;The Time Traveller
