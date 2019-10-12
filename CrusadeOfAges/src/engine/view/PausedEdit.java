@@ -13,14 +13,14 @@ public class PausedEdit extends View {
 
     private Settings s;
     private SoundClip hover, click;
-    private Button save;
 
     public PausedEdit(Settings settings) {
         s = settings;
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
-        buttons.add(save = new Button("Save", "creativeMode"));
+        buttons.add(new Button("Try", "edit"));
+        buttons.add(new Button("Save", "creativeMode"));
         buttons.add(new Button("Cancel", "creativeMode"));
         buttons.add(new Button("Back", "edit"));
     }
@@ -30,16 +30,20 @@ public class PausedEdit extends View {
 
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("edit");
 
-        //Button selection
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                if (btn == save) {
-                    Editor.creaImg.saveIt(Editor.rename);
-                    CreativeMode.once = false;
+                switch (btn.getText()) {
+                    case "Save":
+                        Editor.creaImg.saveIt(Editor.rename);
+                        CreativeMode.once = false;
+                        Editor.setSpawn(false);
+                        break;
+                    case "Try": Editor.setSpawn(true); break;
+                    case "Cancel": Editor.setSpawn(false); break;
                 }
                 click.play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("pausedEdit");
+                gc.setPrevView(gc.getActiView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

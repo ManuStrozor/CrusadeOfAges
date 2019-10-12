@@ -58,7 +58,8 @@ public class Image {
     }
 
     public void setP(int x, int y, int value) {
-        this.p[x + y * getW()] = value;
+        int pos = x + y * getW();
+        if (pos >= 0 && pos < p.length) p[pos] = value;
     }
 
     public boolean isAlpha() {

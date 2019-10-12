@@ -149,6 +149,11 @@ public class World {
         return spawnY;
     }
 
+    public void resetSpawn() {
+        spawnX = -1;
+        spawnY = -1;
+    }
+
     /**
      * Verify if a bloc is solid (can't walk throw) or not
      *
@@ -172,11 +177,14 @@ public class World {
      * @param col Rgba code
      */
     public void setBloc(int x, int y, int col) {
-        if (col == 0xff00ff00) {
-            spawnX = x;
-            spawnY = y;
+        int pos = x + y * width;
+        if (pos >= 0 && pos < map.length) {
+            if (col == 0xff00ff00) {
+                spawnX = x;
+                spawnY = y;
+            }
+            map[pos] = col;
         }
-        map[x + y * width] = col;
     }
 
     /**

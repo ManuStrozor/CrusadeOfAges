@@ -462,11 +462,11 @@ public class Renderer {
     }
 
     public void drawMiniMap(GameContainer gc, Image img) {
-        int xMMap = camX + gc.getWidth() - img.getW() - 2;
-        int yMMap = camY + gc.getHeight() - img.getH() - 2;
+        int xMMap = camX + gc.getWidth() - img.getW() - 4;
+        int yMMap = camY + gc.getHeight() - img.getH() - 4;
         fillRect(xMMap, yMMap, img.getW(), img.getH(), 0x99ababab);
-        drawRect(xMMap + camX / 32 + 1, yMMap + camY / 32, gc.getWidth() / 32 - 1, gc.getHeight() / 32 + 1, 0x99ababab);
         drawImage(img, xMMap, yMMap);
+        drawRect(xMMap + camX / 32, yMMap + camY / 32, gc.getWidth() / 32, gc.getHeight() / 32, 0x99ababab);
     }
 
     public void drawArrows(GameContainer gc, World world, int width, int height) {

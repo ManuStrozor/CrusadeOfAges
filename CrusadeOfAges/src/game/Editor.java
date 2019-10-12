@@ -12,7 +12,8 @@ import java.awt.event.MouseEvent;
 public class Editor extends AbstractGame {
 
     public static Image creaImg;
-    public static boolean spawn = false, once = false, newOne = false;
+    private static boolean spawn = false;
+    public static boolean once = false, newOne = false;
     public static String rename = "";
 
     private World world;
@@ -37,6 +38,10 @@ public class Editor extends AbstractGame {
     };
     private int color, scroll = 0;
 
+    private static final int DRAGSPEED = 3;
+    private int dragX = -1, dragY = -1;
+    private int tmpCamX = -1, tmpCamY = -1;
+
     public Editor(int width, int height) {
         world = new World();
         player = new Player("Tester", world, 999);
@@ -48,25 +53,20 @@ public class Editor extends AbstractGame {
     @Override
     public void update(GameContainer gc, float dt) {
 
+        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedEdit");
+
         if (!once) {
             if (newOne) {
-                creaImg = null;
                 creaImg = new Image(new int[width * height], width, height);
             }
             world.init(creaImg);
             once = true;
         }
 
-        if (!spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1)) {
-            player = new Player("player", world, 1);
-            spawn = true;
-        }
-
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedEdit");
-
         //Player update
-        if (spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1))
+        if (spawn && spawnExists()) {
             player.creativeUpdate(gc, dt);
+        }
 
         if (gc.getInputHandler().getScroll() > 0)
             scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
@@ -79,49 +79,53 @@ public class Editor extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if (gc.getActiView().equals("edit")) {
+        if (gc.getActiView().equals("edit")) { // Bloquer l'editeur sur la view pausedEdit
+
             int mouseX = gc.getInputHandler().getMouseX();
             int mouseY = gc.getInputHandler().getMouseY();
 
             int x = (mouseX + r.getCamX()) / GameManager.TS;
             int y = (mouseY + r.getCamY()) / GameManager.TS;
 
-            int speed = 10;
-
-            if (r.getCamX() + gc.getWidth() < creaImg.getW() * GameManager.TS) {
-                if (mouseX == gc.getWidth() - 1) r.setCamX(r.getCamX() + speed);
-            }
-            if (r.getCamX() > -GameManager.TS) {
-                if (mouseX == 0) r.setCamX(r.getCamX() - speed);
-            }
-            if (r.getCamY() + gc.getHeight() < creaImg.getH() * GameManager.TS) {
-                if (mouseY == gc.getHeight() - 1) r.setCamY(r.getCamY() + speed);
-            }
-            if (r.getCamY() > 0) {
-                if (mouseY == 0) r.setCamY(r.getCamY() - speed);
-            }
-
-            if (mouseX > GameManager.TS) {
+            if (gc.getInputHandler().isKey(KeyEvent.VK_CONTROL)) { // Déplacement sur l'editeur (CTRL + souris)
+                if (!isDragging()) {
+                    tmpCamX = r.getCamX();
+                    tmpCamY = r.getCamY();
+                    if (gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
+                        dragX = mouseX;
+                        dragY = mouseY;
+                    }
+                } else {
+                    int ddX = dragX - mouseX;
+                    int ddY = dragY - mouseY;
+                    int newCamX = notExceed(tmpCamX + ddX*DRAGSPEED, width*GameManager.TS-gc.getWidth()+GameManager.TS);
+                    int newCamY = notExceed(tmpCamY + ddY*DRAGSPEED, height*GameManager.TS-gc.getHeight()+GameManager.TS);
+                    r.setCoorCam(newCamX, newCamY);
+                    if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
+                        dragX = -1;
+                        dragY = -1;
+                    }
+                }
+            } else {
                 if (gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
 
-                    if (elems[scroll].equals("spawn") && world.getSpawnX() != -1 && world.getSpawnY() != -1) {
-
+                    if (elems[scroll].equals("spawn") && spawnExists()) {
                         //Delete previous spawn
                         creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000);
                         world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-
-                        //create new spawn
-                        creaImg.setP(x, y, color);
-
                         //Reset player position
                         player.getEvent().respawn(world.getSpawnX(), world.getSpawnY());
-                    } else {
-                        creaImg.setP(x, y, color);
                     }
-
+                    creaImg.setP(x, y, color);
                     world.setBloc(x, y, world.getCol(elems[scroll]));
 
                 } else if (gc.getInputHandler().isButton(MouseEvent.BUTTON3)) {
+                    if (x == world.getSpawnX() && y == world.getSpawnY()) {
+                        //Delete spawn
+                        creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000);
+                        world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
+                        world.resetSpawn();
+                    }
                     creaImg.setP(x, y, 0x00000000);
                     world.setBloc(x, y, 0);
                 }
@@ -133,7 +137,23 @@ public class Editor extends AbstractGame {
         r.drawDock(gc, world, elems, scroll);
         r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
 
-        if (spawn && (world.getSpawnX() != -1 || world.getSpawnY() != -1))
+        if (spawn && spawnExists())
             player.render(gc, r);
+    }
+
+    public static void setSpawn(boolean spawn) {
+        Editor.spawn = spawn;
+    }
+
+    private boolean spawnExists() {
+        return world.getSpawnX() != -1 && world.getSpawnY() != -1;
+    }
+
+    private boolean isDragging() {
+        return dragX != -1 && dragY != -1;
+    }
+
+    private int notExceed(int val, int max) {
+        return Math.max(Math.min(val, max), -GameManager.TS);
     }
 }

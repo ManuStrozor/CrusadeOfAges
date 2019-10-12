@@ -4,8 +4,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 public class Settings {
 
@@ -21,12 +19,11 @@ public class Settings {
     }
 
     public String translate(String key) {
-        try {
-            return langs.get(getIndexFromFlag(flag)).get(key);
-        } catch (Exception e) {
-            System.out.println("The sentence '" + key + "' could not be translated");
-            e.printStackTrace();
-            return null;
+        String trans;
+        if ((trans = langs.get(getIndexFromFlag(flag)).get(key)) == null) {
+            return "@" + key;
+        } else {
+            return trans;
         }
     }
 
@@ -61,7 +58,6 @@ public class Settings {
         File[] allSubFiles = f.listFiles();
         for (File file : allSubFiles) {
             if(!file.isDirectory()) {
-                System.out.println("fil: " + file.getAbsolutePath());
                 populateLang(map = new HashMap<>(), "lang/" + file.getName());
                 langs.add(map);
             }
