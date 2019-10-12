@@ -13,7 +13,7 @@ public class Sprite extends Image {
     public Image getSprite(int tileX, int tileY) {
         int[] p = new int[w * h];
 
-        System.arraycopy(this.getP(), (tileX * w) + (tileY * h) * this.getW(), p, 0, w * h);
+        System.arraycopy(this.p, (tileX * w) + (tileY * h) * this.getW(), p, 0, w * h);
 
         return new Image(p, w, h);
     }

@@ -254,7 +254,7 @@ public class GameContainer implements Runnable {
         this.height = height;
     }
 
-    float getScale() {
+    public float getScale() {
         return scale;
     }
 

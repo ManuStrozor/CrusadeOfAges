@@ -6,6 +6,8 @@ import engine.Settings;
 import engine.audio.SoundClip;
 import engine.gfx.Button;
 import game.Editor;
+import game.GameManager;
+import game.objects.Player;
 
 import java.awt.event.KeyEvent;
 
@@ -37,9 +39,17 @@ public class PausedEdit extends View {
                         Editor.creaImg.saveIt(Editor.rename);
                         CreativeMode.once = false;
                         Editor.setSpawn(false);
+                        Renderer.tileSize = GameManager.TS;
+                        Player.tileSize = GameManager.TS;
+                        Editor.tileSize = GameManager.TS;
                         break;
                     case "Try": Editor.setSpawn(true); break;
-                    case "Cancel": Editor.setSpawn(false); break;
+                    case "Cancel":
+                        Editor.setSpawn(false);
+                        Renderer.tileSize = GameManager.TS;
+                        Player.tileSize = GameManager.TS;
+                        Editor.tileSize = GameManager.TS;
+                        break;
                 }
                 click.play();
                 gc.setActiView(btn.getTargetView());

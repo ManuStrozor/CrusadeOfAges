@@ -13,7 +13,7 @@ import java.util.Date;
 public class Image {
 
     private int w, h;
-    private int[] p;
+    int[] p;
     private boolean alpha = false;
 
     /**

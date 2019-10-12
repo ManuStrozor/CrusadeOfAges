@@ -38,6 +38,7 @@ public class Editor extends AbstractGame {
     };
     private int color, scroll = 0;
 
+    public static int tileSize = GameManager.TS;
     private static final int DRAGSPEED = 3;
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
@@ -56,22 +57,30 @@ public class Editor extends AbstractGame {
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedEdit");
 
         if (!once) {
-            if (newOne) {
-                creaImg = new Image(new int[width * height], width, height);
-            }
+            if (newOne) creaImg = new Image(new int[width * height], width, height);
             world.init(creaImg);
             once = true;
         }
 
-        //Player update
-        if (spawn && spawnExists()) {
-            player.creativeUpdate(gc, dt);
-        }
+        if (spawn && spawnExists()) player.creativeUpdate(gc, dt); // Player update
 
-        if (gc.getInputHandler().getScroll() > 0)
-            scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
-        else if (gc.getInputHandler().getScroll() < 0)
-            scroll = (scroll == 0) ? elems.length - 1 : scroll - 1;
+        if (!gc.getInputHandler().isKey(KeyEvent.VK_CONTROL)) {
+            if (gc.getInputHandler().getScroll() > 0) {
+                scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
+            } else if (gc.getInputHandler().getScroll() < 0) {
+                scroll = (scroll == 0) ? elems.length - 1 : scroll - 1;
+            }
+        } else {
+            if (gc.getInputHandler().getScroll() < 0) {
+                Renderer.tileSize+=1;
+                Player.tileSize+=1;
+                tileSize+=1;
+            } else if (gc.getInputHandler().getScroll() > 0) {
+                if (Renderer.tileSize > 1) Renderer.tileSize-=1;
+                if (Player.tileSize > 1) Player.tileSize-=1;
+                if (tileSize > 1) tileSize-=1;
+            }
+        }
 
         color = world.getCol(elems[scroll]);
     }
@@ -84,13 +93,16 @@ public class Editor extends AbstractGame {
             int mouseX = gc.getInputHandler().getMouseX();
             int mouseY = gc.getInputHandler().getMouseY();
 
-            int x = (mouseX + r.getCamX()) / GameManager.TS;
-            int y = (mouseY + r.getCamY()) / GameManager.TS;
+            int x = (mouseX + r.getCamX()) / tileSize;
+            int y = (mouseY + r.getCamY()) / tileSize;
 
             if (gc.getInputHandler().isKey(KeyEvent.VK_CONTROL)) { // Déplacement sur l'editeur (CTRL + souris)
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
                     tmpCamY = r.getCamY();
+                    if (gc.getInputHandler().getScroll() != 0) {
+                        r.setCoorCam(mouseX, mouseY);
+                    }
                     if (gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
                         dragX = mouseX;
                         dragY = mouseY;
@@ -98,8 +110,8 @@ public class Editor extends AbstractGame {
                 } else {
                     int ddX = dragX - mouseX;
                     int ddY = dragY - mouseY;
-                    int newCamX = notExceed(tmpCamX + ddX*DRAGSPEED, width*GameManager.TS-gc.getWidth()+GameManager.TS);
-                    int newCamY = notExceed(tmpCamY + ddY*DRAGSPEED, height*GameManager.TS-gc.getHeight()+GameManager.TS);
+                    int newCamX = notExceed(tmpCamX + ddX*DRAGSPEED, width*tileSize-gc.getWidth()+tileSize);
+                    int newCamY = notExceed(tmpCamY + ddY*DRAGSPEED, height*tileSize-gc.getHeight()+tileSize);
                     r.setCoorCam(newCamX, newCamY);
                     if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
                         dragX = -1;
@@ -132,10 +144,10 @@ public class Editor extends AbstractGame {
             }
         }
 
-        r.drawWorld(world);
+        r.drawWorld(world, tileSize);
         r.drawMiniMap(gc, creaImg);
         r.drawDock(gc, world, elems, scroll);
-        r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
+        //r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
 
         if (spawn && spawnExists())
             player.render(gc, r);
@@ -154,6 +166,6 @@ public class Editor extends AbstractGame {
     }
 
     private int notExceed(int val, int max) {
-        return Math.max(Math.min(val, max), -GameManager.TS);
+        return Math.max(Math.min(val, max), -tileSize);
     }
 }

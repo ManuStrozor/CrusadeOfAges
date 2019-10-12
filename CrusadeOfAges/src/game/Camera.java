@@ -12,6 +12,8 @@ public class Camera {
     private String targetTag;
     private GameObject target = null;
 
+    private int tileSize = GameManager.TS;
+
     Camera(String tag, World world) {
         this.targetTag = tag;
         this.world = world;
@@ -30,10 +32,10 @@ public class Camera {
 
         if (offX < 0) offX = 0;
         if (offY < 0) offY = 0;
-        if (offX + gc.getWidth() > world.getWidth() * GameManager.TS)
-            offX = world.getWidth() * GameManager.TS - gc.getWidth();
-        if (offY + gc.getHeight() > world.getHeight() * GameManager.TS)
-            offY = world.getHeight() * GameManager.TS - gc.getHeight();
+        if (offX + gc.getWidth() > world.getWidth() * tileSize)
+            offX = world.getWidth() * tileSize - gc.getWidth();
+        if (offY + gc.getHeight() > world.getHeight() * tileSize)
+            offY = world.getHeight() * tileSize - gc.getHeight();
     }
 
     public void render(Renderer r) {

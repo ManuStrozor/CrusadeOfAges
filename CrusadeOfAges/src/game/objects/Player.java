@@ -35,9 +35,11 @@ public class Player extends GameObject {
     private int speed, ground = 2;
     private float fallDist = 0;
 
+    public static int tileSize = GameManager.TS;
+    private float modif = GameManager.TS / (float)tileSize;
+
     public Player(String tag, World world, int lives) {
-        String path = Conf.SM_FOLDER + "/assets/player.png";
-        plSprite = new Sprite(path, GameManager.TS, GameManager.TS, true);
+        plSprite = new Sprite(Conf.SM_FOLDER + "/assets/player.png", tileSize, tileSize, true);
 
         this.world = world;
         this.tag = tag;
@@ -47,12 +49,12 @@ public class Player extends GameObject {
         collect = new Collect(this, world);
         event = new Event(this, world);
 
-        width = GameManager.TS;
-        height = GameManager.TS;
+        width = tileSize;
+        height = tileSize;
         tileX = world.getSpawnX();
         tileY = world.getSpawnY();
-        posX = tileX * GameManager.TS;
-        posY = tileY * GameManager.TS;
+        posX = tileX * tileSize;
+        posY = tileY * tileSize;
         upPosX = posX;
         upPosY = posY;
         offX = 0;
@@ -131,21 +133,21 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if (offY > GameManager.TS / 2.0) {
+        if (offY > tileSize / 2.0) {
             tileY++;
-            offY -= GameManager.TS;
+            offY -= tileSize;
         }
-        if (offY < -GameManager.TS / 2.0) {
+        if (offY < -tileSize / 2.0) {
             tileY--;
-            offY += GameManager.TS;
+            offY += tileSize;
         }
-        if (offX > GameManager.TS / 2.0) {
+        if (offX > tileSize / 2.0) {
             tileX++;
-            offX -= GameManager.TS;
+            offX -= tileSize;
         }
-        if (offX < -GameManager.TS / 2.0) {
+        if (offX < -tileSize / 2.0) {
             tileX--;
-            offX += GameManager.TS;
+            offX += tileSize;
         }
 
         //Snick -> Slow
@@ -169,8 +171,8 @@ public class Player extends GameObject {
 
         if (fallDist != 0) anim = 3;
 
-        posX = tileX * GameManager.TS + offX;
-        posY = tileY * GameManager.TS + offY;
+        posX = tileX * tileSize + offX;
+        posY = tileY * tileSize + offY;
     }
 
     @Override
@@ -302,21 +304,21 @@ public class Player extends GameObject {
 
 
         //Update Tile position
-        if (offY > GameManager.TS / 2.0) {
+        if (offY > tileSize / 2.0) {
             tileY++;
-            offY -= GameManager.TS;
+            offY -= tileSize;
         }
-        if (offY < -GameManager.TS / 2.0) {
+        if (offY < -tileSize / 2.0) {
             tileY--;
-            offY += GameManager.TS;
+            offY += tileSize;
         }
-        if (offX > GameManager.TS / 2.0) {
+        if (offX > tileSize / 2.0) {
             tileX++;
-            offX -= GameManager.TS;
+            offX -= tileSize;
         }
-        if (offX < -GameManager.TS / 2.0) {
+        if (offX < -tileSize / 2.0) {
             tileX--;
-            offX += GameManager.TS;
+            offX += tileSize;
         }
 
         //Snick -> Slow
@@ -340,13 +342,13 @@ public class Player extends GameObject {
 
         if (fallDist != 0) anim = 3;
 
-        posX = tileX * GameManager.TS + offX;
-        posY = tileY * GameManager.TS + offY;
+        posX = tileX * tileSize + offX;
+        posY = tileY * tileSize + offY;
     }
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawLight(new Light(200, 0xffffff99), (int) posX + GameManager.TS / 2, (int) posY + GameManager.TS / 2);
+        r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
         r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim);
         r.drawText(tag, (int) posX - r.getCamX(), (int) posY - r.getCamY(), 1, -1, -1, Font.STANDARD);
         for (Notification notif : notifs) notif.render(gc, r);
