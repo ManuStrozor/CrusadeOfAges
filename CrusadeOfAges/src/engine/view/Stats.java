@@ -28,7 +28,6 @@ public class Stats extends View {
             if (isSelected(gc, btn)) {
                 gc.getClick().play();
                 gc.setActiView(gc.getPrevView());
-                gc.setPrevView(gc.getPrevView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

@@ -37,7 +37,6 @@ public class InputDialog extends View {
         }
 
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            gc.setPrevView("inputDialog");
             gc.setActiView("creativeMode");
             once = false;
         }
@@ -49,7 +48,6 @@ public class InputDialog extends View {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            gc.setPrevView("inputDialog");
             gc.setActiView("creativeMode");
             once = false;
         }
@@ -81,7 +79,6 @@ public class InputDialog extends View {
                 }
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("inputDialog");
                 once = false;
             }
 

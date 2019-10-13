@@ -16,53 +16,60 @@ public class Options extends View {
 
     private Settings s;
     private World world;
-    private Button tglLang, tglFps, tglLights, back;
 
     public Options(Settings s, World world) {
         this.s = s;
         this.world = world;
-        buttons.add(tglLang = new Button("lang", "mainMenu"));
-        buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", "mainMenu"));
-        buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", "mainMenu"));
-        buttons.add(back = new Button("Back", "mainMenu"));
+        buttons.add(new Button("lang", null));
+        buttons.add(new Button(s.isShowFps() ? "FPS on" : "FPS off", null));
+        buttons.add(new Button(s.isShowLights() ? "Darkness" : "Full day", null));
+        buttons.add(new Button("Back", "mainMenu"));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            upSettings();
+            saveSettings();
             gc.setActiView(gc.getPrevView());
         }
 
         //Button selection
-        if (isSelected(gc, tglLang)) {
-            gc.getClick().play();
-            if (s.getIndexFromFlag(s.getFlag()) < s.getLangs().size() - 1) {
-                s.setFlag(s.getFlagFromIndex(s.getIndexFromFlag(s.getFlag()) + 1));
-            } else {
-                s.setFlag(s.getFlagFromIndex(0));
+        for (Button btn : buttons) {
+            if (isSelected(gc, btn)) {
+                gc.getClick().play();
+                switch (btn.getText()) {
+                    case "lang":
+                        if (s.getIFlag(s.getFlag()) < s.getLangs().size() - 1) {
+                            s.setFlag(s.getFIndex(s.getIFlag(s.getFlag()) + 1));
+                        } else {
+                            s.setFlag(s.getFIndex(0));
+                        }
+                        break;
+                    case "Back":
+                        saveSettings();
+                        gc.setActiView(gc.getPrevView());
+                        break;
+                    case "FPS on":
+                    case "FPS off":
+                        s.setShowFps(!s.isShowFps());
+                        if (s.isShowFps()) {
+                            btn.setText("FPS on");
+                        } else {
+                            btn.setText("FPS off");
+                        }
+                        break;
+                    case "Darkness":
+                    case "Full day":
+                        s.setShowLights(!s.isShowLights());
+                        if (s.isShowLights()) {
+                            btn.setText("Darkness");
+                        } else {
+                            btn.setText("Full day");
+                        }
+                        break;
+                }
             }
-        } else if (isSelected(gc, tglFps)) {
-            gc.getClick().play();
-            s.setShowFps(!s.isShowFps());
-            if (s.isShowFps()) {
-                tglFps.setText("FPS on");
-            } else {
-                tglFps.setText("FPS off");
-            }
-        } else if (isSelected(gc, tglLights)) {
-            gc.getClick().play();
-            s.setShowLights(!s.isShowLights());
-            if (s.isShowLights()) {
-                tglLights.setText("Darkness");
-            } else {
-                tglLights.setText("Full day");
-            }
-        } else if (isSelected(gc, back)) {
-            gc.getClick().play();
-            upSettings();
-            gc.setActiView(gc.getPrevView());
         }
 
         for (Button btn : buttons) {
@@ -98,7 +105,7 @@ public class Options extends View {
         }
     }
 
-    private void upSettings() {
+    private void saveSettings() {
         try {
             List<String> newLines = new ArrayList<>();
             for (String line : Files.readAllLines(Paths.get(Conf.SM_FOLDER + "/settings.txt"), StandardCharsets.UTF_8)) {

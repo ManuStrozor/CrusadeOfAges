@@ -31,7 +31,6 @@ public class Credits extends View {
             if (isSelected(gc, btn)) {
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("credits");
             }
 
             if (btn.setHover(isHover(gc, btn))) {

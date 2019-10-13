@@ -20,21 +20,21 @@ public class Settings {
 
     public String translate(String key) {
         String trans;
-        if ((trans = langs.get(getIndexFromFlag(flag)).get(key)) == null) {
+        if ((trans = langs.get(getIFlag(flag)).get(key)) == null) {
             return "@" + key;
         } else {
             return trans;
         }
     }
 
-    public int getIndexFromFlag(String flag) {
+    public int getIFlag(String flag) {
         for (int i = 0; i < langs.size(); i++) {
             if (langs.get(i).get("flag").equals(flag)) return i;
         }
         return 0;
     }
 
-    public String getFlagFromIndex(int index) {
+    public String getFIndex(int index) {
         return langs.get(index).get("flag");
     }
 

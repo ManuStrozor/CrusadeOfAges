@@ -243,7 +243,6 @@ public class Player extends GameObject {
                 this.setDead(true);
                 gc.getPlayerStats().upValueOf("Game over");
                 gc.setActiView("gameOver");
-                gc.setPrevView("game");
             } else {
                 event.respawn(lastFloorX, lastFlorrY);
             }

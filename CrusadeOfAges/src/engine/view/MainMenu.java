@@ -31,7 +31,6 @@ public class MainMenu extends View {
             if (isSelected(gc, btn)) {
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("mainMenu");
             }
             // Button Hover
             if (btn.setHover(isHover(gc, btn))) {

@@ -49,9 +49,9 @@ public class GameSelection extends View {
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
             gc.setActiView("mainMenu");
-            gc.setPrevView(gc.getPrevView());
             once = false;
         }
+
         //Scroll control
         if (gc.getInputHandler().getScroll() < 0) {
             scroll -= 20;
@@ -60,6 +60,7 @@ public class GameSelection extends View {
             scroll += 20;
             if (scroll > sMax) scroll = sMax;
         }
+
         //Selected control
         for (int i = 0; i <= gc.getPlayerStats().getValueOf("Level up"); i++) {
             if (levelSelected(gc, i, scroll)) {
@@ -67,6 +68,7 @@ public class GameSelection extends View {
                 focus = true;
             }
         }
+
         //Button selection
         for (Button btn : buttons) {
             btn.setBgColor(0xff616E7A);
@@ -80,7 +82,6 @@ public class GameSelection extends View {
                 }
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView(gc.getPrevView());
                 once = false;
             }
 

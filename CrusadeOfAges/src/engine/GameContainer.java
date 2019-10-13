@@ -31,8 +31,8 @@ public class GameContainer implements Runnable {
     private int width, height;
     private float scale;
     private String title;
-    private String prevView = "mainMenu";
-    private String actiView = "creativeMode"; // Ecran de départ !
+    private String prevView = null;
+    private String actiView = "mainMenu"; // Ecran de départ !
 
     private static final String VERSION = "version 1.0";
     private static final String FACTORY = "Strozor Inc.";
@@ -306,16 +306,12 @@ public class GameContainer implements Runnable {
         return prevView;
     }
 
-    public void setPrevView(String prevView) {
-        this.prevView = prevView;
-    }
-
     public String getActiView() {
         return actiView;
     }
 
     public void setActiView(String value) {
-        setPrevView(actiView);
+        prevView = actiView;
         actiView = value;
     }
 }

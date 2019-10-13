@@ -51,7 +51,6 @@ public class PausedEdit extends View {
                 }
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView(gc.getActiView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

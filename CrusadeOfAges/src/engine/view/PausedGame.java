@@ -29,7 +29,6 @@ public class PausedGame extends View {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
                 gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView(gc.getPrevView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {

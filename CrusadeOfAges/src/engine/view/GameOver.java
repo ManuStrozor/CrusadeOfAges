@@ -33,7 +33,6 @@ public class GameOver extends View {
                 gc.getGameover().stop();
                 once = false;
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("gameOver");
             }
 
             if (btn.setHover(isHover(gc, btn))) {
