@@ -3,8 +3,6 @@ import exceptions.ConfException;
 import game.Conf;
 import game.GameManager;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
 

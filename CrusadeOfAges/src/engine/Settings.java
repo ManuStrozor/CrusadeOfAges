@@ -1,9 +1,10 @@
 package engine;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 public class Settings {
 
@@ -13,7 +14,7 @@ public class Settings {
     private boolean showFps = true;
     private boolean showLights = false;
 
-    public Settings() {
+    public Settings() throws IOException {
         langs = new ArrayList<>();
         parseAllLangs(langs);
     }
@@ -41,7 +42,7 @@ public class Settings {
     private void populateLang(Map<String, String> langMap, String path) {
         try {
             InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(path);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
             String[] word;
             while (reader.ready()) {
                 word = reader.readLine().split(";");
@@ -52,16 +53,29 @@ public class Settings {
         }
     }
 
-    private void parseAllLangs(ArrayList<Map<String, String>> langs) {
+    private void parseAllLangs(ArrayList<Map<String, String>> langs) throws IOException {
         Map<String, String> map;
-        File f = new File("assets/lang");
-        File[] allSubFiles = f.listFiles();
-        for (File file : allSubFiles) {
-            if(!file.isDirectory()) {
-                populateLang(map = new HashMap<>(), "lang/" + file.getName());
+        String jar;
+        if (System.getProperty("user.dir").contains("artifacts")) jar = "CrusadeOfAges.jar";
+        else jar = "../out/artifacts/CrusadeOfAges.jar";
+        for (String file : getJarContent(jar)) {
+            if (file.contains("lang") && file.contains("txt")) {
+                populateLang(map = new HashMap<>(), file);
                 langs.add(map);
             }
         }
+    }
+
+    private List<String> getJarContent(String jarPath) throws IOException {
+        List<String> content = new ArrayList<>();
+        JarFile jarFile = new JarFile(jarPath);
+        Enumeration<JarEntry> e = jarFile.entries();
+        while (e.hasMoreElements()) {
+            JarEntry entry = e.nextElement();
+            String name = entry.getName();
+            content.add(name);
+        }
+        return content;
     }
 
     public ArrayList<Map<String, String>> getLangs() {
