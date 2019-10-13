@@ -3,7 +3,6 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import game.Editor;
 import game.GameManager;
@@ -14,12 +13,9 @@ import java.awt.event.KeyEvent;
 public class PausedEdit extends View {
 
     private Settings s;
-    private SoundClip hover, click;
 
     public PausedEdit(Settings settings) {
         s = settings;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
 
         buttons.add(new Button("Save", "creativeMode"));
         buttons.add(new Button("Cancel", "creativeMode"));
@@ -53,14 +49,14 @@ public class PausedEdit extends View {
                         Editor.tileSize = GameManager.TS;
                         break;
                 }
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView(gc.getActiView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

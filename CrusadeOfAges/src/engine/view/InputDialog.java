@@ -1,6 +1,5 @@
 package engine.view;
 
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import game.GameManager;
 import engine.*;
@@ -18,7 +17,6 @@ public class InputDialog extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
     private Button cancel, rename;
 
     private boolean once = false;
@@ -26,8 +24,6 @@ public class InputDialog extends View {
     public InputDialog(Settings s, World world) {
         this.s = s;
         this.world = world;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(cancel = new Button(80, 20, "Cancel", "creativeMode"));
         buttons.add(rename = new Button(80, 20, "Rename", "creativeMode"));
     }
@@ -83,7 +79,7 @@ public class InputDialog extends View {
                         e.printStackTrace();
                     }
                 }
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView("inputDialog");
                 once = false;
@@ -91,7 +87,7 @@ public class InputDialog extends View {
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

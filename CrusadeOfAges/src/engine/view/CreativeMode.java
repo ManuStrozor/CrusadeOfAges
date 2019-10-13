@@ -4,7 +4,6 @@ import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
 import engine.World;
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import engine.gfx.Image;
 import game.Conf;
@@ -35,7 +34,6 @@ public class CreativeMode extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
     private engine.gfx.Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File dossier;
@@ -48,8 +46,6 @@ public class CreativeMode extends View {
     public CreativeMode(Settings s, World world) {
         this.s = s;
         this.world = world;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
 
         buttons.add(edit = new engine.gfx.Button(170, 20, "Edit", "edit"));
         buttons.add(rename = new engine.gfx.Button(80, 20, "Rename", "inputDialog"));
@@ -164,14 +160,14 @@ public class CreativeMode extends View {
                         break;
                 }
 
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

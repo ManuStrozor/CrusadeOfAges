@@ -400,26 +400,32 @@ public class Renderer {
         drawText("x" + obj.getKeys(), x + tileSize * 5 - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawWorld(World world, int tileSize) {
+    public void drawWorld(World world) {
 
-        for (int y = 0; y < world.getHeight(); y++) {
-            for (int x = 0; x < world.getWidth(); x++) {
+        int offX = Math.max(camX/tileSize, 0);
+        int offY = Math.max(camY/tileSize, 0);
+
+        int endX = Math.min(pW/tileSize+offX+2, world.getWidth());
+        int endY = Math.min(pH/tileSize+offY+2, world.getHeight());
+
+        for (int y = offY; y < endY; y++) {
+            for (int x = offX; x < endX; x++) {
 
                 int tileX = world.getBlocMap(x, y).getX();
                 int tileY = world.getBlocMap(x, y).getY();
 
-                //draw wall behind non-solid bloc
+                // Murs derriere les blocs non-solides
                 if (!world.getBlocMap(x, y).isSolid() && !world.getBlocMap(x, y).isTagged("wall"))
                     drawSprite(objsImg, x * tileSize, y * tileSize, 1, 0);
 
-                //draw bloc
+                // Affichage des blocs
                 drawSprite(objsImg, x * tileSize, y * tileSize, tileX, tileY);
 
-                //draw shadow under solid bloc
+                // Ombres sous les blocs
                 if (!world.getBlocMap(x, y).isSolid() && world.getBlocMap(x, y - 1).isSolid())
                     drawSprite(objsImg, x * tileSize, y * tileSize, 0, 3);
 
-                //draw top part of the door
+                // Partie haute de la porte
                 if (world.getBlocMap(x, y).isTagged("door"))
                     drawSprite(objsImg, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1);
             }

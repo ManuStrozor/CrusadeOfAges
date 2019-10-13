@@ -1,6 +1,5 @@
 package engine.view;
 
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import engine.gfx.Font;
 import engine.*;
@@ -11,14 +10,11 @@ public class Stats extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
     private Button back;
 
     public Stats(Settings s, World world) {
         this.s = s;
         this.world = world;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(back = new Button(60, 20, "Back", "mainMenu"));
     }
 
@@ -30,14 +26,14 @@ public class Stats extends View {
         //Button selection
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(gc.getPrevView());
                 gc.setPrevView(gc.getPrevView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

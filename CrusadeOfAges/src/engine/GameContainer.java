@@ -1,5 +1,6 @@
 package engine;
 
+import engine.audio.SoundClip;
 import engine.gfx.Font;
 import engine.gfx.Light;
 import engine.view.*;
@@ -22,15 +23,16 @@ public class GameContainer implements Runnable {
     private InputHandler inputHandler;
     private Settings settings;
     private PlayerStats playerStats;
-    private AbstractGame game, edit;
+    private SoundClip hover, click, gameover;
+    private AbstractGame game, editor;
     private Map<String, View> v = new HashMap<>();
 
     private boolean running = false;
     private int width, height;
     private float scale;
     private String title;
-    private String prevView = null;
-    private String actiView = "mainMenu"; // Ecran de départ !
+    private String prevView = "mainMenu";
+    private String actiView = "creativeMode"; // Ecran de départ !
 
     private static final String VERSION = "version 1.0";
     private static final String FACTORY = "Strozor Inc.";
@@ -41,9 +43,7 @@ public class GameContainer implements Runnable {
         gm = (GameManager) game;
         this.settings = settings;
         this.playerStats = playerStats;
-
-        edit = new Editor();
-
+        editor = new Editor();
         v.put("creativeMode", new CreativeMode(settings, world));
         v.put("credits", new Credits(settings, world));
         v.put("gameOver", new GameOver(settings));
@@ -54,6 +54,10 @@ public class GameContainer implements Runnable {
         v.put("pausedEdit", new PausedEdit(settings));
         v.put("pausedGame", new PausedGame(settings));
         v.put("stats", new Stats(settings, world));
+
+        hover = new SoundClip("/audio/hover.wav");
+        click = new SoundClip("/audio/click.wav");
+        gameover = new SoundClip("/audio/gameover.wav");
     }
 
     public synchronized void start() {
@@ -100,7 +104,7 @@ public class GameContainer implements Runnable {
 
                 switch (actiView) {
                     case "edit":
-                        edit.update(this, (float) UPDATE_CAP);
+                        editor.update(this, (float) UPDATE_CAP);
                         break;
                     case "game":
                         game.update(this, (float) UPDATE_CAP);
@@ -145,10 +149,10 @@ public class GameContainer implements Runnable {
             // Affichage de la view active
             switch (actiView) {
                 case "edit":
-                    edit.render(this, renderer);
+                    editor.render(this, renderer);
                     break;
                 case "pausedEdit":
-                    edit.render(this, renderer);
+                    editor.render(this, renderer);
                     v.get("pausedEdit").render(this, renderer);
                     break;
                 case "game":
@@ -284,6 +288,18 @@ public class GameContainer implements Runnable {
 
     public PlayerStats getPlayerStats() {
         return playerStats;
+    }
+
+    public SoundClip getHover() {
+        return hover;
+    }
+
+    public SoundClip getClick() {
+        return click;
+    }
+
+    public SoundClip getGameover() {
+        return gameover;
     }
 
     public String getPrevView() {

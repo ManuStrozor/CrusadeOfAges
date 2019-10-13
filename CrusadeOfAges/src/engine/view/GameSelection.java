@@ -1,6 +1,5 @@
 package engine.view;
 
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import engine.gfx.Font;
 import game.AbstractGame;
@@ -26,14 +25,11 @@ public class GameSelection extends View {
     private World world;
     private GameManager gameManager;
     private Button play, back;
-    private SoundClip hover, click;
 
     public GameSelection(Settings s, World world, AbstractGame game) {
         this.s = s;
         this.world = world;
         this.gameManager = (GameManager) game;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(play = new Button(170, 20, "Play", "game"));
         buttons.add(back = new Button(170, 20, "Back", "mainMenu"));
     }
@@ -82,7 +78,7 @@ public class GameSelection extends View {
                     GameManager.current = fIndex;
                     gameManager.load(GameManager.levels[fIndex][0]);
                 }
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView(gc.getPrevView());
                 once = false;
@@ -90,7 +86,7 @@ public class GameSelection extends View {
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

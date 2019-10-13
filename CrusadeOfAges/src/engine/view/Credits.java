@@ -1,6 +1,5 @@
 package engine.view;
 
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 import engine.*;
 
@@ -10,7 +9,6 @@ public class Credits extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
     private Button back;
 
     private String[] devs = {"Majoolwip", "Manu TD"};
@@ -20,8 +18,6 @@ public class Credits extends View {
     public Credits(Settings s, World world) {
         this.s = s;
         this.world = world;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(back = new Button(60, 20, "Back", "mainMenu"));
     }
 
@@ -33,14 +29,14 @@ public class Credits extends View {
         //Button selection
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView("credits");
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

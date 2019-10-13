@@ -3,21 +3,16 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 
 public class GameOver extends View {
 
     private Settings s;
-    private SoundClip hover, click, gameover;
 
     private boolean once = false;
 
     public GameOver(Settings settings) {
         s = settings;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
-        gameover = new SoundClip("/audio/gameover.wav");
         buttons.add(new Button("Try again", "game"));
         buttons.add(new Button("Quit to title", "mainMenu"));
     }
@@ -26,7 +21,7 @@ public class GameOver extends View {
     public void update(GameContainer gc, float dt) {
 
         if (gc.getPrevView().equals("game") && !once) {
-            gameover.play();
+            gc.getGameover().play();
             once = true;
         }
 
@@ -34,8 +29,8 @@ public class GameOver extends View {
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
-                click.play();
-                gameover.stop();
+                gc.getClick().play();
+                gc.getGameover().stop();
                 once = false;
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView("gameOver");
@@ -43,7 +38,7 @@ public class GameOver extends View {
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

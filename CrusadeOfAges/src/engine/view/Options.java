@@ -1,7 +1,6 @@
 package engine.view;
 
 import engine.*;
-import engine.audio.SoundClip;
 import game.Conf;
 import engine.gfx.Button;
 
@@ -17,14 +16,11 @@ public class Options extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
     private Button tglLang, tglFps, tglLights, back;
 
     public Options(Settings s, World world) {
         this.s = s;
         this.world = world;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(tglLang = new Button("lang", "mainMenu"));
         buttons.add(tglFps = new Button(s.isShowFps() ? "FPS on" : "FPS off", "mainMenu"));
         buttons.add(tglLights = new Button(s.isShowLights() ? "Darkness" : "Full day", "mainMenu"));
@@ -41,14 +37,14 @@ public class Options extends View {
 
         //Button selection
         if (isSelected(gc, tglLang)) {
-            click.play();
+            gc.getClick().play();
             if (s.getIndexFromFlag(s.getFlag()) < s.getLangs().size() - 1) {
                 s.setFlag(s.getFlagFromIndex(s.getIndexFromFlag(s.getFlag()) + 1));
             } else {
                 s.setFlag(s.getFlagFromIndex(0));
             }
         } else if (isSelected(gc, tglFps)) {
-            click.play();
+            gc.getClick().play();
             s.setShowFps(!s.isShowFps());
             if (s.isShowFps()) {
                 tglFps.setText("FPS on");
@@ -56,7 +52,7 @@ public class Options extends View {
                 tglFps.setText("FPS off");
             }
         } else if (isSelected(gc, tglLights)) {
-            click.play();
+            gc.getClick().play();
             s.setShowLights(!s.isShowLights());
             if (s.isShowLights()) {
                 tglLights.setText("Darkness");
@@ -64,7 +60,7 @@ public class Options extends View {
                 tglLights.setText("Full day");
             }
         } else if (isSelected(gc, back)) {
-            click.play();
+            gc.getClick().play();
             upSettings();
             gc.setActiView(gc.getPrevView());
         }
@@ -72,7 +68,7 @@ public class Options extends View {
         for (Button btn : buttons) {
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

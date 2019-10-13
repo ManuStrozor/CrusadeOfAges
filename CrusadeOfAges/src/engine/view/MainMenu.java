@@ -4,7 +4,6 @@ import engine.GameContainer;
 import engine.World;
 import engine.Renderer;
 import engine.Settings;
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 
 
@@ -12,14 +11,10 @@ public class MainMenu extends View {
 
     private Settings s;
     private World world;
-    private SoundClip hover, click;
 
     public MainMenu(Settings s, World world) {
         this.s = s;
         this.world = world;
-
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
 
         buttons.add(new Button("Single player", "gameSelection"));
         buttons.add(new Button("Stats", "stats"));
@@ -34,14 +29,14 @@ public class MainMenu extends View {
         for (Button btn : buttons) {
             // Button Click
             if (isSelected(gc, btn)) {
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView("mainMenu");
             }
             // Button Hover
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {

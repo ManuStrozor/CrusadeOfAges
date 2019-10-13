@@ -3,7 +3,6 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
-import engine.audio.SoundClip;
 import engine.gfx.Button;
 
 import java.awt.event.KeyEvent;
@@ -11,12 +10,9 @@ import java.awt.event.KeyEvent;
 public class PausedGame extends View {
 
     private Settings s;
-    private SoundClip hover, click;
 
     public PausedGame(Settings settings) {
         s = settings;
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
         buttons.add(new Button("Back to game", "game"));
         buttons.add(new Button("Stats", "stats"));
         buttons.add(new Button("Quit to title", "mainMenu"));
@@ -31,14 +27,14 @@ public class PausedGame extends View {
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
-                click.play();
+                gc.getClick().play();
                 gc.setActiView(btn.getTargetView());
                 gc.setPrevView(gc.getPrevView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!hover.isRunning()) hover.play();
+                    if (!gc.getHover().isRunning()) gc.getHover().play();
                     btn.setHoverSounded(true);
                 }
             } else {
