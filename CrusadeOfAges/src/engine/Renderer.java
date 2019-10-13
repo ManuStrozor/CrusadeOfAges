@@ -13,8 +13,6 @@ import engine.view.CreativeMode;
 import engine.view.GameSelection;
 import engine.view.InputDialog;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -23,8 +21,6 @@ import java.util.Date;
 public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
-    public static final int THUMBWIDTH = 120;
-    public static final int THUMBHEIGHT = 60;
 
     private Sprite objsImg;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
@@ -57,12 +53,7 @@ public class Renderer {
     void process() {
         processing = true;
 
-        imageRequest.sort(new Comparator<ImageRequest>() {
-            @Override
-            public int compare(ImageRequest i0, ImageRequest i1) {
-                return Integer.compare(i0.zDepth, i1.zDepth);
-            }
-        });
+        imageRequest.sort(Comparator.comparingInt(i0 -> i0.zDepth));
 
         for (ImageRequest ir : imageRequest) {
             setzDepth(ir.zDepth);
@@ -527,8 +518,8 @@ public class Renderer {
         if (f.size() == 0)
             drawText(nothing, gc.getWidth() / 2, gc.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
 
-        int w = THUMBWIDTH;
-        int h = THUMBHEIGHT;
+        int w = Image.THUMBW;
+        int h = Image.THUMBH;
         int largest = 0;
         for (int i = 0; i < f.size(); i++) {
             int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(d.get(i).toString(), Font.STANDARD));

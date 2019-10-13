@@ -31,11 +31,8 @@ public abstract class View {
 
     protected boolean fileSelected(GameContainer gc, int index, int scroll) {
 
-        int highs = GameManager.TS + 10 - scroll;
-        for (int i = 0; i < index; i++) {
-            highs += Renderer.THUMBHEIGHT + 10;
-        }
-        int currHigh = Renderer.THUMBHEIGHT;
+        int highs = GameManager.TS + 10 - scroll + index * (Image.THUMBH + 10);
+        int currHigh = Image.THUMBH;
 
         return gc.getInputHandler().getMouseY() > highs &&
                 gc.getInputHandler().getMouseY() < highs + currHigh &&

@@ -87,7 +87,7 @@ public class CreativeMode extends View {
                         names.add(file.getName());
                         paths.add(file.getPath());
                         dates.add(new Date(file.lastModified()));
-                        sMax += Renderer.THUMBHEIGHT + 10;
+                        sMax += Image.THUMBH + 10;
                         count++;
                     }
                 }
@@ -151,7 +151,7 @@ public class CreativeMode extends View {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        int high = Renderer.THUMBHEIGHT + 10;
+                        int high = Image.THUMBH + 10;
                         if (scroll >= high) scroll -= high;
                         if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
                         break;
