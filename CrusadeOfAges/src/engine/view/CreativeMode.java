@@ -1,11 +1,15 @@
 package engine.view;
 
+import engine.GameContainer;
+import engine.Renderer;
+import engine.Settings;
+import engine.World;
 import engine.audio.SoundClip;
 import engine.gfx.Button;
+import engine.gfx.Image;
 import game.Conf;
 import game.Editor;
 import game.GameManager;
-import engine.*;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -61,6 +65,12 @@ public class CreativeMode extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
+        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            focus = false;
+            gc.setActiView("mainMenu");
+            once = false;
+        }
+
         if (!once) {
             images.clear();
             names.clear();
@@ -73,11 +83,11 @@ public class CreativeMode extends View {
             if (files != null) {
                 for (File file : files) {
                     if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
-                        images.add(new engine.gfx.Image(creativeFolder + "/" + file.getName(), true));
+                        images.add(new Image(creativeFolder + "/" + file.getName(), true));
                         names.add(file.getName());
                         paths.add(file.getPath());
                         dates.add(new Date(file.lastModified()));
-                        sMax += Math.max(images.get(count).getH(), 30) + 10;
+                        sMax += Renderer.THUMBHEIGHT + 10;
                         count++;
                     }
                 }
@@ -87,12 +97,6 @@ public class CreativeMode extends View {
             once = true;
         }
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            focus = false;
-            gc.setPrevView("creativeMode");
-            gc.setActiView("mainMenu");
-            once = false;
-        }
         //Scroll control
         if (gc.getInputHandler().getScroll() < 0) {
             scroll -= 20;
@@ -101,57 +105,67 @@ public class CreativeMode extends View {
             scroll += 20;
             if (scroll > sMax) scroll = sMax;
         }
+
         //Hover control
         for (int i = 0; i < images.size(); i++) {
-            if (fileSelected(gc, images, i, scroll)) {
+            if (fileSelected(gc, i, scroll)) {
                 fIndex = i;
                 focus = true;
             }
         }
+
         //Button selection
         for (engine.gfx.Button btn : buttons) {
             btn.setBgColor(0xff616E7A);
-            if (!focus && (btn == edit || btn == rename || btn == delete)) {
-                btn.setBgColor(0xffdedede);
-            } else if (isSelected(gc, btn)) {
-                if (btn == back) focus = false;
-                if (btn == create) {
-                    Editor.once = false;
-                    if (!Editor.newOne) Editor.newOne = true;
-                    Editor.rename = "";
+            switch (btn.getText()) {
+                case "Edit":
+                case "Rename":
+                case "Delete":
+                    if (!focus) btn.setBgColor(0xffdedede);
+                    break;
+            }
+            if (isSelected(gc, btn)) {
+                switch (btn.getText()) {
+                    case "Back":
+                        focus = false;
+                        break;
+                    case "Create":
+                        Editor.once = true;
+                        Editor.newOne = true;
+                        Editor.rename = "";
+                        break;
+                    case "Edit":
+                        Editor.once = true;
+                        Editor.newOne = false;
+                        Editor.rename = names.get(fIndex);
+                        Editor.creaImg = images.get(fIndex);
+                        break;
+                    case "Rename":
+                        InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
+                        InputDialog.path = paths.get(fIndex);
+                        focus = false;
+                        break;
+                    case "Delete":
+                        try {
+                            Files.delete(Paths.get(paths.get(fIndex)));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        int high = Renderer.THUMBHEIGHT + 10;
+                        if (scroll >= high) scroll -= high;
+                        if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
+                        break;
+                    case "Folder":
+                        try {
+                            Desktop.getDesktop().open(new File(creativeFolder));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
                 }
-                if (btn == edit) {
-                    Editor.once = false;
-                    if (Editor.newOne) Editor.newOne = false;
-                    Editor.rename = names.get(fIndex);
-                    Editor.creaImg = null;
-                    Editor.creaImg = images.get(fIndex);
-                }
-                if (btn == rename) {
-                    InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
-                    InputDialog.path = paths.get(fIndex);
-                    focus = false;
-                }
-                if (btn == delete) {
-                    try {
-                        Files.delete(Paths.get(paths.get(fIndex)));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    int high = Math.max(images.get(fIndex).getH(), 30) + 10;
-                    if (scroll >= high) scroll -= high;
-                    if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
-                }
-                if (btn == folder) {
-                    try {
-                        Desktop.getDesktop().open(new File(creativeFolder));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+
                 click.play();
                 gc.setActiView(btn.getTargetView());
-                gc.setPrevView("creativeMode");
                 once = false;
             }
 

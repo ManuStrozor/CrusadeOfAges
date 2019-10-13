@@ -21,9 +21,10 @@ public class PausedEdit extends View {
         hover = new SoundClip("/audio/hover.wav");
         click = new SoundClip("/audio/click.wav");
 
-        buttons.add(new Button("Try", "edit"));
         buttons.add(new Button("Save", "creativeMode"));
         buttons.add(new Button("Cancel", "creativeMode"));
+        buttons.add(new Button("Try", "edit"));
+        buttons.add(new Button("Blank", "edit"));
         buttons.add(new Button("Back", "edit"));
     }
 
@@ -36,7 +37,7 @@ public class PausedEdit extends View {
             if (isSelected(gc, btn)) {
                 switch (btn.getText()) {
                     case "Save":
-                        Editor.creaImg.saveIt(Editor.rename);
+                        Editor.creaImg.save(Editor.rename);
                         CreativeMode.once = false;
                         Editor.setSpawn(false);
                         Renderer.tileSize = GameManager.TS;
@@ -44,6 +45,7 @@ public class PausedEdit extends View {
                         Editor.tileSize = GameManager.TS;
                         break;
                     case "Try": Editor.setSpawn(true); break;
+                    case "Blank": Editor.creaImg.blank(); break;
                     case "Cancel":
                         Editor.setSpawn(false);
                         Renderer.tileSize = GameManager.TS;

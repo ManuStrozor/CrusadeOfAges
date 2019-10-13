@@ -13,7 +13,7 @@ public class Editor extends AbstractGame {
 
     public static Image creaImg;
     private static boolean spawn = false;
-    public static boolean once = false, newOne = false;
+    public static boolean once = true, newOne = true;
     public static String rename = "";
 
     private World world;
@@ -26,13 +26,13 @@ public class Editor extends AbstractGame {
             "floor",
             "slime",
             "ladder",
-            "ground spikes",
-            "ceiling spikes",
+            "ground_spikes",
+            "ceiling_spikes",
             "pill",
             "coin",
             "key",
             "skull",
-            "lever left",
+            "lever_left",
             "torch",
             "door"
     };
@@ -43,12 +43,9 @@ public class Editor extends AbstractGame {
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
 
-    public Editor(int width, int height) {
+    public Editor() {
         world = new World();
         player = new Player("Tester", world, 999);
-        creaImg = new Image(new int[width * height], width, height);
-        this.width = width;
-        this.height = height;
     }
 
     @Override
@@ -56,10 +53,12 @@ public class Editor extends AbstractGame {
 
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedEdit");
 
-        if (!once) {
-            if (newOne) creaImg = new Image(new int[width * height], width, height);
+        if (once) {
+            if (newOne) creaImg = new Image(new int[60 * 30], 60, 30);
             world.init(creaImg);
-            once = true;
+            width = creaImg.getW();
+            height = creaImg.getH();
+            once = false;
         }
 
         if (spawn && spawnExists()) player.creativeUpdate(gc, dt); // Player update
@@ -82,7 +81,7 @@ public class Editor extends AbstractGame {
             }
         }
 
-        color = world.getCol(elems[scroll]);
+        color = world.getBloc(elems[scroll]).getCode();
     }
 
     @Override
@@ -129,7 +128,7 @@ public class Editor extends AbstractGame {
                         player.getEvent().respawn(world.getSpawnX(), world.getSpawnY());
                     }
                     creaImg.setP(x, y, color);
-                    world.setBloc(x, y, world.getCol(elems[scroll]));
+                    world.setBloc(x, y, world.getBloc(elems[scroll]).getCode());
 
                 } else if (gc.getInputHandler().isButton(MouseEvent.BUTTON3)) {
                     if (x == world.getSpawnX() && y == world.getSpawnY()) {
@@ -145,9 +144,9 @@ public class Editor extends AbstractGame {
         }
 
         r.drawWorld(world, tileSize);
-        r.drawMiniMap(gc, creaImg);
+        if (creaImg != null) r.drawMiniMap(gc, creaImg);
         r.drawDock(gc, world, elems, scroll);
-        //r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
+        if (creaImg != null) r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
 
         if (spawn && spawnExists())
             player.render(gc, r);

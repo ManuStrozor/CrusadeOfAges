@@ -31,7 +31,7 @@ public class Move {
     public void toLeft(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(2);
-            if (world.isSolid(pl.getTileX() - 1, pl.getTileY()) || world.isSolid(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
+            if (world.getBlocMap(pl.getTileX() - 1, pl.getTileY()).isSolid() || world.getBlocMap(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
                 if (pl.getOffX() > 0) {
                     pl.setOffX(pl.getOffX() - dt * speed);
                     if (pl.getOffX() < 0) pl.setOffX(0);
@@ -43,7 +43,7 @@ public class Move {
             }
         } else {
             nwPl.setDirection(2);
-            if (world.isSolid(nwPl.getTileX() - 1, nwPl.getTileY()) || world.isSolid(nwPl.getTileX() - 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY()))) {
+            if (world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY()).isSolid() || world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
                 if (nwPl.getOffX() > 0) {
                     nwPl.setOffX(nwPl.getOffX() - dt * speed);
                     if (nwPl.getOffX() < 0) nwPl.setOffX(0);
@@ -59,7 +59,7 @@ public class Move {
     public void toRight(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(1);
-            if (world.isSolid(pl.getTileX() + 1, pl.getTileY()) || world.isSolid(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY()))) {
+            if (world.getBlocMap(pl.getTileX() + 1, pl.getTileY()).isSolid() || world.getBlocMap(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
                 if (pl.getOffX() < 0) {
                     pl.setOffX(pl.getOffX() + dt * speed);
                     if (pl.getOffX() > 0) pl.setOffX(0);
@@ -71,7 +71,7 @@ public class Move {
             }
         } else {
             nwPl.setDirection(1);
-            if (world.isSolid(nwPl.getTileX() + 1, nwPl.getTileY()) || world.isSolid(nwPl.getTileX() + 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY()))) {
+            if (world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY()).isSolid() || world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
                 if (nwPl.getOffX() < 0) {
                     nwPl.setOffX(nwPl.getOffX() + dt * speed);
                     if (nwPl.getOffX() > 0) nwPl.setOffX(0);
@@ -88,13 +88,13 @@ public class Move {
         if (pl != null) {
             pl.setDirection(3);
             pl.setFallDist(-power);
-            if (!world.isSolid(pl.getTileX(), pl.getTileY() - 1) && !world.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1))
+            if (!world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() && !world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1).isSolid())
                 jump.play();
             pl.setGround(pl.getGround() + 1);
         } else {
             nwPl.setDirection(3);
             nwPl.setFallDist(-power);
-            if (!world.isSolid(nwPl.getTileX(), nwPl.getTileY() - 1) && !world.isSolid(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1))
+            if (!world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() && !world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1).isSolid())
                 jump.play();
             nwPl.setGround(nwPl.getGround() + 1);
         }
@@ -103,7 +103,7 @@ public class Move {
     public void upLadder(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(3);
-            if (world.isSolid(pl.getTileX(), pl.getTileY() - 1) || world.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1)) {
+            if (world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() || world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1).isSolid()) {
                 pl.setOffY(pl.getOffY() - dt * speed);
                 if (pl.getOffY() < 0) pl.setOffY(0);
             } else {
@@ -111,7 +111,7 @@ public class Move {
             }
         } else {
             nwPl.setDirection(3);
-            if (world.isSolid(nwPl.getTileX(), nwPl.getTileY() - 1) || world.isSolid(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1)) {
+            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() || world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1).isSolid()) {
                 nwPl.setOffY(nwPl.getOffY() - dt * speed);
                 if (nwPl.getOffY() < 0) nwPl.setOffY(0);
             } else {
@@ -123,7 +123,7 @@ public class Move {
     public void downLadder(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(3);
-            if (world.isSolid(pl.getTileX(), pl.getTileY() + 1) || world.isSolid(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() + 1)) {
+            if (world.getBlocMap(pl.getTileX(), pl.getTileY() + 1).isSolid() || world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() + 1).isSolid()) {
                 if (pl.getOffY() < 0) {
                     pl.setOffY(pl.getOffY() + dt * speed);
                     if (pl.getOffY() > 0) pl.setOffY(0);
@@ -135,7 +135,7 @@ public class Move {
             }
         } else {
             nwPl.setDirection(3);
-            if (world.isSolid(nwPl.getTileX(), nwPl.getTileY() + 1) || world.isSolid(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() + 1)) {
+            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() + 1).isSolid() || world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() + 1).isSolid()) {
                 if (nwPl.getOffY() < 0) {
                     nwPl.setOffY(nwPl.getOffY() + dt * speed);
                     if (nwPl.getOffY() > 0) nwPl.setOffY(0);

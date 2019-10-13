@@ -29,13 +29,13 @@ public abstract class View {
                 gc.getInputHandler().getMouseY() < b.getOffY() + b.getHeight();
     }
 
-    protected boolean fileSelected(GameContainer gc, ArrayList<Image> images, int index, int scroll) {
+    protected boolean fileSelected(GameContainer gc, int index, int scroll) {
 
         int highs = GameManager.TS + 10 - scroll;
         for (int i = 0; i < index; i++) {
-            highs += images.get(i).getH() < 30 ? 30 + 10 : images.get(i).getH() + 10;
+            highs += Renderer.THUMBHEIGHT + 10;
         }
-        int currHigh = Math.max(images.get(index).getH(), 30);
+        int currHigh = Renderer.THUMBHEIGHT;
 
         return gc.getInputHandler().getMouseY() > highs &&
                 gc.getInputHandler().getMouseY() < highs + currHigh &&

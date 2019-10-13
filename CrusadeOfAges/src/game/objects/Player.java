@@ -36,7 +36,6 @@ public class Player extends GameObject {
     private float fallDist = 0;
 
     public static int tileSize = GameManager.TS;
-    private float modif = GameManager.TS / (float)tileSize;
 
     public Player(String tag, World world, int lives) {
         plSprite = new Sprite(Conf.SM_FOLDER + "/assets/player.png", tileSize, tileSize, true);
@@ -63,8 +62,8 @@ public class Player extends GameObject {
 
     public void creativeUpdate(GameContainer gc, float dt) {
 
-        String currTag = world.getTag(tileX, tileY);
-        String botTag = world.getTag(tileX, tileY + 1);
+        String currTag = world.getBlocMap(tileX, tileY).getTag();
+        String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
 
         //Last floor
         if (!currTag.contains("spikes") && botTag.equals("floor")) {
@@ -115,14 +114,14 @@ public class Player extends GameObject {
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((world.isSolid(tileX, tileY - 1) || world.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY - 1).isSolid()) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((world.isSolid(tileX, tileY + 1) || world.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY + 1).isSolid()) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -196,8 +195,8 @@ public class Player extends GameObject {
             }
         }
 
-        String currTag = world.getTag(tileX, tileY);
-        String botTag = world.getTag(tileX, tileY + 1);
+        String currTag = world.getBlocMap(tileX, tileY).getTag();
+        String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
 
         //Last floor
         if (!currTag.contains("spikes") && botTag.equals("floor") && fallDist == 0) {
@@ -214,7 +213,7 @@ public class Player extends GameObject {
         }
 
         //Collectings & Events on current bloc
-        switch (world.getTag(tileX, tileY)) {
+        switch (world.getBlocMap(tileX, tileY).getTag()) {
             case "coin":
                 collect.coin(gc);
                 break;
@@ -230,7 +229,7 @@ public class Player extends GameObject {
             case "door":
                 event.switchLevel(gc, gm);
                 break;
-            case "lever left":
+            case "lever_left":
                 event.actionLever(gc, currTag);
                 break;
         }
@@ -286,14 +285,14 @@ public class Player extends GameObject {
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((world.isSolid(tileX, tileY - 1) || world.isSolid(tileX + (int) Math.signum((int) offX), tileY - 1)) && offY < 0) {
+                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY - 1).isSolid()) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((world.isSolid(tileX, tileY + 1) || world.isSolid(tileX + (int) Math.signum((int) offX), tileY + 1)) && offY > 0) {
+                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY + 1).isSolid()) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;

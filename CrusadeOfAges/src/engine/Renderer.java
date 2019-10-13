@@ -13,6 +13,8 @@ import engine.view.CreativeMode;
 import engine.view.GameSelection;
 import engine.view.InputDialog;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,6 +23,8 @@ import java.util.Date;
 public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
+    public static final int THUMBWIDTH = 120;
+    public static final int THUMBHEIGHT = 60;
 
     private Sprite objsImg;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
@@ -410,22 +414,22 @@ public class Renderer {
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
 
-                int tileX = world.getTile(world.getTag(x, y))[0];
-                int tileY = world.getTile(world.getTag(x, y))[1];
+                int tileX = world.getBlocMap(x, y).getX();
+                int tileY = world.getBlocMap(x, y).getY();
 
                 //draw wall behind non-solid bloc
-                if (!world.isSolid(x, y) && !world.getTag(x, y).equals("wall"))
+                if (!world.getBlocMap(x, y).isSolid() && !world.getBlocMap(x, y).isTagged("wall"))
                     drawSprite(objsImg, x * tileSize, y * tileSize, 1, 0);
 
                 //draw bloc
                 drawSprite(objsImg, x * tileSize, y * tileSize, tileX, tileY);
 
                 //draw shadow under solid bloc
-                if (!world.isSolid(x, y) && world.isSolid(x, y - 1))
+                if (!world.getBlocMap(x, y).isSolid() && world.getBlocMap(x, y - 1).isSolid())
                     drawSprite(objsImg, x * tileSize, y * tileSize, 0, 3);
 
                 //draw top part of the door
-                if (world.getTag(x, y).equals("door"))
+                if (world.getBlocMap(x, y).isTagged("door"))
                     drawSprite(objsImg, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1);
             }
         }
@@ -434,14 +438,14 @@ public class Renderer {
     public void drawWorldLights(World world, Light lamp) {
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
-                if (world.getTag(x, y).equals("torch"))
+                if (world.getBlocMap(x, y).isTagged("torch"))
                     drawLight(lamp, x * tileSize + tileSize / 2, y * tileSize + tileSize / 3);
             }
         }
     }
 
     private void drawBloc(World world, String tag, int x, int y) {
-        drawSprite(objsImg, x, y, world.getTile(tag)[0], world.getTile(tag)[1]);
+        drawSprite(objsImg, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY());
     }
 
     public void drawDock(GameContainer gc, World world, String[] dock, int scroll) {
@@ -463,22 +467,24 @@ public class Renderer {
     }
 
     public void drawMiniMap(GameContainer gc, Image img) {
-        int xMMap = camX + gc.getWidth() - img.getW() - 4;
-        int yMMap = camY + gc.getHeight() - img.getH() - 4;
-        fillRect(xMMap, yMMap, img.getW(), img.getH(), 0x99ababab);
-        drawImage(img, xMMap, yMMap);
-        drawRect(xMMap + camX / tileSize, yMMap + camY / tileSize, gc.getWidth() / tileSize, gc.getHeight() / tileSize, 0x99ababab);
+        Image thumb = img.getThumbnail();
+        int xMMap = camX + gc.getWidth() - thumb.getW() - 4;
+        int yMMap = camY + gc.getHeight() - thumb.getH() - 4;
+        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
+        drawImage(thumb, xMMap, yMMap);
+        drawRect(xMMap + camX / tileSize, yMMap + camY / tileSize,
+                gc.getWidth() / tileSize, gc.getHeight() / tileSize, 0x99ababab);
     }
 
     public void drawArrows(GameContainer gc, World world, int width, int height) {
         if (camY > 0)
-            drawBloc(world, "arrow up", camX + gc.getWidth() / 2 - tileSize / 2, camY);
+            drawBloc(world, "arrow_up", camX + gc.getWidth() / 2 - tileSize / 2, camY);
         if (camY + gc.getHeight() < height * tileSize)
-            drawBloc(world, "arrow down", camX + gc.getWidth() / 2 - tileSize / 2, camY + gc.getHeight() - tileSize);
+            drawBloc(world, "arrow_down", camX + gc.getWidth() / 2 - tileSize / 2, camY + gc.getHeight() - tileSize);
         if (camX > -tileSize)
-            drawBloc(world, "arrow left", camX, camY + gc.getHeight() / 2 - tileSize / 2);
+            drawBloc(world, "arrow_left", camX, camY + gc.getHeight() / 2 - tileSize / 2);
         if (camX + gc.getWidth() < width * tileSize)
-            drawBloc(world, "arrow right", camX + gc.getWidth() - tileSize, camY + gc.getHeight() / 2 - tileSize / 2);
+            drawBloc(world, "arrow_right", camX + gc.getWidth() - tileSize, camY + gc.getHeight() / 2 - tileSize / 2);
     }
 
     public void drawLevels(GameContainer gc, String[][] levels) {
@@ -521,11 +527,13 @@ public class Renderer {
         if (f.size() == 0)
             drawText(nothing, gc.getWidth() / 2, gc.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
 
+        int w = THUMBWIDTH;
+        int h = THUMBHEIGHT;
         int largest = 0;
         for (int i = 0; i < f.size(); i++) {
             int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(d.get(i).toString(), Font.STANDARD));
             size = Math.max(size, textSize("Dimensions: " + f.get(i).getW() + "x" + f.get(i).getH(), Font.STANDARD));
-            if (size + f.get(i).getW() > largest) largest = size + f.get(i).getW();
+            if (size + w > largest) largest = size + w;
         }
 
         int x = gc.getWidth() / 2 - largest / 2;
@@ -534,20 +542,17 @@ public class Renderer {
         int hUsed = 10;
         for (int i = 0; i < f.size(); i++) {
 
-            int w = f.get(i).getW();
-            int h = Math.max(f.get(i).getH(), 30);
-
-            if (i != 0) y += f.get(i - 1).getH() < 30 ? 30 + 10 : f.get(i - 1).getH() + 10;
+            if (i != 0) y += h + 10;
 
             if (CreativeMode.focus && i == CreativeMode.fIndex)
-                drawRect(x - 4, y - 4, largest + 12, f.get(i).getH() < 30 ? 30 + 8 : f.get(i).getH() + 8, 0xff696969);
+                drawRect(x - 4, y - 4, largest + 12, h + 8, 0xff696969);
 
-            fillRect(x, y, w, f.get(i).getH(), -1);
-            drawImage(f.get(i), x, y);
+            fillRect(x, y, w, h, -1);
+            drawImage(f.get(i).getThumbnail(), x, y);
 
             drawText(n.get(i), x + w + 4, y - 2, 1, 1, -1, Font.STANDARD);
-            drawText("Dimensions: " + w + "x" + f.get(i).getH(), x + w + 4, y + 15, 1, 0, 0xff898989, Font.STANDARD);
-            drawText(d.get(i).toString(), x + w + 4, y + 30 + 2, 1, -1, 0xff898989, Font.STANDARD);
+            drawText("Dimensions: " + f.get(i).getW() + "x" + f.get(i).getH(), x + w + 4, y + h/2, 1, 0, 0xff898989, Font.STANDARD);
+            drawText(d.get(i).toString(), x + w + 4, y + h + 2, 1, -1, 0xff898989, Font.STANDARD);
 
             hUsed += h + 10;
         }

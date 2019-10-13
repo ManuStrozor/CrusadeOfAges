@@ -42,7 +42,7 @@ public class GameContainer implements Runnable {
         this.settings = settings;
         this.playerStats = playerStats;
 
-        edit = new Editor(60, 30);
+        edit = new Editor();
 
         v.put("creativeMode", new CreativeMode(settings, world));
         v.put("credits", new Credits(settings, world));
@@ -211,7 +211,7 @@ public class GameContainer implements Runnable {
 
             // Affichage des FPS
             if (settings.isShowFps()) {
-                renderer.drawText(fps + "fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
+                renderer.drawText(fps + " fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
             }
 
             window.update();

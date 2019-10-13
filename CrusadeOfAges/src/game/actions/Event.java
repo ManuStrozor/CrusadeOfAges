@@ -22,12 +22,12 @@ public class Event {
     }
 
     public void impale() {
-        String tag = world.getTag(pl.getTileX(), pl.getTileY());
+        String tag = world.getBlocMap(pl.getTileX(), pl.getTileY()).getTag();
 
         if (tag.contains("ground"))
-            world.setBloc(pl.getTileX(), pl.getTileY(), world.getCol("ground spikes blooded"));
+            world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("ground_spikes_blooded").getCode());
         else if (tag.contains("ceiling"))
-            world.setBloc(pl.getTileX(), pl.getTileY(), world.getCol("ceiling spikes blooded"));
+            world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("ceiling_spikes_blooded").getCode());
 
         impaled.play();
         pl.setLives(pl.getLives() - 1);
@@ -57,8 +57,8 @@ public class Event {
 
     public void actionLever(GameContainer gc, String tag) {
         if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER) && tag.contains("left")) {
-            world.setBloc(pl.getTileX(), pl.getTileY(), world.getCol("lever right"));
-            gc.getPlayerStats().upValueOf("Lever pulled");
+            world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("lever_right").getCode());
+            gc.getPlayerStats().upValueOf("Lever_pulled");
             leverActioned.play();
         }
     }

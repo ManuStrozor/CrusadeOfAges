@@ -3,6 +3,7 @@ package engine.gfx;
 import game.Conf;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.File;
@@ -11,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Image {
+
+    public static final int THUMBW = 120;
+    public static final int THUMBH = 60;
 
     private int w, h;
     int[] p;
@@ -70,7 +74,31 @@ public class Image {
         this.alpha = alpha;
     }
 
-    public void saveIt(String rename) {
+    public Image getThumbnail() {
+        BufferedImage origin = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                origin.setRGB(x, y, this.p[x + y * w]);
+            }
+        }
+        BufferedImage thumbnail = new BufferedImage(THUMBW, THUMBH, origin.getType());
+        Graphics2D g = thumbnail.createGraphics();
+        g.drawImage(origin, 0, 0, THUMBW, THUMBH, null);
+        g.dispose();
+        int[] p = thumbnail.getRGB(0, 0, THUMBW, THUMBH, null, 0, THUMBW);
+        thumbnail.flush();
+        return new Image(p, THUMBW, THUMBH);
+    }
+
+    public void blank() {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+               setP(x, y, 0);
+            }
+        }
+    }
+
+    public void save(String rename) {
         BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
