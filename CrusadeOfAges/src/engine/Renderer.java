@@ -463,14 +463,16 @@ public class Renderer {
         drawRect(camX + 3, midH - tileSize / 2 - 1, s, s, 0x33ffffff);
     }
 
-    public void drawMiniMap(GameContainer gc, Image img) {
+    public void drawMiniMap(Image img) {
         Image thumb = img.getThumbnail();
-        int xMMap = camX + gc.getWidth() - thumb.getW() - 4;
-        int yMMap = camY + gc.getHeight() - thumb.getH() - 4;
+        float diffW = thumb.getW() / (float)img.getW();
+        float diffH = thumb.getH() / (float)img.getH();
+        int xMMap = camX + pW - thumb.getW() - 4;
+        int yMMap = camY + pH - thumb.getH() - 4;
         fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
         drawImage(thumb, xMMap, yMMap);
-        drawRect(xMMap + camX / tileSize, yMMap + camY / tileSize,
-                gc.getWidth() / tileSize, gc.getHeight() / tileSize, 0x99ababab);
+        drawRect(xMMap + (int)(camX/tileSize * diffW), yMMap + (int)(camY/tileSize * diffH),
+                (int)(pW/tileSize * diffW), (int)(pH/tileSize * diffH), 0x99ababab);
     }
 
     public void drawArrows(GameContainer gc, World world, int width, int height) {

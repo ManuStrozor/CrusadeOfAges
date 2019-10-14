@@ -149,7 +149,7 @@ public class Editor extends AbstractGame {
         }
 
         r.drawWorld(world);
-        if (creaImg != null) r.drawMiniMap(gc, creaImg);
+        if (creaImg != null) r.drawMiniMap(creaImg);
         r.drawDock(gc, world, elems, scroll);
         if (creaImg != null) r.drawArrows(gc, world, creaImg.getW(), creaImg.getH());
 
