@@ -51,7 +51,7 @@ public class GameOver extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        r.drawMenuTitle(gc, s.translate("GAME OVER"), s.translate("You are dead"));
+        r.drawMenuTitle(s.translate("GAME OVER"), s.translate("You are dead"));
 
         int startY = gc.getHeight() / 4;
 

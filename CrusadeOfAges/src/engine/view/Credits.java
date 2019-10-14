@@ -47,8 +47,8 @@ public class Credits extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        r.drawBackground(gc, world, "wall");
-        r.drawMenuTitle(gc, s.translate("Game credits").toUpperCase(), s.translate("Development team"));
+        r.drawBackground(world);
+        r.drawMenuTitle(s.translate("Game credits").toUpperCase(), s.translate("Development team"));
 
         r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("DEVELOPERS"), devs);
         r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, s.translate("CONTRIBUTORS"), contribs);

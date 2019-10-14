@@ -134,14 +134,14 @@ public class GameContainer implements Runnable {
                     game.render(this, renderer);
                     renderer.setCoorCam(0, 0);
                     if (settings.isShowLights()) renderer.process();
-                    if (go != null) renderer.drawHUD(this, go);
+                    if (go != null) renderer.drawHUD(go);
                     break;
                 case "stats":
                     if (prevView.equals("pausedGame")) {
                         game.render(this, renderer);
                         renderer.setCoorCam(0, 0);
                         if (settings.isShowLights()) renderer.process();
-                        if (go != null) renderer.drawHUD(this, go);
+                        if (go != null) renderer.drawHUD(go);
                     }
                     break;
             }
@@ -159,7 +159,7 @@ public class GameContainer implements Runnable {
                     game.render(this, renderer);
                     renderer.setCoorCam(0, 0);
                     if (settings.isShowLights()) renderer.process();
-                    if (go != null) renderer.drawHUD(this, go);
+                    if (go != null) renderer.drawHUD(go);
                     break;
                 case "creativeMode":
                     v.get("creativeMode").render(this, renderer);

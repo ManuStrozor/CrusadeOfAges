@@ -99,11 +99,11 @@ public class GameSelection extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(gc, world, "wall");
+        r.drawBackground(world);
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawLevels(gc, GameManager.levels);
+        r.drawLevels(GameManager.levels, gc.getPlayerStats());
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
         r.drawText(s.translate("Choose a level"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);

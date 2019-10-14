@@ -46,7 +46,7 @@ public class PausedGame extends View {
     public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
-        r.drawMenuTitle(gc, s.translate("Paused").toUpperCase(), "");
+        r.drawMenuTitle(s.translate("Paused").toUpperCase(), null);
 
         int startY = gc.getHeight() / 4;
 

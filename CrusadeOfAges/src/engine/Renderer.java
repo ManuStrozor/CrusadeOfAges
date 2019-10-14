@@ -25,7 +25,7 @@ public class Renderer {
     private Sprite objsImg;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
-    private int pW, pH;
+    private int gcW, gcH;
     private int[] p, zb, lm;
     private int camX, camY;
     private int zDepth = 0;
@@ -35,8 +35,8 @@ public class Renderer {
 
     public Renderer(GameContainer gc) {
         objsImg = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", tileSize, tileSize, true);
-        pW = gc.getWidth();
-        pH = gc.getHeight();
+        gcW = gc.getWidth();
+        gcH = gc.getHeight();
         p = ((DataBufferInt) gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
         zb = new int[p.length];
         lm = new int[p.length];
@@ -80,9 +80,9 @@ public class Renderer {
     private void setPixel(int x, int y, int value) {
 
         int alpha = (value >> 24) & 255;
-        if ((x < 0 || x >= pW || y < 0 || y >= pH) || alpha == 0) return;
+        if ((x < 0 || x >= gcW || y < 0 || y >= gcH) || alpha == 0) return;
 
-        int index = x + y * pW;
+        int index = x + y * gcW;
 
         if (zb[index] > zDepth) return;
 
@@ -109,15 +109,15 @@ public class Renderer {
 
     private void setLightWorld(int x, int y, int value) {
 
-        if (x < 0 || x >= pW || y < 0 || y >= pH) return;
+        if (x < 0 || x >= gcW || y < 0 || y >= gcH) return;
 
-        int baseColor = lm[x + y * pW];
+        int baseColor = lm[x + y * gcW];
 
         int maxR = Math.max((baseColor >> 16) & 255, (value >> 16) & 255);
         int maxG = Math.max((baseColor >> 8) & 255, (value >> 8) & 255);
         int maxB = Math.max(baseColor & 255, value & 255);
 
-        lm[x + y * pW] = maxR << 16 | maxG << 8 | maxB;
+        lm[x + y * gcW] = maxR << 16 | maxG << 8 | maxB;
     }
 
     private int darken(int color, int diff) {
@@ -206,8 +206,8 @@ public class Renderer {
 
         if (offX < -image.getW()) return;
         if (offY < -image.getH()) return;
-        if (offX >= pW) return;
-        if (offY >= pH) return;
+        if (offX >= gcW) return;
+        if (offY >= gcH) return;
 
         int newX = 0;
         int newY = 0;
@@ -216,8 +216,8 @@ public class Renderer {
 
         if (offX < 0) newX -= offX;
         if (offY < 0) newY -= offY;
-        if (offX + newWidth >= pW) newWidth -= newWidth + offX - pW;
-        if (offY + newHeight >= pH) newHeight -= newHeight + offY - pH;
+        if (offX + newWidth >= gcW) newWidth -= newWidth + offX - gcW;
+        if (offY + newHeight >= gcH) newHeight -= newHeight + offY - gcH;
 
         for (int y = newY; y < newHeight; y++) {
             for (int x = newX; x < newWidth; x++) {
@@ -238,8 +238,8 @@ public class Renderer {
 
         if (offX < -image.getWidth()) return;
         if (offY < -image.getHeight()) return;
-        if (offX >= pW) return;
-        if (offY >= pH) return;
+        if (offX >= gcW) return;
+        if (offY >= gcH) return;
 
         int newX = 0;
         int newY = 0;
@@ -279,8 +279,8 @@ public class Renderer {
 
         if (x < -w) return;
         if (y < -h) return;
-        if (x >= pW) return;
-        if (y >= pH) return;
+        if (x >= gcW) return;
+        if (y >= gcH) return;
 
         int newX = 0;
         int newY = 0;
@@ -289,8 +289,8 @@ public class Renderer {
 
         if (x < 0) newX -= x;
         if (y < 0) newY -= y;
-        if (x + newWidth >= pW) newWidth -= newWidth + x - pW;
-        if (y + newHeight >= pH) newHeight -= newHeight + y - pH;
+        if (x + newWidth >= gcW) newWidth -= newWidth + x - gcW;
+        if (y + newHeight >= gcH) newHeight -= newHeight + y - gcH;
 
         for (int j = newY; j < newHeight; j++) {
             for (int i = newX; i < newWidth; i++) {
@@ -386,9 +386,9 @@ public class Renderer {
         fillRect(x + w, y + 1, 1, h - 1, lighten(color, 40));
     }
 
-    void drawHUD(GameContainer gc, GameObject obj) {
+    void drawHUD(GameObject obj) {
         int width = tileSize * 6;
-        int x = gc.getWidth() / 2 - width / 2;
+        int x = gcW / 2 - width / 2;
         fillRect(x, 0, width, tileSize, 0x99000000);
 
         drawSprite(objsImg, x, 0, 3, 2);
@@ -405,8 +405,8 @@ public class Renderer {
         int offX = Math.max(camX/tileSize, 0);
         int offY = Math.max(camY/tileSize, 0);
 
-        int endX = Math.min(pW/tileSize+offX+2, world.getWidth());
-        int endY = Math.min(pH/tileSize+offY+2, world.getHeight());
+        int endX = Math.min(gcW /tileSize+offX+2, world.getWidth());
+        int endY = Math.min(gcH /tileSize+offY+2, world.getHeight());
 
         for (int y = offY; y < endY; y++) {
             for (int x = offX; x < endX; x++) {
@@ -445,15 +445,15 @@ public class Renderer {
         drawSprite(objsImg, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY());
     }
 
-    public void drawDock(GameContainer gc, World world, String[] dock, int scroll) {
-        int midH = camY + gc.getHeight() / 2;
+    public void drawDock(World world, String[] dock, int scroll) {
+        int midH = camY + gcH / 2;
         int s = tileSize + 1;
         int y = midH - (dock.length * s) / 2 + (dock.length / 2 - scroll) * s;
 
         if (dock.length % 2 != 0)
             y += tileSize / 2;
 
-        fillRect(camX, camY, s + 4, gc.getHeight(), 0x89000000);
+        fillRect(camX, camY, s + 4, gcH, 0x89000000);
 
         for (int i = 0; i < dock.length; i++)
             drawBloc(world, dock[i], camX + 4, y - tileSize / 2 + s * i);
@@ -467,26 +467,26 @@ public class Renderer {
         Image thumb = img.getThumbnail();
         float diffW = thumb.getW() / (float)img.getW();
         float diffH = thumb.getH() / (float)img.getH();
-        int xMMap = camX + pW - thumb.getW() - 4;
-        int yMMap = camY + pH - thumb.getH() - 4;
+        int xMMap = camX + gcW - thumb.getW() - 4;
+        int yMMap = camY + gcH - thumb.getH() - 4;
         fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
         drawImage(thumb, xMMap, yMMap);
         drawRect(xMMap + (int)(camX/tileSize * diffW), yMMap + (int)(camY/tileSize * diffH),
-                (int)(pW/tileSize * diffW), (int)(pH/tileSize * diffH), 0x99ababab);
+                (int)(gcW /tileSize * diffW), (int)(gcH /tileSize * diffH), 0x99ababab);
     }
 
-    public void drawArrows(GameContainer gc, World world, int width, int height) {
+    public void drawArrows(World world, int width, int height) {
         if (camY > 0)
-            drawBloc(world, "arrow_up", camX + gc.getWidth() / 2 - tileSize / 2, camY);
-        if (camY + gc.getHeight() < height * tileSize)
-            drawBloc(world, "arrow_down", camX + gc.getWidth() / 2 - tileSize / 2, camY + gc.getHeight() - tileSize);
+            drawBloc(world, "arrow_up", camX + gcW / 2 - tileSize / 2, camY);
+        if (camY + gcH < height * tileSize)
+            drawBloc(world, "arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize);
         if (camX > -tileSize)
-            drawBloc(world, "arrow_left", camX, camY + gc.getHeight() / 2 - tileSize / 2);
-        if (camX + gc.getWidth() < width * tileSize)
-            drawBloc(world, "arrow_right", camX + gc.getWidth() - tileSize, camY + gc.getHeight() / 2 - tileSize / 2);
+            drawBloc(world, "arrow_left", camX, camY + gcH / 2 - tileSize / 2);
+        if (camX + gcW < width * tileSize)
+            drawBloc(world, "arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2);
     }
 
-    public void drawLevels(GameContainer gc, String[][] levels) {
+    public void drawLevels(String[][] levels, PlayerStats ps) {
 
         int largest = 0;
         for (String[] level : levels) {
@@ -494,11 +494,11 @@ public class Renderer {
             if (len + 30 > largest) largest = len + 30;
         }
 
-        int x = gc.getWidth() / 2 - largest / 2;
+        int x = gcW / 2 - largest / 2;
         int y = tileSize + 10 - GameSelection.scroll;
 
         int hUsed = 10;
-        for (int i = 0; i < Math.min(gc.getPlayerStats().getValueOf("Level up"), levels.length) + 1; i++) {
+        for (int i = 0; i < Math.min(ps.getValueOf("Level up"), levels.length) + 1; i++) {
 
             int size = 30;
             if (i != 0) y += 30 + 10;
@@ -515,16 +515,16 @@ public class Renderer {
             hUsed += size + 10;
         }
 
-        int hTotal = gc.getHeight() - (3 * tileSize);
+        int hTotal = gcH - (3 * tileSize);
         int minus = Math.max(hUsed - hTotal, 0);
 
-        drawScrollBar(gc.getWidth() / 2 + largest / 2 + 20, tileSize, 10, hTotal, GameSelection.scroll, minus);
+        drawScrollBar(gcW / 2 + largest / 2 + 20, tileSize, 10, hTotal, GameSelection.scroll, minus);
     }
 
-    public void drawListOfFiles(GameContainer gc, ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
+    public void drawListOfFiles(ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
 
         if (f.size() == 0)
-            drawText(nothing, gc.getWidth() / 2, gc.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
+            drawText(nothing, gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
 
         int w = Image.THUMBW;
         int h = Image.THUMBH;
@@ -535,7 +535,7 @@ public class Renderer {
             if (size + w > largest) largest = size + w;
         }
 
-        int x = gc.getWidth() / 2 - largest / 2;
+        int x = gcW / 2 - largest / 2;
         int y = tileSize + 10 - CreativeMode.scroll;
 
         int hUsed = 10;
@@ -556,11 +556,11 @@ public class Renderer {
             hUsed += h + 10;
         }
 
-        int hTotal = gc.getHeight() - 3 * tileSize;
+        int hTotal = gcH - 3 * tileSize;
         int minus = Math.max(hUsed - hTotal, 0);
 
         if (f.size() != 0)
-            drawScrollBar(gc.getWidth() / 2 + largest / 2 + 20, tileSize, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
+            drawScrollBar(gcW / 2 + largest / 2 + 20, tileSize, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {
@@ -577,10 +577,10 @@ public class Renderer {
         fillRect(x, y + h - minus + scroll, w, 1, 0xff444244);
     }
 
-    public void drawBackground(GameContainer gc, World world, String tag) {
-        for (int y = 0; y <= gc.getHeight() / tileSize; y++) {
-            for (int x = 0; x <= gc.getWidth() / tileSize; x++) {
-                drawBloc(world, tag, x * tileSize, y * tileSize);
+    public void drawBackground(World world) {
+        for (int y = 0; y <= gcH /tileSize; y++) {
+            for (int x = 0; x <= gcW /tileSize; x++) {
+                drawBloc(world, "wall", x*tileSize, y*tileSize);
             }
         }
     }
@@ -593,10 +593,11 @@ public class Renderer {
         }
     }
 
-    public void drawMenuTitle(GameContainer gc, String bigTitle, String smallTitle) {
-        drawText(bigTitle, gc.getWidth() / 2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
-        if (!smallTitle.equals(""))
-            drawText(smallTitle, gc.getWidth() / 2, 60, 0, 1, 0xffababab, Font.STANDARD);
+    public void drawMenuTitle(String title, String small) {
+        drawText(title, gcW /2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
+        if (small != null) {
+            drawText(small, gcW /2, 60, 0, 1, 0xffababab, Font.STANDARD);
+        }
     }
 
     public void drawList(int offX, int offY, String title, String[] list) {

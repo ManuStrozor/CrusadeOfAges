@@ -1,3 +1,5 @@
+import java.awt.*;
+import java.io.Console;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -9,8 +11,20 @@ public class Server {
     private static final int PORT = 5338;
     private static final int MAX = 10;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        Console console = System.console();
+        if(console == null && !GraphicsEnvironment.isHeadless()){
+            String jar;
+            if (System.getProperty("user.dir").contains("artifacts")) jar = "Server.jar";
+            else jar = "../out/artifacts/Server.jar";
+            Runtime.getRuntime().exec(new String[]{"cmd","/c","start","cmd","/k","java -jar \"" + jar + "\""});
+        }else{
+            launch();
+            System.out.println("Program has ended, please type 'exit' to close the console");
+        }
+    }
 
+    private static void launch() {
         ClientHandler[] tab = new ClientHandler[MAX];
         ServerSocket ss;
         Socket s;

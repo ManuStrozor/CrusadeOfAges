@@ -179,11 +179,11 @@ public class CreativeMode extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(gc, world, "wall");
+        r.drawBackground(world);
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawListOfFiles(gc, images, names, dates, s.translate("Create your first map !"));
+        r.drawListOfFiles(images, names, dates, s.translate("Create your first map !"));
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
         r.drawText(s.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);

@@ -88,8 +88,8 @@ public class Options extends View {
     public void render(GameContainer gc, Renderer r) {
 
         if (gc.getPrevView().equals("mainMenu")) {
-            r.drawBackground(gc, world, "wall");
-            r.drawMenuTitle(gc, gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
+            r.drawBackground(world);
+            r.drawMenuTitle(gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         }
