@@ -226,7 +226,7 @@ public class Renderer {
         }
     }
 
-    public void drawSprite(Sprite image, int offX, int offY, int tileX, int tileY) {
+    public void drawSprite(Sprite image, int offX, int offY, int tileX, int tileY, int tileSize) {
 
         offX -= camX;
         offY -= camY;
@@ -391,9 +391,9 @@ public class Renderer {
         int x = gcW / 2 - width / 2;
         fillRect(x, 0, width, tileSize, 0x99000000);
 
-        drawSprite(objsImg, x, 0, 3, 2);
-        drawSprite(objsImg, x + tileSize * 2, 0, 5, 0);
-        drawSprite(objsImg, x + tileSize * 4, 0, 3, 1);
+        drawSprite(objsImg, x, 0, 3, 2, tileSize);
+        drawSprite(objsImg, x + tileSize * 2, 0, 5, 0, tileSize);
+        drawSprite(objsImg, x + tileSize * 4, 0, 3, 1, tileSize);
 
         drawText("x" + obj.getLives(), x + tileSize - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getCoins(), x + tileSize * 3 - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
@@ -416,18 +416,18 @@ public class Renderer {
 
                 // Murs derriere les blocs non-solides
                 if (!world.getBlocMap(x, y).isSolid() && !world.getBlocMap(x, y).isTagged("wall"))
-                    drawSprite(objsImg, x * tileSize, y * tileSize, 1, 0);
+                    drawSprite(objsImg, x * tileSize, y * tileSize, 1, 0, tileSize);
 
                 // Affichage des blocs
-                drawSprite(objsImg, x * tileSize, y * tileSize, tileX, tileY);
+                drawSprite(objsImg, x * tileSize, y * tileSize, tileX, tileY, tileSize);
 
                 // Ombres sous les blocs
                 if (!world.getBlocMap(x, y).isSolid() && world.getBlocMap(x, y - 1).isSolid())
-                    drawSprite(objsImg, x * tileSize, y * tileSize, 0, 3);
+                    drawSprite(objsImg, x * tileSize, y * tileSize, 0, 3, tileSize);
 
                 // Partie haute de la porte
                 if (world.getBlocMap(x, y).isTagged("door"))
-                    drawSprite(objsImg, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1);
+                    drawSprite(objsImg, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1, tileSize);
             }
         }
     }
@@ -441,11 +441,11 @@ public class Renderer {
         }
     }
 
-    private void drawBloc(World world, String tag, int x, int y) {
-        drawSprite(objsImg, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY());
+    private void drawBloc(World world, String tag, int x, int y, int tileSize) {
+        drawSprite(objsImg, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY(), tileSize);
     }
 
-    public void drawDock(World world, String[] dock, int scroll) {
+    public void drawDock(World world, String[] dock, int scroll, int tileSize) {
         int midH = camY + gcH / 2;
         int s = tileSize + 1;
         int y = midH - (dock.length * s) / 2 + (dock.length / 2 - scroll) * s;
@@ -455,16 +455,17 @@ public class Renderer {
 
         fillRect(camX, camY, s + 4, gcH, 0x89000000);
 
-        for (int i = 0; i < dock.length; i++)
-            drawBloc(world, dock[i], camX + 4, y - tileSize / 2 + s * i);
+        for (int i = 0; i < dock.length; i++) {
+            drawBloc(world, dock[i], camX + 4, y - tileSize / 2 + s * i, tileSize);
+        }
 
         drawRect(camX + 1, midH - tileSize / 2 - 3, s + 4, s + 4, 0xbbffffff);
         drawRect(camX + 2, midH - tileSize / 2 - 2, s + 2, s + 2, 0x77ffffff);
         drawRect(camX + 3, midH - tileSize / 2 - 1, s, s, 0x33ffffff);
     }
 
-    public void drawMiniMap(Image img) {
-        Image thumb = img.getThumbnail();
+    public void drawMiniMap(Image img, int w, int h) {
+        Image thumb = img.getThumbnail(w, h);
         float diffW = thumb.getW() / (float)img.getW();
         float diffH = thumb.getH() / (float)img.getH();
         int xMMap = camX + gcW - thumb.getW() - 4;
@@ -475,15 +476,15 @@ public class Renderer {
                 (int)(gcW /tileSize * diffW), (int)(gcH /tileSize * diffH), 0x99ababab);
     }
 
-    public void drawArrows(World world, int width, int height) {
+    public void drawArrows(World world, int width, int height, int tileSize) {
         if (camY > 0)
-            drawBloc(world, "arrow_up", camX + gcW / 2 - tileSize / 2, camY);
-        if (camY + gcH < height * tileSize)
-            drawBloc(world, "arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize);
-        if (camX > -tileSize)
-            drawBloc(world, "arrow_left", camX, camY + gcH / 2 - tileSize / 2);
-        if (camX + gcW < width * tileSize)
-            drawBloc(world, "arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2);
+            drawBloc(world, "arrow_up", camX + gcW / 2 - tileSize / 2, camY, tileSize);
+        if (camY + gcH < height * this.tileSize)
+            drawBloc(world, "arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize, tileSize);
+        if (camX > 0)
+            drawBloc(world, "arrow_left", camX, camY + gcH / 2 - tileSize / 2, tileSize);
+        if (camX + gcW < width * this.tileSize)
+            drawBloc(world, "arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2, tileSize);
     }
 
     public void drawLevels(String[][] levels, PlayerStats ps) {
@@ -547,7 +548,7 @@ public class Renderer {
                 drawRect(x - 4, y - 4, largest + 12, h + 8, 0xff696969);
 
             fillRect(x, y, w, h, -1);
-            drawImage(f.get(i).getThumbnail(), x, y);
+            drawImage(f.get(i).getThumbnail(Image.THUMBW, Image.THUMBH), x, y);
 
             drawText(n.get(i), x + w + 4, y - 2, 1, 1, -1, Font.STANDARD);
             drawText("Dimensions: " + f.get(i).getW() + "x" + f.get(i).getH(), x + w + 4, y + h/2, 1, 0, 0xff898989, Font.STANDARD);
@@ -580,7 +581,7 @@ public class Renderer {
     public void drawBackground(World world) {
         for (int y = 0; y <= gcH /tileSize; y++) {
             for (int x = 0; x <= gcW /tileSize; x++) {
-                drawBloc(world, "wall", x*tileSize, y*tileSize);
+                drawBloc(world, "wall", x*tileSize, y*tileSize, tileSize);
             }
         }
     }
@@ -588,7 +589,7 @@ public class Renderer {
     public void fillAreaBloc(int nX, int nY, int nW, int nH, World world, String tag) {
         for (int y = 0; y < nH; y++) {
             for (int x = 0; x < nW; x++) {
-                drawBloc(world, tag, nX + x * tileSize, nY + y * tileSize);
+                drawBloc(world, tag, nX + x * tileSize, nY + y * tileSize, tileSize);
             }
         }
     }

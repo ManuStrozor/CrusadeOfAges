@@ -16,7 +16,7 @@ public class Editor extends AbstractGame {
     public static boolean once = true, newOne = true;
     public static String rename = "";
 
-    private World world;
+    public static World world;
     private Player player;
 
     private int width, height;
@@ -39,6 +39,7 @@ public class Editor extends AbstractGame {
     private int color, scroll = 0;
 
     public static int tileSize = GameManager.TS;
+    private int toolSize = 24;
     private static final int DRAGSPEED = 3;
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
@@ -114,8 +115,8 @@ public class Editor extends AbstractGame {
                 } else {
                     int ddX = dragX - mouseX;
                     int ddY = dragY - mouseY;
-                    int newCamX = notExceed(tmpCamX + ddX * DRAGSPEED, width * tileSize - gc.getWidth() + tileSize);
-                    int newCamY = notExceed(tmpCamY + ddY * DRAGSPEED, height * tileSize - gc.getHeight() + tileSize);
+                    int newCamX = notExceed(tmpCamX + ddX * DRAGSPEED, width * tileSize - gc.getWidth() + toolSize);
+                    int newCamY = notExceed(tmpCamY + ddY * DRAGSPEED, height * tileSize - gc.getHeight() + toolSize);
                     r.setCoorCam(newCamX, newCamY);
                     if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
                         dragX = -1;
@@ -149,9 +150,9 @@ public class Editor extends AbstractGame {
         }
 
         r.drawWorld(world);
-        if (creaImg != null) r.drawMiniMap(creaImg);
-        r.drawDock(world, elems, scroll);
-        if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH());
+        if (creaImg != null) r.drawMiniMap(creaImg, 200, 100);
+        r.drawDock(world, elems, scroll, toolSize);
+        if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);
 
         if (spawn && spawnExists()) player.render(gc, r);
     }
@@ -169,6 +170,6 @@ public class Editor extends AbstractGame {
     }
 
     private int notExceed(int val, int max) {
-        return Math.max(Math.min(val, max), -tileSize);
+        return Math.max(Math.min(val, max), -toolSize-6);
     }
 }

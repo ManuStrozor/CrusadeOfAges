@@ -1,7 +1,5 @@
 package game.objects;
 
-import java.util.ArrayList;
-
 import engine.GameContainer;
 import engine.Renderer;
 import engine.World;
@@ -10,7 +8,6 @@ import engine.gfx.Light;
 import engine.gfx.Sprite;
 import game.Conf;
 import game.GameManager;
-import game.Notification;
 import game.actions.Move;
 
 public class NetworkPlayer extends GameObject {
@@ -19,19 +16,18 @@ public class NetworkPlayer extends GameObject {
 
     private World world;
     private Sprite plSprite;
-    private ArrayList<Notification> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
     private float upPosX, upPosY, offX, offY, anim = 0;
 
-    private int lastFloorX, lastFlorrY;
-
-    private int speed, ground = 2;
+    private int ground = 2;
     private float fallDist = 0;
+
+    public static int tileSize = GameManager.TS;
 
     public NetworkPlayer(String tag, World world, int lives) {
         String path = Conf.APPDATA + "/assets/player.png";
-        plSprite = new Sprite(path, GameManager.TS, GameManager.TS, true);
+        plSprite = new Sprite(path, tileSize, tileSize, true);
 
         this.world = world;
         this.tag = tag;
@@ -39,12 +35,12 @@ public class NetworkPlayer extends GameObject {
 
         move = new Move(this, world);
 
-        width = GameManager.TS;
-        height = GameManager.TS;
+        width = tileSize;
+        height = tileSize;
         tileX = world.getSpawnX();
         tileY = world.getSpawnY();
-        posX = tileX * GameManager.TS;
-        posY = tileY * GameManager.TS;
+        posX = tileX * tileSize;
+        posY = tileY * tileSize;
         upPosX = posX;
         upPosY = posY;
         offX = 0;
@@ -58,9 +54,9 @@ public class NetworkPlayer extends GameObject {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawLight(new Light(200, 0xffffff99), (int) posX + GameManager.TS / 2, (int) posY + GameManager.TS / 2);
-        r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim);
-        r.drawText(tag, (int) posX / GameManager.TS, (int) posY / GameManager.TS, 1, -1, -1, Font.STANDARD);
+        r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
+        r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim, tileSize);
+        r.drawText(tag, (int) posX / tileSize, (int) posY / tileSize, 1, -1, -1, Font.STANDARD);
     }
 
     public int getTileX() {

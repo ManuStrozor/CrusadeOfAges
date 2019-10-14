@@ -34,11 +34,10 @@ public class CreativeMode extends View {
 
     private Settings s;
     private World world;
-    private engine.gfx.Button edit, rename, delete, create, folder, back;
+    private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
-    private File dossier;
 
-    private ArrayList<engine.gfx.Image> images = new ArrayList<>();
+    private ArrayList<Image> images = new ArrayList<>();
     private ArrayList<String> names = new ArrayList<>();
     private ArrayList<String> paths = new ArrayList<>();
     private ArrayList<Date> dates = new ArrayList<>();
@@ -55,7 +54,6 @@ public class CreativeMode extends View {
         buttons.add(back = new engine.gfx.Button(80, 20, "Back", "mainMenu"));
 
         creativeFolder = Conf.SM_FOLDER + "/creative_mode";
-        dossier = new File(creativeFolder);
     }
 
     @Override
@@ -75,6 +73,7 @@ public class CreativeMode extends View {
 
             sMax = 10 - (gc.getHeight() - 3 * GameManager.TS);
             int count = 0;
+            File dossier = new File(creativeFolder);
             File[] files = dossier.listFiles();
             if (files != null) {
                 for (File file : files) {
@@ -111,7 +110,7 @@ public class CreativeMode extends View {
         }
 
         //Button selection
-        for (engine.gfx.Button btn : buttons) {
+        for (Button btn : buttons) {
             btn.setBgColor(0xff616E7A);
             switch (btn.getText()) {
                 case "Edit":
@@ -131,25 +130,30 @@ public class CreativeMode extends View {
                         Editor.rename = "";
                         break;
                     case "Edit":
-                        Editor.once = true;
-                        Editor.newOne = false;
-                        Editor.rename = names.get(fIndex);
-                        Editor.creaImg = images.get(fIndex);
+                        if (focus) {
+                            Editor.once = true;
+                            Editor.newOne = false;
+                            Editor.rename = names.get(fIndex);
+                            Editor.creaImg = images.get(fIndex);
+                        }
                         break;
                     case "Rename":
-                        InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
-                        InputDialog.path = paths.get(fIndex);
-                        focus = false;
+                        if (focus) {
+                            InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
+                            InputDialog.path = paths.get(fIndex);
+                        }
                         break;
                     case "Delete":
-                        try {
-                            Files.delete(Paths.get(paths.get(fIndex)));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (focus) {
+                            try {
+                                Files.delete(Paths.get(paths.get(fIndex)));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            int high = Image.THUMBH + 10;
+                            if (scroll >= high) scroll -= high;
+                            if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
                         }
-                        int high = Image.THUMBH + 10;
-                        if (scroll >= high) scroll -= high;
-                        if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
                         break;
                     case "Folder":
                         try {
@@ -160,18 +164,22 @@ public class CreativeMode extends View {
                         break;
                 }
 
-                gc.getClick().play();
-                gc.setActiView(btn.getTargetView());
-                once = false;
+                if (!((btn == edit || btn == rename || btn == delete) && !focus)) {
+                    gc.getClick().play();
+                    gc.setActiView(btn.getTargetView());
+                    once = false;
+                }
             }
 
-            if (btn.setHover(isHover(gc, btn))) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHover().isRunning()) gc.getHover().play();
-                    btn.setHoverSounded(true);
+            if (!((btn == edit || btn == rename || btn == delete) && !focus)) {
+                if (btn.setHover(isHover(gc, btn))) {
+                    if (!btn.isHoverSounded()) {
+                        if (!gc.getHover().isRunning()) gc.getHover().play();
+                        btn.setHoverSounded(true);
+                    }
+                } else {
+                    btn.setHoverSounded(false);
                 }
-            } else {
-                btn.setHoverSounded(false);
             }
         }
     }

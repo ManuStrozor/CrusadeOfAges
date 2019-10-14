@@ -347,7 +347,7 @@ public class Player extends GameObject {
     @Override
     public void render(GameContainer gc, Renderer r) {
         r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
-        r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim);
+        r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim, tileSize);
         r.drawText(tag, (int) posX - r.getCamX(), (int) posY - r.getCamY(), 1, -1, -1, Font.STANDARD);
         for (Notification notif : notifs) notif.render(gc, r);
     }

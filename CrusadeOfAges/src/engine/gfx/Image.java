@@ -74,20 +74,20 @@ public class Image {
         this.alpha = alpha;
     }
 
-    public Image getThumbnail() {
+    public Image getThumbnail(int thumbW, int thumbH) {
         BufferedImage origin = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 origin.setRGB(x, y, this.p[x + y * w]);
             }
         }
-        BufferedImage thumbnail = new BufferedImage(THUMBW, THUMBH, origin.getType());
+        BufferedImage thumbnail = new BufferedImage(thumbW, thumbH, origin.getType());
         Graphics2D g = thumbnail.createGraphics();
-        g.drawImage(origin, 0, 0, THUMBW, THUMBH, null);
+        g.drawImage(origin, 0, 0, thumbW, thumbH, null);
         g.dispose();
-        int[] p = thumbnail.getRGB(0, 0, THUMBW, THUMBH, null, 0, THUMBW);
+        int[] p = thumbnail.getRGB(0, 0, thumbW, thumbH, null, 0, thumbW);
         thumbnail.flush();
-        return new Image(p, THUMBW, THUMBH);
+        return new Image(p, thumbW, thumbH);
     }
 
     public void blank() {

@@ -139,6 +139,12 @@ public class World {
      * @param y Height coordinate
      */
     public void clean(int x, int y) {
-        this.map[x + y * width] = 0;
+        map[x + y * width] = 0;
+    }
+
+    public void blank() {
+        for (int i = 0; i < map.length; i++) {
+            map[i] = 0;
+        }
     }
 }

@@ -20,7 +20,7 @@ public class PausedEdit extends View {
         buttons.add(new Button("Save", "creativeMode"));
         buttons.add(new Button("Cancel", "creativeMode"));
         buttons.add(new Button("Try", "edit"));
-        buttons.add(new Button("Blank", "edit"));
+        buttons.add(new Button("Blank", "pausedEdit"));
         buttons.add(new Button("Back", "edit"));
     }
 
@@ -41,7 +41,10 @@ public class PausedEdit extends View {
                         Editor.tileSize = GameManager.TS;
                         break;
                     case "Try": Editor.setSpawn(true); break;
-                    case "Blank": Editor.creaImg.blank(); break;
+                    case "Blank":
+                        Editor.creaImg.blank();
+                        Editor.world.blank();
+                        break;
                     case "Cancel":
                         Editor.setSpawn(false);
                         Renderer.tileSize = GameManager.TS;
