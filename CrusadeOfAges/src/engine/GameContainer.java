@@ -23,7 +23,7 @@ public class GameContainer implements Runnable {
     private InputHandler inputHandler;
     private Settings settings;
     private PlayerStats playerStats;
-    private SoundClip hover, click, gameover;
+    private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
     private AbstractGame game, editor;
     private Map<String, View> v = new HashMap<>();
 
@@ -55,9 +55,12 @@ public class GameContainer implements Runnable {
         v.put("pausedGame", new PausedGame(settings));
         v.put("stats", new Stats(settings, world));
 
-        hover = new SoundClip("/audio/hover.wav");
-        click = new SoundClip("/audio/click.wav");
-        gameover = new SoundClip("/audio/gameover.wav");
+        hoverSound = new SoundClip("/audio/hover.wav");
+        clickSound = new SoundClip("/audio/click.wav");
+        gameoverSound = new SoundClip("/audio/gameover.wav");
+        impaleSound = new SoundClip("/audio/impaled.wav");
+        leverSound = new SoundClip("/audio/lever.wav");
+        leverSound.setVolume(-10f);
     }
 
     public synchronized void start() {
@@ -290,16 +293,24 @@ public class GameContainer implements Runnable {
         return playerStats;
     }
 
-    public SoundClip getHover() {
-        return hover;
+    public SoundClip getHoverSound() {
+        return hoverSound;
     }
 
-    public SoundClip getClick() {
-        return click;
+    public SoundClip getClickSound() {
+        return clickSound;
     }
 
-    public SoundClip getGameover() {
-        return gameover;
+    public SoundClip getGameoverSound() {
+        return gameoverSound;
+    }
+
+    public SoundClip getImpaleSound() {
+        return impaleSound;
+    }
+
+    public SoundClip getLeverSound() {
+        return leverSound;
     }
 
     public String getPrevView() {

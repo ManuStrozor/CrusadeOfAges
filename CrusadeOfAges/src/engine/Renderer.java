@@ -405,8 +405,8 @@ public class Renderer {
         int offX = Math.max(camX/tileSize, 0);
         int offY = Math.max(camY/tileSize, 0);
 
-        int endX = Math.min(gcW /tileSize+offX+2, world.getWidth());
-        int endY = Math.min(gcH /tileSize+offY+2, world.getHeight());
+        int endX = Math.min(gcW/tileSize+offX+2, world.getWidth());
+        int endY = Math.min(gcH/tileSize+offY+2, world.getHeight());
 
         for (int y = offY; y < endY; y++) {
             for (int x = offX; x < endX; x++) {
@@ -464,8 +464,8 @@ public class Renderer {
         drawRect(camX + 3, midH - tileSize / 2 - 1, s, s, 0x33ffffff);
     }
 
-    public void drawMiniMap(Image img, int w, int h) {
-        Image thumb = img.getThumbnail(w, h);
+    public void drawMiniMap(Image img, int h) {
+        Image thumb = img.getThumbnail(h*(img.getW()/img.getH()), h);
         float diffW = thumb.getW() / (float)img.getW();
         float diffH = thumb.getH() / (float)img.getH();
         int xMMap = camX + gcW - thumb.getW() - 4;

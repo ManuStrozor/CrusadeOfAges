@@ -34,6 +34,7 @@ public class Player extends GameObject {
 
     private int speed, ground = 2;
     private float fallDist = 0;
+    private int padding = 8;
 
     public static int tileSize = GameManager.TS;
 
@@ -79,7 +80,7 @@ public class Player extends GameObject {
 
         //Hit spikes
         if (currTag.contains("spikes")) {
-            event.impale();
+            event.impale(gc);
             event.respawn(lastFloorX, lastFlorrY);
         } else {
 
@@ -114,14 +115,14 @@ public class Player extends GameObject {
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY - 1).isSolid()) && offY < 0) {
+                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1).isSolid()) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY + 1).isSolid()) && offY > 0) {
+                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1).isSolid()) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -237,7 +238,7 @@ public class Player extends GameObject {
         //Hit spikes
         if (currTag.contains("spikes")) {
 
-            event.impale();
+            event.impale(gc);
             gc.getPlayerStats().upValueOf("Death");
             if (this.lives == 0) {
                 this.setDead(true);
@@ -284,14 +285,14 @@ public class Player extends GameObject {
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY - 1).isSolid()) && offY < 0) {
+                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1).isSolid()) && offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) offX), tileY + 1).isSolid()) && offY > 0) {
+                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1).isSolid()) && offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;
@@ -299,7 +300,6 @@ public class Player extends GameObject {
                 }
             }
         }
-
 
         //Update Tile position
         if (offY > tileSize / 2.0) {
@@ -322,13 +322,13 @@ public class Player extends GameObject {
         //Snick -> Slow
         if (currTag.equals("ladder")) {
             speed = 140;
-            anim += dt * 14;
+            anim += dt * 6;
         } else if (gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S)) {
             speed = 40;
-            anim += dt * 4;
+            anim += dt * 3;
         } else {
             speed = 180;
-            anim += dt * 18;
+            anim += dt * 8;
         }
 
         if ((!gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) &&
@@ -402,5 +402,9 @@ public class Player extends GameObject {
 
     public Event getEvent() {
         return event;
+    }
+
+    public int getPadding() {
+        return padding;
     }
 }

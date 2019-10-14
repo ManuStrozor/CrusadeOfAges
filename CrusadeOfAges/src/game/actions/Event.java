@@ -2,7 +2,6 @@ package game.actions;
 
 import engine.GameContainer;
 import engine.World;
-import engine.audio.SoundClip;
 import game.GameManager;
 import game.objects.Player;
 
@@ -12,16 +11,13 @@ public class Event {
 
     private Player pl;
     private World world;
-    private SoundClip impaled = new SoundClip("/audio/impaled.wav");
-    private SoundClip leverActioned = new SoundClip("/audio/lever.wav");
 
     public Event(Player pl, World world) {
         this.pl = pl;
         this.world = world;
-        leverActioned.setVolume(-10f);
     }
 
-    public void impale() {
+    public void impale(GameContainer gc) {
         String tag = world.getBlocMap(pl.getTileX(), pl.getTileY()).getTag();
 
         if (tag.contains("ground"))
@@ -29,7 +25,7 @@ public class Event {
         else if (tag.contains("ceiling"))
             world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("ceiling_spikes_blooded").getCode());
 
-        impaled.play();
+        gc.getImpaleSound().play();
         pl.setLives(pl.getLives() - 1);
     }
 
@@ -56,10 +52,10 @@ public class Event {
     }
 
     public void actionLever(GameContainer gc, String tag) {
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER) && tag.contains("left")) {
+        if (tag.contains("left")) {
             world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("lever_right").getCode());
             gc.getPlayerStats().upValueOf("Lever_pulled");
-            leverActioned.play();
+            gc.getLeverSound().play();
         }
     }
 }

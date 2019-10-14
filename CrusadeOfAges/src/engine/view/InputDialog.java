@@ -77,14 +77,14 @@ public class InputDialog extends View {
                         e.printStackTrace();
                     }
                 }
-                gc.getClick().play();
+                gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!gc.getHover().isRunning()) gc.getHover().play();
+                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
                 }
             } else {

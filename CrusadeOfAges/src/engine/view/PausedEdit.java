@@ -52,13 +52,13 @@ public class PausedEdit extends View {
                         Editor.tileSize = GameManager.TS;
                         break;
                 }
-                gc.getClick().play();
+                gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!gc.getHover().isRunning()) gc.getHover().play();
+                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
                 }
             } else {

@@ -29,13 +29,13 @@ public class MainMenu extends View {
         for (Button btn : buttons) {
             // Button Click
             if (isSelected(gc, btn)) {
-                gc.getClick().play();
+                gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
             }
             // Button Hover
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!gc.getHover().isRunning()) gc.getHover().play();
+                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
                 }
             } else {

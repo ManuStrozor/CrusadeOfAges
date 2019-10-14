@@ -31,25 +31,19 @@ public class Move {
     public void toLeft(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(2);
-            if (world.getBlocMap(pl.getTileX() - 1, pl.getTileY()).isSolid() || world.getBlocMap(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
-                if (pl.getOffX() > 0) {
-                    pl.setOffX(pl.getOffX() - dt * speed);
-                    if (pl.getOffX() < 0) pl.setOffX(0);
-                } else {
-                    pl.setOffX(0);
-                }
+            if (world.getBlocMap(pl.getTileX() - 1, pl.getTileY()).isSolid() ||
+                    world.getBlocMap(pl.getTileX() - 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
+                pl.setOffX(pl.getOffX() - dt * speed);
+                if (pl.getOffX() < -pl.getPadding()) pl.setOffX(-pl.getPadding());
             } else {
                 pl.setOffX(pl.getOffX() - dt * speed);
             }
         } else {
             nwPl.setDirection(2);
-            if (world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY()).isSolid() || world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
-                if (nwPl.getOffX() > 0) {
-                    nwPl.setOffX(nwPl.getOffX() - dt * speed);
-                    if (nwPl.getOffX() < 0) nwPl.setOffX(0);
-                } else {
-                    nwPl.setOffX(0);
-                }
+            if (world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY()).isSolid() ||
+                    world.getBlocMap(nwPl.getTileX() - 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
+                nwPl.setOffX(nwPl.getOffX() - dt * speed);
+                if (nwPl.getOffX() < -nwPl.getPadding()) nwPl.setOffX(-nwPl.getPadding());
             } else {
                 nwPl.setOffX(nwPl.getOffX() - dt * speed);
             }
@@ -59,25 +53,19 @@ public class Move {
     public void toRight(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(1);
-            if (world.getBlocMap(pl.getTileX() + 1, pl.getTileY()).isSolid() || world.getBlocMap(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
-                if (pl.getOffX() < 0) {
-                    pl.setOffX(pl.getOffX() + dt * speed);
-                    if (pl.getOffX() > 0) pl.setOffX(0);
-                } else {
-                    pl.setOffX(0);
-                }
+            if (world.getBlocMap(pl.getTileX() + 1, pl.getTileY()).isSolid() ||
+                    world.getBlocMap(pl.getTileX() + 1, pl.getTileY() + (int) Math.signum((int) pl.getOffY())).isSolid()) {
+                pl.setOffX(pl.getOffX() + dt * speed);
+                if (pl.getOffX() > pl.getPadding()) pl.setOffX(pl.getPadding());
             } else {
                 pl.setOffX(pl.getOffX() + dt * speed);
             }
         } else {
             nwPl.setDirection(1);
-            if (world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY()).isSolid() || world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
-                if (nwPl.getOffX() < 0) {
-                    nwPl.setOffX(nwPl.getOffX() + dt * speed);
-                    if (nwPl.getOffX() > 0) nwPl.setOffX(0);
-                } else {
-                    nwPl.setOffX(0);
-                }
+            if (world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY()).isSolid() ||
+                    world.getBlocMap(nwPl.getTileX() + 1, nwPl.getTileY() + (int) Math.signum((int) nwPl.getOffY())).isSolid()) {
+                nwPl.setOffX(nwPl.getOffX() + dt * speed);
+                if (nwPl.getOffX() > nwPl.getPadding()) nwPl.setOffX(nwPl.getPadding());
             } else {
                 nwPl.setOffX(nwPl.getOffX() + dt * speed);
             }
@@ -88,13 +76,15 @@ public class Move {
         if (pl != null) {
             pl.setDirection(3);
             pl.setFallDist(-power);
-            if (!world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() && !world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1).isSolid())
+            if (!world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() &&
+                    !world.getBlocMap(pl.getTileX() + (int) Math.signum((int) Math.abs(pl.getOffX()) > pl.getPadding() ? pl.getOffX() : 0), pl.getTileY() - 1).isSolid())
                 jump.play();
             pl.setGround(pl.getGround() + 1);
         } else {
             nwPl.setDirection(3);
             nwPl.setFallDist(-power);
-            if (!world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() && !world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1).isSolid())
+            if (!world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() &&
+                    !world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) Math.abs(nwPl.getOffX()) > nwPl.getPadding() ? nwPl.getOffX() : 0), nwPl.getTileY() - 1).isSolid())
                 jump.play();
             nwPl.setGround(nwPl.getGround() + 1);
         }
@@ -103,7 +93,8 @@ public class Move {
     public void upLadder(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(3);
-            if (world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() || world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() - 1).isSolid()) {
+            if (world.getBlocMap(pl.getTileX(), pl.getTileY() - 1).isSolid() ||
+                    world.getBlocMap(pl.getTileX() + (int) Math.signum((int) Math.abs(pl.getOffX()) > pl.getPadding() ? pl.getOffX() : 0), pl.getTileY() - 1).isSolid()) {
                 pl.setOffY(pl.getOffY() - dt * speed);
                 if (pl.getOffY() < 0) pl.setOffY(0);
             } else {
@@ -111,7 +102,8 @@ public class Move {
             }
         } else {
             nwPl.setDirection(3);
-            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() || world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() - 1).isSolid()) {
+            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() - 1).isSolid() ||
+                    world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) Math.abs(nwPl.getOffX()) > nwPl.getPadding() ? nwPl.getOffX() : 0), nwPl.getTileY() - 1).isSolid()) {
                 nwPl.setOffY(nwPl.getOffY() - dt * speed);
                 if (nwPl.getOffY() < 0) nwPl.setOffY(0);
             } else {
@@ -123,25 +115,19 @@ public class Move {
     public void downLadder(float dt, float speed) {
         if (pl != null) {
             pl.setDirection(3);
-            if (world.getBlocMap(pl.getTileX(), pl.getTileY() + 1).isSolid() || world.getBlocMap(pl.getTileX() + (int) Math.signum((int) pl.getOffX()), pl.getTileY() + 1).isSolid()) {
-                if (pl.getOffY() < 0) {
-                    pl.setOffY(pl.getOffY() + dt * speed);
-                    if (pl.getOffY() > 0) pl.setOffY(0);
-                } else {
-                    pl.setOffY(0);
-                }
+            if (world.getBlocMap(pl.getTileX(), pl.getTileY() + 1).isSolid() ||
+                    world.getBlocMap(pl.getTileX() + (int) Math.signum((int) Math.abs(pl.getOffX()) > pl.getPadding() ? pl.getOffX() : 0), pl.getTileY() + 1).isSolid()) {
+                pl.setOffY(pl.getOffY() + dt * speed);
+                if (pl.getOffY() > 0) pl.setOffY(0);
             } else {
                 pl.setOffY(pl.getOffY() + dt * speed);
             }
         } else {
             nwPl.setDirection(3);
-            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() + 1).isSolid() || world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) nwPl.getOffX()), nwPl.getTileY() + 1).isSolid()) {
-                if (nwPl.getOffY() < 0) {
-                    nwPl.setOffY(nwPl.getOffY() + dt * speed);
-                    if (nwPl.getOffY() > 0) nwPl.setOffY(0);
-                } else {
-                    nwPl.setOffY(0);
-                }
+            if (world.getBlocMap(nwPl.getTileX(), nwPl.getTileY() + 1).isSolid() ||
+                    world.getBlocMap(nwPl.getTileX() + (int) Math.signum((int) Math.abs(nwPl.getOffX()) > nwPl.getPadding() ? nwPl.getOffX() : 0), nwPl.getTileY() + 1).isSolid()) {
+                nwPl.setOffY(nwPl.getOffY() + dt * speed);
+                if (nwPl.getOffY() > 0) nwPl.setOffY(0);
             } else {
                 nwPl.setOffY(nwPl.getOffY() + dt * speed);
             }

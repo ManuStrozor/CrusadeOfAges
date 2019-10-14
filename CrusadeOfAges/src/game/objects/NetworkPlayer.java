@@ -22,6 +22,7 @@ public class NetworkPlayer extends GameObject {
 
     private int ground = 2;
     private float fallDist = 0;
+    private int padding = 8;
 
     public static int tileSize = GameManager.TS;
 
@@ -105,5 +106,9 @@ public class NetworkPlayer extends GameObject {
 
     public void setFallDist(float fallDist) {
         this.fallDist = fallDist;
+    }
+
+    public int getPadding() {
+        return padding;
     }
 }

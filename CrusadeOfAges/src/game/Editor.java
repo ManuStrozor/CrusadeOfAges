@@ -100,25 +100,25 @@ public class Editor extends AbstractGame {
             int x = (mouseX + r.getCamX()) / tileSize;
             int y = (mouseY + r.getCamY()) / tileSize;
 
-            if (gc.getInputHandler().isKey(KeyEvent.VK_CONTROL)) {
+            if (gc.getInputHandler().isKey(KeyEvent.VK_CONTROL) || gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
                 ///////////////// Déplacement (CTRL + souris)
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
                     tmpCamY = r.getCamY();
                     if (gc.getInputHandler().getScroll() != 0) {
-                        r.setCoorCam(mouseX, mouseY);
+                        int midW = gc.getWidth()/2/tileSize;
+                        int midH = gc.getHeight()/2/tileSize;
+                        r.setCoorCam(r.getCamX() + (mouseX/tileSize - midW), r.getCamY() + (mouseY/tileSize - midH));
                     }
-                    if (gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
+                    if (gc.getInputHandler().isButton(MouseEvent.BUTTON1) || gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
                         dragX = mouseX;
                         dragY = mouseY;
                     }
                 } else {
                     int ddX = dragX - mouseX;
                     int ddY = dragY - mouseY;
-                    int newCamX = notExceed(tmpCamX + ddX * DRAGSPEED, width * tileSize - gc.getWidth() + toolSize);
-                    int newCamY = notExceed(tmpCamY + ddY * DRAGSPEED, height * tileSize - gc.getHeight() + toolSize);
-                    r.setCoorCam(newCamX, newCamY);
-                    if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
+                    r.setCoorCam(tmpCamX + ddX * DRAGSPEED, tmpCamY + ddY * DRAGSPEED);
+                    if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1) || !gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
                         dragX = -1;
                         dragY = -1;
                     }
@@ -150,7 +150,7 @@ public class Editor extends AbstractGame {
         }
 
         r.drawWorld(world);
-        if (creaImg != null) r.drawMiniMap(creaImg, 200, 100);
+        if (creaImg != null) r.drawMiniMap(creaImg, 100);
         r.drawDock(world, elems, scroll, toolSize);
         if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);
 
@@ -167,9 +167,5 @@ public class Editor extends AbstractGame {
 
     private boolean isDragging() {
         return dragX != -1 && dragY != -1;
-    }
-
-    private int notExceed(int val, int max) {
-        return Math.max(Math.min(val, max), -toolSize-6);
     }
 }

@@ -21,7 +21,7 @@ public class GameOver extends View {
     public void update(GameContainer gc, float dt) {
 
         if (gc.getPrevView().equals("game") && !once) {
-            gc.getGameover().play();
+            gc.getGameoverSound().play();
             once = true;
         }
 
@@ -29,15 +29,15 @@ public class GameOver extends View {
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
-                gc.getClick().play();
-                gc.getGameover().stop();
+                gc.getClickSound().play();
+                gc.getGameoverSound().stop();
                 once = false;
                 gc.setActiView(btn.getTargetView());
             }
 
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
-                    if (!gc.getHover().isRunning()) gc.getHover().play();
+                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
                 }
             } else {

@@ -18,10 +18,7 @@ public class GameManager extends AbstractGame {
     public static final int TS = 32;
     public static int current = 0;
     public static String[][] levels = {
-            {"/levels/0.png", "Learn to jump0"},
-            {"/levels/1.png", "Trampoline room"},
-            {"/levels/2.png", "Go on slowly..."},
-            {"/levels/3.png", "Crown of thorns"}
+            {"/levels/Techsdale (TXDL).png", "Techsdale (TXDL)"}
     };
 
     private Socket socket;
