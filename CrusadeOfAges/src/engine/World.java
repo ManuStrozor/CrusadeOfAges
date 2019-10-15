@@ -18,7 +18,7 @@ public class World {
         blocs.add(new Bloc("wall",                  0xffffff, 1,0, false));
         blocs.add(new Bloc("wall",                  0x00ffffff, 1,0, false));
         blocs.add(new Bloc("wall",                  0xffffffff, 1,0, false));
-        blocs.add(new Bloc("water",                  0xff0000ef, 3,3, false));
+        blocs.add(new Bloc("water",                 0xff0000ef, 3,3, false));
         blocs.add(new Bloc("floor",                 0xff000000, 0,0, true));
         blocs.add(new Bloc("slime",                 0xff777777, 0,2, true));
         blocs.add(new Bloc("ladder",                0xff009900, 0,1, false));

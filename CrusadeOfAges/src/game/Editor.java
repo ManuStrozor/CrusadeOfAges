@@ -114,8 +114,8 @@ public class Editor extends AbstractGame {
                     if (zoom != 0 && zooming) {
                         int prevX, prevY;
                         if (zoom < 0) {
-                            prevX = (mouseX + r.getCamX()) / (tileSize-1);
-                            prevY = (mouseY + r.getCamY()) / (tileSize-1);
+                            prevX = (mouseX + r.getCamX()) / Math.max(tileSize-1, 1);
+                            prevY = (mouseY + r.getCamY()) / Math.max(tileSize-1, 1);
                             r.setCoorCam(r.getCamX() + prevX, r.getCamY() + prevY);
                         } else {
                             prevX = (mouseX + r.getCamX()) / (tileSize+1);
