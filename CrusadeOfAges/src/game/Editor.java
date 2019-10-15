@@ -44,6 +44,7 @@ public class Editor extends AbstractGame {
     private static final int DRAGSPEED = 3;
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
+    private boolean zooming = false;
 
     public Editor() {
         world = new World();
@@ -79,10 +80,12 @@ public class Editor extends AbstractGame {
                 Renderer.tileSize+=1;
                 Player.tileSize+=1;
                 tileSize+=1;
+                zooming = true;
             } else if (gc.getInputHandler().getScroll() > 0) {
                 if (Renderer.tileSize > 1) Renderer.tileSize-=1;
                 if (Player.tileSize > 1) Player.tileSize-=1;
                 if (tileSize > 1) tileSize-=1;
+                zooming = true;
             }
             /////////// Zoom - dézoom (CTRL + molette)
         }
@@ -106,11 +109,22 @@ public class Editor extends AbstractGame {
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
                     tmpCamY = r.getCamY();
-                    if (gc.getInputHandler().getScroll() != 0) {
-                        int midW = gc.getWidth()/2/tileSize;
-                        int midH = gc.getHeight()/2/tileSize;
-                        r.setCoorCam(r.getCamX() + (mouseX/tileSize - midW), r.getCamY() + (mouseY/tileSize - midH));
+                    ////////////// Zoom + dezoom
+                    int zoom = gc.getInputHandler().getScroll();
+                    if (zoom != 0 && zooming) {
+                        int prevX, prevY;
+                        if (zoom < 0) {
+                            prevX = (mouseX + r.getCamX()) / (tileSize-1);
+                            prevY = (mouseY + r.getCamY()) / (tileSize-1);
+                            r.setCoorCam(r.getCamX() + prevX, r.getCamY() + prevY);
+                        } else {
+                            prevX = (mouseX + r.getCamX()) / (tileSize+1);
+                            prevY = (mouseY + r.getCamY()) / (tileSize+1);
+                            r.setCoorCam(r.getCamX() - prevX, r.getCamY() - prevY);
+                        }
+                        zooming = false;
                     }
+                    ////////////// Zoom + dezoom
                     if (gc.getInputHandler().isButton(MouseEvent.BUTTON1) || gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
                         dragX = mouseX;
                         dragY = mouseY;
