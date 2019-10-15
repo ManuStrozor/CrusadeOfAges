@@ -247,6 +247,10 @@ public class GameContainer implements Runnable {
         stop();
     }
 
+    public Renderer getRenderer() {
+        return renderer;
+    }
+
     public int getWidth() {
         return width;
     }

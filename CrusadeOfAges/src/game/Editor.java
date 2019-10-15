@@ -44,7 +44,8 @@ public class Editor extends AbstractGame {
     private static final int DRAGSPEED = 3;
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
-    private boolean zooming = false;
+    private int mouseX;
+    private int mouseY;
 
     public Editor() {
         world = new World();
@@ -76,16 +77,21 @@ public class Editor extends AbstractGame {
             /////////// Dock
         } else {
             /////////// Zoom - dézoom (CTRL + molette)
-            if (gc.getInputHandler().getScroll() < 0) {
+            int wheel = gc.getInputHandler().getScroll();
+            int camX = gc.getRenderer().getCamX();
+            int camY = gc.getRenderer().getCamY();
+            if (wheel < 0) { // ZOOM IN
+                gc.getRenderer().setCamX(camX + (mouseX + camX) / tileSize);
+                gc.getRenderer().setCamY(camY + (mouseY + camY) / tileSize);
                 Renderer.tileSize+=1;
                 Player.tileSize+=1;
                 tileSize+=1;
-                zooming = true;
-            } else if (gc.getInputHandler().getScroll() > 0) {
+            } else if (wheel > 0) { // ZOOM OUT
+                gc.getRenderer().setCamX(camX - (mouseX + camX) / tileSize);
+                gc.getRenderer().setCamY(camY - (mouseY + camY) / tileSize);
                 if (Renderer.tileSize > 1) Renderer.tileSize-=1;
                 if (Player.tileSize > 1) Player.tileSize-=1;
                 if (tileSize > 1) tileSize-=1;
-                zooming = true;
             }
             /////////// Zoom - dézoom (CTRL + molette)
         }
@@ -98,8 +104,8 @@ public class Editor extends AbstractGame {
 
         if (gc.getActiView().equals("edit")) { // Bloquer l'editeur sur la view pausedEdit
 
-            int mouseX = gc.getInputHandler().getMouseX();
-            int mouseY = gc.getInputHandler().getMouseY();
+            mouseX = gc.getInputHandler().getMouseX();
+            mouseY = gc.getInputHandler().getMouseY();
 
             int x = (mouseX + r.getCamX()) / tileSize;
             int y = (mouseY + r.getCamY()) / tileSize;
@@ -109,22 +115,6 @@ public class Editor extends AbstractGame {
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
                     tmpCamY = r.getCamY();
-                    ////////////// Zoom + dezoom
-                    int zoom = gc.getInputHandler().getScroll();
-                    if (zoom != 0 && zooming) {
-                        int prevX, prevY;
-                        if (zoom < 0) {
-                            prevX = (mouseX + r.getCamX()) / Math.max(tileSize-1, 1);
-                            prevY = (mouseY + r.getCamY()) / Math.max(tileSize-1, 1);
-                            r.setCoorCam(r.getCamX() + prevX, r.getCamY() + prevY);
-                        } else {
-                            prevX = (mouseX + r.getCamX()) / (tileSize+1);
-                            prevY = (mouseY + r.getCamY()) / (tileSize+1);
-                            r.setCoorCam(r.getCamX() - prevX, r.getCamY() - prevY);
-                        }
-                        zooming = false;
-                    }
-                    ////////////// Zoom + dezoom
                     if (gc.getInputHandler().isButton(MouseEvent.BUTTON1) || gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
                         dragX = mouseX;
                         dragY = mouseY;
