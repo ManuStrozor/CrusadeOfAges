@@ -56,11 +56,13 @@ public class GameContainer implements Runnable {
         v.put("stats", new Stats(settings, world));
 
         hoverSound = new SoundClip("/audio/hover.wav");
+        hoverSound.setVolume(-15f);
         clickSound = new SoundClip("/audio/click.wav");
+        clickSound.setVolume(-15f);
         gameoverSound = new SoundClip("/audio/gameover.wav");
         impaleSound = new SoundClip("/audio/impaled.wav");
         leverSound = new SoundClip("/audio/lever.wav");
-        leverSound.setVolume(-10f);
+        leverSound.setVolume(-15f);
     }
 
     public synchronized void start() {

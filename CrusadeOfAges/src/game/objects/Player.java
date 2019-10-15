@@ -115,14 +115,16 @@ public class Player extends GameObject {
                 offY += fallDist;
 
                 if (fallDist < 0) {
-                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1).isSolid()) && offY < 0) {
+                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1).isSolid()) &&
+                            offY < 0) {
                         fallDist = 0;
                         offY = 0;
                     }
                 }
 
                 if (fallDist > 0) {
-                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1).isSolid()) && offY > 0) {
+                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1).isSolid()) &&
+                            offY > 0) {
                         fallDist = 0;
                         offY = 0;
                         ground = 0;

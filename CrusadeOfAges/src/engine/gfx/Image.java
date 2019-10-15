@@ -15,10 +15,9 @@ public class Image {
 
     public static final int THUMBW = 120;
     public static final int THUMBH = 60;
-
+    private boolean alpha = false;
     private int w, h;
     int[] p;
-    private boolean alpha = false;
 
     /**
      * Creates Image object using image from : [True] AppData or [False] game assets

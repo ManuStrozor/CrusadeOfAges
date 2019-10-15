@@ -22,7 +22,7 @@ public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
 
-    private Sprite objsImg;
+    private Sprite objs, floor, water;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
     private int gcW, gcH;
@@ -34,7 +34,11 @@ public class Renderer {
     public static int tileSize = GameManager.TS;
 
     public Renderer(GameContainer gc) {
-        objsImg = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", tileSize, tileSize, true);
+        // Sprites
+        objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", tileSize, tileSize, true);
+        floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", tileSize, tileSize, true);
+        water = new Sprite(Conf.SM_FOLDER + "/assets/objects/water.png", tileSize, tileSize, true);
+
         gcW = gc.getWidth();
         gcH = gc.getHeight();
         p = ((DataBufferInt) gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
@@ -62,13 +66,13 @@ public class Renderer {
 
         for (int i = 0; i < p.length; i++) {
 
-            int pR = (p[i] >> 16) & 255;
-            int pG = (p[i] >> 8) & 255;
-            int pB = p[i] & 255;
+            int pR = (p[i] >> 16) & 0xff;
+            int pG = (p[i] >> 8) & 0xff;
+            int pB = p[i] & 0xff;
 
-            int lR = (lm[i] >> 16) & 255;
-            int lG = (lm[i] >> 8) & 255;
-            int lB = lm[i] & 255;
+            int lR = (lm[i] >> 16) & 0xff;
+            int lG = (lm[i] >> 8) & 0xff;
+            int lB = lm[i] & 0xff;
 
             p[i] = (int) (pR * lR / 255f) << 16 | (int) (pG * lG / 255f) << 8 | (int) (pB * lB / 255f);
         }
@@ -79,7 +83,7 @@ public class Renderer {
 
     private void setPixel(int x, int y, int value) {
 
-        int alpha = (value >> 24) & 255;
+        int alpha = (value >> 24) & 0xff;
         if ((x < 0 || x >= gcW || y < 0 || y >= gcH) || alpha == 0) return;
 
         int index = x + y * gcW;
@@ -88,22 +92,22 @@ public class Renderer {
 
         zb[index] = zDepth;
 
-        if (alpha == 255) {
+        if (alpha == 0xff) {
             p[index] = value;
         } else {
-            int pR = (p[index] >> 16) & 255;
-            int pG = (p[index] >> 8) & 255;
-            int pB = p[index] & 255;
+            int pR = (p[index] >> 16) & 0xff;
+            int pG = (p[index] >> 8) & 0xff;
+            int pB = p[index] & 0xff;
 
-            int vR = (value >> 16) & 255;
-            int vG = (value >> 8) & 255;
-            int vB = value & 255;
+            int vR = (value >> 16) & 0xff;
+            int vG = (value >> 8) & 0xff;
+            int vB = value & 0xff;
 
             int newR = pR - (int) ((pR - vR) * alpha / 255f);
             int newG = pG - (int) ((pG - vG) * alpha / 255f);
             int newB = pB - (int) ((pB - vB) * alpha / 255f);
 
-            p[index] = newR << 16 | newG << 8 | newB;
+            p[index] = 0xff << 24 | newR << 16 | newG << 8 | newB;
         }
     }
 
@@ -391,9 +395,9 @@ public class Renderer {
         int x = gcW / 2 - width / 2;
         fillRect(x, 0, width, tileSize, 0x99000000);
 
-        drawSprite(objsImg, x, 0, 3, 2, tileSize);
-        drawSprite(objsImg, x + tileSize * 2, 0, 5, 0, tileSize);
-        drawSprite(objsImg, x + tileSize * 4, 0, 3, 1, tileSize);
+        drawSprite(objs, x, 0, 3, 2, tileSize);
+        drawSprite(objs, x + tileSize * 2, 0, 5, 0, tileSize);
+        drawSprite(objs, x + tileSize * 4, 0, 3, 1, tileSize);
 
         drawText("x" + obj.getLives(), x + tileSize - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getCoins(), x + tileSize * 3 - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
@@ -415,21 +419,78 @@ public class Renderer {
                 int tileY = world.getBlocMap(x, y).getY();
 
                 // Murs derriere les blocs non-solides
-                if (!world.getBlocMap(x, y).isSolid() && !world.getBlocMap(x, y).isTagged("wall"))
-                    drawSprite(objsImg, x * tileSize, y * tileSize, 1, 0, tileSize);
+                drawSprite(objs, x * tileSize, y * tileSize, 1, 0, tileSize);
 
                 // Affichage des blocs
-                drawSprite(objsImg, x * tileSize, y * tileSize, tileX, tileY, tileSize);
+                switch (world.getBlocMap(x, y).getTag()) {
+                    case "floor":
+                        drawSprite(floor, x * tileSize, y * tileSize, getTileX(world, x, y), getTileY(world, x, y), tileSize);
+                        break;
+                    case "water":
+                        drawSprite(water, x * tileSize, y * tileSize, 0, getWaterTile(world, x, y), tileSize);
+                        break;
+                    default:
+                        drawSprite(objs, x * tileSize, y * tileSize, tileX, tileY, tileSize);
+                        break;
+                }
 
                 // Ombres sous les blocs
-                if (!world.getBlocMap(x, y).isSolid() && world.getBlocMap(x, y - 1).isSolid())
-                    drawSprite(objsImg, x * tileSize, y * tileSize, 0, 3, tileSize);
+                if (!world.getBlocMap(x, y).isSolid() && solidTop(world, x, y))
+                    drawSprite(objs, x * tileSize, y * tileSize, 0, 3, tileSize);
 
                 // Partie haute de la porte
                 if (world.getBlocMap(x, y).isTagged("door"))
-                    drawSprite(objsImg, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1, tileSize);
+                    drawSprite(objs, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1, tileSize);
             }
         }
+    }
+
+    private int getWaterTile(World world, int x, int y) {
+        if (!world.getBlocMap(x, y-1).getTag().equals("water")) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    private int getTileY(World world, int x, int y) {
+        if (!solidTop(world, x, y) && solidBottom(world, x, y)) {
+            return 1;
+        } else if (solidTop(world, x, y) && solidBottom(world, x, y)) {
+            return 2;
+        } else if (solidTop(world, x, y) && !solidBottom(world, x, y)) {
+            return 3;
+        } else {
+            return 0;
+        }
+    }
+
+    private int getTileX(World world, int x, int y) {
+        if (!solidLeft(world, x, y) && solidRight(world, x, y)) {
+            return 0;
+        } else if (solidLeft(world, x, y) && solidRight(world, x, y)) {
+            return 1;
+        } else if (solidLeft(world, x, y) && !solidRight(world, x, y)) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    private boolean solidRight(World world, int x, int y) {
+        return world.getBlocMap(x+1, y).isSolid();
+    }
+
+    private boolean solidLeft(World world, int x, int y) {
+        return world.getBlocMap(x-1, y).isSolid();
+    }
+
+    private boolean solidTop(World world, int x, int y) {
+        return world.getBlocMap(x, y-1).isSolid();
+    }
+
+    private boolean solidBottom(World world, int x, int y) {
+        return world.getBlocMap(x, y+1).isSolid();
     }
 
     public void drawWorldLights(World world, Light lamp) {
@@ -442,7 +503,7 @@ public class Renderer {
     }
 
     private void drawBloc(World world, String tag, int x, int y, int tileSize) {
-        drawSprite(objsImg, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY(), tileSize);
+        drawSprite(objs, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY(), tileSize);
     }
 
     public void drawDock(World world, String[] dock, int scroll, int tileSize) {
@@ -470,7 +531,6 @@ public class Renderer {
         float diffH = thumb.getH() / (float)img.getH();
         int xMMap = camX + gcW - thumb.getW() - 4;
         int yMMap = camY + gcH - thumb.getH() - 4;
-        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
         drawImage(thumb, xMMap, yMMap);
         drawRect(xMMap + (int)(camX/tileSize * diffW), yMMap + (int)(camY/tileSize * diffH),
                 (int)(gcW /tileSize * diffW), (int)(gcH /tileSize * diffH), 0x99ababab);

@@ -25,6 +25,7 @@ public class Editor extends AbstractGame {
             "spawn",
             "floor",
             "slime",
+            "water",
             "ladder",
             "ground_spikes",
             "ceiling_spikes",

@@ -28,6 +28,7 @@ public class Conf {
 
     private File dirSM;
     private File dirAssets;
+    private File dirObjects;
 
     public Conf(String path) {
         APPDATA = path;
@@ -42,6 +43,8 @@ public class Conf {
         initPlayerStats();
         dirAssets = mkdirAssets();
         initAssets();
+        dirObjects = mkdirObjects();
+        initObjects();
     }
 
     public void readSettings(Settings s) {
@@ -125,6 +128,23 @@ public class Conf {
         return true;
     }
 
+    private boolean initObjects() {
+        File floor = new File(SM_FOLDER + "/assets/objects/floor.png");
+        File water = new File(SM_FOLDER + "/assets/objects/water.png");
+        try {
+            if (!floor.exists() && dirObjects.canWrite()) {
+                ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/objects/floor.png")), "png", floor);
+            }
+            if (!water.exists() && dirObjects.canWrite()) {
+                ImageIO.write(ImageIO.read(Image.class.getResourceAsStream("/objects/water.png")), "png", water);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     private File mkdirSM(File appdata) throws ConfException {
 
         SM_FOLDER = APPDATA + "/.crusadeofages";
@@ -149,6 +169,18 @@ public class Conf {
             }
         }
         return dirAssets;
+    }
+
+    private File mkdirObjects() throws ConfException {
+        File dirObjects = new File(SM_FOLDER + "/assets/objects");
+        if (!dirObjects.exists()) {
+            if (!dirAssets.canWrite()) {
+                throw new ConfException("Unable to create the folder: assets/objects");
+            } else if (!dirObjects.mkdir()) {
+                throw new ConfException("Folder already existing: assets/objects");
+            }
+        }
+        return dirObjects;
     }
 
     private void mkdirScreenshots() throws ConfException {

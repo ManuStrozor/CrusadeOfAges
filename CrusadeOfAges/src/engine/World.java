@@ -3,6 +3,7 @@ package engine;
 import engine.gfx.Image;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class World {
 
@@ -17,17 +18,18 @@ public class World {
         blocs.add(new Bloc("wall",                  0xffffff, 1,0, false));
         blocs.add(new Bloc("wall",                  0x00ffffff, 1,0, false));
         blocs.add(new Bloc("wall",                  0xffffffff, 1,0, false));
+        blocs.add(new Bloc("water",                  0xff0000ef, 3,3, false));
         blocs.add(new Bloc("floor",                 0xff000000, 0,0, true));
         blocs.add(new Bloc("slime",                 0xff777777, 0,2, true));
         blocs.add(new Bloc("ladder",                0xff009900, 0,1, false));
-        blocs.add(new Bloc("under_shadow",          0x66000000, 0,3, false));
-        blocs.add(new Bloc("above_shadow",          0x69000000, 0,4, false));
+        blocs.add(new Bloc("under_shadow",          0xff666666, 0,3, false));
+        blocs.add(new Bloc("above_shadow",          0xff999999, 0,4, false));
         blocs.add(new Bloc("ground_spikes",         0xffff0000, 1,1, false));
         blocs.add(new Bloc("ground_spikes_blooded", 0xff990000, 1,2, false));
         blocs.add(new Bloc("ceiling_spikes",        0xffff00ff, 2,1, false));
         blocs.add(new Bloc("ceiling_spikes_blooded",0xff990099, 2,2, false));
-        blocs.add(new Bloc("lever_left",            0xe1e1e1e1, 1,3, false));
-        blocs.add(new Bloc("lever_right",           0xe2e2e2e2, 2,3, false));
+        blocs.add(new Bloc("lever_left",            0xffe1e1e1, 1,3, false));
+        blocs.add(new Bloc("lever_right",           0xffe2e2e2, 2,3, false));
         blocs.add(new Bloc("spawn",                 0xff00ff00, 2,0, false));
         blocs.add(new Bloc("skull",                 0xffff7700, 3,0, false));
         blocs.add(new Bloc("key",                   0xff0000ff, 3,1, false));
@@ -35,10 +37,10 @@ public class World {
         blocs.add(new Bloc("torch",                 0xff00ffff, 4,0, false));
         blocs.add(new Bloc("coin",                  0xffffff00, 5,0, false));
         blocs.add(new Bloc("door",                  0xff999999, 5,2, false));
-        blocs.add(new Bloc("arrow_down",            0x42000000, 6,0, false));
-        blocs.add(new Bloc("arrow_left",            0x42ff0000, 6,1, false));
-        blocs.add(new Bloc("arrow_right",           0x420000ff, 6,2, false));
-        blocs.add(new Bloc("arrow_up",              0x4200ff00, 6,3, false));
+        blocs.add(new Bloc("arrow_down",            0xff000000, 6,0, false));
+        blocs.add(new Bloc("arrow_left",            0xffff0000, 6,1, false));
+        blocs.add(new Bloc("arrow_right",           0xff0000ff, 6,2, false));
+        blocs.add(new Bloc("arrow_up",              0xff00ff00, 6,3, false));
     }
 
     /**
@@ -143,8 +145,6 @@ public class World {
     }
 
     public void blank() {
-        for (int i = 0; i < map.length; i++) {
-            map[i] = 0;
-        }
+        IntStream.range(0, map.length).forEach(i -> map[i] = 0);
     }
 }
