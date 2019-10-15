@@ -102,7 +102,7 @@ public class Editor extends AbstractGame {
             int y = (mouseY + r.getCamY()) / tileSize;
 
             if (gc.getInputHandler().isKey(KeyEvent.VK_CONTROL) || gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
-                ///////////////// Déplacement (CTRL + souris)
+                ///////////////// Déplacement (CTRL + souris/molette)
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
                     tmpCamY = r.getCamY();
@@ -118,14 +118,22 @@ public class Editor extends AbstractGame {
                 } else {
                     int ddX = dragX - mouseX;
                     int ddY = dragY - mouseY;
-                    r.setCoorCam(tmpCamX + ddX * DRAGSPEED, tmpCamY + ddY * DRAGSPEED);
-                    if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1) || !gc.getInputHandler().isButton(MouseEvent.BUTTON2)) {
+                    int newCamX = notExceed(tmpCamX + ddX * DRAGSPEED, -gc.getWidth(), width * tileSize);
+                    int newCamY = notExceed(tmpCamY + ddY * DRAGSPEED, -gc.getHeight(), height * tileSize);
+                    r.setCoorCam(newCamX, newCamY);
+                    if (!gc.getInputHandler().isButton(MouseEvent.BUTTON1)) { // Arret deplacement (CTRL + souris)
                         dragX = -1;
                         dragY = -1;
                     }
                 }
-                ///////////////// Déplacement (CTRL + souris)
+                ///////////////// Déplacement (CTRL + souris/molette)
             } else {
+
+                if (!gc.getInputHandler().isButton(MouseEvent.BUTTON2)) { // Arret deplacement (CTRL + molette)
+                    dragX = -1;
+                    dragY = -1;
+                }
+
                 if (gc.getInputHandler().isButton(MouseEvent.BUTTON1)) {
                     ////////// Placement des blocs
                     if (elems[scroll].equals("spawn") && spawnExists()) {
@@ -168,5 +176,9 @@ public class Editor extends AbstractGame {
 
     private boolean isDragging() {
         return dragX != -1 && dragY != -1;
+    }
+
+    private int notExceed(int val, int min, int max) {
+        return Math.max(Math.min(val, max), min);
     }
 }

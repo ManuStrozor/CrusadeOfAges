@@ -23,7 +23,7 @@ public class World {
         blocs.add(new Bloc("slime",                 0xff777777, 0,2, true));
         blocs.add(new Bloc("ladder",                0xff009900, 0,1, false));
         blocs.add(new Bloc("under_shadow",          0xff666666, 0,3, false));
-        blocs.add(new Bloc("above_shadow",          0xff999999, 0,4, false));
+        blocs.add(new Bloc("above_shadow",          0xff888888, 0,4, false));
         blocs.add(new Bloc("ground_spikes",         0xffff0000, 1,1, false));
         blocs.add(new Bloc("ground_spikes_blooded", 0xff990000, 1,2, false));
         blocs.add(new Bloc("ceiling_spikes",        0xffff00ff, 2,1, false));
@@ -45,7 +45,7 @@ public class World {
 
     /**
      * Initialize GameMap with all pixels of img
-     * @param img
+     * @param img image
      */
     public void init(Image img) {
         this.width = img.getW();
