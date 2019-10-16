@@ -25,8 +25,10 @@ public class GameOver extends View {
             once = true;
         }
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            // Button Selection
             if (isSelected(gc, btn)) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
                 gc.getClickSound().play();
@@ -35,6 +37,7 @@ public class GameOver extends View {
                 gc.setActiView(btn.getTargetView());
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -43,7 +46,14 @@ public class GameOver extends View {
             } else {
                 btn.setHoverSounded(false);
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

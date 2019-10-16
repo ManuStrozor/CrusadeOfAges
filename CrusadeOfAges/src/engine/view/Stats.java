@@ -23,13 +23,16 @@ public class Stats extends View {
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView(gc.getPrevView());
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            //Button selection
             if (isSelected(gc, btn)) {
                 gc.getClickSound().play();
                 gc.setActiView(gc.getPrevView());
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -38,7 +41,14 @@ public class Stats extends View {
             } else {
                 btn.setHoverSounded(false);
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

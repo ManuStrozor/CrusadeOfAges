@@ -26,13 +26,16 @@ public class MainMenu extends View {
 
     @Override
     public void update(GameContainer gc, float dt) {
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
             // Button Click
             if (isSelected(gc, btn)) {
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
             }
-            // Button Hover
+
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -41,7 +44,14 @@ public class MainMenu extends View {
             } else {
                 btn.setHoverSounded(false);
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

@@ -99,7 +99,7 @@ public class CreativeMode extends View {
             }
         }
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
             btn.setBgColor(0xff616E7A);
             switch (btn.getText()) {
@@ -109,6 +109,14 @@ public class CreativeMode extends View {
                     if (!focus) btn.setBgColor(0xffdedede);
                     break;
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn) && !((btn == edit || btn == rename || btn == delete) && !focus)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
+
+            //Button selection
             if (isSelected(gc, btn)) {
                 switch (btn.getText()) {
                     case "Back":
@@ -118,6 +126,7 @@ public class CreativeMode extends View {
                         Editor.once = true;
                         Editor.newOne = true;
                         Editor.rename = "";
+                        gc.getWindow().setDefaultCursor();
                         break;
                     case "Edit":
                         if (focus) {
@@ -125,6 +134,7 @@ public class CreativeMode extends View {
                             Editor.newOne = false;
                             Editor.rename = files[fIndex].getName();
                             Editor.creaImg = new Image(creativeFolder + "/" + files[fIndex].getName(), true);
+                            gc.getWindow().setDefaultCursor();
                         }
                         break;
                     case "Rename":
@@ -172,6 +182,7 @@ public class CreativeMode extends View {
                 }
             }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

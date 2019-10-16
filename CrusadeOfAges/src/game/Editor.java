@@ -87,7 +87,7 @@ public class Editor extends AbstractGame {
             }
             /////////// Dock
         } else {
-            /////////// Zoom - dézoom (CTRL + molette)
+            /////////// ZOOM IN - ZOOM OUT (CTRL + molette)
             if (wheel < 0) { // ZOOM IN
                 gc.getR().zoomIn(gc.getInput().getMouseX(), gc.getInput().getMouseY());
                 Player.tileSize+=1;
@@ -97,7 +97,7 @@ public class Editor extends AbstractGame {
                 if (Player.tileSize > 1) Player.tileSize-=1;
                 if (tileSize > 1) tileSize-=1;
             }
-            /////////// Zoom - dézoom (CTRL + molette)
+            /////////// ZOOM IN - ZOOM OUT (CTRL + molette)
             /////////// Sauvegarde (CTRL + S)
             if (gc.getInput().isKeyUp(KeyEvent.VK_S)) {
                 creaImg.save(rename);
@@ -139,6 +139,7 @@ public class Editor extends AbstractGame {
             int y = (gc.getInput().getMouseY() + r.getCamY()) / tileSize;
 
             if (gc.getInput().isKey(KeyEvent.VK_CONTROL) || gc.getInput().isButton(MouseEvent.BUTTON2)) {
+                gc.getWindow().setMovingCursor();
                 ///////////////// Déplacement (CTRL + souris/molette)
                 if (!isDragging()) {
                     tmpCamX = r.getCamX();
@@ -150,7 +151,9 @@ public class Editor extends AbstractGame {
                 } else {
                     r.setCamX(notExceed(tmpCamX + (dragX - gc.getInput().getMouseX()) * DRAGSPEED, -gc.getWidth(), width * tileSize));
                     r.setCamY(notExceed(tmpCamY + (dragY - gc.getInput().getMouseY()) * DRAGSPEED, -gc.getHeight(), height * tileSize));
-                    if (!gc.getInput().isButton(MouseEvent.BUTTON1)) { // Arret deplacement (CTRL + souris)
+                    if (!gc.getInput().isButton(MouseEvent.BUTTON1) &&
+                            !gc.getInput().isButton(MouseEvent.BUTTON2)) { // Arret deplacement (CTRL + souris)
+                        gc.getWindow().setDefaultCursor();
                         dragX = -1;
                         dragY = -1;
                     }
@@ -159,6 +162,7 @@ public class Editor extends AbstractGame {
             } else {
 
                 if (!gc.getInput().isButton(MouseEvent.BUTTON2)) { // Arret deplacement (CTRL + molette)
+                    gc.getWindow().setDefaultCursor();
                     dragX = -1;
                     dragY = -1;
                 }

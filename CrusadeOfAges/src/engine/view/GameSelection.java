@@ -69,22 +69,31 @@ public class GameSelection extends View {
             }
         }
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
+
             btn.setBgColor(0xff616E7A);
             if (!focus && btn == play) {
                 btn.setBgColor(0xffdedede);
-            } else if (isSelected(gc, btn)) {
+            } else if (isSelected(gc, btn)) { //Button selection
                 if (btn == back) focus = false;
                 if (btn == play) {
                     GameManager.current = fIndex;
                     gameManager.load(GameManager.levels[fIndex][0]);
+                    gc.getWindow().setDefaultCursor();
                 }
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -94,6 +103,7 @@ public class GameSelection extends View {
                 btn.setHoverSounded(false);
             }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

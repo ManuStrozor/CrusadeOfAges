@@ -34,8 +34,10 @@ public class Options extends View {
             gc.setActiView(gc.getPrevView());
         }
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            //Button selection
             if (isSelected(gc, btn)) {
                 gc.getClickSound().play();
                 switch (btn.getText()) {
@@ -70,9 +72,8 @@ public class Options extends View {
                         break;
                 }
             }
-        }
 
-        for (Button btn : buttons) {
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -81,7 +82,15 @@ public class Options extends View {
             } else {
                 btn.setHoverSounded(false);
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
+
     }
 
     @Override

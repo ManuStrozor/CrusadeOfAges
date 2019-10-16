@@ -23,14 +23,24 @@ public class PausedGame extends View {
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("game");
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
+
+            // Button Selection
             if (isSelected(gc, btn)) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
+                if (btn.getText().contains("Back")) gc.getWindow().setDefaultCursor();
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -40,6 +50,7 @@ public class PausedGame extends View {
                 btn.setHoverSounded(false);
             }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

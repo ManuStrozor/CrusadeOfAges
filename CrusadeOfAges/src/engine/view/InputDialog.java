@@ -66,8 +66,10 @@ public class InputDialog extends View {
         inputCtrl(gc);
 
 
-        //Button selection
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            // Button Selection
             if (isSelected(gc, btn)) {
                 if (btn == rename) {
                     try {
@@ -82,6 +84,7 @@ public class InputDialog extends View {
                 once = false;
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -90,7 +93,14 @@ public class InputDialog extends View {
             } else {
                 btn.setHoverSounded(false);
             }
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

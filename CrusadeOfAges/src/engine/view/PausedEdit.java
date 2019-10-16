@@ -31,13 +31,28 @@ public class PausedEdit extends View {
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("edit");
 
+        boolean cursorHand = false;
         for (Button btn : buttons) {
+
+            // Hand Cursor
+            if (isHover(gc, btn)) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
+
+            // Button Selection
             if (isSelected(gc, btn)) {
                 switch (btn.getText()) {
+                    case "Back":
+                        gc.getWindow().setDefaultCursor();
+                        break;
                     case "Save":
                         Editor.creaImg.save(Editor.rename);
                         break;
-                    case "Try": Editor.setSpawn(true); break;
+                    case "Try":
+                        Editor.setSpawn(true);
+                        gc.getWindow().setDefaultCursor();
+                        break;
                     case "Blank":
                         Editor.creaImg.blank();
                         Editor.world.blank();
@@ -53,6 +68,7 @@ public class PausedEdit extends View {
                 gc.setActiView(btn.getTargetView());
             }
 
+            // Hover Sound
             if (btn.setHover(isHover(gc, btn))) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
@@ -62,6 +78,7 @@ public class PausedEdit extends View {
                 btn.setHoverSounded(false);
             }
         }
+        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override
