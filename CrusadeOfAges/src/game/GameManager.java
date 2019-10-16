@@ -24,8 +24,8 @@ public class GameManager extends AbstractGame {
     private Socket socket;
     private DataInputStream dis;
     private DataOutputStream dos;
-    private ArrayList<GameObject> objects;
-    private ArrayList<Notification> notifs;
+    private ArrayList<GameObject> objects = new ArrayList<>();;
+    private ArrayList<Notification> notifs = new ArrayList<>();
     private Camera camera;
     private World world;
 
@@ -34,8 +34,6 @@ public class GameManager extends AbstractGame {
         this.world = world;
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        objects = new ArrayList<>();
-        notifs = new ArrayList<>();
     }
 
     @Override

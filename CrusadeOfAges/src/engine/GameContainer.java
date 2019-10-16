@@ -34,7 +34,6 @@ public class GameContainer implements Runnable {
     private String prevView = null;
     private String actiView = "mainMenu"; // Ecran de départ !
 
-    private static final String VERSION = "version 1.0";
     private static final String FACTORY = "Strozor Inc.";
 
     public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
@@ -43,7 +42,7 @@ public class GameContainer implements Runnable {
         gm = (GameManager) game;
         this.settings = settings;
         this.playerStats = playerStats;
-        editor = new Editor();
+        editor = new Editor(settings, world);
         v.put("creativeMode", new CreativeMode(settings, world));
         v.put("credits", new Credits(settings, world));
         v.put("gameOver", new GameOver(settings));
@@ -207,13 +206,11 @@ public class GameContainer implements Runnable {
                 case "credits":
                 case "mainMenu":
                 case "options":
-                    r.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                    r.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+                    r.drawText(FACTORY, getWidth()/2, getHeight(), 0, -1, 0xffababab, Font.STANDARD);
                     break;
                 case "stats":
                     if (prevView.equals("mainMenu")) {
-                        r.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                        r.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+                        r.drawText(FACTORY, getWidth()/2, getHeight(), 0, -1, 0xffababab, Font.STANDARD);
                     }
                     break;
             }

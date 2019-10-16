@@ -7,7 +7,6 @@ import engine.gfx.Sprite;
 import engine.World;
 import engine.gfx.Light;
 import game.Conf;
-import game.Notification;
 import game.GameManager;
 import game.actions.Collect;
 import game.actions.Event;
@@ -15,7 +14,6 @@ import game.actions.Move;
 
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class Player extends GameObject {
 
@@ -25,7 +23,6 @@ public class Player extends GameObject {
 
     private World world;
     private Sprite plSprite;
-    private ArrayList<Notification> notifs = new ArrayList<>();
 
     private int tileX, tileY, direction = 0;
     private float upPosX, upPosY, offX, offY, anim = 0;
@@ -190,14 +187,6 @@ public class Player extends GameObject {
             e.printStackTrace();
         }
 
-        //Notifications update
-        for (int i = 0; i < notifs.size(); i++) {
-            notifs.get(i).update(dt);
-            if (notifs.get(i).isEnded()) {
-                notifs.remove(i--);
-            }
-        }
-
         String currTag = world.getBlocMap(tileX, tileY).getTag();
         String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
 
@@ -351,7 +340,6 @@ public class Player extends GameObject {
         r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
         r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim, tileSize);
         r.drawText(tag, (int) posX - r.getCamX(), (int) posY - r.getCamY(), 1, -1, -1, Font.STANDARD);
-        for (Notification notif : notifs) notif.render(gc, r);
     }
 
     public int getTileX() {

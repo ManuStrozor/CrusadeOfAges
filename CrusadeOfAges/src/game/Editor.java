@@ -2,21 +2,30 @@ package game;
 
 import engine.GameContainer;
 import engine.Renderer;
+import engine.Settings;
 import engine.gfx.Image;
 import engine.World;
 import game.objects.Player;
 
+import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class Editor extends AbstractGame {
 
     public static Image creaImg;
+    public static World world;
     private static boolean spawn = false;
     public static boolean once = true, newOne = true;
     public static String rename = "";
 
-    public static World world;
+    private Settings settings;
     private Player player;
 
     private int width, height;
@@ -45,8 +54,11 @@ public class Editor extends AbstractGame {
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
 
-    public Editor() {
-        world = new World();
+    private ArrayList<Notification> notifs = new ArrayList<>();
+
+    public Editor(Settings settings, World world) {
+        this.settings = settings;
+        Editor.world = world;
         player = new Player("Tester", world, 999);
     }
 
@@ -86,9 +98,36 @@ public class Editor extends AbstractGame {
                 if (tileSize > 1) tileSize-=1;
             }
             /////////// Zoom - dézoom (CTRL + molette)
+            /////////// Sauvegarde (CTRL + S)
+            if (gc.getInput().isKeyUp(KeyEvent.VK_S)) {
+                creaImg.save(rename);
+                notifs.add(new Notification(rename + settings.translate(" a été sauvegardé avec succès")));
+            }
+            /////////// Sauvegarde (CTRL + S)
         }
 
         color = world.getBloc(elems[scroll]).getCode();
+
+        // Screenshots
+        if(gc.getInput().isKeyDown(KeyEvent.VK_F12)) {
+            try {
+                DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+                String filename = sdf.format(new Date()) + ".png";
+                File out = new File(Conf.SM_FOLDER + "/screenshots/" + filename);
+                ImageIO.write(gc.getWindow().getImage(), "png", out);
+                notifs.add(new Notification(filename, 3, 100, -1));
+            } catch(IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //Notifications update
+        for (int i = 0; i < notifs.size(); i++) {
+            notifs.get(i).update(dt);
+            if (notifs.get(i).isEnded()) {
+                notifs.remove(i--);
+            }
+        }
     }
 
     @Override
@@ -154,6 +193,8 @@ public class Editor extends AbstractGame {
         if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);
 
         if (spawn && spawnExists()) player.render(gc, r);
+
+        for (Notification notif : notifs) notif.render(gc, r);
     }
 
     public static void setSpawn(boolean spawn) {

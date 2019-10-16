@@ -13,7 +13,9 @@ import engine.view.CreativeMode;
 import engine.view.GameSelection;
 import engine.view.InputDialog;
 
+import javax.imageio.IIOException;
 import java.awt.image.DataBufferInt;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -525,11 +527,12 @@ public class Renderer {
     }
 
     public void drawMiniMap(Image img, int h) {
-        Image thumb = img.getThumbnail(h*(img.getW()/img.getH()), h);
+        Image thumb = img.getThumbnail(h*img.getW()/img.getH(), h);
         float diffW = thumb.getW() / (float)img.getW();
         float diffH = thumb.getH() / (float)img.getH();
         int xMMap = camX + gcW - thumb.getW() - 4;
         int yMMap = camY + gcH - thumb.getH() - 4;
+        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
         drawImage(thumb, xMMap, yMMap);
         drawRect(xMMap + (int)(camX/ ts * diffW), yMMap + (int)(camY/ ts * diffH),
                 (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x99ababab);
@@ -581,46 +584,57 @@ public class Renderer {
         drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 10, hTotal, GameSelection.scroll, minus);
     }
 
-    public void drawListOfFiles(ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
+    public void drawCreaList(File[] files, Image[] imgs, String nothingMessage) {
 
-        if (f.size() == 0)
-            drawText(nothing, gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
+        if (files == null || files.length == 0) {
+            drawText(nothingMessage, gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
+        } else {
+            Date[] dates = new Date[files.length];
+            int[] widths = new int[files.length];
 
-        int w = Image.THUMBW;
-        int h = Image.THUMBH;
-        int largest = 0;
-        for (int i = 0; i < f.size(); i++) {
-            int size = Math.max(textSize(n.get(i), Font.STANDARD), textSize(d.get(i).toString(), Font.STANDARD));
-            size = Math.max(size, textSize("Dimensions: " + f.get(i).getW() + "x" + f.get(i).getH(), Font.STANDARD));
-            if (size + w > largest) largest = size + w;
-        }
+            int largest = 0;
+            for (int i = 0; i < files.length; i++) {
 
-        int x = gcW / 2 - largest / 2;
-        int y = ts + 10 - CreativeMode.scroll;
+                widths[i] = Image.THUMBH * imgs[i].getW() / imgs[i].getH();
+                dates[i] = new Date(files[i].lastModified());
 
-        int hUsed = 10;
-        for (int i = 0; i < f.size(); i++) {
+                int size = max3(
+                        textSize(files[i].getName(), Font.STANDARD),
+                        textSize(dates[i].toString(), Font.STANDARD),
+                        textSize("Dimensions: " + imgs[i].getW() + "x" + imgs[i].getH(), Font.STANDARD)
+                );
 
-            if (i != 0) y += h + 10;
+                largest = Math.max(size + widths[i], largest);
+            }
 
-            if (CreativeMode.focus && i == CreativeMode.fIndex)
-                drawRect(x - 4, y - 4, largest + 12, h + 8, 0xff696969);
+            int x = gcW / 2 - largest / 2;
+            int y = ts + 10 - CreativeMode.scroll - Image.THUMBH - 10;
 
-            fillRect(x, y, w, h, -1);
-            drawImage(f.get(i).getThumbnail(Image.THUMBW, Image.THUMBH), x, y);
+            int hUsed = 10;
+            for (int i = 0; i < files.length; i++) {
 
-            drawText(n.get(i), x + w + 4, y - 2, 1, 1, -1, Font.STANDARD);
-            drawText("Dimensions: " + f.get(i).getW() + "x" + f.get(i).getH(), x + w + 4, y + h/2, 1, 0, 0xff898989, Font.STANDARD);
-            drawText(d.get(i).toString(), x + w + 4, y + h + 2, 1, -1, 0xff898989, Font.STANDARD);
+                y += Image.THUMBH + 10;
+                if (CreativeMode.focus && i == CreativeMode.fIndex)
+                    drawRect(x - 4, y - 4, largest + 12, Image.THUMBH + 8, 0xff696969);
 
-            hUsed += h + 10;
-        }
+                fillRect(x, y, widths[i], Image.THUMBH, -1);
+                drawImage(imgs[i].getThumbnail(widths[i], Image.THUMBH), x, y);
+                drawText(files[i].getName(), x + widths[i] + 4, y - 2, 1, 1, -1, Font.STANDARD);
+                drawText("Dimensions: " + imgs[i].getW() + "x" + imgs[i].getH(), x + widths[i] + 4, y + Image.THUMBH/2, 1, 0, 0xff898989, Font.STANDARD);
+                drawText(dates[i].toString(), x + widths[i] + 4, y + Image.THUMBH + 2, 1, -1, 0xff898989, Font.STANDARD);
 
-        int hTotal = gcH - 3 * ts;
-        int minus = Math.max(hUsed - hTotal, 0);
+                hUsed += Image.THUMBH + 10;
+            }
 
-        if (f.size() != 0)
+            int hTotal = gcH - 3 * ts;
+            int minus = Math.max(hUsed - hTotal, 0);
+
             drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
+        }
+    }
+
+    private int max3(int a, int b, int c) {
+        return Math.max(Math.max(a, b), c);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {

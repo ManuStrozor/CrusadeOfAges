@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class CreativeMode extends View {
 
@@ -36,11 +35,8 @@ public class CreativeMode extends View {
     private World world;
     private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
-
-    private ArrayList<Image> images = new ArrayList<>();
-    private ArrayList<String> names = new ArrayList<>();
-    private ArrayList<String> paths = new ArrayList<>();
-    private ArrayList<Date> dates = new ArrayList<>();
+    private File[] files;
+    private Image[] imgs;
 
     public CreativeMode(Settings s, World world) {
         this.s = s;
@@ -66,27 +62,21 @@ public class CreativeMode extends View {
         }
 
         if (!once) {
-            images.clear();
-            names.clear();
-            paths.clear();
-            dates.clear();
-
             sMax = 10 - (gc.getHeight() - 3 * GameManager.TS);
+            files = new File(creativeFolder).listFiles();
+
             int count = 0;
-            File dossier = new File(creativeFolder);
-            File[] files = dossier.listFiles();
             if (files != null) {
-                for (File file : files) {
-                    if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
-                        images.add(new Image(creativeFolder + "/" + file.getName(), true));
-                        names.add(file.getName());
-                        paths.add(file.getPath());
-                        dates.add(new Date(file.lastModified()));
+                imgs = new Image[files.length];
+                for (int i = 0; i < files.length; i++) {
+                    if (files[i].isFile() && files[i].getName().substring(files[i].getName().length() - 3).equals("png")) {
+                        imgs[i] = new Image(creativeFolder + "/" + files[i].getName(), true);
                         sMax += Image.THUMBH + 10;
                         count++;
                     }
                 }
             }
+
             if (count == 0) focus = false;
             if (sMax < 0) sMax = 0;
             once = true;
@@ -102,7 +92,7 @@ public class CreativeMode extends View {
         }
 
         //Hover control
-        for (int i = 0; i < images.size(); i++) {
+        for (int i = 0; i < files.length; i++) {
             if (fileSelected(gc, i, scroll)) {
                 fIndex = i;
                 focus = true;
@@ -133,26 +123,26 @@ public class CreativeMode extends View {
                         if (focus) {
                             Editor.once = true;
                             Editor.newOne = false;
-                            Editor.rename = names.get(fIndex);
-                            Editor.creaImg = images.get(fIndex);
+                            Editor.rename = files[fIndex].getName();
+                            Editor.creaImg = new Image(creativeFolder + "/" + files[fIndex].getName(), true);
                         }
                         break;
                     case "Rename":
                         if (focus) {
-                            InputDialog.input = names.get(fIndex).substring(0, names.get(fIndex).length() - 4);
-                            InputDialog.path = paths.get(fIndex);
+                            InputDialog.input = files[fIndex].getName().substring(0, files[fIndex].getName().length() - 4);
+                            InputDialog.path = files[fIndex].getPath();
                         }
                         break;
                     case "Delete":
                         if (focus) {
                             try {
-                                Files.delete(Paths.get(paths.get(fIndex)));
+                                Files.delete(Paths.get(files[fIndex].getPath()));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
                             int high = Image.THUMBH + 10;
                             if (scroll >= high) scroll -= high;
-                            if (fIndex == images.size() - 1 && fIndex != 0) fIndex--;
+                            if (fIndex == files.length - 1 && fIndex != 0) fIndex--;
                         }
                         break;
                     case "Folder":
@@ -191,7 +181,7 @@ public class CreativeMode extends View {
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawListOfFiles(images, names, dates, s.translate("Create your first map !"));
+        r.drawCreaList(files, imgs, s.translate("Create your first map !"));
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
         r.drawText(s.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);

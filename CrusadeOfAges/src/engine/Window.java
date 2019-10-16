@@ -1,12 +1,10 @@
 package engine;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
@@ -17,15 +15,22 @@ public class Window {
     private Canvas canvas;
     private BufferStrategy bs;
     private Graphics g;
-    private JFrame frame;
 
     public Window(GameContainer gc) {
 
-        frame = new JFrame(gc.getTitle());
+        JFrame frame = new JFrame(gc.getTitle());
         frame.setUndecorated(true);
         frame.setResizable(false);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        try {
+            Toolkit toolkit = Toolkit.getDefaultToolkit();
+            Image img = ImageIO.read(Window.class.getResourceAsStream("/cursor.png"));
+            Cursor c = toolkit.createCustomCursor(img, new Point(0,0), "custom cursor");
+            frame.getRootPane().setCursor(c);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
         frame.setLayout(new BorderLayout());
 
         Toolkit tk = Toolkit.getDefaultToolkit();
@@ -60,15 +65,11 @@ public class Window {
         bs.show();
     }
 
-    public JFrame getFrame() {
-        return frame;
-    }
-
     public BufferedImage getImage() {
         return image;
     }
 
-    Canvas getCanvas() {
+    public Canvas getCanvas() {
         return canvas;
     }
 }

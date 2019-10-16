@@ -8,9 +8,12 @@ import java.net.Socket;
 
 public class Launcher {
 
-    private static String appdata;
+    private static final String GAMENAME = "Crusade Of Ages";
+    private static final String VERSION = "0.0.1";
+
     private static String host = "localhost";
     private static int port = 5338;
+    private static String appdata;
 
     /**
      * Starts the game
@@ -37,7 +40,7 @@ public class Launcher {
             GameManager gm = new GameManager(socket, world);
             PlayerStats ps = new PlayerStats();
             GameContainer gc = new GameContainer(gm, settings, world, ps);
-            gc.setTitle("Crusade of Ages");
+            gc.setTitle(GAMENAME + " " + VERSION);
             gc.setScale(settings.getScale());
             gc.start();
         } catch (ConnectException e) {

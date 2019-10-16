@@ -17,11 +17,13 @@ public class PausedEdit extends View {
     public PausedEdit(Settings settings) {
         s = settings;
 
-        buttons.add(new Button("Save", "creativeMode"));
-        buttons.add(new Button("Cancel", "creativeMode"));
+        buttons.add(new Button("Back", "edit"));
+
         buttons.add(new Button("Try", "edit"));
         buttons.add(new Button("Blank", "pausedEdit"));
-        buttons.add(new Button("Back", "edit"));
+
+        buttons.add(new Button("Save", "pausedEdit"));
+        buttons.add(new Button("Quit", "creativeMode"));
     }
 
     @Override
@@ -34,18 +36,13 @@ public class PausedEdit extends View {
                 switch (btn.getText()) {
                     case "Save":
                         Editor.creaImg.save(Editor.rename);
-                        CreativeMode.once = false;
-                        Editor.setSpawn(false);
-                        gc.getR().setTs(GameManager.TS);
-                        Player.tileSize = GameManager.TS;
-                        Editor.tileSize = GameManager.TS;
                         break;
                     case "Try": Editor.setSpawn(true); break;
                     case "Blank":
                         Editor.creaImg.blank();
                         Editor.world.blank();
                         break;
-                    case "Cancel":
+                    case "Quit":
                         Editor.setSpawn(false);
                         gc.getR().setTs(GameManager.TS);
                         Player.tileSize = GameManager.TS;

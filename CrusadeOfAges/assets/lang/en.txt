@@ -6,6 +6,7 @@ Creative mode;Creative Mode
 Game credits;Game credits
 Options;Options
 Quit game;Quit game
+Quit;Quit
 FPS off;FPS off
 Darkness;Darkness
 FPS on;FPS on
