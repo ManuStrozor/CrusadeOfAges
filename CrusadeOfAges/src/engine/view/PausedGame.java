@@ -21,7 +21,7 @@ public class PausedGame extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("game");
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("game");
 
         //Button selection
         for (Button btn : buttons) {

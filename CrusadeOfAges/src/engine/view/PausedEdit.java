@@ -27,7 +27,7 @@ public class PausedEdit extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("edit");
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("edit");
 
         for (Button btn : buttons) {
             if (isSelected(gc, btn)) {
@@ -36,7 +36,7 @@ public class PausedEdit extends View {
                         Editor.creaImg.save(Editor.rename);
                         CreativeMode.once = false;
                         Editor.setSpawn(false);
-                        Renderer.tileSize = GameManager.TS;
+                        gc.getR().setTs(GameManager.TS);
                         Player.tileSize = GameManager.TS;
                         Editor.tileSize = GameManager.TS;
                         break;
@@ -47,7 +47,7 @@ public class PausedEdit extends View {
                         break;
                     case "Cancel":
                         Editor.setSpawn(false);
-                        Renderer.tileSize = GameManager.TS;
+                        gc.getR().setTs(GameManager.TS);
                         Player.tileSize = GameManager.TS;
                         Editor.tileSize = GameManager.TS;
                         break;

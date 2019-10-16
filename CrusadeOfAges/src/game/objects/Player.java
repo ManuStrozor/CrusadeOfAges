@@ -74,7 +74,7 @@ public class Player extends GameObject {
 
         //Slime bloc
         if (botTag.equals("slime") && fallDist == 0) {
-            if (!gc.getInputHandler().isKey(KeyEvent.VK_DOWN) && !gc.getInputHandler().isKey(KeyEvent.VK_S))
+            if (!gc.getInput().isKey(KeyEvent.VK_DOWN) && !gc.getInput().isKey(KeyEvent.VK_S))
                 move.jump(10);
         }
 
@@ -85,9 +85,9 @@ public class Player extends GameObject {
         } else {
 
             //Left & Right
-            if (gc.getInputHandler().isKey(KeyEvent.VK_LEFT) || gc.getInputHandler().isKey(KeyEvent.VK_Q))
+            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
                 move.toLeft(dt, speed);
-            if (gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) || gc.getInputHandler().isKey(KeyEvent.VK_D))
+            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
                 move.toRight(dt, speed);
 
             //Up & Down ladders
@@ -96,19 +96,19 @@ public class Player extends GameObject {
                 fallDist = 0;
                 ground = 0;
 
-                if ((gc.getInputHandler().isKey(KeyEvent.VK_UP) || gc.getInputHandler().isKey(KeyEvent.VK_Z) || gc.getInputHandler().isKey(KeyEvent.VK_SPACE))) {
+                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
                     if (!currTag.equals("ladder")) move.jump(4);
                     else move.upLadder(dt, speed);
                 }
 
-                if ((gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S))) {
+                if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
                     move.downLadder(dt, speed);
                 }
             } else {
                 //Jump & Gravity
                 fallDist += dt * 14;
 
-                if (gc.getInputHandler().isKeyDown(KeyEvent.VK_UP) || gc.getInputHandler().isKeyDown(KeyEvent.VK_Z) || gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) {
+                if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
                     if (ground <= 1) move.jump(5);
                 }
 
@@ -156,7 +156,7 @@ public class Player extends GameObject {
         if (currTag.equals("ladder")) {
             speed = 140;
             anim += dt * 14;
-        } else if (gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S)) {
+        } else if (gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
             speed = 40;
             anim += dt * 4;
         } else {
@@ -164,10 +164,10 @@ public class Player extends GameObject {
             anim += dt * 18;
         }
 
-        if ((!gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_D) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_LEFT) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_Q)) || anim > 4) {
+        if ((!gc.getInput().isKey(KeyEvent.VK_RIGHT) &&
+                !gc.getInput().isKey(KeyEvent.VK_D) &&
+                !gc.getInput().isKey(KeyEvent.VK_LEFT) &&
+                !gc.getInput().isKey(KeyEvent.VK_Q)) || anim > 4) {
             anim = 0;
         }
 
@@ -209,7 +209,7 @@ public class Player extends GameObject {
 
         //Slime bloc
         if (botTag.equals("slime") && fallDist == 0) {
-            if (!gc.getInputHandler().isKey(KeyEvent.VK_DOWN) && !gc.getInputHandler().isKey(KeyEvent.VK_S)) {
+            if (!gc.getInput().isKey(KeyEvent.VK_DOWN) && !gc.getInput().isKey(KeyEvent.VK_S)) {
                 move.jump(10);
                 gc.getPlayerStats().upValueOf("Slime");
             }
@@ -253,9 +253,9 @@ public class Player extends GameObject {
         } else {
 
             //Left & Right
-            if (gc.getInputHandler().isKey(KeyEvent.VK_LEFT) || gc.getInputHandler().isKey(KeyEvent.VK_Q))
+            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
                 move.toLeft(dt, speed);
-            if (gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) || gc.getInputHandler().isKey(KeyEvent.VK_D))
+            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
                 move.toRight(dt, speed);
 
             //Up & Down ladders
@@ -264,12 +264,12 @@ public class Player extends GameObject {
                 fallDist = 0;
                 ground = 0;
 
-                if ((gc.getInputHandler().isKey(KeyEvent.VK_UP) || gc.getInputHandler().isKey(KeyEvent.VK_Z) || gc.getInputHandler().isKey(KeyEvent.VK_SPACE))) {
+                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
                     if (!currTag.equals("ladder")) move.jump(4);
                     else move.upLadder(dt, speed);
                 }
 
-                if ((gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S))) {
+                if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
                     move.downLadder(dt, speed);
                 }
 
@@ -277,7 +277,7 @@ public class Player extends GameObject {
             } else {
                 fallDist += dt * 14;
 
-                if (gc.getInputHandler().isKeyDown(KeyEvent.VK_UP) || gc.getInputHandler().isKeyDown(KeyEvent.VK_Z) || gc.getInputHandler().isKeyDown(KeyEvent.VK_SPACE)) {
+                if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
                     if (ground <= 1) {
                         move.jump(5);
                         gc.getPlayerStats().upValueOf("Jump");
@@ -325,7 +325,7 @@ public class Player extends GameObject {
         if (currTag.equals("ladder")) {
             speed = 140;
             anim += dt * 6;
-        } else if (gc.getInputHandler().isKey(KeyEvent.VK_DOWN) || gc.getInputHandler().isKey(KeyEvent.VK_S)) {
+        } else if (gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
             speed = 40;
             anim += dt * 3;
         } else {
@@ -333,10 +333,10 @@ public class Player extends GameObject {
             anim += dt * 8;
         }
 
-        if ((!gc.getInputHandler().isKey(KeyEvent.VK_RIGHT) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_D) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_LEFT) &&
-                !gc.getInputHandler().isKey(KeyEvent.VK_Q)) || anim > 4) {
+        if ((!gc.getInput().isKey(KeyEvent.VK_RIGHT) &&
+                !gc.getInput().isKey(KeyEvent.VK_D) &&
+                !gc.getInput().isKey(KeyEvent.VK_LEFT) &&
+                !gc.getInput().isKey(KeyEvent.VK_Q)) || anim > 4) {
             anim = 0;
         }
 

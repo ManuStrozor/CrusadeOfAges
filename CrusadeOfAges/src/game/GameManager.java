@@ -57,10 +57,10 @@ public class GameManager extends AbstractGame {
             e.printStackTrace();
         }
 
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedGame");
+        if(gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedGame");
 
         // Screenshots
-        if(gc.getInputHandler().isKeyDown(KeyEvent.VK_F12)) {
+        if(gc.getInput().isKeyDown(KeyEvent.VK_F12)) {
             try {
                 DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
                 String filename = sdf.format(new Date()) + ".png";

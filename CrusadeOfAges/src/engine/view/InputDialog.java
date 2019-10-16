@@ -36,12 +36,12 @@ public class InputDialog extends View {
             once = true;
         }
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
             gc.setActiView("creativeMode");
             once = false;
         }
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER)) {
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             try {
                 Path src = Paths.get(path);
                 Files.move(src, src.resolveSibling(input + ".png"));
@@ -53,13 +53,13 @@ public class InputDialog extends View {
         }
 
         //Blinking bar control
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
+        if (gc.getInput().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
             blink--;
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
+        if (gc.getInput().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
             blink++;
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_END))
+        if (gc.getInput().isKeyDown(KeyEvent.VK_END))
             blink = input.length();
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_HOME))
+        if (gc.getInput().isKeyDown(KeyEvent.VK_HOME))
             blink = 0;
 
         //Input control

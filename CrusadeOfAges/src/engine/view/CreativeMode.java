@@ -59,7 +59,7 @@ public class CreativeMode extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
             focus = false;
             gc.setActiView("mainMenu");
             once = false;
@@ -93,10 +93,10 @@ public class CreativeMode extends View {
         }
 
         //Scroll control
-        if (gc.getInputHandler().getScroll() < 0) {
+        if (gc.getInput().getScroll() < 0) {
             scroll -= 20;
             if (scroll < 0) scroll = 0;
-        } else if (gc.getInputHandler().getScroll() > 0) {
+        } else if (gc.getInput().getScroll() > 0) {
             scroll += 20;
             if (scroll > sMax) scroll = sMax;
         }

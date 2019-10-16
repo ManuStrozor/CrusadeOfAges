@@ -30,14 +30,13 @@ public class Renderer {
     private int camX, camY;
     private int zDepth = 0;
     private boolean processing = false;
-
-    public static int tileSize = GameManager.TS;
+    private int ts = GameManager.TS;
 
     public Renderer(GameContainer gc) {
         // Sprites
-        objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", tileSize, tileSize, true);
-        floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", tileSize, tileSize, true);
-        water = new Sprite(Conf.SM_FOLDER + "/assets/objects/water.png", tileSize, tileSize, true);
+        objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", ts, ts, true);
+        floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", ts, ts, true);
+        water = new Sprite(Conf.SM_FOLDER + "/assets/objects/water.png", ts, ts, true);
 
         gcW = gc.getWidth();
         gcH = gc.getHeight();
@@ -391,26 +390,26 @@ public class Renderer {
     }
 
     void drawHUD(GameObject obj) {
-        int width = tileSize * 6;
+        int width = ts * 6;
         int x = gcW / 2 - width / 2;
-        fillRect(x, 0, width, tileSize, 0x99000000);
+        fillRect(x, 0, width, ts, 0x99000000);
 
-        drawSprite(objs, x, 0, 3, 2, tileSize);
-        drawSprite(objs, x + tileSize * 2, 0, 5, 0, tileSize);
-        drawSprite(objs, x + tileSize * 4, 0, 3, 1, tileSize);
+        drawSprite(objs, x, 0, 3, 2, ts);
+        drawSprite(objs, x + ts * 2, 0, 5, 0, ts);
+        drawSprite(objs, x + ts * 4, 0, 3, 1, ts);
 
-        drawText("x" + obj.getLives(), x + tileSize - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getCoins(), x + tileSize * 3 - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
-        drawText("x" + obj.getKeys(), x + tileSize * 5 - 4, tileSize, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getLives(), x + ts - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getCoins(), x + ts * 3 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + obj.getKeys(), x + ts * 5 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
 
     public void drawWorld(World world) {
 
-        int offX = Math.max(camX/tileSize, 0);
-        int offY = Math.max(camY/tileSize, 0);
+        int offX = Math.max(camX/ ts, 0);
+        int offY = Math.max(camY/ ts, 0);
 
-        int endX = Math.min(gcW/tileSize+offX+2, world.getWidth());
-        int endY = Math.min(gcH/tileSize+offY+2, world.getHeight());
+        int endX = Math.min(gcW/ ts +offX+2, world.getWidth());
+        int endY = Math.min(gcH/ ts +offY+2, world.getHeight());
 
         for (int y = offY; y < endY; y++) {
             for (int x = offX; x < endX; x++) {
@@ -419,28 +418,28 @@ public class Renderer {
                 int tileY = world.getBlocMap(x, y).getY();
 
                 // Murs derriere les blocs non-solides
-                drawSprite(objs, x * tileSize, y * tileSize, 1, 0, tileSize);
+                drawSprite(objs, x * ts, y * ts, 1, 0, ts);
 
                 // Affichage des blocs
                 switch (world.getBlocMap(x, y).getTag()) {
                     case "floor":
-                        drawSprite(floor, x * tileSize, y * tileSize, getTileX(world, x, y), getTileY(world, x, y), tileSize);
+                        drawSprite(floor, x * ts, y * ts, getTileX(world, x, y), getTileY(world, x, y), ts);
                         break;
                     case "water":
-                        drawSprite(water, x * tileSize, y * tileSize, 0, getWaterTile(world, x, y), tileSize);
+                        drawSprite(water, x * ts, y * ts, 0, getWaterTile(world, x, y), ts);
                         break;
                     default:
-                        drawSprite(objs, x * tileSize, y * tileSize, tileX, tileY, tileSize);
+                        drawSprite(objs, x * ts, y * ts, tileX, tileY, ts);
                         break;
                 }
 
                 // Ombres sous les blocs
                 if (!world.getBlocMap(x, y).isSolid() && solidTop(world, x, y))
-                    drawSprite(objs, x * tileSize, y * tileSize, 0, 3, tileSize);
+                    drawSprite(objs, x * ts, y * ts, 0, 3, ts);
 
                 // Partie haute de la porte
                 if (world.getBlocMap(x, y).isTagged("door"))
-                    drawSprite(objs, x * tileSize, (y - 1) * tileSize, tileX, tileY - 1, tileSize);
+                    drawSprite(objs, x * ts, (y - 1) * ts, tileX, tileY - 1, ts);
             }
         }
     }
@@ -497,7 +496,7 @@ public class Renderer {
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
                 if (world.getBlocMap(x, y).isTagged("torch"))
-                    drawLight(lamp, x * tileSize + tileSize / 2, y * tileSize + tileSize / 3);
+                    drawLight(lamp, x * ts + ts / 2, y * ts + ts / 3);
             }
         }
     }
@@ -532,18 +531,18 @@ public class Renderer {
         int xMMap = camX + gcW - thumb.getW() - 4;
         int yMMap = camY + gcH - thumb.getH() - 4;
         drawImage(thumb, xMMap, yMMap);
-        drawRect(xMMap + (int)(camX/tileSize * diffW), yMMap + (int)(camY/tileSize * diffH),
-                (int)(gcW /tileSize * diffW), (int)(gcH /tileSize * diffH), 0x99ababab);
+        drawRect(xMMap + (int)(camX/ ts * diffW), yMMap + (int)(camY/ ts * diffH),
+                (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x99ababab);
     }
 
     public void drawArrows(World world, int width, int height, int tileSize) {
         if (camY > 0)
             drawBloc(world, "arrow_up", camX + gcW / 2 - tileSize / 2, camY, tileSize);
-        if (camY + gcH < height * this.tileSize)
+        if (camY + gcH < height * this.ts)
             drawBloc(world, "arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize, tileSize);
         if (camX > 0)
             drawBloc(world, "arrow_left", camX, camY + gcH / 2 - tileSize / 2, tileSize);
-        if (camX + gcW < width * this.tileSize)
+        if (camX + gcW < width * this.ts)
             drawBloc(world, "arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2, tileSize);
     }
 
@@ -556,7 +555,7 @@ public class Renderer {
         }
 
         int x = gcW / 2 - largest / 2;
-        int y = tileSize + 10 - GameSelection.scroll;
+        int y = ts + 10 - GameSelection.scroll;
 
         int hUsed = 10;
         for (int i = 0; i < Math.min(ps.getValueOf("Level up"), levels.length) + 1; i++) {
@@ -576,10 +575,10 @@ public class Renderer {
             hUsed += size + 10;
         }
 
-        int hTotal = gcH - (3 * tileSize);
+        int hTotal = gcH - (3 * ts);
         int minus = Math.max(hUsed - hTotal, 0);
 
-        drawScrollBar(gcW / 2 + largest / 2 + 20, tileSize, 10, hTotal, GameSelection.scroll, minus);
+        drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 10, hTotal, GameSelection.scroll, minus);
     }
 
     public void drawListOfFiles(ArrayList<Image> f, ArrayList<String> n, ArrayList<Date> d, String nothing) {
@@ -597,7 +596,7 @@ public class Renderer {
         }
 
         int x = gcW / 2 - largest / 2;
-        int y = tileSize + 10 - CreativeMode.scroll;
+        int y = ts + 10 - CreativeMode.scroll;
 
         int hUsed = 10;
         for (int i = 0; i < f.size(); i++) {
@@ -617,11 +616,11 @@ public class Renderer {
             hUsed += h + 10;
         }
 
-        int hTotal = gcH - 3 * tileSize;
+        int hTotal = gcH - 3 * ts;
         int minus = Math.max(hUsed - hTotal, 0);
 
         if (f.size() != 0)
-            drawScrollBar(gcW / 2 + largest / 2 + 20, tileSize, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
+            drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
     }
 
     private void drawScrollBar(int x, int y, int w, int h, int scroll, int minus) {
@@ -639,9 +638,9 @@ public class Renderer {
     }
 
     public void drawBackground(World world) {
-        for (int y = 0; y <= gcH /tileSize; y++) {
-            for (int x = 0; x <= gcW /tileSize; x++) {
-                drawBloc(world, "wall", x*tileSize, y*tileSize, tileSize);
+        for (int y = 0; y <= gcH / ts; y++) {
+            for (int x = 0; x <= gcW / ts; x++) {
+                drawBloc(world, "wall", x* ts, y* ts, ts);
             }
         }
     }
@@ -649,7 +648,7 @@ public class Renderer {
     public void fillAreaBloc(int nX, int nY, int nW, int nH, World world, String tag) {
         for (int y = 0; y < nH; y++) {
             for (int x = 0; x < nW; x++) {
-                drawBloc(world, tag, nX + x * tileSize, nY + y * tileSize, tileSize);
+                drawBloc(world, tag, nX + x * ts, nY + y * ts, ts);
             }
         }
     }
@@ -690,5 +689,25 @@ public class Renderer {
 
     private void setzDepth(int zDepth) {
         this.zDepth = zDepth;
+    }
+
+    public int getTs() {
+        return ts;
+    }
+
+    public void setTs(int ts) {
+        this.ts = ts;
+    }
+
+    public void zoomIn(int mouseX, int mouseY) {
+        camX += (mouseX + camX) / ts;
+        camY += (mouseY + camY) / ts;
+        ts+=1;
+    }
+
+    public void zoomOut(int mouseX, int mouseY) {
+        camX -= (mouseX + camX) / ts;
+        camY -= (mouseY + camY) / ts;
+        if (ts > 1) ts-=1;
     }
 }

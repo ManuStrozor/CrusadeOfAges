@@ -39,7 +39,7 @@ public class Event {
     }
 
     public void switchLevel(GameContainer gc, GameManager gm) {
-        if (pl.getKeys() >= 1 && gc.getInputHandler().isKeyDown(KeyEvent.VK_ENTER)) {
+        if (pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             if (gc.getPlayerStats().getValueOf("Level up") <= GameManager.current) {
                 gc.getPlayerStats().upValueOf("Level up");
             }

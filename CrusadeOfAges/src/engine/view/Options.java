@@ -29,7 +29,7 @@ public class Options extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getInputHandler().isKeyDown(KeyEvent.VK_ESCAPE)) {
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
             saveSettings();
             gc.setActiView(gc.getPrevView());
         }

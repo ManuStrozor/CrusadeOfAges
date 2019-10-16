@@ -18,9 +18,9 @@ public class GameContainer implements Runnable {
 
     private Thread thread;
     private Window window;
-    private Renderer renderer;
+    private Renderer r;
     private GameManager gm;
-    private InputHandler inputHandler;
+    private InputHandler input;
     private Settings settings;
     private PlayerStats playerStats;
     private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
@@ -67,8 +67,8 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        renderer = new Renderer(this);
-        inputHandler = new InputHandler(this);
+        r = new Renderer(this);
+        input = new InputHandler(this);
 
         thread = new Thread(this);
         thread.run();
@@ -120,7 +120,7 @@ public class GameContainer implements Runnable {
                         v.get(actiView).update(this, (float) UPDATE_CAP);
                 }
 
-                inputHandler.update();
+                input.update();
 
                 if (frameTime >= 1.0) {
                     frameTime = 0;
@@ -130,23 +130,23 @@ public class GameContainer implements Runnable {
             }
 
             GameObject go = gm.getObject("" + gm.getSocket().getLocalPort()); // Utile pour afficher le hud
-            renderer.clear();
+            r.clear();
 
             // Affichage du jeu en arrière plan
             switch (actiView) {
                 case "gameOver":
                 case "pausedGame":
-                    game.render(this, renderer);
-                    renderer.setCoorCam(0, 0);
-                    if (settings.isShowLights()) renderer.process();
-                    if (go != null) renderer.drawHUD(go);
+                    game.render(this, r);
+                    r.setCoorCam(0, 0);
+                    if (settings.isShowLights()) r.process();
+                    if (go != null) r.drawHUD(go);
                     break;
                 case "stats":
                     if (prevView.equals("pausedGame")) {
-                        game.render(this, renderer);
-                        renderer.setCoorCam(0, 0);
-                        if (settings.isShowLights()) renderer.process();
-                        if (go != null) renderer.drawHUD(go);
+                        game.render(this, r);
+                        r.setCoorCam(0, 0);
+                        if (settings.isShowLights()) r.process();
+                        if (go != null) r.drawHUD(go);
                     }
                     break;
             }
@@ -154,30 +154,30 @@ public class GameContainer implements Runnable {
             // Affichage de la view active
             switch (actiView) {
                 case "edit":
-                    editor.render(this, renderer);
+                    editor.render(this, r);
                     break;
                 case "pausedEdit":
-                    editor.render(this, renderer);
-                    v.get("pausedEdit").render(this, renderer);
+                    editor.render(this, r);
+                    v.get("pausedEdit").render(this, r);
                     break;
                 case "game":
-                    game.render(this, renderer);
-                    renderer.setCoorCam(0, 0);
-                    if (settings.isShowLights()) renderer.process();
-                    if (go != null) renderer.drawHUD(go);
+                    game.render(this, r);
+                    r.setCoorCam(0, 0);
+                    if (settings.isShowLights()) r.process();
+                    if (go != null) r.drawHUD(go);
                     break;
                 case "creativeMode":
-                    v.get("creativeMode").render(this, renderer);
-                    renderer.setCoorCam(0, 0);
+                    v.get("creativeMode").render(this, r);
+                    r.setCoorCam(0, 0);
                     break;
                 case "inputDialog":
-                    v.get("creativeMode").render(this, renderer);
-                    v.get("inputDialog").render(this, renderer);
+                    v.get("creativeMode").render(this, r);
+                    v.get("inputDialog").render(this, r);
                     break;
                 case "exit":
                     break;
                 default:
-                    v.get(actiView).render(this, renderer);
+                    v.get(actiView).render(this, r);
             }
 
             // SI Lights = ON ALORS : Affichage d'une source de lumière à la position du curseur de la souris
@@ -186,18 +186,18 @@ public class GameContainer implements Runnable {
                 case "mainMenu":
                 case "options":
                     if (settings.isShowLights()) {
-                        renderer.drawLight(new Light(150, 0xffffff99),
-                                this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
+                        r.drawLight(new Light(150, 0xffffff99),
+                                this.getInput().getMouseX(), this.getInput().getMouseY());
                     }
-                    if (settings.isShowLights()) renderer.process();
+                    if (settings.isShowLights()) r.process();
                     break;
                 case "stats":
                     if (prevView.equals("mainMenu")) {
                         if (settings.isShowLights()) {
-                            renderer.drawLight(new Light(150, 0xffffff99),
-                                    this.getInputHandler().getMouseX(), this.getInputHandler().getMouseY());
+                            r.drawLight(new Light(150, 0xffffff99),
+                                    this.getInput().getMouseX(), this.getInput().getMouseY());
                         }
-                        if (settings.isShowLights()) renderer.process();
+                        if (settings.isShowLights()) r.process();
                     }
                     break;
             }
@@ -207,20 +207,20 @@ public class GameContainer implements Runnable {
                 case "credits":
                 case "mainMenu":
                 case "options":
-                    renderer.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                    renderer.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+                    r.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                    r.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                     break;
                 case "stats":
                     if (prevView.equals("mainMenu")) {
-                        renderer.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
-                        renderer.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
+                        r.drawText(VERSION, 0, getHeight(), 1, -1, 0xffababab, Font.STANDARD);
+                        r.drawText(FACTORY, getWidth(), getHeight(), -1, -1, 0xffababab, Font.STANDARD);
                     }
                     break;
             }
 
             // Affichage des FPS
             if (settings.isShowFps()) {
-                renderer.drawText(fps + " fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
+                r.drawText(fps + " fps", getWidth(), 0, -1, 1, 0xffababab, Font.STANDARD);
             }
 
             window.update();
@@ -247,8 +247,8 @@ public class GameContainer implements Runnable {
         stop();
     }
 
-    public Renderer getRenderer() {
-        return renderer;
+    public Renderer getR() {
+        return r;
     }
 
     public int getWidth() {
@@ -287,8 +287,8 @@ public class GameContainer implements Runnable {
         return window;
     }
 
-    public InputHandler getInputHandler() {
-        return inputHandler;
+    public InputHandler getInput() {
+        return input;
     }
 
     public Settings getSettings() {
