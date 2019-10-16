@@ -87,13 +87,13 @@ public class Window {
 
     public void setHandCursor() {
         if (!f.getRootPane().getCursor().getName().equals("hand")) {
-            f.getRootPane().setCursor(tk.createCustomCursor(iH, new Point(0,0), "hand"));
+            f.getRootPane().setCursor(tk.createCustomCursor(iH, new Point(8,0), "hand"));
         }
     }
 
     public void setMovingCursor() {
         if (!f.getRootPane().getCursor().getName().equals("moving")) {
-            f.getRootPane().setCursor(tk.createCustomCursor(iM, new Point(0,0), "moving"));
+            f.getRootPane().setCursor(tk.createCustomCursor(iM, new Point(13,13), "moving"));
         }
     }
 }
