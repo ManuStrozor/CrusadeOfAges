@@ -241,20 +241,9 @@ public class Renderer {
             return;
         }
 
-        if (offX < -image.getWidth()) return;
-        if (offY < -image.getHeight()) return;
-        if (offX >= gcW) return;
-        if (offY >= gcH) return;
-
-        int newX = 0;
-        int newY = 0;
-
-        if (offX < 0) newX -= offX;
-        if (offY < 0) newY -= offY;
-
         float plus = GameManager.TS / (float)tileSize;
-        for (int y = newY; y < tileSize; y++) {
-            for (int x = newX; x < tileSize; x++) {
+        for (int y = 0; y < tileSize; y++) {
+            for (int x = 0; x < tileSize; x++) {
                 int position = (int)(x*plus + tileX * image.getWidth()) + (int)(y*plus + tileY * image.getHeight()) * image.getW();
                 setPixel(x + offX, y + offY, image.getP()[Math.max(Math.min(position, image.getP().length-1), 0)]);
             }
@@ -407,11 +396,11 @@ public class Renderer {
 
     public void drawWorld(World world) {
 
-        int offX = Math.max(camX/ ts, 0);
-        int offY = Math.max(camY/ ts, 0);
+        int offX = Math.max(camX/ts, 0);
+        int offY = Math.max(camY/ts, 0);
 
-        int endX = Math.min(gcW/ ts +offX+2, world.getWidth());
-        int endY = Math.min(gcH/ ts +offY+2, world.getHeight());
+        int endX = Math.min(((gcW+camX)/ts)+1, world.getWidth());
+        int endY = Math.min(((gcH+camY)/ts)+1, world.getHeight());
 
         for (int y = offY; y < endY; y++) {
             for (int x = offX; x < endX; x++) {
@@ -532,10 +521,10 @@ public class Renderer {
         float diffH = thumb.getH() / (float)img.getH();
         int xMMap = camX + gcW - thumb.getW() - 4;
         int yMMap = camY + gcH - thumb.getH() - 4;
-        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x99ababab);
-        drawImage(thumb, xMMap, yMMap);
+        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x22ffffff);
+        drawImage(thumb.setOpacity(0x99), xMMap, yMMap);
         drawRect(xMMap + (int)(camX/ ts * diffW), yMMap + (int)(camY/ ts * diffH),
-                (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x99ababab);
+                (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x66ffffff);
     }
 
     public void drawArrows(World world, int width, int height, int tileSize) {
@@ -713,15 +702,15 @@ public class Renderer {
         this.ts = ts;
     }
 
-    public void zoomIn(int mouseX, int mouseY) {
+    public void zoomIn(int mouseX, int mouseY, int amount) {
         camX += (mouseX + camX) / ts;
         camY += (mouseY + camY) / ts;
-        ts+=1;
+        ts += amount;
     }
 
-    public void zoomOut(int mouseX, int mouseY) {
+    public void zoomOut(int mouseX, int mouseY, int amount) {
         camX -= (mouseX + camX) / ts;
         camY -= (mouseY + camY) / ts;
-        if (ts > 1) ts-=1;
+        if (ts > amount) ts -= amount;
     }
 }

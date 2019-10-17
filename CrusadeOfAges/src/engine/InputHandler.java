@@ -81,7 +81,6 @@ public class InputHandler implements KeyListener, MouseListener, MouseMotionList
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
     }
 
     @Override

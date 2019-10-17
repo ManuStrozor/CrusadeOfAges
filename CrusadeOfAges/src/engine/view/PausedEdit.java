@@ -61,7 +61,7 @@ public class PausedEdit extends View {
                         Editor.setSpawn(false);
                         gc.getR().setTs(GameManager.TS);
                         Player.tileSize = GameManager.TS;
-                        Editor.tileSize = GameManager.TS;
+                        Editor.ts = GameManager.TS;
                         break;
                 }
                 gc.getClickSound().play();

@@ -13,7 +13,6 @@ import java.util.Date;
 
 public class Image {
 
-    public static final int THUMBW = 120;
     public static final int THUMBH = 60;
     private boolean alpha = false;
     private int w, h;
@@ -69,24 +68,32 @@ public class Image {
         return alpha;
     }
 
-    public void setAlpha(boolean alpha) {
-        this.alpha = alpha;
-    }
-
-    public Image getThumbnail(int thumbW, int thumbH) {
-        BufferedImage origin = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+    public Image setOpacity(int value) {
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                origin.setRGB(x, y, this.p[x + y * w]);
+                int index = x + y * w;
+                int alpha = (p[index] >> 24) & 0xff;
+                int newP = (Math.min(alpha, value)) << 24 | ((p[index] >> 16) & 0xff) << 16 | ((p[index] >> 8) & 0xff) << 8 | (p[index] & 0xff);
+                setP(x, y, newP);
             }
         }
-        BufferedImage thumbnail = new BufferedImage(thumbW, thumbH, origin.getType());
+        return this;
+    }
+
+    public Image getThumbnail(int w, int h) {
+        BufferedImage origin = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < this.h; y++) {
+            for (int x = 0; x < this.w; x++) {
+                origin.setRGB(x, y, this.p[x + y * this.w]);
+            }
+        }
+        BufferedImage thumbnail = new BufferedImage(w, h, origin.getType());
         Graphics2D g = thumbnail.createGraphics();
-        g.drawImage(origin, 0, 0, thumbW, thumbH, null);
+        g.drawImage(origin, 0, 0, w, h, null);
         g.dispose();
-        int[] p = thumbnail.getRGB(0, 0, thumbW, thumbH, null, 0, thumbW);
+        int[] p = thumbnail.getRGB(0, 0, w, h, null, 0, w);
         thumbnail.flush();
-        return new Image(p, thumbW, thumbH);
+        return new Image(p, w, h);
     }
 
     public void blank() {

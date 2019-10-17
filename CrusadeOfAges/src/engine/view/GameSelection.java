@@ -86,7 +86,7 @@ public class GameSelection extends View {
                 if (btn == play) {
                     GameManager.current = fIndex;
                     gameManager.load(GameManager.levels[fIndex][0]);
-                    gc.getWindow().setDefaultCursor();
+                    gc.getWindow().setBlankCursor();
                 }
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());

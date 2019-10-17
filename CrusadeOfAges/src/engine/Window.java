@@ -17,7 +17,7 @@ public class Window {
     private Graphics g;
     private JFrame f;
     private Toolkit tk;
-    private Image iD, iH, iM;
+    private Image iD, iH, iM, iR;
 
     public Window(GameContainer gc) {
 
@@ -34,6 +34,7 @@ public class Window {
             iD = ImageIO.read(Window.class.getResourceAsStream("/cursor/default.png"));
             iH = ImageIO.read(Window.class.getResourceAsStream("/cursor/hand.png"));
             iM = ImageIO.read(Window.class.getResourceAsStream("/cursor/moving.png"));
+            iR = ImageIO.read(Window.class.getResourceAsStream("/cursor/rubber.png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -94,6 +95,19 @@ public class Window {
     public void setMovingCursor() {
         if (!f.getRootPane().getCursor().getName().equals("moving")) {
             f.getRootPane().setCursor(tk.createCustomCursor(iM, new Point(13,13), "moving"));
+        }
+    }
+
+    public void setRubberCursor() {
+        if (!f.getRootPane().getCursor().getName().equals("rubber")) {
+            f.getRootPane().setCursor(tk.createCustomCursor(iR, new Point(8,30), "rubber"));
+        }
+    }
+
+    public void setBlankCursor() {
+        if (!f.getRootPane().getCursor().getName().equals("blank")) {
+            BufferedImage blank = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+            f.getRootPane().setCursor(tk.createCustomCursor(blank, new Point(0,0), "blank"));
         }
     }
 }

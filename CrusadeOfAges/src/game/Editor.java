@@ -31,6 +31,7 @@ public class Editor extends AbstractGame {
     private int width, height;
 
     private String[] elems = {
+            "free",
             "spawn",
             "floor",
             "slime",
@@ -48,8 +49,8 @@ public class Editor extends AbstractGame {
     };
     private int color, scroll = 0;
 
-    public static int tileSize = GameManager.TS;
-    private int toolSize = 24;
+    public static int ts = GameManager.TS;
+    private int toolSize = 32;
     private static final int DRAGSPEED = 3;
     private int dragX = -1, dragY = -1;
     private int tmpCamX = -1, tmpCamY = -1;
@@ -78,7 +79,7 @@ public class Editor extends AbstractGame {
         if (spawn && spawnExists()) player.creativeUpdate(gc, dt); // Player update
 
         int wheel = gc.getInput().getScroll();
-        if (!gc.getInput().isKey(KeyEvent.VK_CONTROL)) {
+        if (!gc.getInput().isKey(KeyEvent.VK_CONTROL) && gc.getInput().getMouseX() < toolSize + 4) {
             /////////// Dock
             if (wheel > 0) {
                 scroll = (scroll == elems.length - 1) ? 0 : scroll + 1;
@@ -86,16 +87,16 @@ public class Editor extends AbstractGame {
                 scroll = (scroll == 0) ? elems.length - 1 : scroll - 1;
             }
             /////////// Dock
-        } else {
+        } else if (gc.getInput().isKey(KeyEvent.VK_CONTROL)) {
             /////////// ZOOM IN - ZOOM OUT (CTRL + molette)
             if (wheel < 0) { // ZOOM IN
-                gc.getR().zoomIn(gc.getInput().getMouseX(), gc.getInput().getMouseY());
-                Player.tileSize+=1;
-                tileSize+=1;
+                gc.getR().zoomIn(gc.getInput().getMouseX(), gc.getInput().getMouseY(), 1);
+                Player.tileSize += 1;
+                ts += 1;
             } else if (wheel > 0) { // ZOOM OUT
-                gc.getR().zoomOut(gc.getInput().getMouseX(), gc.getInput().getMouseY());
-                if (Player.tileSize > 1) Player.tileSize-=1;
-                if (tileSize > 1) tileSize-=1;
+                gc.getR().zoomOut(gc.getInput().getMouseX(), gc.getInput().getMouseY(), 1);
+                if (Player.tileSize > 1) Player.tileSize -= 1;
+                if (ts > 1) ts -= 1;
             }
             /////////// ZOOM IN - ZOOM OUT (CTRL + molette)
             /////////// Sauvegarde (CTRL + S)
@@ -104,6 +105,12 @@ public class Editor extends AbstractGame {
                 notifs.add(new Notification(rename + settings.translate(" a été sauvegardé avec succès")));
             }
             /////////// Sauvegarde (CTRL + S)
+        } else {
+            if (wheel < 0) {
+                gc.getR().setCamY(notExceed(gc.getR().getCamY() - 2* ts, -gc.getHeight(), height * ts));
+            } else if (wheel > 0) {
+                gc.getR().setCamY(notExceed(gc.getR().getCamY() + 2* ts, -gc.getHeight(), height * ts));
+            }
         }
 
         color = world.getBloc(elems[scroll]).getCode();
@@ -135,8 +142,27 @@ public class Editor extends AbstractGame {
 
         if (gc.getActiView().equals("edit")) { // Bloquer l'editeur sur la view pausedEdit
 
-            int x = (gc.getInput().getMouseX() + r.getCamX()) / tileSize;
-            int y = (gc.getInput().getMouseY() + r.getCamY()) / tileSize;
+            int x = (gc.getInput().getMouseX() + r.getCamX()) / ts;
+            int y = (gc.getInput().getMouseY() + r.getCamY()) / ts;
+
+            /////////////// Déplacement Clavier
+            if (gc.getInput().isKey(KeyEvent.VK_LEFT)) {
+                r.setCamX(notExceed(r.getCamX() - DRAGSPEED, -gc.getWidth(), width * ts));
+            }
+
+            if (gc.getInput().isKey(KeyEvent.VK_UP)) {
+                r.setCamY(notExceed(r.getCamY() - DRAGSPEED, -gc.getHeight(), height * ts));
+            }
+
+            if (gc.getInput().isKey(KeyEvent.VK_RIGHT)) {
+                r.setCamX(notExceed(r.getCamX() + DRAGSPEED, -gc.getWidth(), width * ts));
+            }
+
+            if (gc.getInput().isKey(KeyEvent.VK_DOWN)) {
+                r.setCamY(notExceed(r.getCamY() + DRAGSPEED, -gc.getHeight(), height * ts));
+            }
+            /////////////// Déplacement Clavier
+
 
             if (gc.getInput().isKey(KeyEvent.VK_CONTROL) || gc.getInput().isButton(MouseEvent.BUTTON2)) {
                 gc.getWindow().setMovingCursor();
@@ -149,8 +175,8 @@ public class Editor extends AbstractGame {
                         dragY = gc.getInput().getMouseY();
                     }
                 } else {
-                    r.setCamX(notExceed(tmpCamX + (dragX - gc.getInput().getMouseX()) * DRAGSPEED, -gc.getWidth(), width * tileSize));
-                    r.setCamY(notExceed(tmpCamY + (dragY - gc.getInput().getMouseY()) * DRAGSPEED, -gc.getHeight(), height * tileSize));
+                    r.setCamX(notExceed(tmpCamX + (dragX - gc.getInput().getMouseX()) * DRAGSPEED, -gc.getWidth(), width * ts));
+                    r.setCamY(notExceed(tmpCamY + (dragY - gc.getInput().getMouseY()) * DRAGSPEED, -gc.getHeight(), height * ts));
                     if (!gc.getInput().isButton(MouseEvent.BUTTON1) &&
                             !gc.getInput().isButton(MouseEvent.BUTTON2)) { // Arret deplacement (CTRL + souris)
                         gc.getWindow().setDefaultCursor();
@@ -161,32 +187,36 @@ public class Editor extends AbstractGame {
                 ///////////////// Déplacement (CTRL + souris/molette)
             } else {
 
-                if (!gc.getInput().isButton(MouseEvent.BUTTON2)) { // Arret deplacement (CTRL + molette)
+                if (!gc.getInput().isButton(MouseEvent.BUTTON2) &&
+                        !gc.getInput().isButton(MouseEvent.BUTTON3)) { // Arret deplacement (CTRL + molette)
                     gc.getWindow().setDefaultCursor();
                     dragX = -1;
                     dragY = -1;
                 }
 
-                if (gc.getInput().isButton(MouseEvent.BUTTON1)) {
-                    ////////// Placement des blocs
-                    if (elems[scroll].equals("spawn") && spawnExists()) {
-                        creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000); // Delete previous spawn
-                        world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-                        player.getEvent().respawn(world.getSpawnX(), world.getSpawnY()); // Reset player position
+                if (!world.getBloc(elems[scroll]).isTagged("free")) {
+                    if (gc.getInput().isButton(MouseEvent.BUTTON1)) {
+                        ////////// Placement des blocs
+                        if (elems[scroll].equals("spawn") && spawnExists()) {
+                            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000); // Delete previous spawn
+                            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
+                            player.getEvent().respawn(world.getSpawnX(), world.getSpawnY()); // Reset player position
+                        }
+                        creaImg.setP(x, y, color);
+                        world.setBloc(x, y, color);
+                        ////////// Placement des blocs
+                    } else if (gc.getInput().isButton(MouseEvent.BUTTON3)) {
+                        gc.getWindow().setRubberCursor();
+                        ////////// Effacement des blocs
+                        if (x == world.getSpawnX() && y == world.getSpawnY()) {
+                            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000); // Delete spawn
+                            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
+                            world.resetSpawn();
+                        }
+                        creaImg.setP(x, y, 0x00000000);
+                        world.setBloc(x, y, 0);
+                        ////////// Effacement des blocs
                     }
-                    creaImg.setP(x, y, color);
-                    world.setBloc(x, y, world.getBloc(elems[scroll]).getCode());
-                    ////////// Placement des blocs
-                } else if (gc.getInput().isButton(MouseEvent.BUTTON3)) {
-                    ////////// Effacement des blocs
-                    if (x == world.getSpawnX() && y == world.getSpawnY()) {
-                        creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0x00000000); // Delete spawn
-                        world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-                        world.resetSpawn();
-                    }
-                    creaImg.setP(x, y, 0x00000000);
-                    world.setBloc(x, y, 0);
-                    ////////// Effacement des blocs
                 }
             }
         }
