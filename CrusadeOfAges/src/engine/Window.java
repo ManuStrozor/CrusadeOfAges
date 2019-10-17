@@ -30,11 +30,21 @@ public class Window {
 
         tk = Toolkit.getDefaultToolkit();
 
+        int size;
+        Dimension cursorSize = tk.getBestCursorSize(64, 64);
+        if (cursorSize.width > 32) {
+            size = 64;
+        } else if (cursorSize.width > 16) {
+            size = 32;
+        } else {
+            size = 16;
+        }
+
         try {
-            iD = ImageIO.read(Window.class.getResourceAsStream("/cursor/default.png"));
-            iH = ImageIO.read(Window.class.getResourceAsStream("/cursor/hand.png"));
-            iM = ImageIO.read(Window.class.getResourceAsStream("/cursor/moving.png"));
-            iR = ImageIO.read(Window.class.getResourceAsStream("/cursor/rubber.png"));
+            iD = ImageIO.read(Window.class.getResourceAsStream("/cursor/default"+size+".png"));
+            iH = ImageIO.read(Window.class.getResourceAsStream("/cursor/hand"+size+".png"));
+            iM = ImageIO.read(Window.class.getResourceAsStream("/cursor/moving"+size+".png"));
+            iR = ImageIO.read(Window.class.getResourceAsStream("/cursor/rubber"+size+".png"));
         } catch(IOException e) {
             e.printStackTrace();
         }
