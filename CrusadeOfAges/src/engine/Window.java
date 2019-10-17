@@ -19,7 +19,7 @@ public class Window {
     private Toolkit tk;
     private Image iD, iH, iM, iR;
 
-    public Window(GameContainer gc) {
+    Window(GameContainer gc) {
 
         f = new JFrame(gc.getTitle());
         f.setUndecorated(true);
@@ -86,7 +86,7 @@ public class Window {
         return image;
     }
 
-    public Canvas getCanvas() {
+    Canvas getCanvas() {
         return canvas;
     }
 
