@@ -125,14 +125,14 @@ public class Renderer {
         lm[x + y * gcW] = maxR << 16 | maxG << 8 | maxB;
     }
 
-    private int darken(int color, int diff) {
+    public int darken(int color, int diff) {
 
         int a = (color >> 24) & 0xff;
         int r = (color >> 16) & 0xff;
         int g = (color >> 8) & 0xff;
         int b = color & 0xff;
         diff = Math.abs(diff);
-        int newA = (Math.max(a - diff, 0)) << 24;
+        int newA = a << 24;
         int newR = (Math.max(r - diff, 0)) << 16;
         int newG = (Math.max(g - diff, 0)) << 8;
         int newB = Math.max(b - diff, 0);
@@ -155,7 +155,7 @@ public class Renderer {
         return newA | newR | newG | newB;
     }
 
-    private int textSize(String text, Font font) {
+    public int textSize(String text, Font font) {
 
         int textW = 0;
         for (int i = 0; i < text.length(); i++) {

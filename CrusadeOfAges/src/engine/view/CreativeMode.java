@@ -9,8 +9,11 @@ import engine.gfx.Image;
 import game.Conf;
 import game.Editor;
 import game.GameManager;
+import game.Notification;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -31,15 +34,17 @@ public class CreativeMode extends View {
         sMax = 0;
     }
 
-    private Settings s;
+    private Settings settings;
     private World world;
     private Button edit, rename, delete, create, folder, back;
     private String creativeFolder;
     private File[] files;
     private Image[] imgs;
 
-    public CreativeMode(Settings s, World world) {
-        this.s = s;
+    private ArrayList<Notification> notifs = new ArrayList<>();
+
+    public CreativeMode(Settings settings, World world) {
+        this.settings = settings;
         this.world = world;
 
         buttons.add(edit = new engine.gfx.Button(170, 20, "Edit", "edit"));
@@ -156,11 +161,17 @@ public class CreativeMode extends View {
                         }
                         break;
                     case "Folder":
-                        try {
-                            Desktop.getDesktop().open(new File(creativeFolder));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (Desktop.isDesktopSupported()) {
+                            try {
+                                Desktop.getDesktop().open(new File(creativeFolder));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        StringSelection data = new StringSelection(creativeFolder);
+                        Clipboard cb = gc.getWindow().getTk().getSystemClipboard();
+                        cb.setContents(data, data);
+                        notifs.add(new Notification(settings.translate("Le chemin vers le dossier a été copié"), 3, 50, -1));
                         break;
                 }
 
@@ -183,6 +194,15 @@ public class CreativeMode extends View {
             }
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
+
+        //////////// NOTIFS UPDATE
+        for (int i = 0; i < notifs.size(); i++) {
+            notifs.get(i).update(dt);
+            if (notifs.get(i).isEnded()) {
+                notifs.remove(i--);
+            }
+        }
+        //////////// NOTIFS UPDATE
     }
 
     @Override
@@ -192,10 +212,10 @@ public class CreativeMode extends View {
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawCreaList(files, imgs, s.translate("Create your first map !"));
+        r.drawCreaList(files, imgs, settings.translate("Create your first map !"));
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
-        r.drawText(s.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);
+        r.drawText(settings.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);
         //Draw background & buttons
         r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, world, "wall");
         edit.setOffX(gc.getWidth() / 2 - edit.getWidth() - 5);
@@ -215,7 +235,9 @@ public class CreativeMode extends View {
 
         back.setOffX(folder.getOffX() + folder.getWidth() + 10);
         back.setOffY(rename.getOffY());
-        //Draw Buttons
-        for (Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
+        // Draw Buttons
+        for (Button btn : buttons) r.drawButton(btn, settings.translate(btn.getText()));
+        // Draw Notifs
+        for (Notification notif : notifs) notif.render(gc, r);
     }
 }

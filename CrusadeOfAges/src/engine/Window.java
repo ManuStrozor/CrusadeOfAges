@@ -1,12 +1,10 @@
 package engine;
 
 import java.awt.*;
-import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 
 public class Window {
@@ -88,6 +86,10 @@ public class Window {
 
     Canvas getCanvas() {
         return canvas;
+    }
+
+    public Toolkit getTk() {
+        return tk;
     }
 
     public void setDefaultCursor() {

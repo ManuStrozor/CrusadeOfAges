@@ -38,6 +38,8 @@ public class Notification {
         int b = ((color >> 24) & 255) - (int) (percent * ((color >> 24) & 255));
         int newColor = b << 24 | ((color >> 16) & 255) << 16 | ((color >> 8) & 255) << 8 | (color & 255);
 
+        int size = r.textSize(message, Font.STANDARD);
+        r.fillRect((offX == -1) ? gc.getWidth()/2-size/2 : 1, (int) offset-13, size, 13, r.darken(newColor, 250));
         r.drawText(message, (offX == -1) ? gc.getWidth()/2 : 1, (int) offset, (offX == -1) ? 0 : 1, -1, newColor, Font.STANDARD);
     }
 
