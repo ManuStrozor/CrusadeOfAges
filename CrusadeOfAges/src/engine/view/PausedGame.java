@@ -61,14 +61,22 @@ public class PausedGame extends View {
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(s.translate("Paused").toUpperCase(), null);
 
-        int startY = gc.getHeight() / 4;
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() / 4;
 
         for (Button btn : buttons) {
-            if (btn.getText().contains("Quit")) startY += 10;
-            btn.setOffX(gc.getWidth() / 2 - 85);
-            btn.setOffY(startY);
-            startY += btn.getHeight() + 5;
-            r.drawButton(btn, s.translate(btn.getText()));
+            switch (btn.getText()) {
+                case "Back to game":
+                    btn.setAlignCoor(x, y, 0, 1);
+                    break;
+                case "Stats":
+                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    break;
+                case "Quit to title":
+                    btn.setAlignCoor(x, y + 70, 0, 1);
+                    break;
+            }
+            r.drawButton(btn);
         }
     }
 }

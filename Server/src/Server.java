@@ -12,11 +12,12 @@ public class Server {
     private static final int MAX = 10;
 
     public static void main(String[] args) throws IOException {
+        String jar = Server.class.getResource("Server.class").toString();
+        String jarName = jar.split("!")[0].split("file:/")[1];
+        jar = jar.contains("jar:") ? jarName : "../out/artifacts/Server.jar";
+
         Console console = System.console();
         if(console == null && !GraphicsEnvironment.isHeadless()){
-            String jar;
-            if (System.getProperty("user.dir").contains("artifacts")) jar = "Server.jar";
-            else jar = "../out/artifacts/Server.jar";
             Runtime.getRuntime().exec(new String[]{"cmd","/c","start","cmd","/k","java -jar \"" + jar + "\""});
         }else{
             launch();

@@ -208,7 +208,7 @@ public class Editor extends AbstractGame {
             }
         }
 
-        r.drawWorld(world);
+        r.drawWorld(world, false);
         if (creaImg != null) r.drawMiniMap(creaImg, 100);
         r.drawDock(world, elems, scroll, toolSize);
         if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);

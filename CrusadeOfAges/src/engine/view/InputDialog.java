@@ -15,16 +15,14 @@ public class InputDialog extends View {
     public static String input, path;
     public static int blink;
 
-    private Settings s;
     private World world;
-    private Button cancel, rename;
+    private Button rename;
 
     private boolean once = false;
 
     public InputDialog(Settings s, World world) {
-        this.s = s;
         this.world = world;
-        buttons.add(cancel = new Button(80, 20, "Cancel", "creativeMode"));
+        buttons.add(new Button(80, 20, "Cancel", "creativeMode"));
         buttons.add(rename = new Button(80, 20, "Rename", "creativeMode"));
     }
 
@@ -108,18 +106,22 @@ public class InputDialog extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        int x = gc.getWidth() / 2 - GameManager.TS * 3;
-        int y = gc.getHeight() / 3 - GameManager.TS;
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() / 2;
 
-        r.fillAreaBloc(x, y, 6, 2, world, "wall");
-        r.drawInput(x + 6, y + 9, GameManager.TS * 6 - 12, GameManager.TS - 12, 0xff333333);
+        r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, world, "wall");
+        r.drawInput(x - 3*GameManager.TS + 6, y - GameManager.TS + 9, GameManager.TS * 6 - 12, GameManager.TS - 12, 0xff333333);
 
-        cancel.setOffX(gc.getWidth() / 2 - cancel.getWidth() - 5);
-        cancel.setOffY(gc.getHeight() / 3 + 5);
-
-        rename.setOffX(gc.getWidth() / 2 + 5);
-        rename.setOffY(cancel.getOffY());
-
-        for (Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
+        for (Button btn : buttons) {
+            switch (btn.getText()) {
+                case "Cancel":
+                    btn.setAlignCoor(x - 5, y + 5, -1, 1);
+                    break;
+                case "Rename":
+                    btn.setAlignCoor(x + 5, y + 5, 1, 1);
+                    break;
+            }
+            r.drawButton(btn);
+        }
     }
 }

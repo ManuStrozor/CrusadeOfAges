@@ -10,12 +10,11 @@ public class Stats extends View {
 
     private Settings s;
     private World world;
-    private Button back;
 
     public Stats(Settings s, World world) {
         this.s = s;
         this.world = world;
-        buttons.add(back = new Button(60, 20, "Back", "mainMenu"));
+        buttons.add(new Button(60, 20, "Back", "mainMenu"));
     }
 
     @Override
@@ -63,9 +62,9 @@ public class Stats extends View {
             r.drawText(" = " + gc.getPlayerStats().getValues()[i], gc.getWidth() / 2, gc.getHeight() / 4 + i * 15, 1, 1, -1, Font.STANDARD);
         }
 
-        back.setOffX(5);
-        back.setOffY(5);
-
-        for (Button btn : buttons) r.drawButton(btn, s.translate(btn.getText()));
+        for (Button btn : buttons) {
+            btn.setAlignCoor(5, 5, 1, 1);
+            r.drawButton(btn);
+        }
     }
 }

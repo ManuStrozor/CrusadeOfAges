@@ -36,7 +36,7 @@ public class CreativeMode extends View {
 
     private Settings settings;
     private World world;
-    private Button edit, rename, delete, create, folder, back;
+    private Button edit, rename, delete, folder;
     private String creativeFolder;
     private File[] files;
     private Image[] imgs;
@@ -50,9 +50,9 @@ public class CreativeMode extends View {
         buttons.add(edit = new engine.gfx.Button(170, 20, "Edit", "edit"));
         buttons.add(rename = new engine.gfx.Button(80, 20, "Rename", "inputDialog"));
         buttons.add(delete = new engine.gfx.Button(80, 20, "Delete", "creativeMode"));
-        buttons.add(create = new engine.gfx.Button(80, 20, "Create", "edit"));
-        buttons.add(folder = new engine.gfx.Button(80, 47, "Folder", "creativeMode"));
-        buttons.add(back = new engine.gfx.Button(80, 20, "Back", "mainMenu"));
+        buttons.add(folder = new engine.gfx.Button(80, 48, "Folder", "creativeMode"));
+        buttons.add(new engine.gfx.Button(80, 20, "Create", "edit"));
+        buttons.add(new engine.gfx.Button(80, 20, "Back", "mainMenu"));
 
         creativeFolder = Conf.SM_FOLDER + "/creative_mode";
     }
@@ -218,26 +218,34 @@ public class CreativeMode extends View {
         r.drawText(settings.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);
         //Draw background & buttons
         r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, world, "wall");
-        edit.setOffX(gc.getWidth() / 2 - edit.getWidth() - 5);
-        edit.setOffY(gc.getHeight() - 2 * GameManager.TS + 10);
 
-        create.setOffX(gc.getWidth() / 2 + 5 + create.getWidth() + 10);
-        create.setOffY(edit.getOffY());
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() - 2 * GameManager.TS + 8;
 
-        rename.setOffX(edit.getOffX());
-        rename.setOffY(gc.getHeight() - GameManager.TS + 5);
+        for (Button btn : buttons) {
+            switch (btn.getText()) {
+                case "Edit":
+                    btn.setAlignCoor(x - 5, y, -1, 1);
+                    break;
+                case "Rename":
+                    btn.setAlignCoor(x - delete.getWidth() - 15, gc.getHeight() - 8, -1, -1);
+                    break;
+                case "Delete":
+                    btn.setAlignCoor(x - 5, gc.getHeight() - 8, -1, -1);
+                    break;
+                case "Folder":
+                    btn.setAlignCoor(x + 5, y, 1, 1);
+                    break;
+                case "Create":
+                    btn.setAlignCoor(x + folder.getWidth() + 15, y, 1, 1);
+                    break;
+                case "Back":
+                    btn.setAlignCoor(x + folder.getWidth() + 15, gc.getHeight() - 8, 1, -1);
+                    break;
+            }
+            r.drawButton(btn);
+        }
 
-        delete.setOffX(rename.getOffX() + rename.getWidth() + 10);
-        delete.setOffY(rename.getOffY());
-
-        folder.setOffX(gc.getWidth() / 2 + 5);
-        folder.setOffY(create.getOffY());
-
-        back.setOffX(folder.getOffX() + folder.getWidth() + 10);
-        back.setOffY(rename.getOffY());
-        // Draw Buttons
-        for (Button btn : buttons) r.drawButton(btn, settings.translate(btn.getText()));
-        // Draw Notifs
         for (Notification notif : notifs) notif.render(gc, r);
     }
 }

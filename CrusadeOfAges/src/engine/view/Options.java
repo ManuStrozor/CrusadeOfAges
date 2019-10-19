@@ -98,19 +98,32 @@ public class Options extends View {
 
         if (gc.getPrevView().equals("mainMenu")) {
             r.drawBackground(world);
-            r.drawMenuTitle(gc.getTitle().toUpperCase(), s.translate("The Time Traveller"));
+            r.drawMenuTitle(s.translate("Options").toUpperCase(), null);
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         }
 
-        int startY = gc.getHeight() / 4;
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() / 4;
 
         for (Button btn : buttons) {
-            if (btn.getText().contains("Back")) startY += 5;
-            btn.setOffX(gc.getWidth() / 2 - 85);
-            btn.setOffY(startY);
-            startY += btn.getHeight() + 5;
-            r.drawButton(btn, s.translate(btn.getText()));
+            switch (btn.getText()) {
+                case "lang":
+                    btn.setAlignCoor(x, y, 0, 1);
+                    break;
+                case "FPS on":
+                case "FPS off":
+                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    break;
+                case "Darkness":
+                case "Full day":
+                    btn.setAlignCoor(x, y + 60, 0, 1);
+                    break;
+                case "Back":
+                    btn.setAlignCoor(x, y + 95, 0, 1);
+                    break;
+            }
+            r.drawButton(btn);
         }
     }
 

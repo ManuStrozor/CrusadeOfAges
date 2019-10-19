@@ -36,6 +36,20 @@ public class Button {
         this.offY = offY;
     }
 
+    public void setAlignCoor(int offX, int offY, int alignX, int alignY) {
+        if (alignX != 1) {
+            if (alignX == 0) offX -= width / 2;
+            else if (alignX == -1) offX -= width;
+        }
+
+        if (alignY != 1) {
+            if (alignY == 0) offY -= height / 2;
+            else if (alignY == -1) offY -= height;
+        }
+        this.offX = offX;
+        this.offY = offY;
+    }
+
     public int getWidth() {
         return width;
     }

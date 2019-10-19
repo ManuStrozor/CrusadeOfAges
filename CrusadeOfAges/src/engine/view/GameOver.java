@@ -64,13 +64,19 @@ public class GameOver extends View {
 
         r.drawMenuTitle(s.translate("GAME OVER"), s.translate("You are dead"));
 
-        int startY = gc.getHeight() / 4;
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() / 4;
 
         for (Button btn : buttons) {
-            btn.setOffX(gc.getWidth() / 2 - 85);
-            btn.setOffY(startY);
-            startY += btn.getHeight() + 5;
-            r.drawButton(btn, s.translate(btn.getText()));
+            switch (btn.getText()) {
+                case "Try again":
+                    btn.setAlignCoor(x, y, 0, 1);
+                    break;
+                case "Quit to title":
+                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    break;
+            }
+            r.drawButton(btn);
         }
     }
 }

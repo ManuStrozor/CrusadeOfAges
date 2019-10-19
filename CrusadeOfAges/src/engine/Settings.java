@@ -55,9 +55,10 @@ public class Settings {
 
     private void parseAllLangs(ArrayList<Map<String, String>> langs) throws IOException {
         Map<String, String> map;
-        String jar;
-        if (System.getProperty("user.dir").contains("artifacts")) jar = "CrusadeOfAges.jar";
-        else jar = "../out/artifacts/CrusadeOfAges.jar";
+        String jar = Settings.class.getResource("Settings.class").toString();
+        System.out.println(jar);
+        String jarName = jar.split("!")[0].split("file:/")[1];
+        jar = jar.contains("jar:") ? jarName : "../out/artifacts/Server.jar";
         for (String file : getJarContent(jar)) {
             if (file.contains("lang") && file.contains("txt")) {
                 populateLang(map = new HashMap<>(), file);

@@ -66,7 +66,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        r = new Renderer(this);
+        r = new Renderer(this, settings);
         input = new InputHandler(this);
 
         thread = new Thread(this);

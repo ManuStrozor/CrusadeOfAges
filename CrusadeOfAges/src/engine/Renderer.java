@@ -13,7 +13,6 @@ import engine.view.CreativeMode;
 import engine.view.GameSelection;
 import engine.view.InputDialog;
 
-import javax.imageio.IIOException;
 import java.awt.image.DataBufferInt;
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
 
+    private Settings settings;
     private Sprite objs, floor, water;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
@@ -34,7 +34,9 @@ public class Renderer {
     private boolean processing = false;
     private int ts = GameManager.TS;
 
-    public Renderer(GameContainer gc) {
+    public Renderer(GameContainer gc, Settings settings) {
+        this.settings = settings;
+
         // Sprites
         objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", ts, ts, true);
         floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", ts, ts, true);
@@ -346,13 +348,14 @@ public class Renderer {
         }
     }
 
-    public void drawButton(Button b, String text) {
+    public void drawButton(Button b) {
+
         int col = b.isHover() ? darken(b.getBgColor(), 20) : b.getBgColor();
         //Border-out
         drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xff333333);
         //background & text
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, b.getWidth() - 2, b.getHeight() - 2, col);
-        drawText(text, b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, lighten(col, 100), Font.STANDARD);
+        drawText(settings.translate(b.getText()), b.getOffX() + b.getWidth() / 2, b.getOffY() + b.getHeight() / 2, 0, 0, lighten(col, 100), Font.STANDARD);
         //Border-in lighter
         fillRect(b.getOffX() + camX + 1, b.getOffY() + camY + 1, 1, b.getHeight() - 2, lighten(col, 40));
         fillRect(b.getOffX() + camX + 2, b.getOffY() + camY + 1, b.getWidth() - 4, 1, lighten(col, 40));
@@ -394,7 +397,7 @@ public class Renderer {
         drawText("x" + obj.getKeys(), x + ts * 5 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawWorld(World world) {
+    public void drawWorld(World world, boolean gameMode) {
 
         int offX = Math.max(camX/ts, 0);
         int offY = Math.max(camY/ts, 0);
@@ -413,6 +416,9 @@ public class Renderer {
 
                 // Affichage des blocs
                 switch (world.getBlocMap(x, y).getTag()) {
+                    case "free":
+                        if (!gameMode) drawSprite(objs, x * ts, y * ts, tileX, tileY, ts);
+                        break;
                     case "floor":
                         drawSprite(floor, x * ts, y * ts, getTileX(world, x, y), getTileY(world, x, y), ts);
                         break;

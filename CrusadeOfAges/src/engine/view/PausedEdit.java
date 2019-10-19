@@ -18,10 +18,8 @@ public class PausedEdit extends View {
         s = settings;
 
         buttons.add(new Button("Back", "edit"));
-
         buttons.add(new Button("Try", "edit"));
         buttons.add(new Button("Blank", "pausedEdit"));
-
         buttons.add(new Button("Save", "pausedEdit"));
         buttons.add(new Button("Quit", "creativeMode"));
     }
@@ -86,13 +84,28 @@ public class PausedEdit extends View {
 
         r.fillRect(r.getCamX(), r.getCamY(), gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        int startY = gc.getHeight() / 4;
+        int x = gc.getWidth() / 2;
+        int y = gc.getHeight() / 4;
 
         for (Button btn : buttons) {
-            btn.setOffX(gc.getWidth() / 2 - 85);
-            btn.setOffY(startY);
-            startY += btn.getHeight() + 5;
-            r.drawButton(btn, s.translate(btn.getText()));
+            switch (btn.getText()) {
+                case "Back":
+                    btn.setAlignCoor(x, y, 0, 1);
+                    break;
+                case "Try":
+                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    break;
+                case "Blank":
+                    btn.setAlignCoor(x, y + 60, 0, 1);
+                    break;
+                case "Save":
+                    btn.setAlignCoor(x, y + 90, 0, 1);
+                    break;
+                case "Quit":
+                    btn.setAlignCoor(x, y + 120, 0, 1);
+                    break;
+            }
+            r.drawButton(btn);
         }
     }
 }
