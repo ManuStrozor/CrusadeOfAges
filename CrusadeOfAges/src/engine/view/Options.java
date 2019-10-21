@@ -1,6 +1,8 @@
 package engine.view;
 
 import engine.*;
+import engine.gfx.Checkbox;
+import engine.gfx.Font;
 import game.Conf;
 import engine.gfx.Button;
 
@@ -20,9 +22,10 @@ public class Options extends View {
     public Options(Settings s, World world) {
         this.s = s;
         this.world = world;
-        buttons.add(new Button("lang", null));
-        buttons.add(new Button(s.isShowFps() ? "FPS on" : "FPS off", null));
-        buttons.add(new Button(s.isShowLights() ? "Darkness" : "Full day", null));
+        buttons.add(new Button(20, 20, "<", null));
+        buttons.add(new Button(20, 20, ">", null));
+        checkboxes.add(new Checkbox("fps", s.isShowFps()));
+        checkboxes.add(new Checkbox("light", s.isShowLights()));
         buttons.add(new Button("Back", "mainMenu"));
     }
 
@@ -41,7 +44,14 @@ public class Options extends View {
             if (isSelected(gc, btn)) {
                 gc.getClickSound().play();
                 switch (btn.getText()) {
-                    case "lang":
+                    case "<":
+                        if (s.getIFlag(s.getFlag()) > 0) {
+                            s.setFlag(s.getFIndex(s.getIFlag(s.getFlag()) - 1));
+                        } else {
+                            s.setFlag(s.getFIndex(s.getLangs().size() - 1));
+                        }
+                        break;
+                    case ">":
                         if (s.getIFlag(s.getFlag()) < s.getLangs().size() - 1) {
                             s.setFlag(s.getFIndex(s.getIFlag(s.getFlag()) + 1));
                         } else {
@@ -51,24 +61,6 @@ public class Options extends View {
                     case "Back":
                         saveSettings();
                         gc.setActiView(gc.getPrevView());
-                        break;
-                    case "FPS on":
-                    case "FPS off":
-                        s.setShowFps(!s.isShowFps());
-                        if (s.isShowFps()) {
-                            btn.setText("FPS on");
-                        } else {
-                            btn.setText("FPS off");
-                        }
-                        break;
-                    case "Darkness":
-                    case "Full day":
-                        s.setShowLights(!s.isShowLights());
-                        if (s.isShowLights()) {
-                            btn.setText("Darkness");
-                        } else {
-                            btn.setText("Full day");
-                        }
                         break;
                 }
             }
@@ -89,6 +81,25 @@ public class Options extends View {
                 cursorHand = true;
             }
         }
+
+        for (Checkbox chk : checkboxes) {
+
+            // Checkbox Selection
+            if (isSelected(gc, chk)) {
+                ////// Sound Checkbox //////
+                switch (chk.getTag()) {
+                    case "fps":
+                        s.setShowFps(!s.isShowFps());
+                        chk.setChecked(s.isShowFps());
+                        break;
+                    case "light":
+                        s.setShowLights(!s.isShowLights());
+                        chk.setChecked(s.isShowLights());
+                        break;
+                }
+            }
+        }
+
         if (!cursorHand) gc.getWindow().setDefaultCursor();
 
     }
@@ -106,24 +117,35 @@ public class Options extends View {
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 4;
 
+        r.drawText(s.translate("lang"), x, y + 5, 0, 1, -1, Font.STANDARD);
+        r.drawText(s.translate("Show the FPS"), x - 55, y + 35, 1, 1, -1, Font.STANDARD);
+        r.drawText(s.translate("Activate the light"), x - 55, y + 60, 1, 1, -1, Font.STANDARD);
+
         for (Button btn : buttons) {
             switch (btn.getText()) {
-                case "lang":
-                    btn.setAlignCoor(x, y, 0, 1);
+                case "<":
+                    btn.setAlignCoor(x - 40, y, -1, 1);
                     break;
-                case "FPS on":
-                case "FPS off":
-                    btn.setAlignCoor(x, y + 30, 0, 1);
-                    break;
-                case "Darkness":
-                case "Full day":
-                    btn.setAlignCoor(x, y + 60, 0, 1);
+                case ">":
+                    btn.setAlignCoor(x + 40, y, 1, 1);
                     break;
                 case "Back":
-                    btn.setAlignCoor(x, y + 95, 0, 1);
+                    btn.setAlignCoor(x, y + 85, 0, 1);
                     break;
             }
             r.drawButton(btn);
+        }
+
+        for (Checkbox chk : checkboxes) {
+            switch (chk.getTag()) {
+                case "fps":
+                    chk.setAlignCoor(x - 65, y + 30, -1, 1);
+                    break;
+                case "light":
+                    chk.setAlignCoor(x - 65, y + 55, -1, 1);
+                    break;
+            }
+            r.drawCheckbox(chk);
         }
     }
 

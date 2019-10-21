@@ -13,9 +13,11 @@ public class Server {
 
     public static void main(String[] args) throws IOException {
         String jar = Server.class.getResource("Server.class").toString();
-        String jarName = jar.split("!")[0].split("file:/")[1];
-        jar = jar.contains("jar:") ? jarName : "../out/artifacts/Server.jar";
-
+        if (jar.contains("jar:")) {
+            jar = jar.split("!")[0].split("file:/")[1];
+        } else {
+            jar = "../out/artifacts/Server.jar";
+        }
         Console console = System.console();
         if(console == null && !GraphicsEnvironment.isHeadless()){
             Runtime.getRuntime().exec(new String[]{"cmd","/c","start","cmd","/k","java -jar \"" + jar + "\""});

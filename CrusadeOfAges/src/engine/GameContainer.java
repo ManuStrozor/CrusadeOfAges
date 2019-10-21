@@ -21,6 +21,7 @@ public class GameContainer implements Runnable {
     private Renderer r;
     private GameManager gm;
     private InputHandler input;
+    private World world;
     private Settings settings;
     private PlayerStats playerStats;
     private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
@@ -37,18 +38,22 @@ public class GameContainer implements Runnable {
     private static final String FACTORY = "Strozor Inc.";
 
     public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
-
+        this.world = world;
         this.game = game;
         gm = (GameManager) game;
         this.settings = settings;
         this.playerStats = playerStats;
         editor = new Editor(settings, world);
+        Confirm confirmView = new Confirm();
+
+        v.put("confirmExit", confirmView);
+
         v.put("creativeMode", new CreativeMode(settings, world));
         v.put("credits", new Credits(settings, world));
         v.put("gameOver", new GameOver(settings));
         v.put("gameSelection", new GameSelection(settings, world, game));
         v.put("inputDialog", new InputDialog(settings, world));
-        v.put("mainMenu", new MainMenu(settings, world));
+        v.put("mainMenu", new MainMenu(settings, world, (Confirm) v.get("confirmExit")));
         v.put("options", new Options(settings, world));
         v.put("pausedEdit", new PausedEdit(settings));
         v.put("pausedGame", new PausedGame(settings));
@@ -66,7 +71,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        r = new Renderer(this, settings);
+        r = new Renderer(this, world, settings);
         input = new InputHandler(this);
 
         thread = new Thread(this);
@@ -172,6 +177,10 @@ public class GameContainer implements Runnable {
                 case "inputDialog":
                     v.get("creativeMode").render(this, r);
                     v.get("inputDialog").render(this, r);
+                    break;
+                case "confirmExit":
+                    v.get("mainMenu").render(this, r);
+                    v.get("confirmExit").render(this, r);
                     break;
                 case "exit":
                     break;

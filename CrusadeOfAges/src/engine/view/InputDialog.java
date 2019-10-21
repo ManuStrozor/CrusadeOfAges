@@ -104,20 +104,21 @@ public class InputDialog extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
+        r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0xcc000000);
 
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 2;
 
-        r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, world, "wall");
+        r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, "wall");
+        r.drawRect(x - 3*GameManager.TS, y - GameManager.TS, 6*GameManager.TS, 2*GameManager.TS, 0xffababab);
         r.drawInput(x - 3*GameManager.TS + 6, y - GameManager.TS + 9, GameManager.TS * 6 - 12, GameManager.TS - 12, 0xff333333);
 
         for (Button btn : buttons) {
             switch (btn.getText()) {
-                case "Cancel":
+                case "Rename":
                     btn.setAlignCoor(x - 5, y + 5, -1, 1);
                     break;
-                case "Rename":
+                case "Cancel":
                     btn.setAlignCoor(x + 5, y + 5, 1, 1);
                     break;
             }

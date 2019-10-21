@@ -73,7 +73,7 @@ public class GameSelection extends View {
         for (Button btn : buttons) {
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (isHover(gc, btn) && !(btn == play && !focus)) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -94,13 +94,15 @@ public class GameSelection extends View {
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
+            if (!(btn == play && !focus)) {
+                if (btn.setHover(isHover(gc, btn))) {
+                    if (!btn.isHoverSounded()) {
+                        if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
+                        btn.setHoverSounded(true);
+                    }
+                } else {
+                    btn.setHoverSounded(false);
                 }
-            } else {
-                btn.setHoverSounded(false);
             }
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
@@ -115,21 +117,21 @@ public class GameSelection extends View {
         if (sMax <= 0) scroll = 0;
         r.drawLevels(GameManager.levels, gc.getPlayerStats());
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, world, "wall");
+        r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, "wall");
         r.drawText(s.translate("Choose a level"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, world, "wall");
+        r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, "wall");
 
         int x = gc.getWidth() / 2;
-        int y = gc.getHeight() - 2 * GameManager.TS + 10;
+        int y = gc.getHeight() - 2 * GameManager.TS;
 
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "Play":
-                    btn.setAlignCoor(x, y, 0, 1);
+                    btn.setAlignCoor(x, y + 10, 0, 1);
                     break;
                 case "Back":
-                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    btn.setAlignCoor(x, gc.getHeight() - 10, 0, -1);
                     break;
             }
             r.drawButton(btn);

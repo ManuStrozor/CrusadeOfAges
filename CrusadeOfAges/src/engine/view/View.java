@@ -3,6 +3,7 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.gfx.Button;
+import engine.gfx.Checkbox;
 import engine.gfx.Image;
 import game.GameManager;
 
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 public abstract class View {
 
     protected ArrayList<Button> buttons = new ArrayList<>();
+    protected ArrayList<Checkbox> checkboxes = new ArrayList<>();
 
     public abstract void update(GameContainer gc, float dt);
 
@@ -22,11 +24,22 @@ public abstract class View {
         return isHover(gc, b) && gc.getInput().isButtonUp(MouseEvent.BUTTON1);
     }
 
+    protected boolean isSelected(GameContainer gc, Checkbox c) {
+        return isHover(gc, c) && gc.getInput().isButtonUp(MouseEvent.BUTTON1);
+    }
+
     protected boolean isHover(GameContainer gc, Button b) {
         return gc.getInput().getMouseX() > b.getOffX() &&
                 gc.getInput().getMouseX() < b.getOffX() + b.getWidth() &&
                 gc.getInput().getMouseY() > b.getOffY() &&
                 gc.getInput().getMouseY() < b.getOffY() + b.getHeight();
+    }
+
+    protected boolean isHover(GameContainer gc, Checkbox c) {
+        return gc.getInput().getMouseX() > c.getOffX() &&
+                gc.getInput().getMouseX() < c.getOffX() + c.getWidth() &&
+                gc.getInput().getMouseY() > c.getOffY() &&
+                gc.getInput().getMouseY() < c.getOffY() + c.getHeight();
     }
 
     protected boolean fileSelected(GameContainer gc, int index, int scroll) {

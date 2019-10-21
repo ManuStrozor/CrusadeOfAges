@@ -1,11 +1,6 @@
 package engine;
 
-import engine.gfx.Button;
-import engine.gfx.Font;
-import engine.gfx.Image;
-import engine.gfx.ImageRequest;
-import engine.gfx.Sprite;
-import engine.gfx.Light;
+import engine.gfx.*;
 import game.Conf;
 import game.GameManager;
 import game.objects.GameObject;
@@ -24,6 +19,7 @@ public class Renderer {
     private static final int AMBIENTCOLOR = 0xff020202;
 
     private Settings settings;
+    private World world;
     private Sprite objs, floor, water;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
@@ -34,9 +30,9 @@ public class Renderer {
     private boolean processing = false;
     private int ts = GameManager.TS;
 
-    public Renderer(GameContainer gc, Settings settings) {
+    public Renderer(GameContainer gc, World world, Settings settings) {
+        this.world = world;
         this.settings = settings;
-
         // Sprites
         objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", ts, ts, true);
         floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", ts, ts, true);
@@ -252,7 +248,7 @@ public class Renderer {
         }
     }
 
-    private void drawRect(int x, int y, int w, int h, int col) {
+    public void drawRect(int x, int y, int w, int h, int col) {
 
         x -= camX;
         y -= camY;
@@ -362,6 +358,26 @@ public class Renderer {
         //Border-in darker
         fillRect(b.getOffX() + camX + b.getWidth() - 2, b.getOffY() + camY + 1, 1, b.getHeight() - 2, darken(col, 40));
         fillRect(b.getOffX() + camX + 2, b.getOffY() + camY + b.getHeight() - 2, b.getWidth() - 4, 1, darken(col, 40));
+    }
+
+    public void drawCheckbox(Checkbox c) {
+
+        int col = c.getBgColor();
+        //Border-out
+        drawRect(c.getOffX() + camX, c.getOffY() + camY, c.getWidth(), c.getHeight(), 0xff333333);
+        //background & text
+        fillRect(c.getOffX() + camX + 1, c.getOffY() + camY + 1, c.getWidth() - 2, c.getHeight() - 2, col);
+
+        if (c.isChecked()) {
+            drawText("X", c.getOffX() + c.getWidth() / 2, c.getOffY() + c.getHeight() / 2, 0, 0, -1, Font.STANDARD);
+        }
+
+        //Border-in lighter
+        fillRect(c.getOffX() + camX + 1, c.getOffY() + camY + 1, 1, c.getHeight() - 2, lighten(col, 40));
+        fillRect(c.getOffX() + camX + 2, c.getOffY() + camY + 1, c.getWidth() - 4, 1, lighten(col, 40));
+        //Border-in darker
+        fillRect(c.getOffX() + camX + c.getWidth() - 2, c.getOffY() + camY + 1, 1, c.getHeight() - 2, darken(col, 40));
+        fillRect(c.getOffX() + camX + 2, c.getOffY() + camY + c.getHeight() - 2, c.getWidth() - 4, 1, darken(col, 40));
     }
 
     public void drawInput(int x, int y, int w, int h, int color) {
@@ -654,7 +670,7 @@ public class Renderer {
         }
     }
 
-    public void fillAreaBloc(int nX, int nY, int nW, int nH, World world, String tag) {
+    public void fillAreaBloc(int nX, int nY, int nW, int nH, String tag) {
         for (int y = 0; y < nH; y++) {
             for (int x = 0; x < nW; x++) {
                 drawBloc(world, tag, nX + x * ts, nY + y * ts, ts);

@@ -12,16 +12,19 @@ public class MainMenu extends View {
     private Settings settings;
     private World world;
 
-    public MainMenu(Settings settings, World world) {
+    public MainMenu(Settings settings, World world, Confirm confirm) {
         this.settings = settings;
         this.world = world;
 
         buttons.add(new Button("Single player", "gameSelection"));
+        buttons.add(new Button("Multiplayer", "mainMenu"));
         buttons.add(new Button("Stats", "stats"));
-        buttons.add(new Button("Creative mode", "creativeMode"));
+        buttons.add(new Button("Editor", "creativeMode"));
         buttons.add(new Button("Game credits", "credits"));
         buttons.add(new Button(80, 20, "Options", "options"));
-        buttons.add(new Button(80, 20, "Quit game", "exit"));
+        confirm.setMessage("Quit game ?");
+        confirm.setButton(new Button(80, 20, "Quit game", "exit"));
+        buttons.add(new Button(80, 20, "Quit game", "confirmExit"));
     }
 
     @Override
@@ -67,20 +70,23 @@ public class MainMenu extends View {
                 case "Single player":
                     btn.setAlignCoor(x, y, 0, 1);
                     break;
-                case "Stats":
-                    btn.setAlignCoor(x, y + 30, 0, 1);
+                case "Multiplayer":
+                    btn.setAlignCoor(x, y + 25, 0, 1);
                     break;
-                case "Creative mode":
-                    btn.setAlignCoor(x, y + 60, 0, 1);
+                case "Editor":
+                    btn.setAlignCoor(x, y + 55, 0, 1);
+                    break;
+                case "Stats":
+                    btn.setAlignCoor(x, y + 85, 0, 1);
                     break;
                 case "Game credits":
-                    btn.setAlignCoor(x, y + 90, 0, 1);
+                    btn.setAlignCoor(x, y + 110, 0, 1);
                     break;
                 case "Options":
-                    btn.setAlignCoor(x - 5, y + 120, -1, 1);
+                    btn.setAlignCoor(x - 5, y + 135, -1, 1);
                     break;
                 case "Quit game":
-                    btn.setAlignCoor(x + 5, y + 120, 1, 1);
+                    btn.setAlignCoor(x + 5, y + 135, 1, 1);
                     break;
             }
             r.drawButton(btn);
