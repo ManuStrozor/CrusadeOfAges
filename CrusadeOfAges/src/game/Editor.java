@@ -9,6 +9,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,8 +19,8 @@ import java.util.Date;
 
 public class Editor extends AbstractGame {
 
-    public static Image creaImg;
-    public static World world;
+    public static File mapFile;
+    public static TileMap tileMap;
     private static boolean spawn = false;
     public static boolean once = true, newOne = true;
     public static String rename = "";
@@ -44,7 +47,7 @@ public class Editor extends AbstractGame {
             "torch",
             "door"
     };
-    private int color, scroll = 0;
+    private int tileCode, scroll = 0;
 
     public static int ts = GameManager.TS;
     private int toolSize = 32;
@@ -54,10 +57,10 @@ public class Editor extends AbstractGame {
 
     private ArrayList<Notification> notifs = new ArrayList<>();
 
-    public Editor(Settings settings, World world) {
+    public Editor(Settings settings, TileMap tileMap) {
         this.settings = settings;
-        Editor.world = world;
-        player = new Player("Tester", world, 999);
+        Editor.tileMap = tileMap;
+        player = new Player("Tester", tileMap, 999);
     }
 
     @Override
@@ -66,10 +69,19 @@ public class Editor extends AbstractGame {
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView("pausedEdit");
 
         if (once) {
-            if (newOne) creaImg = new Image(new int[60 * 30], 60, 30);
-            world.init(creaImg);
-            width = creaImg.getW();
-            height = creaImg.getH();
+            if (newOne) {
+                try {
+                    DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss");
+                    String filename = sdf.format(new Date()) + ".map";
+                    Path path = Paths.get(Conf.SM_FOLDER + "/creative_mode/" + filename);
+                    Files.createFile(path);
+                    tileMap.init(new File(String.valueOf(path)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            width = tileMap.getWidth();
+            height = tileMap.getHeight();
             once = false;
         }
 
@@ -120,12 +132,12 @@ public class Editor extends AbstractGame {
 
         /////////// SAUVEGARDE
         if (isCtrlDown(gc) && gc.getInput().isKeyUp(KeyEvent.VK_S)) {
-            creaImg.save(rename);
-            notifs.add(new Notification(rename + settings.translate(" a été sauvegardé avec succès")));
+            tileMap.export(rename);
+            notifs.add(new Notification(rename + settings.translate(" a été exporté avec succès")));
         }
         /////////// SAUVEGARDE
 
-        color = world.getBloc(elems[scroll]).getCode();
+        tileCode = tileMap.getTile(elems[scroll]).getCode();
 
         ////////////// SCREENSHOT
         if(gc.getInput().isKeyDown(KeyEvent.VK_F12)) {
@@ -190,11 +202,11 @@ public class Editor extends AbstractGame {
                     stopDragging(gc);
                 }
 
-                if (!world.getBloc(elems[scroll]).isTagged("free")) {
+                if (!tileMap.getTile(elems[scroll]).isTagged("free")) {
 
                     ////////////// PLACEMENT + EFFACEMENT
                     if (gc.getInput().isButton(MouseEvent.BUTTON1)) {
-                        putSomething(color, mouseMapX, mouseMapY);
+                        putSomething(tileCode, mouseMapX, mouseMapY);
                     } else if (gc.getInput().isButton(MouseEvent.BUTTON3)) {
                         delSomething(gc, mouseMapX, mouseMapY);
                     } else {
@@ -208,10 +220,9 @@ public class Editor extends AbstractGame {
             }
         }
 
-        r.drawWorld(world, false);
-        if (creaImg != null) r.drawMiniMap(creaImg, 100);
-        r.drawDock(world, elems, scroll, toolSize);
-        if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);
+        r.drawWorld(tileMap, false);
+        r.drawDock(tileMap, elems, scroll, toolSize);
+        if (mapFile != null) r.drawArrows(tileMap, tileMap.getWidth(), tileMap.getHeight(), 32);
 
         if (spawn && spawnExists()) player.render(gc, r);
 
@@ -233,25 +244,21 @@ public class Editor extends AbstractGame {
         }
     }
 
-    private void putSomething(int color, int x, int y) {
+    private void putSomething(int tileCode, int x, int y) {
         if (elems[scroll].equals("spawn") && spawnExists()) {
-            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0); // Delete previous spawn
-            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-            player.getEvent().respawn(world.getSpawnX(), world.getSpawnY()); // Reset player position
+            tileMap.setTile(tileMap.getSpawnX(), tileMap.getSpawnY(), 0);
+            player.getEvent().respawn(tileMap.getSpawnX(), tileMap.getSpawnY()); // Reset player position
         }
-        creaImg.setP(x, y, color);
-        world.setBloc(x, y, color);
+        tileMap.setTile(x, y, tileCode);
     }
 
     private void delSomething(GameContainer gc, int x, int y) {
         gc.getWindow().setRubberCursor();
-        if (x == world.getSpawnX() && y == world.getSpawnY()) {
-            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0); // Delete spawn
-            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-            world.resetSpawn();
+        if (x == tileMap.getSpawnX() && y == tileMap.getSpawnY()) {
+            tileMap.setTile(tileMap.getSpawnX(), tileMap.getSpawnY(), 0);
+            tileMap.resetSpawn();
         }
-        creaImg.setP(x, y, 0);
-        world.setBloc(x, y, 0);
+        tileMap.setTile(x, y, 0);
     }
 
     public static void setSpawn(boolean spawn) {
@@ -259,7 +266,7 @@ public class Editor extends AbstractGame {
     }
 
     private boolean spawnExists() {
-        return world.getSpawnX() != -1 && world.getSpawnY() != -1;
+        return tileMap.getSpawnX() != -1 && tileMap.getSpawnY() != -1;
     }
 
     private boolean isDragging() {

@@ -22,13 +22,13 @@ public class GameSelection extends View {
     }
 
     private Settings s;
-    private World world;
+    private TileMap tileMap;
     private GameManager gameManager;
     private Button play, back;
 
-    public GameSelection(Settings s, World world, AbstractGame game) {
+    public GameSelection(Settings s, TileMap tileMap, AbstractGame game) {
         this.s = s;
-        this.world = world;
+        this.tileMap = tileMap;
         this.gameManager = (GameManager) game;
         buttons.add(play = new Button(170, 20, "Play", "game"));
         buttons.add(back = new Button(170, 20, "Back", "mainMenu"));
@@ -85,7 +85,7 @@ public class GameSelection extends View {
                 if (btn == back) focus = false;
                 if (btn == play) {
                     GameManager.current = fIndex;
-                    gameManager.load(GameManager.levels[fIndex][0]);
+                    //gameManager.load(GameManager.levels[fIndex][0]);
                     gc.getWindow().setBlankCursor();
                 }
                 gc.getClickSound().play();
@@ -111,7 +111,7 @@ public class GameSelection extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(world);
+        r.drawBackground(tileMap);
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;

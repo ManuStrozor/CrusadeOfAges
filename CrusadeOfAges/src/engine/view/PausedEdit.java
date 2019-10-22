@@ -45,15 +45,14 @@ public class PausedEdit extends View {
                         gc.getWindow().setDefaultCursor();
                         break;
                     case "Save":
-                        Editor.creaImg.save(Editor.rename);
+                        Editor.tileMap.export(Editor.rename);
                         break;
                     case "Try":
                         Editor.setSpawn(true);
                         gc.getWindow().setDefaultCursor();
                         break;
                     case "Blank":
-                        Editor.creaImg.blank();
-                        Editor.world.blank();
+                        Editor.tileMap.blank();
                         break;
                     case "Quit":
                         Editor.setSpawn(false);

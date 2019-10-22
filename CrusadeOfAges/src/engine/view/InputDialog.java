@@ -15,13 +15,13 @@ public class InputDialog extends View {
     public static String input, path;
     public static int blink;
 
-    private World world;
+    private TileMap tileMap;
     private Button rename;
 
     private boolean once = false;
 
-    public InputDialog(Settings s, World world) {
-        this.world = world;
+    public InputDialog(Settings s, TileMap tileMap) {
+        this.tileMap = tileMap;
         buttons.add(new Button(80, 20, "Cancel", "creativeMode"));
         buttons.add(rename = new Button(80, 20, "Rename", "creativeMode"));
     }

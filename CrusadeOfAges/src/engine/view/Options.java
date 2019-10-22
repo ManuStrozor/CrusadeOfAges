@@ -17,11 +17,11 @@ import java.util.List;
 public class Options extends View {
 
     private Settings s;
-    private World world;
+    private TileMap tileMap;
 
-    public Options(Settings s, World world) {
+    public Options(Settings s, TileMap tileMap) {
         this.s = s;
-        this.world = world;
+        this.tileMap = tileMap;
         buttons.add(new Button(20, 20, "<", null));
         buttons.add(new Button(20, 20, ">", null));
         checkboxes.add(new Checkbox("fps", s.isShowFps()));
@@ -108,7 +108,7 @@ public class Options extends View {
     public void render(GameContainer gc, Renderer r) {
 
         if (gc.getPrevView().equals("mainMenu")) {
-            r.drawBackground(world);
+            r.drawBackground(tileMap);
             r.drawMenuTitle(s.translate("Options").toUpperCase(), null);
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);

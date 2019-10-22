@@ -28,11 +28,11 @@ public class GameManager extends AbstractGame {
     private ArrayList<GameObject> objects = new ArrayList<>();;
     private ArrayList<Notification> notifs = new ArrayList<>();
     private Camera camera;
-    private World world;
+    private TileMap tileMap;
 
-    public GameManager(Socket socket, World world) throws IOException {
+    public GameManager(Socket socket, TileMap tileMap) throws IOException {
         this.socket = socket;
-        this.world = world;
+        this.tileMap = tileMap;
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
     }
@@ -45,7 +45,7 @@ public class GameManager extends AbstractGame {
                 data = dis.readUTF();
                 if (data.contains(":") && Integer.parseInt(data.split(":")[0]) != socket.getLocalPort()) {
                     if (getObject(data.split(":")[0]) == null) {
-                        objects.add(new NetworkPlayer(data.split(":")[0], world, 1));
+                        objects.add(new NetworkPlayer(data.split(":")[0], tileMap, 1));
                     } else {
                         getObject(data.split(":")[0]).setPosX(Float.parseFloat(data.split(":")[1]));
                         getObject(data.split(":")[0]).setPosY(Float.parseFloat(data.split(":")[2]));
@@ -91,7 +91,11 @@ public class GameManager extends AbstractGame {
 
         // Load level
         if(getObject(""+socket.getLocalPort()) == null && (gc.getPrevView().equals("gameOver") || gc.getPrevView().equals("mainMenu"))) {
-            load(levels[current][0]);
+            try {
+                load(levels[current][0]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         camera.update(gc, this, dt);
@@ -100,8 +104,8 @@ public class GameManager extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
         camera.render(r);
-        r.drawWorld(world, true);
-        if(gc.getSettings().isShowLights()) r.drawWorldLights(world, new Light(30, 0xffffff99));
+        r.drawWorld(tileMap, true);
+        if(gc.getSettings().isShowLights()) r.drawWorldLights(tileMap, new Light(30, 0xffffff99));
         for(GameObject obj : objects) obj.render(gc, r);
         for(Notification notif : notifs) notif.render(gc, r);
     }
@@ -110,11 +114,11 @@ public class GameManager extends AbstractGame {
      * Loads a game level
      * @param path of the level image
      */
-    public void load(String path) {
-        world.init(new Image(path, false));
+    public void load(String path) throws IOException {
+        tileMap.init(new File(path));
         objects.clear();
-        objects.add(new Player(""+socket.getLocalPort(), world, 1));
-        camera = new Camera(""+socket.getLocalPort(), world);
+        objects.add(new Player(""+socket.getLocalPort(), tileMap, 1));
+        camera = new Camera(""+socket.getLocalPort(), tileMap);
     }
 
     /**

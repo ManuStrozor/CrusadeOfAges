@@ -1,7 +1,7 @@
 package engine.view;
 
 import engine.GameContainer;
-import engine.World;
+import engine.TileMap;
 import engine.Renderer;
 import engine.Settings;
 import engine.gfx.Button;
@@ -10,11 +10,11 @@ import engine.gfx.Button;
 public class MainMenu extends View {
 
     private Settings settings;
-    private World world;
+    private TileMap tileMap;
 
-    public MainMenu(Settings settings, World world, Confirm confirm) {
+    public MainMenu(Settings settings, TileMap tileMap, Confirm confirm) {
         this.settings = settings;
-        this.world = world;
+        this.tileMap = tileMap;
 
         buttons.add(new Button("Single player", "gameSelection"));
         buttons.add(new Button("Multiplayer", "mainMenu"));
@@ -59,7 +59,7 @@ public class MainMenu extends View {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawBackground(world);
+        r.drawBackground(tileMap);
         r.drawMenuTitle(gc.getTitle().substring(0, gc.getTitle().length() - 6).toUpperCase(), settings.translate("The Time Traveller"));
 
         int x = gc.getWidth() / 2;

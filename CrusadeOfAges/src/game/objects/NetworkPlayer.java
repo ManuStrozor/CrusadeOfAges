@@ -2,7 +2,7 @@ package game.objects;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.World;
+import engine.TileMap;
 import engine.gfx.Font;
 import engine.gfx.Light;
 import engine.gfx.Sprite;
@@ -14,7 +14,7 @@ public class NetworkPlayer extends GameObject {
 
     private Move move;
 
-    private World world;
+    private TileMap tileMap;
     private Sprite plSprite;
 
     private int tileX, tileY, direction = 0;
@@ -26,20 +26,20 @@ public class NetworkPlayer extends GameObject {
 
     public static int tileSize = GameManager.TS;
 
-    public NetworkPlayer(String tag, World world, int lives) {
+    public NetworkPlayer(String tag, TileMap tileMap, int lives) {
         String path = Conf.APPDATA + "/assets/player.png";
         plSprite = new Sprite(path, tileSize, tileSize, true);
 
-        this.world = world;
+        this.tileMap = tileMap;
         this.tag = tag;
         this.lives = lives;
 
-        move = new Move(this, world);
+        move = new Move(this, tileMap);
 
         width = tileSize;
         height = tileSize;
-        tileX = world.getSpawnX();
-        tileY = world.getSpawnY();
+        tileX = tileMap.getSpawnX();
+        tileY = tileMap.getSpawnY();
         posX = tileX * tileSize;
         posY = tileY * tileSize;
         upPosX = posX;

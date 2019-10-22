@@ -26,7 +26,7 @@ public class Launcher {
         manageArgs(args);
 
         Settings settings = new Settings();
-        World world = new World();
+        TileMap tileMap = new TileMap();
         try {
             Conf conf = new Conf(appdata);
             conf.initiate();
@@ -37,9 +37,9 @@ public class Launcher {
 
         try {
             Socket socket = new Socket(host, port);
-            GameManager gm = new GameManager(socket, world);
+            GameManager gm = new GameManager(socket, tileMap);
             PlayerStats ps = new PlayerStats();
-            GameContainer gc = new GameContainer(gm, settings, world, ps);
+            GameContainer gc = new GameContainer(gm, settings, tileMap, ps);
             gc.setTitle(GAMENAME + " " + VERSION);
             gc.setScale(settings.getScale());
             gc.start();

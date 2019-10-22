@@ -3,7 +3,7 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
-import engine.World;
+import engine.TileMap;
 import engine.gfx.Button;
 import engine.gfx.Image;
 import game.Conf;
@@ -35,17 +35,16 @@ public class CreativeMode extends View {
     }
 
     private Settings settings;
-    private World world;
+    private TileMap tileMap;
     private Button edit, rename, delete, folder;
     private String creativeFolder;
     private File[] files;
-    private Image[] imgs;
 
     private ArrayList<Notification> notifs = new ArrayList<>();
 
-    public CreativeMode(Settings settings, World world) {
+    public CreativeMode(Settings settings, TileMap tileMap) {
         this.settings = settings;
-        this.world = world;
+        this.tileMap = tileMap;
 
         buttons.add(edit = new engine.gfx.Button(170, 20, "Edit", "edit"));
         buttons.add(rename = new engine.gfx.Button(80, 20, "Rename", "inputDialog"));
@@ -72,11 +71,9 @@ public class CreativeMode extends View {
 
             int count = 0;
             if (files != null) {
-                imgs = new Image[files.length];
-                for (int i = 0; i < files.length; i++) {
-                    if (files[i].isFile() && files[i].getName().substring(files[i].getName().length() - 3).equals("png")) {
-                        imgs[i] = new Image(creativeFolder + "/" + files[i].getName(), true);
-                        sMax += Image.THUMBH + 10;
+                for (File file : files) {
+                    if (file.isFile() && file.getName().substring(file.getName().length() - 3).equals("png")) {
+                        sMax += 10;
                         count++;
                     }
                 }
@@ -138,7 +135,6 @@ public class CreativeMode extends View {
                             Editor.once = true;
                             Editor.newOne = false;
                             Editor.rename = files[fIndex].getName();
-                            Editor.creaImg = new Image(creativeFolder + "/" + files[fIndex].getName(), true);
                             gc.getWindow().setDefaultCursor();
                         }
                         break;
@@ -208,11 +204,11 @@ public class CreativeMode extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(world);
+        r.drawBackground(tileMap);
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawCreaList(files, imgs, settings.translate("Create your first map !"));
+        r.drawCreaList(files, settings.translate("Create your first map !"));
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, "wall");
         r.drawText(settings.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);

@@ -2,21 +2,21 @@ package game;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.World;
+import engine.TileMap;
 import game.objects.GameObject;
 
 public class Camera {
 
     private float offX, offY;
-    private World world;
+    private TileMap tileMap;
     private String targetTag;
     private GameObject target = null;
 
     private int tileSize = GameManager.TS;
 
-    Camera(String tag, World world) {
+    Camera(String tag, TileMap tileMap) {
         this.targetTag = tag;
-        this.world = world;
+        this.tileMap = tileMap;
     }
 
     public void update(GameContainer gc, GameManager gm, float dt) {
@@ -32,10 +32,10 @@ public class Camera {
 
         if (offX < 0) offX = 0;
         if (offY < 0) offY = 0;
-        if (offX + gc.getWidth() > world.getWidth() * tileSize)
-            offX = world.getWidth() * tileSize - gc.getWidth();
-        if (offY + gc.getHeight() > world.getHeight() * tileSize)
-            offY = world.getHeight() * tileSize - gc.getHeight();
+        if (offX + gc.getWidth() > tileMap.getWidth() * tileSize)
+            offX = tileMap.getWidth() * tileSize - gc.getWidth();
+        if (offY + gc.getHeight() > tileMap.getHeight() * tileSize)
+            offY = tileMap.getHeight() * tileSize - gc.getHeight();
     }
 
     public void render(Renderer r) {

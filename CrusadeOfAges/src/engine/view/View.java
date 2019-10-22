@@ -44,8 +44,8 @@ public abstract class View {
 
     protected boolean fileSelected(GameContainer gc, int index, int scroll) {
 
-        int highs = GameManager.TS + 10 - scroll + index * (Image.THUMBH + 10);
-        int currHigh = Image.THUMBH;
+        int currHigh = 30;
+        int highs = GameManager.TS + 10 - scroll + index * (currHigh + 10);
 
         return gc.getInput().getMouseY() > highs &&
                 gc.getInput().getMouseY() < highs + currHigh &&
@@ -56,10 +56,10 @@ public abstract class View {
     protected boolean levelSelected(GameContainer gc, int index, int scroll) {
 
         int highs = GameManager.TS + 10 - scroll;
-        for (int i = 0; i < index; i++) {
-            highs += 30 + 10;
-        }
         int currHigh = 30;
+        for (int i = 0; i < index; i++) {
+            highs += currHigh + 10;
+        }
 
         return gc.getInput().getMouseY() > highs &&
                 gc.getInput().getMouseY() < highs + currHigh &&

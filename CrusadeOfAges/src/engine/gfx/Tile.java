@@ -1,13 +1,13 @@
-package engine;
+package engine.gfx;
 
-public class Bloc {
+public class Tile {
 
     private String tag;
     private int code;
     private int x, y;
     private boolean solid;
 
-    public Bloc(String tag, int code, int x, int y, boolean solid) {
+    public Tile(String tag, int code, int x, int y, boolean solid) {
         this.tag = tag;
         this.code = code;
         this.x = x;

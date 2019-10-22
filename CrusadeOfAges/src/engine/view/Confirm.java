@@ -2,17 +2,11 @@ package engine.view;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
-import engine.World;
 import engine.gfx.Button;
 import engine.gfx.Font;
 import game.GameManager;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Confirm extends View {
 

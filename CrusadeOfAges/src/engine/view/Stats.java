@@ -9,11 +9,11 @@ import java.awt.event.KeyEvent;
 public class Stats extends View {
 
     private Settings s;
-    private World world;
+    private TileMap tileMap;
 
-    public Stats(Settings s, World world) {
+    public Stats(Settings s, TileMap tileMap) {
         this.s = s;
-        this.world = world;
+        this.tileMap = tileMap;
         buttons.add(new Button(60, 20, "Back", "mainMenu"));
     }
 
@@ -53,7 +53,7 @@ public class Stats extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if (gc.getPrevView().equals("mainMenu")) r.drawBackground(world);
+        if (gc.getPrevView().equals("mainMenu")) r.drawBackground(tileMap);
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         r.drawMenuTitle(s.translate("Stats").toUpperCase(), null);
 

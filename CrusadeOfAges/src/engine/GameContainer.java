@@ -21,7 +21,7 @@ public class GameContainer implements Runnable {
     private Renderer r;
     private GameManager gm;
     private InputHandler input;
-    private World world;
+    private TileMap tileMap;
     private Settings settings;
     private PlayerStats playerStats;
     private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
@@ -37,27 +37,27 @@ public class GameContainer implements Runnable {
 
     private static final String FACTORY = "Strozor Inc.";
 
-    public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
-        this.world = world;
+    public GameContainer(AbstractGame game, Settings settings, TileMap tileMap, PlayerStats playerStats) {
+        this.tileMap = tileMap;
         this.game = game;
         gm = (GameManager) game;
         this.settings = settings;
         this.playerStats = playerStats;
-        editor = new Editor(settings, world);
+        editor = new Editor(settings, tileMap);
         Confirm confirmView = new Confirm();
 
         v.put("confirmExit", confirmView);
 
-        v.put("creativeMode", new CreativeMode(settings, world));
-        v.put("credits", new Credits(settings, world));
+        v.put("creativeMode", new CreativeMode(settings, tileMap));
+        v.put("credits", new Credits(settings, tileMap));
         v.put("gameOver", new GameOver(settings));
-        v.put("gameSelection", new GameSelection(settings, world, game));
-        v.put("inputDialog", new InputDialog(settings, world));
-        v.put("mainMenu", new MainMenu(settings, world, (Confirm) v.get("confirmExit")));
-        v.put("options", new Options(settings, world));
+        v.put("gameSelection", new GameSelection(settings, tileMap, game));
+        v.put("inputDialog", new InputDialog(settings, tileMap));
+        v.put("mainMenu", new MainMenu(settings, tileMap, (Confirm) v.get("confirmExit")));
+        v.put("options", new Options(settings, tileMap));
         v.put("pausedEdit", new PausedEdit(settings));
         v.put("pausedGame", new PausedGame(settings));
-        v.put("stats", new Stats(settings, world));
+        v.put("stats", new Stats(settings, tileMap));
 
         hoverSound = new SoundClip("/audio/hover.wav");
         hoverSound.setVolume(-15f);
@@ -71,7 +71,7 @@ public class GameContainer implements Runnable {
 
     public synchronized void start() {
         window = new Window(this);
-        r = new Renderer(this, world, settings);
+        r = new Renderer(this, tileMap, settings);
         input = new InputHandler(this);
 
         thread = new Thread(this);
