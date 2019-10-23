@@ -9,10 +9,8 @@ import java.awt.event.KeyEvent;
 
 public class PausedGame extends View {
 
-    private Settings s;
+    public PausedGame() {
 
-    public PausedGame(Settings settings) {
-        s = settings;
         buttons.add(new Button("Back to game", "game"));
         buttons.add(new Button("Stats", "stats"));
         buttons.add(new Button("Quit to title", "mainMenu"));
@@ -59,7 +57,7 @@ public class PausedGame extends View {
     public void render(GameContainer gc, Renderer r) {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
-        r.drawMenuTitle(s.translate("Paused").toUpperCase(), null);
+        r.drawMenuTitle("Paused", null);
 
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 4;

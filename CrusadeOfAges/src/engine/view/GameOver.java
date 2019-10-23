@@ -2,17 +2,15 @@ package engine.view;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
 import engine.gfx.Button;
+
+import java.awt.event.KeyEvent;
 
 public class GameOver extends View {
 
-    private Settings s;
+    private boolean sounded = false;
 
-    private boolean once = false;
-
-    public GameOver(Settings settings) {
-        s = settings;
+    public GameOver() {
         buttons.add(new Button("Try again", "game"));
         buttons.add(new Button("Quit to title", "mainMenu"));
     }
@@ -20,9 +18,22 @@ public class GameOver extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getPrevView().equals("game") && !once) {
+        if (gc.getPrevView().equals("game") && !sounded) {
             gc.getGameoverSound().play();
-            once = true;
+            sounded = true;
+        }
+
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
+            gc.setActiView("game");
+            gc.getWindow().setBlankCursor();
+            gc.getClickSound().play();
+            gc.getGameoverSound().stop();
+            sounded = false;
+        }
+
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            gc.setActiView("mainMenu");
+            sounded = false;
         }
 
         boolean cursorHand = false;
@@ -40,7 +51,7 @@ public class GameOver extends View {
                 if (btn.getText().contains("Try")) gc.getWindow().setBlankCursor();
                 gc.getClickSound().play();
                 gc.getGameoverSound().stop();
-                once = false;
+                sounded = false;
                 gc.setActiView(btn.getTargetView());
             }
 
@@ -62,7 +73,7 @@ public class GameOver extends View {
 
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
 
-        r.drawMenuTitle(s.translate("GAME OVER"), s.translate("You are dead"));
+        r.drawMenuTitle("Game Over", "You are dead");
 
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 4;

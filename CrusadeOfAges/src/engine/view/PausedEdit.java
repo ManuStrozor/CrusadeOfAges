@@ -2,7 +2,6 @@ package engine.view;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
 import engine.gfx.Button;
 import game.Editor;
 import game.GameManager;
@@ -12,10 +11,7 @@ import java.awt.event.KeyEvent;
 
 public class PausedEdit extends View {
 
-    private Settings s;
-
-    public PausedEdit(Settings settings) {
-        s = settings;
+    public PausedEdit() {
 
         buttons.add(new Button("Back", "edit"));
         buttons.add(new Button("Try", "edit"));

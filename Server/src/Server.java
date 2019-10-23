@@ -16,7 +16,7 @@ public class Server {
         if (jar.contains("jar:")) {
             jar = jar.split("!")[0].split("file:/")[1];
         } else {
-            jar = "../out/artifacts/Server.jar";
+            jar = "out/artifacts/Server.jar";
         }
         Console console = System.console();
         if(console == null && !GraphicsEnvironment.isHeadless()){

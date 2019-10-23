@@ -16,24 +16,21 @@ import java.util.List;
 
 public class Options extends View {
 
-    private Settings s;
-    private World world;
-
-    public Options(Settings s, World world) {
-        this.s = s;
-        this.world = world;
+    public Options() {
         buttons.add(new Button(20, 20, "<", null));
         buttons.add(new Button(20, 20, ">", null));
-        checkboxes.add(new Checkbox("fps", s.isShowFps()));
-        checkboxes.add(new Checkbox("light", s.isShowLights()));
+        checkboxes.add(new Checkbox("fps"));
+        checkboxes.add(new Checkbox("light"));
         buttons.add(new Button("Back", "mainMenu"));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
+        Settings s = gc.getSettings();
+
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            saveSettings();
+            saveSettings(s);
             gc.setActiView(gc.getPrevView());
         }
 
@@ -59,7 +56,7 @@ public class Options extends View {
                         }
                         break;
                     case "Back":
-                        saveSettings();
+                        saveSettings(s);
                         gc.setActiView(gc.getPrevView());
                         break;
                 }
@@ -83,17 +80,22 @@ public class Options extends View {
         }
 
         for (Checkbox chk : checkboxes) {
-
-            // Checkbox Selection
             if (isSelected(gc, chk)) {
-                ////// Sound Checkbox //////
+                // Sound Checkbox ?
                 switch (chk.getTag()) {
                     case "fps":
                         s.setShowFps(!s.isShowFps());
-                        chk.setChecked(s.isShowFps());
                         break;
                     case "light":
                         s.setShowLights(!s.isShowLights());
+                        break;
+                }
+            } else {
+                switch (chk.getTag()) {
+                    case "fps":
+                        chk.setChecked(s.isShowFps());
+                        break;
+                    case "light":
                         chk.setChecked(s.isShowLights());
                         break;
                 }
@@ -107,9 +109,11 @@ public class Options extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
+        Settings s = gc.getSettings();
+
         if (gc.getPrevView().equals("mainMenu")) {
-            r.drawBackground(world);
-            r.drawMenuTitle(s.translate("Options").toUpperCase(), null);
+            r.drawBackground();
+            r.drawMenuTitle("Options", null);
         } else {
             r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
         }
@@ -139,34 +143,34 @@ public class Options extends View {
         for (Checkbox chk : checkboxes) {
             switch (chk.getTag()) {
                 case "fps":
-                    chk.setAlignCoor(x - 65, y + 30, -1, 1);
+                    chk.setCoor(x - 65, y + 30, -1, 1);
                     break;
                 case "light":
-                    chk.setAlignCoor(x - 65, y + 55, -1, 1);
+                    chk.setCoor(x - 65, y + 55, -1, 1);
                     break;
             }
             r.drawCheckbox(chk);
         }
     }
 
-    private void saveSettings() {
+    private void saveSettings(Settings settings) {
         try {
             List<String> newLines = new ArrayList<>();
             for (String line : Files.readAllLines(Paths.get(Conf.SM_FOLDER + "/settings.txt"), StandardCharsets.UTF_8)) {
                 String[] sub = line.split(":");
                 switch (sub[0]) {
                     case "lang":
-                        newLines.add(line.replace(sub[1], s.getFlag()));
+                        newLines.add(line.replace(sub[1], settings.getFlag()));
                         break;
                     case "guiScale":
                     case "maxFPS":
                         newLines.add(line);
                         break;
                     case "showFPS":
-                        newLines.add(line.replace(sub[1], s.isShowFps() ? "true" : "false"));
+                        newLines.add(line.replace(sub[1], settings.isShowFps() ? "true" : "false"));
                         break;
                     case "showLights":
-                        newLines.add(line.replace(sub[1], s.isShowLights() ? "true" : "false"));
+                        newLines.add(line.replace(sub[1], settings.isShowLights() ? "true" : "false"));
                         break;
                 }
             }

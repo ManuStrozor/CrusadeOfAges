@@ -4,12 +4,14 @@ import engine.audio.SoundClip;
 import engine.gfx.Font;
 import engine.gfx.Light;
 import engine.view.*;
-import game.AbstractGame;
 import game.GameManager;
 import game.Editor;
 import game.objects.GameObject;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,13 +21,13 @@ public class GameContainer implements Runnable {
     private Thread thread;
     private Window window;
     private Renderer r;
-    private GameManager gm;
     private InputHandler input;
+    private GameManager game;
+    private Editor editor;
     private World world;
     private Settings settings;
     private PlayerStats playerStats;
     private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
-    private AbstractGame game, editor;
     private Map<String, View> v = new HashMap<>();
 
     private boolean running = false;
@@ -37,41 +39,38 @@ public class GameContainer implements Runnable {
 
     private static final String FACTORY = "Strozor Inc.";
 
-    public GameContainer(AbstractGame game, Settings settings, World world, PlayerStats playerStats) {
-        this.world = world;
-        this.game = game;
-        gm = (GameManager) game;
+    public GameContainer(Socket socket, Settings settings) throws IOException {
+        world = new World();
         this.settings = settings;
-        this.playerStats = playerStats;
-        editor = new Editor(settings, world);
-        Confirm confirmView = new Confirm();
+        game = new GameManager(world, socket);
+        playerStats = new PlayerStats();
+        editor = new Editor(world);
 
+        Confirm confirmView = new Confirm();
         v.put("confirmExit", confirmView);
 
-        v.put("creativeMode", new CreativeMode(settings, world));
-        v.put("credits", new Credits(settings, world));
-        v.put("gameOver", new GameOver(settings));
-        v.put("gameSelection", new GameSelection(settings, world, game));
-        v.put("inputDialog", new InputDialog(settings, world));
-        v.put("mainMenu", new MainMenu(settings, world, (Confirm) v.get("confirmExit")));
-        v.put("options", new Options(settings, world));
-        v.put("pausedEdit", new PausedEdit(settings));
-        v.put("pausedGame", new PausedGame(settings));
-        v.put("stats", new Stats(settings, world));
+        v.put("mainMenu", new MainMenu((Confirm) v.get("confirmExit")));
+        v.put("gameSelection", new GameSelection());
+        v.put("lobby", new Lobby());
+        v.put("creativeMode", new CreativeMode());
+        v.put("inputDialog", new InputDialog());
+        v.put("options", new Options());
+        v.put("stats", new Stats());
+        v.put("credits", new Credits());
+        v.put("pausedEdit", new PausedEdit());
+        v.put("pausedGame", new PausedGame());
+        v.put("gameOver", new GameOver());
 
-        hoverSound = new SoundClip("/audio/hover.wav");
-        hoverSound.setVolume(-15f);
-        clickSound = new SoundClip("/audio/click.wav");
-        clickSound.setVolume(-15f);
-        gameoverSound = new SoundClip("/audio/gameover.wav");
+        hoverSound = new SoundClip("/audio/hover.wav", -10f);
+        clickSound = new SoundClip("/audio/click.wav", -10f);
+        gameoverSound = new SoundClip("/audio/gameover.wav", -5f);
         impaleSound = new SoundClip("/audio/impaled.wav");
-        leverSound = new SoundClip("/audio/lever.wav");
-        leverSound.setVolume(-15f);
+        leverSound = new SoundClip("/audio/lever.wav", -15f);
     }
 
     public synchronized void start() {
         window = new Window(this);
-        r = new Renderer(this, world, settings);
+        r = new Renderer(this, settings);
         input = new InputHandler(this);
 
         thread = new Thread(this);
@@ -133,7 +132,7 @@ public class GameContainer implements Runnable {
                 }
             }
 
-            GameObject go = gm.getObject("" + gm.getSocket().getLocalPort()); // Utile pour afficher le hud
+            GameObject go = game.getObject("" + game.getSocket().getLocalPort()); // Utile pour afficher le hud
             r.clear();
 
             // Affichage du jeu en arrière plan
@@ -190,6 +189,7 @@ public class GameContainer implements Runnable {
 
             // SI Lights = ON ALORS : Affichage d'une source de lumière à la position du curseur de la souris
             switch (actiView) {
+                case "lobby":
                 case "credits":
                 case "mainMenu":
                 case "options":
@@ -210,7 +210,7 @@ public class GameContainer implements Runnable {
                     break;
             }
 
-            // Affichage des infos du programme en bas de l'écran
+            // Affichage FACTORY en bas de l'écran
             switch (actiView) {
                 case "credits":
                 case "mainMenu":
@@ -236,25 +236,37 @@ public class GameContainer implements Runnable {
             if (!upState.equals(actiView)) {
                 upState = actiView;
                 try {
-                    gm.getDos().writeUTF(gm.getSocket().getLocalPort() + " " + upState.toUpperCase());
+                    game.getDos().writeUTF(game.getSocket().getLocalPort() + " " + upState.toUpperCase());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("[IOException] " + e.getMessage());
                 }
             }
         }
 
         try {
-            gm.getDis().close();
-            gm.getDos().close();
-            gm.getSocket().close();
+            game.getDis().close();
+            game.getDos().close();
+            game.getSocket().close();
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("[IOException] " + e.getMessage());
         }
         stop();
     }
 
+    public GameManager getGame() {
+        return game;
+    }
+
     public Renderer getR() {
         return r;
+    }
+
+    public World getWorld() {
+        return world;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 
     public int getWidth() {
@@ -273,7 +285,7 @@ public class GameContainer implements Runnable {
         this.height = height;
     }
 
-    public float getScale() {
+    float getScale() {
         return scale;
     }
 
@@ -295,10 +307,6 @@ public class GameContainer implements Runnable {
 
     public InputHandler getInput() {
         return input;
-    }
-
-    public Settings getSettings() {
-        return settings;
     }
 
     public PlayerStats getPlayerStats() {

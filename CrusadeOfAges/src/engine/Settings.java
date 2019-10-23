@@ -22,7 +22,7 @@ public class Settings {
     public String translate(String key) {
         String trans;
         if ((trans = langs.get(getIFlag(flag)).get(key)) == null) {
-            return "@" + key;
+            return "." + key;
         } else {
             return trans;
         }
@@ -59,7 +59,7 @@ public class Settings {
         if (jar.contains("jar:")) {
             jar = jar.split("!")[0].split("file:/")[1];
         } else {
-            jar = "../out/artifacts/CrusadeOfAges.jar";
+            jar = "out/artifacts/CrusadeOfAges.jar";
         }
         for (String file : getJarContent(jar)) {
             if (file.contains("lang") && file.contains("txt")) {

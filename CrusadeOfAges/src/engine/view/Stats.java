@@ -8,12 +8,7 @@ import java.awt.event.KeyEvent;
 
 public class Stats extends View {
 
-    private Settings s;
-    private World world;
-
-    public Stats(Settings s, World world) {
-        this.s = s;
-        this.world = world;
+    public Stats() {
         buttons.add(new Button(60, 20, "Back", "mainMenu"));
     }
 
@@ -53,9 +48,9 @@ public class Stats extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        if (gc.getPrevView().equals("mainMenu")) r.drawBackground(world);
+        if (gc.getPrevView().equals("mainMenu")) r.drawBackground();
         else r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x99000000);
-        r.drawMenuTitle(s.translate("Stats").toUpperCase(), null);
+        r.drawMenuTitle("Stats", null);
 
         for (int i = 0; i < gc.getPlayerStats().getStates().length; i++) {
             r.drawText(gc.getPlayerStats().getStates()[i], gc.getWidth() / 2, gc.getHeight() / 4 + i * 15, -1, 1, -1, Font.STANDARD);

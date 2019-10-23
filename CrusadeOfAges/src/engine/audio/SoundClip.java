@@ -18,9 +18,19 @@ public class SoundClip {
     private FloatControl gainControl;
 
     public SoundClip(String path) {
+        InputStream audioSrc = SoundClip.class.getResourceAsStream(path);
+        init(audioSrc);
+    }
+
+    public SoundClip(String path, float volume) {
+        InputStream audioSrc = SoundClip.class.getResourceAsStream(path);
+        init(audioSrc);
+        setVolume(volume);
+    }
+
+    private void init(InputStream audioSrc) {
+        InputStream bufferedIn = new BufferedInputStream(audioSrc);
         try {
-            InputStream audioSrc = SoundClip.class.getResourceAsStream(path);
-            InputStream bufferedIn = new BufferedInputStream(audioSrc);
             AudioInputStream ais = AudioSystem.getAudioInputStream(bufferedIn);
             AudioFormat baseFormat = ais.getFormat();
             AudioFormat decodeFormat = new AudioFormat(
@@ -33,14 +43,15 @@ public class SoundClip {
                     false
             );
             AudioInputStream dais = AudioSystem.getAudioInputStream(decodeFormat, ais);
-
             clip = AudioSystem.getClip();
             clip.open(dais);
-
             gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-
-        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
-            e.printStackTrace();
+        } catch (UnsupportedAudioFileException e) {
+            System.out.println("[UnsupportedAudioFileException] " + e.getMessage());
+        } catch (LineUnavailableException e) {
+            System.out.println("[LineUnavailableException] " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("[IOException] " + e.getMessage());
         }
     }
 

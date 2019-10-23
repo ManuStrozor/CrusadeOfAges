@@ -2,8 +2,16 @@ package game;
 
 import engine.GameContainer;
 import engine.Renderer;
+import engine.Settings;
+import engine.World;
 
 public abstract class AbstractGame {
+
+    protected World world;
+
+    AbstractGame(World world) {
+        this.world = world;
+    }
 
     public abstract void update(GameContainer gc, float dt);
 

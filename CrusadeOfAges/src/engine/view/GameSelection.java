@@ -10,26 +10,11 @@ import java.awt.event.KeyEvent;
 
 public class GameSelection extends View {
 
-    public static boolean focus, once;
-    public static int fIndex, scroll, sMax;
-
-    static {
-        once = false;
-        focus = true;
-        fIndex = 0;
-        scroll = 0;
-        sMax = 0;
-    }
-
-    private Settings s;
-    private World world;
-    private GameManager gameManager;
+    public static boolean focus = true, once = false;
+    public static int fIndex = 0, scroll = 0, sMax = 0;
     private Button play, back;
 
-    public GameSelection(Settings s, World world, AbstractGame game) {
-        this.s = s;
-        this.world = world;
-        this.gameManager = (GameManager) game;
+    public GameSelection() {
         buttons.add(play = new Button(170, 20, "Play", "game"));
         buttons.add(back = new Button(170, 20, "Back", "mainMenu"));
     }
@@ -85,7 +70,7 @@ public class GameSelection extends View {
                 if (btn == back) focus = false;
                 if (btn == play) {
                     GameManager.current = fIndex;
-                    gameManager.load(GameManager.levels[fIndex][0]);
+                    gc.getGame().load(GameManager.levels[fIndex][0]);
                     gc.getWindow().setBlankCursor();
                 }
                 gc.getClickSound().play();
@@ -111,14 +96,14 @@ public class GameSelection extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(world);
+        r.drawBackground();
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
         r.drawLevels(GameManager.levels, gc.getPlayerStats());
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, "wall");
-        r.drawText(s.translate("Choose a level"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);
+        r.drawText(gc.getSettings().translate("Choose a level"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
         r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, "wall");
 

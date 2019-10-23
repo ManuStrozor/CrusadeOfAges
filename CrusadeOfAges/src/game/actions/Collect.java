@@ -5,6 +5,10 @@ import engine.World;
 import engine.audio.SoundClip;
 import game.objects.Player;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.io.IOException;
+
 public class Collect {
 
     private Player pl;
@@ -15,10 +19,9 @@ public class Collect {
     public Collect(Player pl, World world) {
         this.pl = pl;
         this.world = world;
-        coin = new SoundClip("/audio/getcoin.wav");
-        bonus = new SoundClip("/audio/getlife.wav");
-        coin.setVolume(-20f);
-        bonus.setVolume(-15f);
+
+        coin = new SoundClip("/audio/getcoin.wav", -20f);
+        bonus = new SoundClip("/audio/getlife.wav", -15f);
     }
 
     public void coin(GameContainer gc) {

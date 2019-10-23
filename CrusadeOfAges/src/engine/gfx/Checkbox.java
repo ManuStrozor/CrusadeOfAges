@@ -11,19 +11,6 @@ public class Checkbox {
         this.tag = tag;
     }
 
-    public Checkbox(String tag, boolean checked) {
-        bgColor = 0x66818E9A;
-        this.tag = tag;
-        this.checked = checked;
-    }
-
-    public Checkbox(String tag, int width, int height) {
-        bgColor = 0x66818E9A;
-        this.tag = tag;
-        this.width = width;
-        this.height = height;
-    }
-
     public String getTag() {
         return tag;
     }
@@ -32,30 +19,34 @@ public class Checkbox {
         return offX;
     }
 
-    public void setOffX(int offX) {
-        this.offX = offX;
-    }
-
     public int getOffY() {
         return offY;
     }
 
-    public void setOffY(int offY) {
-        this.offY = offY;
+    public void setCoor(int offX, int offY) {
+        setOffX(offX, 1);
+        setOffY(offY, 1);
     }
 
-    public void setAlignCoor(int offX, int offY, int alignX, int alignY) {
-        if (alignX != 1) {
-            if (alignX == 0) offX -= width / 2;
-            else if (alignX == -1) offX -= width;
-        }
+    public void setCoor(int offX, int offY, int alignX, int alignY) {
+        setOffX(offX, alignX);
+        setOffY(offY, alignY);
+    }
 
-        if (alignY != 1) {
-            if (alignY == 0) offY -= height / 2;
-            else if (alignY == -1) offY -= height;
+    public void setOffX(int offX, int alignX) {
+        this.offX = alignAxe(offX, alignX, width);
+    }
+
+    public void setOffY(int offY, int alignY) {
+        this.offY = alignAxe(offY, alignY, height);
+    }
+
+    private int alignAxe(int value, int align, int Axe) {
+        if (align != 1) {
+            if (align == 0) value -= Axe / 2;
+            else if (align == -1) value -= Axe;
         }
-        this.offX = offX;
-        this.offY = offY;
+        return value;
     }
 
     public int getWidth() {

@@ -3,7 +3,7 @@ package engine.view;
 import engine.GameContainer;
 import engine.Renderer;
 import engine.Settings;
-import engine.World;
+import engine.gfx.Font;
 import engine.gfx.Button;
 import engine.gfx.Image;
 import game.Conf;
@@ -34,8 +34,6 @@ public class CreativeMode extends View {
         sMax = 0;
     }
 
-    private Settings settings;
-    private World world;
     private Button edit, rename, delete, folder;
     private String creativeFolder;
     private File[] files;
@@ -43,9 +41,7 @@ public class CreativeMode extends View {
 
     private ArrayList<Notification> notifs = new ArrayList<>();
 
-    public CreativeMode(Settings settings, World world) {
-        this.settings = settings;
-        this.world = world;
+    public CreativeMode() {
 
         buttons.add(edit = new engine.gfx.Button(170, 20, "Edit", "edit"));
         buttons.add(rename = new engine.gfx.Button(80, 20, "Rename", "inputDialog"));
@@ -171,7 +167,7 @@ public class CreativeMode extends View {
                         StringSelection data = new StringSelection(creativeFolder);
                         Clipboard cb = gc.getWindow().getTk().getSystemClipboard();
                         cb.setContents(data, data);
-                        notifs.add(new Notification(settings.translate("Le chemin vers le dossier a été copié"), 3, 50, -1));
+                        notifs.add(new Notification(gc.getSettings().translate("Le chemin vers le dossier a été copié"), 3, 50, -1));
                         break;
                 }
 
@@ -208,14 +204,14 @@ public class CreativeMode extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
         //Fill general background
-        r.drawBackground(world);
+        r.drawBackground();
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
-        r.drawCreaList(files, imgs, settings.translate("Create your first map !"));
+        r.drawCreaList(files, imgs, "Create your first map !");
         //Draw background & Top title
         r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, "wall");
-        r.drawText(settings.translate("Select a map"), gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, engine.gfx.Font.STANDARD);
+        r.drawText("Select a map", gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
         r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, "wall");
 

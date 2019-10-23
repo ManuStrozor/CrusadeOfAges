@@ -12,6 +12,8 @@ import game.actions.Collect;
 import game.actions.Event;
 import game.actions.Move;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 

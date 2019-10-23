@@ -18,8 +18,9 @@ public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
 
-    private Settings settings;
     private World world;
+    private Settings settings;
+
     private Sprite objs, floor, water;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
@@ -30,8 +31,8 @@ public class Renderer {
     private boolean processing = false;
     private int ts = GameManager.TS;
 
-    public Renderer(GameContainer gc, World world, Settings settings) {
-        this.world = world;
+    public Renderer(GameContainer gc, Settings settings) {
+        world = gc.getWorld();
         this.settings = settings;
         // Sprites
         objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", ts, ts, true);
@@ -413,7 +414,7 @@ public class Renderer {
         drawText("x" + obj.getKeys(), x + ts * 5 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawWorld(World world, boolean gameMode) {
+    public void drawWorld(boolean gameMode) {
 
         int offX = Math.max(camX/ts, 0);
         int offY = Math.max(camY/ts, 0);
@@ -505,20 +506,21 @@ public class Renderer {
         return world.getBlocMap(x, y+1).isSolid();
     }
 
-    public void drawWorldLights(World world, Light lamp) {
+    public void drawWorldLights(Light lamp) { // A optimiser (recherche des lamps sur la zone camera)
         for (int y = 0; y < world.getHeight(); y++) {
             for (int x = 0; x < world.getWidth(); x++) {
-                if (world.getBlocMap(x, y).isTagged("torch"))
+                if (world.getBlocMap(x, y).isTagged("torch")) {
                     drawLight(lamp, x * ts + ts / 2, y * ts + ts / 3);
+                }
             }
         }
     }
 
-    private void drawBloc(World world, String tag, int x, int y, int tileSize) {
+    private void drawBloc(String tag, int x, int y, int tileSize) {
         drawSprite(objs, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY(), tileSize);
     }
 
-    public void drawDock(World world, String[] dock, int scroll, int tileSize) {
+    public void drawDock(String[] dock, int scroll, int tileSize) {
         int midH = camY + gcH / 2;
         int s = tileSize + 1;
         int y = midH - (dock.length * s) / 2 + (dock.length / 2 - scroll) * s;
@@ -529,7 +531,7 @@ public class Renderer {
         fillRect(camX, camY, s + 4, gcH, 0x89000000);
 
         for (int i = 0; i < dock.length; i++) {
-            drawBloc(world, dock[i], camX + 4, y - tileSize / 2 + s * i, tileSize);
+            drawBloc(dock[i], camX + 4, y - tileSize / 2 + s * i, tileSize);
         }
 
         drawRect(camX + 1, midH - tileSize / 2 - 3, s + 4, s + 4, 0xbbffffff);
@@ -549,15 +551,15 @@ public class Renderer {
                 (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x66ffffff);
     }
 
-    public void drawArrows(World world, int width, int height, int tileSize) {
+    public void drawArrows(int width, int height, int tileSize) {
         if (camY > 0)
-            drawBloc(world, "arrow_up", camX + gcW / 2 - tileSize / 2, camY, tileSize);
+            drawBloc("arrow_up", camX + gcW / 2 - tileSize / 2, camY, tileSize);
         if (camY + gcH < height * this.ts)
-            drawBloc(world, "arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize, tileSize);
+            drawBloc("arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize, tileSize);
         if (camX > 0)
-            drawBloc(world, "arrow_left", camX, camY + gcH / 2 - tileSize / 2, tileSize);
+            drawBloc("arrow_left", camX, camY + gcH / 2 - tileSize / 2, tileSize);
         if (camX + gcW < width * this.ts)
-            drawBloc(world, "arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2, tileSize);
+            drawBloc("arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2, tileSize);
     }
 
     public void drawLevels(String[][] levels, PlayerStats ps) {
@@ -598,7 +600,7 @@ public class Renderer {
     public void drawCreaList(File[] files, Image[] imgs, String nothingMessage) {
 
         if (files == null || files.length == 0) {
-            drawText(nothingMessage, gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
+            drawText(settings.translate(nothingMessage), gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
         } else {
             Date[] dates = new Date[files.length];
             int[] widths = new int[files.length];
@@ -662,10 +664,10 @@ public class Renderer {
         fillRect(x, y + h - minus + scroll, w, 1, 0xff444244);
     }
 
-    public void drawBackground(World world) {
+    public void drawBackground() {
         for (int y = 0; y <= gcH / ts; y++) {
             for (int x = 0; x <= gcW / ts; x++) {
-                drawBloc(world, "wall", x* ts, y* ts, ts);
+                drawBloc("wall", x* ts, y* ts, ts);
             }
         }
     }
@@ -673,20 +675,20 @@ public class Renderer {
     public void fillAreaBloc(int nX, int nY, int nW, int nH, String tag) {
         for (int y = 0; y < nH; y++) {
             for (int x = 0; x < nW; x++) {
-                drawBloc(world, tag, nX + x * ts, nY + y * ts, ts);
+                drawBloc(tag, nX + x * ts, nY + y * ts, ts);
             }
         }
     }
 
     public void drawMenuTitle(String title, String small) {
-        drawText(title, gcW /2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
+        drawText(settings.translate(title).toUpperCase(), gcW /2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
         if (small != null) {
-            drawText(small, gcW /2, 60, 0, 1, 0xffababab, Font.STANDARD);
+            drawText(settings.translate(small), gcW /2, 60, 0, 1, 0xffababab, Font.STANDARD);
         }
     }
 
-    public void drawList(int offX, int offY, String title, String[] list) {
-        drawText(title, offX, offY, 0, 0, 0xff27ae60, Font.STANDARD);
+    public void drawList(String title, String[] list, int offX, int offY) {
+        drawText(settings.translate(title), offX, offY, 0, 0, 0xff27ae60, Font.STANDARD);
         for (int i = 0; i < list.length; i++)
             drawText(list[i], offX, offY + 14 * (i + 1), 0, 0, 0xffababab, Font.STANDARD);
     }

@@ -7,16 +7,11 @@ import java.awt.event.KeyEvent;
 
 public class Credits extends View {
 
-    private Settings s;
-    private World world;
-
     private String[] devs = {"Majoolwip", "Manu TD"};
     private String[] thanks = {"Marguerite Turbet", "Marie Lys Turbet", "Martin Turbet-Delof"};
     private String[] contribs = {"Anne Sospedra", "Firas Htm", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
 
-    public Credits(Settings s, World world) {
-        this.s = s;
-        this.world = world;
+    public Credits() {
         buttons.add(new Button(60, 20, "Back", "mainMenu"));
     }
 
@@ -56,12 +51,12 @@ public class Credits extends View {
     @Override
     public void render(GameContainer gc, Renderer r) {
 
-        r.drawBackground(world);
-        r.drawMenuTitle(s.translate("Game credits").toUpperCase(), s.translate("Development team"));
+        r.drawBackground();
+        r.drawMenuTitle("Game credits", "Development team");
 
-        r.drawList(gc.getWidth() / 4, gc.getHeight() / 3, s.translate("DEVELOPERS"), devs);
-        r.drawList(gc.getWidth() / 2, gc.getHeight() / 3, s.translate("CONTRIBUTORS"), contribs);
-        r.drawList(gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3, s.translate("THANKS TO"), thanks);
+        r.drawList("DEVELOPERS", devs, gc.getWidth() / 4, gc.getHeight() / 3);
+        r.drawList("CONTRIBUTORS", contribs, gc.getWidth() / 2, gc.getHeight() / 3);
+        r.drawList("THANKS TO", thanks, gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3);
 
         for (Button btn : buttons) {
             btn.setAlignCoor(5, 5, 1, 1);

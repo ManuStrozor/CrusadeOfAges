@@ -1,10 +1,12 @@
 import engine.*;
-import exceptions.ConfException;
 import game.Conf;
-import game.GameManager;
+import exceptions.ConfException;
 
-import java.net.ConnectException;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.net.Socket;
+import java.net.ConnectException;
+import java.io.IOException;
 
 public class Launcher {
 
@@ -20,31 +22,30 @@ public class Launcher {
      *
      * @param args [-c ConfigFolder] [-h Host] [-p Port]
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
         appdata = setAppdata();
         manageArgs(args);
 
-        Settings settings = new Settings();
-        World world = new World();
         try {
+            Settings settings = new Settings();
+
             Conf conf = new Conf(appdata);
             conf.initiate();
             conf.readSettings(settings);
-        } catch (ConfException e) {
-            return;
-        }
 
-        try {
-            Socket socket = new Socket(host, port);
-            GameManager gm = new GameManager(socket, world);
-            PlayerStats ps = new PlayerStats();
-            GameContainer gc = new GameContainer(gm, settings, world, ps);
+            Socket socket = new Socket(host, port); // A déplacer dans Multiplayer (AbstractGame)
+
+            GameContainer gc = new GameContainer(socket, settings);
             gc.setTitle(GAMENAME + " " + VERSION);
             gc.setScale(settings.getScale());
             gc.start();
         } catch (ConnectException e) {
-            System.out.println("Connection refused: " + host + ":" + port);
+            System.out.println("[ConnectException] Connexion refusée: " + host + ":" + port);
+        } catch (ConfException e) {
+            System.out.println("[ConfException] " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("[IOException] " + e.getMessage());
         }
     }
 

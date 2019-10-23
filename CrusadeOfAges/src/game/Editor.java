@@ -22,7 +22,6 @@ public class Editor extends AbstractGame {
     public static boolean once = true, newOne = true;
     public static String rename = "";
 
-    private Settings settings;
     private Player player;
 
     private int width, height;
@@ -54,8 +53,8 @@ public class Editor extends AbstractGame {
 
     private ArrayList<Notification> notifs = new ArrayList<>();
 
-    public Editor(Settings settings, World world) {
-        this.settings = settings;
+    public Editor(World world) {
+        super(world);
         Editor.world = world;
         player = new Player("Tester", world, 999);
     }
@@ -121,7 +120,7 @@ public class Editor extends AbstractGame {
         /////////// SAUVEGARDE
         if (isCtrlDown(gc) && gc.getInput().isKeyUp(KeyEvent.VK_S)) {
             creaImg.save(rename);
-            notifs.add(new Notification(rename + settings.translate(" a été sauvegardé avec succès")));
+            notifs.add(new Notification(rename + gc.getSettings().translate(" a été sauvegardé avec succès")));
         }
         /////////// SAUVEGARDE
 
@@ -136,7 +135,7 @@ public class Editor extends AbstractGame {
                 ImageIO.write(gc.getWindow().getImage(), "png", out);
                 notifs.add(new Notification(filename, 3, 100, -1));
             } catch(IOException e) {
-                notifs.add(new Notification(settings.translate("Impossible d'éffectuer la capture d'écran")));
+                notifs.add(new Notification(gc.getSettings().translate("Impossible d'éffectuer la capture d'écran")));
             }
         }
         ////////////// SCREENSHOT
@@ -208,10 +207,10 @@ public class Editor extends AbstractGame {
             }
         }
 
-        r.drawWorld(world, false);
+        r.drawWorld(false);
         if (creaImg != null) r.drawMiniMap(creaImg, 100);
-        r.drawDock(world, elems, scroll, toolSize);
-        if (creaImg != null) r.drawArrows(world, creaImg.getW(), creaImg.getH(), 32);
+        r.drawDock(elems, scroll, toolSize);
+        if (creaImg != null) r.drawArrows(creaImg.getW(), creaImg.getH(), 32);
 
         if (spawn && spawnExists()) player.render(gc, r);
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public abstract class View {
 
     protected ArrayList<Button> buttons = new ArrayList<>();
-    protected ArrayList<Checkbox> checkboxes = new ArrayList<>();
+    ArrayList<Checkbox> checkboxes = new ArrayList<>();
 
     public abstract void update(GameContainer gc, float dt);
 
@@ -42,7 +42,7 @@ public abstract class View {
                 gc.getInput().getMouseY() < c.getOffY() + c.getHeight();
     }
 
-    protected boolean fileSelected(GameContainer gc, int index, int scroll) {
+    boolean fileSelected(GameContainer gc, int index, int scroll) {
 
         int highs = GameManager.TS + 10 - scroll + index * (Image.THUMBH + 10);
         int currHigh = Image.THUMBH;
@@ -53,7 +53,7 @@ public abstract class View {
                 gc.getInput().isButtonUp(MouseEvent.BUTTON1);
     }
 
-    protected boolean levelSelected(GameContainer gc, int index, int scroll) {
+    boolean levelSelected(GameContainer gc, int index, int scroll) {
 
         int highs = GameManager.TS + 10 - scroll;
         for (int i = 0; i < index; i++) {
@@ -67,7 +67,7 @@ public abstract class View {
                 gc.getInput().isButtonUp(MouseEvent.BUTTON1);
     }
 
-    protected void inputCtrl(GameContainer gc) {
+    void inputCtrl(GameContainer gc) {
 
         StringBuilder tmp = new StringBuilder();
 

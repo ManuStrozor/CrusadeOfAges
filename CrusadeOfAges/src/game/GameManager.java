@@ -28,11 +28,10 @@ public class GameManager extends AbstractGame {
     private ArrayList<GameObject> objects = new ArrayList<>();;
     private ArrayList<Notification> notifs = new ArrayList<>();
     private Camera camera;
-    private World world;
 
-    public GameManager(Socket socket, World world) throws IOException {
+    public GameManager(World world, Socket socket) throws IOException {
+        super(world);
         this.socket = socket;
-        this.world = world;
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
     }
@@ -100,8 +99,8 @@ public class GameManager extends AbstractGame {
     @Override
     public void render(GameContainer gc, Renderer r) {
         camera.render(r);
-        r.drawWorld(world, true);
-        if(gc.getSettings().isShowLights()) r.drawWorldLights(world, new Light(30, 0xffffff99));
+        r.drawWorld(true);
+        if(gc.getSettings().isShowLights()) r.drawWorldLights(new Light(30, 0xffffff99));
         for(GameObject obj : objects) obj.render(gc, r);
         for(Notification notif : notifs) notif.render(gc, r);
     }

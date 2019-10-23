@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Crusade-Of-Ages.iml" filepath="$PROJECT_DIR$/.idea/Crusade-Of-Ages.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CrusadeOfAges/CrusadeOfAges.iml" filepath="$PROJECT_DIR$/CrusadeOfAges/CrusadeOfAges.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
     </modules>
   </component>
 </project>

@@ -6,18 +6,15 @@ import engine.Renderer;
 import engine.Settings;
 import engine.gfx.Button;
 
+import javax.swing.*;
+
 
 public class MainMenu extends View {
 
-    private Settings settings;
-    private World world;
-
-    public MainMenu(Settings settings, World world, Confirm confirm) {
-        this.settings = settings;
-        this.world = world;
+    public MainMenu(Confirm confirm) {
 
         buttons.add(new Button("Single player", "gameSelection"));
-        buttons.add(new Button("Multiplayer", "mainMenu"));
+        buttons.add(new Button("Multiplayer", "lobby"));
         buttons.add(new Button("Stats", "stats"));
         buttons.add(new Button("Editor", "creativeMode"));
         buttons.add(new Button("Game credits", "credits"));
@@ -33,8 +30,12 @@ public class MainMenu extends View {
         for (Button btn : buttons) {
 
             // Button Click
-            if (isSelected(gc, btn)) {
+            if (isSelected(gc, btn) && !btn.getText().equals("Multiplayer")) {
                 gc.getClickSound().play();
+                gc.setActiView(btn.getTargetView());
+            } else if (isSelected(gc, btn)) {
+                String ip = JOptionPane.showInputDialog("IP ADDRESS ?", "localhost");
+                System.out.println(ip);
                 gc.setActiView(btn.getTargetView());
             }
 
@@ -59,8 +60,8 @@ public class MainMenu extends View {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawBackground(world);
-        r.drawMenuTitle(gc.getTitle().substring(0, gc.getTitle().length() - 6).toUpperCase(), settings.translate("The Time Traveller"));
+        r.drawBackground();
+        r.drawMenuTitle(gc.getTitle().substring(0, gc.getTitle().length() - 6).toUpperCase(), "The Time Traveller");
 
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 4;

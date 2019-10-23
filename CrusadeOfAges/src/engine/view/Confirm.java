@@ -82,7 +82,7 @@ public class Confirm extends View {
 
         r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, "wall");
         r.drawRect(x - 3*GameManager.TS, y - GameManager.TS, 6*GameManager.TS, 2*GameManager.TS, 0xffababab);
-        r.drawText(message, x, y - GameManager.TS + 9, 0, 1, -1, Font.STANDARD);
+        r.drawText(gc.getSettings().translate(message), x, y - GameManager.TS + 9, 0, 1, -1, Font.STANDARD);
 
         for (Button btn : buttons) {
             if (btn.getText().equals("Cancel")) {
