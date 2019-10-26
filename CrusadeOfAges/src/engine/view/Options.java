@@ -37,8 +37,14 @@ public class Options extends View {
         boolean cursorHand = false;
         for (Button btn : buttons) {
 
+            // Hand Cursor
+            if (btn.isHover(gc.getInput())) {
+                gc.getWindow().setHandCursor();
+                cursorHand = true;
+            }
+
             //Button selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
                 switch (btn.getText()) {
                     case "<":
@@ -63,7 +69,7 @@ public class Options extends View {
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -71,16 +77,10 @@ public class Options extends View {
             } else {
                 btn.setHoverSounded(false);
             }
-
-            // Hand Cursor
-            if (isHover(gc, btn)) {
-                gc.getWindow().setHandCursor();
-                cursorHand = true;
-            }
         }
 
         for (Checkbox chk : checkboxes) {
-            if (isSelected(gc, chk)) {
+            if (chk.isSelected(gc.getInput())) {
                 // Sound Checkbox ?
                 switch (chk.getTag()) {
                     case "fps":
@@ -128,16 +128,16 @@ public class Options extends View {
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "<":
-                    btn.setAlignCoor(x - 40, y, -1, 1);
+                    btn.setCoor(x - 40, y, -1, 1);
                     break;
                 case ">":
-                    btn.setAlignCoor(x + 40, y, 1, 1);
+                    btn.setCoor(x + 40, y, 1, 1);
                     break;
                 case "Back":
-                    btn.setAlignCoor(x, y + 85, 0, 1);
+                    btn.setCoor(x, y + 85, 0, 1);
                     break;
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
 
         for (Checkbox chk : checkboxes) {

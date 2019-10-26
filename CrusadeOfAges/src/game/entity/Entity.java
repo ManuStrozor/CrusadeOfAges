@@ -1,20 +1,19 @@
-package game.objects;
+package game.entity;
 
 import engine.GameContainer;
 import engine.Renderer;
-import game.GameManager;
+import game.Game;
 
-public abstract class GameObject {
+public abstract class Entity {
 
     protected String tag;
     protected float posX, posY;
     protected int width, height;
-    protected int lives, coins, keys, skulls;
-    protected boolean dead = false;
+    private int lives, coins, keys, skulls;
+    private boolean dead = false;
 
-    public abstract void update(GameContainer gc, GameManager gm, float dt);
+    public abstract void update(GameContainer gc, float dt);
 
-    //public abstract void creativeUpdate(GameContainer gc, float dt);
     public abstract void render(GameContainer gc, Renderer r);
 
     public String getTag() {

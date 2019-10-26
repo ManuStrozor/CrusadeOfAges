@@ -4,14 +4,13 @@ import engine.audio.SoundClip;
 import engine.gfx.Font;
 import engine.gfx.Light;
 import engine.view.*;
-import game.GameManager;
+import game.Game;
 import game.Editor;
-import game.objects.GameObject;
+import game.entity.Entity;
+import network.Client;
+import network.Server;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,13 +21,16 @@ public class GameContainer implements Runnable {
     private Window window;
     private Renderer r;
     private InputHandler input;
-    private GameManager game;
+    private Game game;
     private Editor editor;
     private World world;
     private Settings settings;
     private PlayerStats playerStats;
     private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
     private Map<String, View> v = new HashMap<>();
+
+    private Client socketClient;
+    private Server socketServer;
 
     private boolean running = false;
     private int width, height;
@@ -39,10 +41,10 @@ public class GameContainer implements Runnable {
 
     private static final String FACTORY = "Strozor Inc.";
 
-    public GameContainer(Socket socket, Settings settings) throws IOException {
+    public GameContainer(Settings settings) throws IOException {
         world = new World();
         this.settings = settings;
-        game = new GameManager(world, socket);
+        game = new Game(world);
         playerStats = new PlayerStats();
         editor = new Editor(world);
 
@@ -89,7 +91,6 @@ public class GameContainer implements Runnable {
     }
 
     public void run() {
-        String upState = "exit";
         double startTime, passedTime, frameTime = 0, unprocessedTime = 0;
         double lastTime = System.nanoTime() / 1000000000.0;
         int fps = 0, frames = 0;
@@ -105,7 +106,6 @@ public class GameContainer implements Runnable {
 
             unprocessedTime += passedTime;
             frameTime += passedTime;
-
 
             while (unprocessedTime >= UPDATE_CAP) {
                 unprocessedTime -= UPDATE_CAP;
@@ -132,7 +132,10 @@ public class GameContainer implements Runnable {
                 }
             }
 
-            GameObject go = game.getObject("" + game.getSocket().getLocalPort()); // Utile pour afficher le hud
+            Entity go = null;
+            if (socketClient != null && socketClient.getPlayerName() != null) {
+                go = game.getLevel().getEntity(socketClient.getPlayerName()); // Utile pour afficher le hud
+            }
             r.clear();
 
             // Affichage du jeu en arrière plan
@@ -231,29 +234,27 @@ public class GameContainer implements Runnable {
 
             window.update();
             frames++;
-
-            // Envoi au serveur la view active
-            if (!upState.equals(actiView)) {
-                upState = actiView;
-                try {
-                    game.getDos().writeUTF(game.getSocket().getLocalPort() + " " + upState.toUpperCase());
-                } catch (IOException e) {
-                    System.out.println("[IOException] " + e.getMessage());
-                }
-            }
-        }
-
-        try {
-            game.getDis().close();
-            game.getDos().close();
-            game.getSocket().close();
-        } catch (IOException e) {
-            System.out.println("[IOException] " + e.getMessage());
         }
         stop();
     }
 
-    public GameManager getGame() {
+    public Server getSocketServer() {
+        return socketServer;
+    }
+
+    public void setSocketServer(Server socketServer) {
+        this.socketServer = socketServer;
+    }
+
+    public Client getSocketClient() {
+        return socketClient;
+    }
+
+    public void setSocketClient(Client socketClient) {
+        this.socketClient = socketClient;
+    }
+
+    public Game getGame() {
         return game;
     }
 

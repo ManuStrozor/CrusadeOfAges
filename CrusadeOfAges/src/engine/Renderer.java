@@ -2,11 +2,10 @@ package engine;
 
 import engine.gfx.*;
 import game.Conf;
-import game.GameManager;
-import game.objects.GameObject;
+import game.Game;
+import game.entity.Entity;
 import engine.view.CreativeMode;
 import engine.view.GameSelection;
-import engine.view.InputDialog;
 
 import java.awt.image.DataBufferInt;
 import java.io.File;
@@ -18,29 +17,27 @@ public class Renderer {
 
     private static final int AMBIENTCOLOR = 0xff020202;
 
-    private World world;
+    private GameContainer gc;
     private Settings settings;
 
     private Sprite objs, floor, water;
     private ArrayList<ImageRequest> imageRequest = new ArrayList<>();
 
-    private int gcW, gcH;
     private int[] p, zb, lm;
     private int camX, camY;
     private int zDepth = 0;
     private boolean processing = false;
-    private int ts = GameManager.TS;
+    private int ts = Game.TS;
 
     public Renderer(GameContainer gc, Settings settings) {
-        world = gc.getWorld();
+        this.gc = gc;
         this.settings = settings;
+
         // Sprites
         objs = new Sprite(Conf.SM_FOLDER + "/assets/objects.png", ts, ts, true);
         floor = new Sprite(Conf.SM_FOLDER + "/assets/objects/floor.png", ts, ts, true);
         water = new Sprite(Conf.SM_FOLDER + "/assets/objects/water.png", ts, ts, true);
 
-        gcW = gc.getWidth();
-        gcH = gc.getHeight();
         p = ((DataBufferInt) gc.getWindow().getImage().getRaster().getDataBuffer()).getData();
         zb = new int[p.length];
         lm = new int[p.length];
@@ -84,9 +81,9 @@ public class Renderer {
     private void setPixel(int x, int y, int value) {
 
         int alpha = (value >> 24) & 0xff;
-        if ((x < 0 || x >= gcW || y < 0 || y >= gcH) || alpha == 0) return;
+        if ((x < 0 || x >= gc.getWidth() || y < 0 || y >= gc.getHeight()) || alpha == 0) return;
 
-        int index = x + y * gcW;
+        int index = x + y * gc.getWidth();
 
         if (zb[index] > zDepth) return;
 
@@ -113,15 +110,15 @@ public class Renderer {
 
     private void setLightWorld(int x, int y, int value) {
 
-        if (x < 0 || x >= gcW || y < 0 || y >= gcH) return;
+        if (x < 0 || x >= gc.getWidth() || y < 0 || y >= gc.getHeight()) return;
 
-        int baseColor = lm[x + y * gcW];
+        int baseColor = lm[x + y * gc.getWidth()];
 
         int maxR = Math.max((baseColor >> 16) & 255, (value >> 16) & 255);
         int maxG = Math.max((baseColor >> 8) & 255, (value >> 8) & 255);
         int maxB = Math.max(baseColor & 255, value & 255);
 
-        lm[x + y * gcW] = maxR << 16 | maxG << 8 | maxB;
+        lm[x + y * gc.getWidth()] = maxR << 16 | maxG << 8 | maxB;
     }
 
     public int darken(int color, int diff) {
@@ -171,25 +168,25 @@ public class Renderer {
         }
 
         if (alignY != 1) {
-            if (alignY == 0) offY -= font.getFontImage().getH() / 2;
-            else if (alignY == -1) offY -= font.getFontImage().getH();
+            if (alignY == 0) offY -= font.getFontImage().getHeight() / 2;
+            else if (alignY == -1) offY -= font.getFontImage().getHeight();
         }
 
         int offset = 0;
         for (int i = 0; i < text.length(); i++) {
             int unicode = text.codePointAt(i);
             // With darker color
-            for (int y = 0; y < font.getFontImage().getH(); y++) {
+            for (int y = 0; y < font.getFontImage().getHeight(); y++) {
                 for (int x = 0; x < font.getWidths()[Math.min(unicode, 255)]; x++) {
-                    if (font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getW()] == 0xff000000) {
+                    if (font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getWidth()] == 0xff000000) {
                         setPixel(x + offX + offset - 1, y + offY - 1, darken(color, 100));
                     }
                 }
             }
             // With normal color
-            for (int y = 0; y < font.getFontImage().getH(); y++) {
+            for (int y = 0; y < font.getFontImage().getHeight(); y++) {
                 for (int x = 0; x < font.getWidths()[Math.min(unicode, 255)]; x++) {
-                    if (font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getW()] == 0xff000000) {
+                    if (font.getFontImage().getP()[(x + font.getOffsets()[Math.min(unicode, 255)]) + y * font.getFontImage().getWidth()] == 0xff000000) {
                         setPixel(x + offX + offset, y + offY, color);
                     }
                 }
@@ -208,24 +205,24 @@ public class Renderer {
             return;
         }
 
-        if (offX < -image.getW()) return;
-        if (offY < -image.getH()) return;
-        if (offX >= gcW) return;
-        if (offY >= gcH) return;
+        if (offX < -image.getWidth()) return;
+        if (offY < -image.getHeight()) return;
+        if (offX >= gc.getWidth()) return;
+        if (offY >= gc.getHeight()) return;
 
         int newX = 0;
         int newY = 0;
-        int newWidth = image.getW();
-        int newHeight = image.getH();
+        int newWidth = image.getWidth();
+        int newHeight = image.getHeight();
 
         if (offX < 0) newX -= offX;
         if (offY < 0) newY -= offY;
-        if (offX + newWidth >= gcW) newWidth -= newWidth + offX - gcW;
-        if (offY + newHeight >= gcH) newHeight -= newHeight + offY - gcH;
+        if (offX + newWidth >= gc.getWidth()) newWidth -= newWidth + offX - gc.getWidth();
+        if (offY + newHeight >= gc.getHeight()) newHeight -= newHeight + offY - gc.getHeight();
 
         for (int y = newY; y < newHeight; y++) {
             for (int x = newX; x < newWidth; x++) {
-                setPixel(x + offX, y + offY, image.getP()[x + y * image.getW()]);
+                setPixel(x + offX, y + offY, image.getP()[x + y * image.getWidth()]);
             }
         }
     }
@@ -240,10 +237,10 @@ public class Renderer {
             return;
         }
 
-        float plus = GameManager.TS / (float)tileSize;
+        float plus = Game.TS / (float)tileSize;
         for (int y = 0; y < tileSize; y++) {
             for (int x = 0; x < tileSize; x++) {
-                int position = (int)(x*plus + tileX * image.getWidth()) + (int)(y*plus + tileY * image.getHeight()) * image.getW();
+                int position = (int)(x*plus + tileX * image.getW()) + (int)(y*plus + tileY * image.getH()) * image.getWidth();
                 setPixel(x + offX, y + offY, image.getP()[Math.max(Math.min(position, image.getP().length-1), 0)]);
             }
         }
@@ -272,8 +269,8 @@ public class Renderer {
 
         if (x < -w) return;
         if (y < -h) return;
-        if (x >= gcW) return;
-        if (y >= gcH) return;
+        if (x >= gc.getWidth()) return;
+        if (y >= gc.getHeight()) return;
 
         int newX = 0;
         int newY = 0;
@@ -282,8 +279,8 @@ public class Renderer {
 
         if (x < 0) newX -= x;
         if (y < 0) newY -= y;
-        if (x + newWidth >= gcW) newWidth -= newWidth + x - gcW;
-        if (y + newHeight >= gcH) newHeight -= newHeight + y - gcH;
+        if (x + newWidth >= gc.getWidth()) newWidth -= newWidth + x - gc.getWidth();
+        if (y + newHeight >= gc.getHeight()) newHeight -= newHeight + y - gc.getHeight();
 
         for (int j = newY; j < newHeight; j++) {
             for (int i = newX; i < newWidth; i++) {
@@ -345,9 +342,9 @@ public class Renderer {
         }
     }
 
-    public void drawButton(Button b) {
+    public void drawButton(Button b, boolean isHover) {
 
-        int col = b.isHover() ? darken(b.getBgColor(), 20) : b.getBgColor();
+        int col = isHover ? darken(b.getBgColor(), 20) : b.getBgColor();
         //Border-out
         drawRect(b.getOffX() + camX, b.getOffY() + camY, b.getWidth(), b.getHeight(), 0xff333333);
         //background & text
@@ -381,17 +378,13 @@ public class Renderer {
         fillRect(c.getOffX() + camX + 2, c.getOffY() + camY + c.getHeight() - 2, c.getWidth() - 4, 1, darken(col, 40));
     }
 
-    public void drawInput(int x, int y, int w, int h, int color) {
-
-        String text = InputDialog.input;
-
-        int position = textSize(text.substring(0, InputDialog.blink), Font.STANDARD);
-
+    public void drawTextInput(TextInput textInput, int x, int y, int w, int h, int color) {
         //Background & text
         fillRect(x, y, w, h, color);
-        drawText(text, x + 4, y + h / 2, 1, 0, -1, Font.STANDARD);
+        drawText(textInput.getText(), x + 4, y + h / 2, 1, 0, -1, Font.STANDARD);
         //Blink bar
-        fillRect(x + 4 + position, y + 3, 1, h - 6, -1);
+        int blinkBarPos = textSize(textInput.getText().substring(0, textInput.getBlinkBarPos()), Font.STANDARD);
+        fillRect(x + 4 + blinkBarPos, y + 3, 1, h - 6, -1);
         //Border-out darker
         fillRect(x, y, w, 1, darken(color, 40));
         fillRect(x - 1, y + 1, 1, h - 1, darken(color, 40));
@@ -400,9 +393,9 @@ public class Renderer {
         fillRect(x + w, y + 1, 1, h - 1, lighten(color, 40));
     }
 
-    void drawHUD(GameObject obj) {
+    void drawHUD(Entity obj) {
         int width = ts * 6;
-        int x = gcW / 2 - width / 2;
+        int x = gc.getWidth() / 2 - width / 2;
         fillRect(x, 0, width, ts, 0x99000000);
 
         drawSprite(objs, x, 0, 3, 2, ts);
@@ -414,33 +407,33 @@ public class Renderer {
         drawText("x" + obj.getKeys(), x + ts * 5 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
 
-    public void drawWorld(boolean gameMode) {
+    public void drawLevel(boolean gameMode) {
 
         int offX = Math.max(camX/ts, 0);
         int offY = Math.max(camY/ts, 0);
 
-        int endX = Math.min(((gcW+camX)/ts)+1, world.getWidth());
-        int endY = Math.min(((gcH+camY)/ts)+1, world.getHeight());
+        int endX = Math.min(((gc.getWidth()+camX)/ts)+1, gc.getWorld().getLevel().getWidth());
+        int endY = Math.min(((gc.getHeight()+camY)/ts)+1, gc.getWorld().getLevel().getHeight());
 
         for (int y = offY; y < endY; y++) {
             for (int x = offX; x < endX; x++) {
 
-                int tileX = world.getBlocMap(x, y).getX();
-                int tileY = world.getBlocMap(x, y).getY();
+                int tileX = gc.getWorld().getBlocMap(x, y).getX();
+                int tileY = gc.getWorld().getBlocMap(x, y).getY();
 
                 // Murs derriere les blocs non-solides
                 drawSprite(objs, x * ts, y * ts, 1, 0, ts);
 
                 // Affichage des blocs
-                switch (world.getBlocMap(x, y).getTag()) {
+                switch (gc.getWorld().getBlocMap(x, y).getTag()) {
                     case "free":
                         if (!gameMode) drawSprite(objs, x * ts, y * ts, tileX, tileY, ts);
                         break;
                     case "floor":
-                        drawSprite(floor, x * ts, y * ts, getTileX(world, x, y), getTileY(world, x, y), ts);
+                        drawSprite(floor, x * ts, y * ts, getTileX(gc.getWorld(), x, y), getTileY(gc.getWorld(), x, y), ts);
                         break;
                     case "water":
-                        drawSprite(water, x * ts, y * ts, 0, getWaterTile(world, x, y), ts);
+                        drawSprite(water, x * ts, y * ts, 0, getWaterTile(gc.getWorld(), x, y), ts);
                         break;
                     default:
                         drawSprite(objs, x * ts, y * ts, tileX, tileY, ts);
@@ -448,11 +441,11 @@ public class Renderer {
                 }
 
                 // Ombres sous les blocs
-                if (!world.getBlocMap(x, y).isSolid() && solidTop(world, x, y))
+                if (!gc.getWorld().getBlocMap(x, y).isSolid() && solidTop(gc.getWorld(), x, y))
                     drawSprite(objs, x * ts, y * ts, 0, 3, ts);
 
                 // Partie haute de la porte
-                if (world.getBlocMap(x, y).isTagged("door"))
+                if (gc.getWorld().getBlocMap(x, y).isTagged("door"))
                     drawSprite(objs, x * ts, (y - 1) * ts, tileX, tileY - 1, ts);
             }
         }
@@ -506,10 +499,10 @@ public class Renderer {
         return world.getBlocMap(x, y+1).isSolid();
     }
 
-    public void drawWorldLights(Light lamp) { // A optimiser (recherche des lamps sur la zone camera)
-        for (int y = 0; y < world.getHeight(); y++) {
-            for (int x = 0; x < world.getWidth(); x++) {
-                if (world.getBlocMap(x, y).isTagged("torch")) {
+    public void drawLevelLights(Light lamp) { // A optimiser (recherche des lamps sur la zone camera)
+        for (int y = 0; y < gc.getWorld().getLevel().getHeight(); y++) {
+            for (int x = 0; x < gc.getWorld().getLevel().getWidth(); x++) {
+                if (gc.getWorld().getBlocMap(x, y).isTagged("torch")) {
                     drawLight(lamp, x * ts + ts / 2, y * ts + ts / 3);
                 }
             }
@@ -517,18 +510,18 @@ public class Renderer {
     }
 
     private void drawBloc(String tag, int x, int y, int tileSize) {
-        drawSprite(objs, x, y, world.getBloc(tag).getX(), world.getBloc(tag).getY(), tileSize);
+        drawSprite(objs, x, y, gc.getWorld().getBloc(tag).getX(), gc.getWorld().getBloc(tag).getY(), tileSize);
     }
 
     public void drawDock(String[] dock, int scroll, int tileSize) {
-        int midH = camY + gcH / 2;
+        int midH = camY + gc.getHeight() / 2;
         int s = tileSize + 1;
         int y = midH - (dock.length * s) / 2 + (dock.length / 2 - scroll) * s;
 
         if (dock.length % 2 != 0)
             y += tileSize / 2;
 
-        fillRect(camX, camY, s + 4, gcH, 0x89000000);
+        fillRect(camX, camY, s + 4, gc.getHeight(), 0x89000000);
 
         for (int i = 0; i < dock.length; i++) {
             drawBloc(dock[i], camX + 4, y - tileSize / 2 + s * i, tileSize);
@@ -540,26 +533,26 @@ public class Renderer {
     }
 
     public void drawMiniMap(Image img, int h) {
-        Image thumb = img.getThumbnail(h*img.getW()/img.getH(), h);
-        float diffW = thumb.getW() / (float)img.getW();
-        float diffH = thumb.getH() / (float)img.getH();
-        int xMMap = camX + gcW - thumb.getW() - 4;
-        int yMMap = camY + gcH - thumb.getH() - 4;
-        fillRect(xMMap, yMMap, thumb.getW(), thumb.getH(), 0x22ffffff);
+        Image thumb = img.getThumbnail(h*img.getWidth()/img.getHeight(), h);
+        float diffW = thumb.getWidth() / (float)img.getWidth();
+        float diffH = thumb.getHeight() / (float)img.getHeight();
+        int xMMap = camX + gc.getWidth() - thumb.getWidth() - 4;
+        int yMMap = camY + gc.getHeight() - thumb.getHeight() - 4;
+        fillRect(xMMap, yMMap, thumb.getWidth(), thumb.getHeight(), 0x22ffffff);
         drawImage(thumb.setOpacity(0x99), xMMap, yMMap);
         drawRect(xMMap + (int)(camX/ ts * diffW), yMMap + (int)(camY/ ts * diffH),
-                (int)(gcW / ts * diffW), (int)(gcH / ts * diffH), 0x66ffffff);
+                (int)(gc.getWidth() / ts * diffW), (int)(gc.getHeight() / ts * diffH), 0x66ffffff);
     }
 
     public void drawArrows(int width, int height, int tileSize) {
         if (camY > 0)
-            drawBloc("arrow_up", camX + gcW / 2 - tileSize / 2, camY, tileSize);
-        if (camY + gcH < height * this.ts)
-            drawBloc("arrow_down", camX + gcW / 2 - tileSize / 2, camY + gcH - tileSize, tileSize);
+            drawBloc("arrow_up", camX + gc.getWidth() / 2 - tileSize / 2, camY, tileSize);
+        if (camY + gc.getHeight() < height * this.ts)
+            drawBloc("arrow_down", camX + gc.getWidth() / 2 - tileSize / 2, camY + gc.getHeight() - tileSize, tileSize);
         if (camX > 0)
-            drawBloc("arrow_left", camX, camY + gcH / 2 - tileSize / 2, tileSize);
-        if (camX + gcW < width * this.ts)
-            drawBloc("arrow_right", camX + gcW - tileSize, camY + gcH / 2 - tileSize / 2, tileSize);
+            drawBloc("arrow_left", camX, camY + gc.getHeight() / 2 - tileSize / 2, tileSize);
+        if (camX + gc.getWidth() < width * this.ts)
+            drawBloc("arrow_right", camX + gc.getWidth() - tileSize, camY + gc.getHeight() / 2 - tileSize / 2, tileSize);
     }
 
     public void drawLevels(String[][] levels, PlayerStats ps) {
@@ -570,7 +563,7 @@ public class Renderer {
             if (len + 30 > largest) largest = len + 30;
         }
 
-        int x = gcW / 2 - largest / 2;
+        int x = gc.getWidth() / 2 - largest / 2;
         int y = ts + 10 - GameSelection.scroll;
 
         int hUsed = 10;
@@ -591,16 +584,16 @@ public class Renderer {
             hUsed += size + 10;
         }
 
-        int hTotal = gcH - (3 * ts);
+        int hTotal = gc.getHeight() - (3 * ts);
         int minus = Math.max(hUsed - hTotal, 0);
 
-        drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 10, hTotal, GameSelection.scroll, minus);
+        drawScrollBar(gc.getWidth() / 2 + largest / 2 + 20, ts, 10, hTotal, GameSelection.scroll, minus);
     }
 
     public void drawCreaList(File[] files, Image[] imgs, String nothingMessage) {
 
         if (files == null || files.length == 0) {
-            drawText(settings.translate(nothingMessage), gcW / 2, gcH / 2, 0, 0, 0xffababab, Font.STANDARD);
+            drawText(settings.translate(nothingMessage), gc.getWidth() / 2, gc.getHeight() / 2, 0, 0, 0xffababab, Font.STANDARD);
         } else {
             Date[] dates = new Date[files.length];
             int[] widths = new int[files.length];
@@ -608,19 +601,19 @@ public class Renderer {
             int largest = 0;
             for (int i = 0; i < files.length; i++) {
 
-                widths[i] = Image.THUMBH * imgs[i].getW() / imgs[i].getH();
+                widths[i] = Image.THUMBH * imgs[i].getWidth() / imgs[i].getHeight();
                 dates[i] = new Date(files[i].lastModified());
 
                 int size = max3(
                         textSize(files[i].getName(), Font.STANDARD),
                         textSize(dates[i].toString(), Font.STANDARD),
-                        textSize("Dimensions: " + imgs[i].getW() + "x" + imgs[i].getH(), Font.STANDARD)
+                        textSize("Dimensions: " + imgs[i].getWidth() + "x" + imgs[i].getHeight(), Font.STANDARD)
                 );
 
                 largest = Math.max(size + widths[i], largest);
             }
 
-            int x = gcW / 2 - largest / 2;
+            int x = gc.getWidth() / 2 - largest / 2;
             int y = ts + 10 - CreativeMode.scroll - Image.THUMBH - 10;
 
             int hUsed = 10;
@@ -633,16 +626,16 @@ public class Renderer {
                 fillRect(x, y, widths[i], Image.THUMBH, -1);
                 drawImage(imgs[i].getThumbnail(widths[i], Image.THUMBH), x, y);
                 drawText(files[i].getName(), x + widths[i] + 4, y - 2, 1, 1, -1, Font.STANDARD);
-                drawText("Dimensions: " + imgs[i].getW() + "x" + imgs[i].getH(), x + widths[i] + 4, y + Image.THUMBH/2, 1, 0, 0xff898989, Font.STANDARD);
+                drawText("Dimensions: " + imgs[i].getWidth() + "x" + imgs[i].getHeight(), x + widths[i] + 4, y + Image.THUMBH/2, 1, 0, 0xff898989, Font.STANDARD);
                 drawText(dates[i].toString(), x + widths[i] + 4, y + Image.THUMBH + 2, 1, -1, 0xff898989, Font.STANDARD);
 
                 hUsed += Image.THUMBH + 10;
             }
 
-            int hTotal = gcH - 3 * ts;
+            int hTotal = gc.getHeight() - 3 * ts;
             int minus = Math.max(hUsed - hTotal, 0);
 
-            drawScrollBar(gcW / 2 + largest / 2 + 20, ts, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
+            drawScrollBar(gc.getWidth() / 2 + largest / 2 + 20, ts, 8, hTotal, CreativeMode.scroll / 8, minus / 8);
         }
     }
 
@@ -665,8 +658,8 @@ public class Renderer {
     }
 
     public void drawBackground() {
-        for (int y = 0; y <= gcH / ts; y++) {
-            for (int x = 0; x <= gcW / ts; x++) {
+        for (int y = 0; y <= gc.getHeight() / ts; y++) {
+            for (int x = 0; x <= gc.getWidth() / ts; x++) {
                 drawBloc("wall", x* ts, y* ts, ts);
             }
         }
@@ -681,9 +674,9 @@ public class Renderer {
     }
 
     public void drawMenuTitle(String title, String small) {
-        drawText(settings.translate(title).toUpperCase(), gcW /2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
+        drawText(settings.translate(title).toUpperCase(), gc.getWidth() /2, 45, 0, 1, 0xffc0392b, Font.BIG_STANDARD);
         if (small != null) {
-            drawText(settings.translate(small), gcW /2, 60, 0, 1, 0xffababab, Font.STANDARD);
+            drawText(settings.translate(small), gc.getWidth() /2, 60, 0, 1, 0xffababab, Font.STANDARD);
         }
     }
 

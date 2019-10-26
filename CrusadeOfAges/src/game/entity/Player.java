@@ -1,4 +1,4 @@
-package game.objects;
+package game.entity;
 
 import engine.GameContainer;
 import engine.Renderer;
@@ -7,17 +7,14 @@ import engine.gfx.Sprite;
 import engine.World;
 import engine.gfx.Light;
 import game.Conf;
-import game.GameManager;
+import game.Game;
 import game.actions.Collect;
 import game.actions.Event;
 import game.actions.Move;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
-public class Player extends GameObject {
+public class Player extends Entity {
 
     private Move move;
     private Collect collect;
@@ -27,7 +24,7 @@ public class Player extends GameObject {
     private Sprite plSprite;
 
     private int tileX, tileY, direction = 0;
-    private float upPosX, upPosY, offX, offY, anim = 0;
+    private float offX, offY, anim = 0;
 
     private int lastFloorX, lastFlorrY;
 
@@ -35,14 +32,14 @@ public class Player extends GameObject {
     private float fallDist = 0;
     private int padding = 8;
 
-    public static int tileSize = GameManager.TS;
+    public static int tileSize = Game.TS;
 
-    public Player(String tag, World world, int lives) {
+    public Player(String name, World world) {
         plSprite = new Sprite(Conf.SM_FOLDER + "/assets/player.png", tileSize, tileSize, true);
 
         this.world = world;
-        this.tag = tag;
-        this.lives = lives;
+        tag = name;
+        setLives(1);
 
         move = new Move(this, world);
         collect = new Collect(this, world);
@@ -50,144 +47,16 @@ public class Player extends GameObject {
 
         width = tileSize;
         height = tileSize;
-        tileX = world.getSpawnX();
-        tileY = world.getSpawnY();
+        tileX = world.getLevel().getSpawnX();
+        tileY = world.getLevel().getSpawnY();
         posX = tileX * tileSize;
         posY = tileY * tileSize;
-        upPosX = posX;
-        upPosY = posY;
         offX = 0;
         offY = 0;
     }
 
-    public void creativeUpdate(GameContainer gc, float dt) {
-
-        String currTag = world.getBlocMap(tileX, tileY).getTag();
-        String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
-
-        //Last floor
-        if (!currTag.contains("spikes") && botTag.equals("floor")) {
-            lastFloorX = tileX;
-            lastFlorrY = tileY;
-        }
-
-        //Slime bloc
-        if (botTag.equals("slime") && fallDist == 0) {
-            if (!gc.getInput().isKey(KeyEvent.VK_DOWN) && !gc.getInput().isKey(KeyEvent.VK_S))
-                move.jump(10);
-        }
-
-        //Hit spikes
-        if (currTag.contains("spikes")) {
-            event.impale(gc);
-            event.respawn(lastFloorX, lastFlorrY);
-        } else {
-
-            //Left & Right
-            if (gc.getInput().isKey(KeyEvent.VK_LEFT) || gc.getInput().isKey(KeyEvent.VK_Q))
-                move.toLeft(dt, speed);
-            if (gc.getInput().isKey(KeyEvent.VK_RIGHT) || gc.getInput().isKey(KeyEvent.VK_D))
-                move.toRight(dt, speed);
-
-            //Up & Down ladders
-            if (currTag.equals("ladder") || (botTag.equals("ladder") && fallDist == 0)) {
-
-                fallDist = 0;
-                ground = 0;
-
-                if ((gc.getInput().isKey(KeyEvent.VK_UP) || gc.getInput().isKey(KeyEvent.VK_Z) || gc.getInput().isKey(KeyEvent.VK_SPACE))) {
-                    if (!currTag.equals("ladder")) move.jump(4);
-                    else move.upLadder(dt, speed);
-                }
-
-                if ((gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S))) {
-                    move.downLadder(dt, speed);
-                }
-            } else {
-                //Jump & Gravity
-                fallDist += dt * 14;
-
-                if (gc.getInput().isKeyDown(KeyEvent.VK_UP) || gc.getInput().isKeyDown(KeyEvent.VK_Z) || gc.getInput().isKeyDown(KeyEvent.VK_SPACE)) {
-                    if (ground <= 1) move.jump(5);
-                }
-
-                offY += fallDist;
-
-                if (fallDist < 0) {
-                    if ((world.getBlocMap(tileX, tileY - 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY - 1).isSolid()) &&
-                            offY < 0) {
-                        fallDist = 0;
-                        offY = 0;
-                    }
-                }
-
-                if (fallDist > 0) {
-                    if ((world.getBlocMap(tileX, tileY + 1).isSolid() || world.getBlocMap(tileX + (int) Math.signum((int) Math.abs(offX) > padding ? offX : 0), tileY + 1).isSolid()) &&
-                            offY > 0) {
-                        fallDist = 0;
-                        offY = 0;
-                        ground = 0;
-                    }
-                }
-            }
-        }
-
-
-        //Update Tile position
-        if (offY > tileSize / 2.0) {
-            tileY++;
-            offY -= tileSize;
-        }
-        if (offY < -tileSize / 2.0) {
-            tileY--;
-            offY += tileSize;
-        }
-        if (offX > tileSize / 2.0) {
-            tileX++;
-            offX -= tileSize;
-        }
-        if (offX < -tileSize / 2.0) {
-            tileX--;
-            offX += tileSize;
-        }
-
-        //Snick -> Slow
-        if (currTag.equals("ladder")) {
-            speed = 140;
-            anim += dt * 14;
-        } else if (gc.getInput().isKey(KeyEvent.VK_DOWN) || gc.getInput().isKey(KeyEvent.VK_S)) {
-            speed = 40;
-            anim += dt * 4;
-        } else {
-            speed = 180;
-            anim += dt * 18;
-        }
-
-        if ((!gc.getInput().isKey(KeyEvent.VK_RIGHT) &&
-                !gc.getInput().isKey(KeyEvent.VK_D) &&
-                !gc.getInput().isKey(KeyEvent.VK_LEFT) &&
-                !gc.getInput().isKey(KeyEvent.VK_Q)) || anim > 4) {
-            anim = 0;
-        }
-
-        if (fallDist != 0) anim = 3;
-
-        posX = tileX * tileSize + offX;
-        posY = tileY * tileSize + offY;
-    }
-
     @Override
-    public void update(GameContainer gc, GameManager gm, float dt) {
-
-        try {
-            if (upPosX != posX || upPosY != posY) {
-                upPosX = posX;
-                upPosY = posY;
-                gm.getDos().writeUTF(gm.getSocket().getLocalPort() + ":" + upPosX + ":" + upPosY + ":" + anim);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void update(GameContainer gc, float dt) {
 
         String currTag = world.getBlocMap(tileX, tileY).getTag();
         String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
@@ -209,19 +78,19 @@ public class Player extends GameObject {
         //Collectings & Events on current bloc
         switch (world.getBlocMap(tileX, tileY).getTag()) {
             case "coin":
-                collect.coin(gc);
+                collect.coin();
                 break;
             case "pill":
-                collect.pill(gc);
+                collect.pill();
                 break;
             case "key":
-                collect.key(gc);
+                collect.key();
                 break;
             case "skull":
-                collect.skull(gc);
+                collect.skull();
                 break;
             case "door":
-                event.switchLevel(gc, gm);
+                event.switchLevel(gc);
                 break;
             case "lever_left":
                 event.actionLever(gc, currTag);
@@ -233,7 +102,7 @@ public class Player extends GameObject {
 
             event.impale(gc);
             gc.getPlayerStats().upValueOf("Death");
-            if (this.lives == 0) {
+            if (getLives() == 0) {
                 this.setDead(true);
                 gc.getPlayerStats().upValueOf("Game over");
                 gc.setActiView("gameOver");

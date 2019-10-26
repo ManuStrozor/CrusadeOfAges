@@ -1,17 +1,16 @@
-package game.objects;
+package game.entity;
 
 import engine.GameContainer;
 import engine.Renderer;
-import game.GameManager;
 
-public class Enemy extends GameObject {
+public class Enemy extends Entity {
 
     public Enemy() {
 
     }
 
     @Override
-    public void update(GameContainer gc, GameManager gm, float dt) {
+    public void update(GameContainer gc, float dt) {
 
     }
 

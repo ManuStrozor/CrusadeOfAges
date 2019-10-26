@@ -2,7 +2,7 @@ package game;
 
 import engine.*;
 import engine.gfx.Image;
-import game.objects.Player;
+import game.entity.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
@@ -45,7 +45,7 @@ public class Editor extends AbstractGame {
     };
     private int color, scroll = 0;
 
-    public static int ts = GameManager.TS;
+    public static int ts = Game.TS;
     private int toolSize = 32;
     private static final int DRAGSPEED = 3;
     private int dragOffX = -1, dragOffY = -1;
@@ -56,7 +56,7 @@ public class Editor extends AbstractGame {
     public Editor(World world) {
         super(world);
         Editor.world = world;
-        player = new Player("Tester", world, 999);
+        player = new Player("Tester", world);
     }
 
     @Override
@@ -66,13 +66,13 @@ public class Editor extends AbstractGame {
 
         if (once) {
             if (newOne) creaImg = new Image(new int[60 * 30], 60, 30);
-            world.init(creaImg);
-            width = creaImg.getW();
-            height = creaImg.getH();
+            world.getLevel().loadFromImage(creaImg);
+            width = creaImg.getWidth();
+            height = creaImg.getHeight();
             once = false;
         }
 
-        if (spawn && spawnExists()) player.creativeUpdate(gc, dt); // Player update
+        //if (spawn && spawnExists()) player.creativeUpdate(gc, dt); // Player update
 
         int wheel = gc.getInput().getScroll();
         if (!isCtrlDown(gc) && gc.getInput().getMouseX() < toolSize + 4) {
@@ -207,12 +207,12 @@ public class Editor extends AbstractGame {
             }
         }
 
-        r.drawWorld(false);
+        r.drawLevel(false);
         if (creaImg != null) r.drawMiniMap(creaImg, 100);
         r.drawDock(elems, scroll, toolSize);
-        if (creaImg != null) r.drawArrows(creaImg.getW(), creaImg.getH(), 32);
+        if (creaImg != null) r.drawArrows(creaImg.getWidth(), creaImg.getHeight(), 32);
 
-        if (spawn && spawnExists()) player.render(gc, r);
+        if (spawn && world.getLevel().hasSpawn()) player.render(gc, r);
 
         for (Notification notif : notifs) notif.render(gc, r);
     }
@@ -233,10 +233,12 @@ public class Editor extends AbstractGame {
     }
 
     private void putSomething(int color, int x, int y) {
-        if (elems[scroll].equals("spawn") && spawnExists()) {
-            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0); // Delete previous spawn
-            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-            player.getEvent().respawn(world.getSpawnX(), world.getSpawnY()); // Reset player position
+        if (elems[scroll].equals("spawn") && world.getLevel().hasSpawn()) {
+            int spawnX = world.getLevel().getSpawnX();
+            int spawnY = world.getLevel().getSpawnY();
+            creaImg.setP(spawnX, spawnY, 0); // Delete previous spawn
+            world.setBloc(spawnX, spawnY, 0);
+            player.getEvent().respawn(spawnX, spawnY); // Reset player position
         }
         creaImg.setP(x, y, color);
         world.setBloc(x, y, color);
@@ -244,10 +246,12 @@ public class Editor extends AbstractGame {
 
     private void delSomething(GameContainer gc, int x, int y) {
         gc.getWindow().setRubberCursor();
-        if (x == world.getSpawnX() && y == world.getSpawnY()) {
-            creaImg.setP(world.getSpawnX(), world.getSpawnY(), 0); // Delete spawn
-            world.setBloc(world.getSpawnX(), world.getSpawnY(), 0);
-            world.resetSpawn();
+        int spawnX = world.getLevel().getSpawnX();
+        int spawnY = world.getLevel().getSpawnY();
+        if (x == spawnX && y == spawnY) {
+            creaImg.setP(spawnX, spawnY, 0); // Delete spawn
+            world.setBloc(spawnX, spawnY, 0);
+            world.getLevel().resetSpawn();
         }
         creaImg.setP(x, y, 0);
         world.setBloc(x, y, 0);
@@ -255,10 +259,6 @@ public class Editor extends AbstractGame {
 
     public static void setSpawn(boolean spawn) {
         Editor.spawn = spawn;
-    }
-
-    private boolean spawnExists() {
-        return world.getSpawnX() != -1 && world.getSpawnY() != -1;
     }
 
     private boolean isDragging() {

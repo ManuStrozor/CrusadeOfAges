@@ -1,13 +1,8 @@
 package game.actions;
 
-import engine.GameContainer;
 import engine.World;
 import engine.audio.SoundClip;
-import game.objects.Player;
-
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.io.IOException;
+import game.entity.Player;
 
 public class Collect {
 
@@ -24,26 +19,26 @@ public class Collect {
         bonus = new SoundClip("/audio/getlife.wav", -15f);
     }
 
-    public void coin(GameContainer gc) {
-        world.clean(pl.getTileX(), pl.getTileY());
+    public void coin() {
+        world.getLevel().clean(pl.getTileX(), pl.getTileY());
         pl.setCoins(pl.getCoins() + 1);
         coin.play();
     }
 
-    public void key(GameContainer gc) {
-        world.clean(pl.getTileX(), pl.getTileY());
+    public void key() {
+        world.getLevel().clean(pl.getTileX(), pl.getTileY());
         pl.setKeys(pl.getKeys() + 1);
         bonus.play();
     }
 
-    public void skull(GameContainer gc) {
-        world.clean(pl.getTileX(), pl.getTileY());
+    public void skull() {
+        world.getLevel().clean(pl.getTileX(), pl.getTileY());
         pl.setSkulls(pl.getSkulls() + 1);
         bonus.play();
     }
 
-    public void pill(GameContainer gc) {
-        world.clean(pl.getTileX(), pl.getTileY());
+    public void pill() {
+        world.getLevel().clean(pl.getTileX(), pl.getTileY());
         pl.setLives(pl.getLives() + 1);
         bonus.play();
     }

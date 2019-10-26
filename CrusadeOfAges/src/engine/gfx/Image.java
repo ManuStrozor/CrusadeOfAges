@@ -9,45 +9,46 @@ import java.io.IOException;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class Image {
 
     public static final int THUMBH = 60;
     private boolean alpha = false;
-    private int w, h;
+    private int width, height;
     int[] p;
 
     /**
      * Creates Image object using image from : [True] AppData or [False] game assets
      *
-     * @param path
+     * @param path chemin de l'image
      * @param appdata True / False
      */
     public Image(String path, boolean appdata) {
         try {
             BufferedImage image = appdata ? ImageIO.read(new File(path)) : ImageIO.read(Image.class.getResourceAsStream(path));
-            w = image.getWidth();
-            h = image.getHeight();
-            p = image.getRGB(0, 0, w, h, null, 0, w);
+            width = image.getWidth();
+            height = image.getHeight();
+            p = image.getRGB(0, 0, width, height, null, 0, width);
             image.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public Image(int[] p, int w, int h) {
+    public Image(int[] p, int width, int height) {
         this.p = p;
-        this.w = w;
-        this.h = h;
+        this.width = width;
+        this.height = height;
     }
 
-    public int getW() {
-        return w;
+    public int getWidth() {
+        return width;
     }
 
-    public int getH() {
-        return h;
+    public int getHeight() {
+        return height;
     }
 
     /**
@@ -60,7 +61,7 @@ public class Image {
     }
 
     public void setP(int x, int y, int value) {
-        int pos = x + y * getW();
+        int pos = x + y * getWidth();
         if (pos >= 0 && pos < p.length) p[pos] = value;
     }
 
@@ -69,9 +70,9 @@ public class Image {
     }
 
     public Image setOpacity(int value) {
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                int index = x + y * w;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int index = x + y * width;
                 int alpha = (p[index] >> 24) & 0xff;
                 int newP = (Math.min(alpha, value)) << 24 | ((p[index] >> 16) & 0xff) << 16 | ((p[index] >> 8) & 0xff) << 8 | (p[index] & 0xff);
                 setP(x, y, newP);
@@ -81,10 +82,10 @@ public class Image {
     }
 
     public Image getThumbnail(int w, int h) {
-        BufferedImage origin = new BufferedImage(this.w, this.h, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < this.h; y++) {
-            for (int x = 0; x < this.w; x++) {
-                origin.setRGB(x, y, this.p[x + y * this.w]);
+        BufferedImage origin = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                origin.setRGB(x, y, this.p[x + y * width]);
             }
         }
         BufferedImage thumbnail = new BufferedImage(w, h, origin.getType());
@@ -97,18 +98,14 @@ public class Image {
     }
 
     public void blank() {
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-               setP(x, y, 0);
-            }
-        }
+        Arrays.fill(p, 0);
     }
 
     public void save(String rename) {
-        BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-        for (int y = 0; y < h; y++) {
-            for (int x = 0; x < w; x++) {
-                bi.setRGB(x, y, p[x + y * w]);
+        BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                bi.setRGB(x, y, p[x + y * width]);
             }
         }
         try {

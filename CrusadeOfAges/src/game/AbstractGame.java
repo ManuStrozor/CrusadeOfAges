@@ -2,7 +2,6 @@ package game;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
 import engine.World;
 
 public abstract class AbstractGame {

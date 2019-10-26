@@ -1,69 +1,20 @@
 package engine.gfx;
 
-public class Button {
+public class Button extends Clickable {
 
-    private int offX, offY, width = 170, height = 20, bgColor;
     private String text, targetView;
-    private boolean hover, hoverSounded = false;
+    private boolean hoverSounded = false;
 
     public Button(String text, String targetView) {
-        bgColor = 0xff616E7A;
+        super(0xff616E7A, 170, 20);
         this.targetView = targetView;
         this.text = text;
     }
 
     public Button(int w, int h, String text, String targetView) {
-        bgColor = 0xff616E7A;
-        width = w;
-        height = h;
-        this.text = text;
+        super(0xff616E7A, w, h);
         this.targetView = targetView;
-    }
-
-    public int getOffX() {
-        return offX;
-    }
-
-    public void setOffX(int offX) {
-        this.offX = offX;
-    }
-
-    public int getOffY() {
-        return offY;
-    }
-
-    public void setOffY(int offY) {
-        this.offY = offY;
-    }
-
-    public void setAlignCoor(int offX, int offY, int alignX, int alignY) {
-        if (alignX != 1) {
-            if (alignX == 0) offX -= width / 2;
-            else if (alignX == -1) offX -= width;
-        }
-
-        if (alignY != 1) {
-            if (alignY == 0) offY -= height / 2;
-            else if (alignY == -1) offY -= height;
-        }
-        this.offX = offX;
-        this.offY = offY;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public int getBgColor() {
-        return bgColor;
-    }
-
-    public void setBgColor(int bgColor) {
-        this.bgColor = bgColor;
+        this.text = text;
     }
 
     public String getTargetView() {
@@ -72,19 +23,6 @@ public class Button {
 
     public String getText() {
         return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public boolean setHover(boolean hover) {
-        this.hover = hover;
-        return hover;
-    }
-
-    public boolean isHover() {
-        return hover;
     }
 
     public boolean isHoverSounded() {

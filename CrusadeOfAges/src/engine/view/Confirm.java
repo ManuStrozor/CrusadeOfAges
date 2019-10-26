@@ -2,17 +2,11 @@ package engine.view;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
-import engine.World;
 import engine.gfx.Button;
 import engine.gfx.Font;
-import game.GameManager;
+import game.Game;
 
 import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class Confirm extends View {
 
@@ -44,7 +38,7 @@ public class Confirm extends View {
         for (Button btn : buttons) {
 
             // Button Selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
                 if (btn.getText().equals("Cancel")) {
                     gc.setActiView(gc.getPrevView());
@@ -54,7 +48,7 @@ public class Confirm extends View {
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -64,7 +58,7 @@ public class Confirm extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -80,17 +74,17 @@ public class Confirm extends View {
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 2;
 
-        r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, "wall");
-        r.drawRect(x - 3*GameManager.TS, y - GameManager.TS, 6*GameManager.TS, 2*GameManager.TS, 0xffababab);
-        r.drawText(gc.getSettings().translate(message), x, y - GameManager.TS + 9, 0, 1, -1, Font.STANDARD);
+        r.fillAreaBloc(x - 3* Game.TS, y - Game.TS, 6, 2, "wall");
+        r.drawRect(x - 3* Game.TS, y - Game.TS, 6* Game.TS, 2* Game.TS, 0xffababab);
+        r.drawText(gc.getSettings().translate(message), x, y - Game.TS + 9, 0, 1, -1, Font.STANDARD);
 
         for (Button btn : buttons) {
             if (btn.getText().equals("Cancel")) {
-                btn.setAlignCoor(x + 5, y + 5, 1, 1);
+                btn.setCoor(x + 5, y + 5, 1, 1);
             } else {
-                btn.setAlignCoor(x - 5, y + 5, -1, 1);
+                btn.setCoor(x - 5, y + 5, -1, 1);
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
 
     }

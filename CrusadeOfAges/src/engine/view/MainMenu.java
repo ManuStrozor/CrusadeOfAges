@@ -1,12 +1,8 @@
 package engine.view;
 
 import engine.GameContainer;
-import engine.World;
 import engine.Renderer;
-import engine.Settings;
 import engine.gfx.Button;
-
-import javax.swing.*;
 
 
 public class MainMenu extends View {
@@ -30,17 +26,13 @@ public class MainMenu extends View {
         for (Button btn : buttons) {
 
             // Button Click
-            if (isSelected(gc, btn) && !btn.getText().equals("Multiplayer")) {
+            if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
-                gc.setActiView(btn.getTargetView());
-            } else if (isSelected(gc, btn)) {
-                String ip = JOptionPane.showInputDialog("IP ADDRESS ?", "localhost");
-                System.out.println(ip);
                 gc.setActiView(btn.getTargetView());
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -50,7 +42,7 @@ public class MainMenu extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -69,28 +61,28 @@ public class MainMenu extends View {
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "Single player":
-                    btn.setAlignCoor(x, y, 0, 1);
+                    btn.setCoor(x, y, 0, 1);
                     break;
                 case "Multiplayer":
-                    btn.setAlignCoor(x, y + 25, 0, 1);
+                    btn.setCoor(x, y + 25, 0, 1);
                     break;
                 case "Editor":
-                    btn.setAlignCoor(x, y + 55, 0, 1);
+                    btn.setCoor(x, y + 55, 0, 1);
                     break;
                 case "Stats":
-                    btn.setAlignCoor(x, y + 85, 0, 1);
+                    btn.setCoor(x, y + 85, 0, 1);
                     break;
                 case "Game credits":
-                    btn.setAlignCoor(x, y + 110, 0, 1);
+                    btn.setCoor(x, y + 110, 0, 1);
                     break;
                 case "Options":
-                    btn.setAlignCoor(x - 5, y + 135, -1, 1);
+                    btn.setCoor(x - 5, y + 135, -1, 1);
                     break;
                 case "Quit game":
-                    btn.setAlignCoor(x + 5, y + 135, 1, 1);
+                    btn.setCoor(x + 5, y + 135, 1, 1);
                     break;
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
     }
 }

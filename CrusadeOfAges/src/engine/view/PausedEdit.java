@@ -4,8 +4,8 @@ import engine.GameContainer;
 import engine.Renderer;
 import engine.gfx.Button;
 import game.Editor;
-import game.GameManager;
-import game.objects.Player;
+import game.Game;
+import game.entity.Player;
 
 import java.awt.event.KeyEvent;
 
@@ -29,13 +29,13 @@ public class PausedEdit extends View {
         for (Button btn : buttons) {
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
 
             // Button Selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 switch (btn.getText()) {
                     case "Back":
                         gc.getWindow().setDefaultCursor();
@@ -49,13 +49,13 @@ public class PausedEdit extends View {
                         break;
                     case "Blank":
                         Editor.creaImg.blank();
-                        Editor.world.blank();
+                        gc.getGame().getLevel().blank();
                         break;
                     case "Quit":
                         Editor.setSpawn(false);
-                        gc.getR().setTs(GameManager.TS);
-                        Player.tileSize = GameManager.TS;
-                        Editor.ts = GameManager.TS;
+                        gc.getR().setTs(Game.TS);
+                        Player.tileSize = Game.TS;
+                        Editor.ts = Game.TS;
                         break;
                 }
                 gc.getClickSound().play();
@@ -63,7 +63,7 @@ public class PausedEdit extends View {
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -86,22 +86,22 @@ public class PausedEdit extends View {
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "Back":
-                    btn.setAlignCoor(x, y, 0, 1);
+                    btn.setCoor(x, y, 0, 1);
                     break;
                 case "Try":
-                    btn.setAlignCoor(x, y + 30, 0, 1);
+                    btn.setCoor(x, y + 30, 0, 1);
                     break;
                 case "Blank":
-                    btn.setAlignCoor(x, y + 60, 0, 1);
+                    btn.setCoor(x, y + 60, 0, 1);
                     break;
                 case "Save":
-                    btn.setAlignCoor(x, y + 90, 0, 1);
+                    btn.setCoor(x, y + 90, 0, 1);
                     break;
                 case "Quit":
-                    btn.setAlignCoor(x, y + 120, 0, 1);
+                    btn.setCoor(x, y + 120, 0, 1);
                     break;
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
     }
 }

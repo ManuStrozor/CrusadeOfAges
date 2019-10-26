@@ -1,7 +1,8 @@
 package engine.view;
 
 import engine.gfx.Button;
-import game.GameManager;
+import engine.gfx.TextInput;
+import game.Game;
 import engine.*;
 
 import java.awt.event.KeyEvent;
@@ -12,76 +13,51 @@ import java.nio.file.Paths;
 
 public class InputDialog extends View {
 
-    public static String input, path;
-    public static int blink;
-
-    private Button rename;
-
+    static String path;
+    static TextInput textInput;
     private boolean once = false;
 
     public InputDialog() {
-        buttons.add(new Button(80, 20, "Cancel", "creativeMode"));
-        buttons.add(rename = new Button(80, 20, "Rename", "creativeMode"));
+        textInput = new TextInput(null, 0);
+
+        buttons.add(new Button(80, 20, "Rename", null));
+        buttons.add(new Button(80, 20, "Cancel", null));
     }
 
     @Override
     public void update(GameContainer gc, float dt) {
 
         if (!once) {
-            blink = input.length();
+            textInput.setBlinkBarPos(textInput.getText().length());
             once = true;
         }
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
-            gc.setActiView("creativeMode");
+            gc.setActiView(gc.getPrevView());
             once = false;
         }
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            try {
-                Path src = Paths.get(path);
-                Files.move(src, src.resolveSibling(input + ".png"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            gc.setActiView("creativeMode");
+            renameFile();
+            gc.setActiView(gc.getPrevView());
             once = false;
         }
 
-        //Blinking bar control
-        if (gc.getInput().isKeyDown(KeyEvent.VK_LEFT) && blink > 0)
-            blink--;
-        if (gc.getInput().isKeyDown(KeyEvent.VK_RIGHT) && blink < input.length())
-            blink++;
-        if (gc.getInput().isKeyDown(KeyEvent.VK_END))
-            blink = input.length();
-        if (gc.getInput().isKeyDown(KeyEvent.VK_HOME))
-            blink = 0;
-
-        //Input control
-        inputCtrl(gc);
-
+        textInput.update(gc.getInput());
 
         boolean cursorHand = false;
         for (Button btn : buttons) {
 
             // Button Selection
-            if (isSelected(gc, btn)) {
-                if (btn == rename) {
-                    try {
-                        Path src = Paths.get(path);
-                        Files.move(src, src.resolveSibling(input + ".png"));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+            if (btn.isSelected(gc.getInput())) {
+                if (btn.getText().equals("Rename")) renameFile();
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -91,7 +67,7 @@ public class InputDialog extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -107,20 +83,29 @@ public class InputDialog extends View {
         int x = gc.getWidth() / 2;
         int y = gc.getHeight() / 2;
 
-        r.fillAreaBloc(x - 3*GameManager.TS, y - GameManager.TS, 6, 2, "wall");
-        r.drawRect(x - 3*GameManager.TS, y - GameManager.TS, 6*GameManager.TS, 2*GameManager.TS, 0xffababab);
-        r.drawInput(x - 3*GameManager.TS + 6, y - GameManager.TS + 9, GameManager.TS * 6 - 12, GameManager.TS - 12, 0xff333333);
+        r.fillAreaBloc(x - 3* Game.TS, y - Game.TS, 6, 2, "wall");
+        r.drawRect(x - 3* Game.TS, y - Game.TS, 6* Game.TS, 2* Game.TS, 0xffababab);
+        r.drawTextInput(textInput, x - 3* Game.TS + 6, y - Game.TS + 9, Game.TS * 6 - 12, Game.TS - 12, 0xff333333);
 
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "Rename":
-                    btn.setAlignCoor(x - 5, y + 5, -1, 1);
+                    btn.setCoor(x - 5, y + 5, -1, 1);
                     break;
                 case "Cancel":
-                    btn.setAlignCoor(x + 5, y + 5, 1, 1);
+                    btn.setCoor(x + 5, y + 5, 1, 1);
                     break;
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
+        }
+    }
+
+    private void renameFile() {
+        try {
+            Path src = Paths.get(path);
+            Files.move(src, src.resolveSibling(textInput.getText() + ".png"));
+        } catch (IOException e) {
+            System.out.println("[IOException] " + e.getMessage());
         }
     }
 }

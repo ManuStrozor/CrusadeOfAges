@@ -1,18 +1,14 @@
 package engine;
 
-import engine.gfx.Image;
-
 import java.util.ArrayList;
-import java.util.stream.IntStream;
 
 public class World {
 
     private ArrayList<Bloc> blocs;
-    private int[] map;
-    private int width, height;
-    private int spawnX = -1, spawnY = -1;
+    private Level level;
 
     public World() {
+        level = null;
         blocs = new ArrayList<>();
         blocs.add(new Bloc("free",                  0, 6,5, false));
         blocs.add(new Bloc("wall",                  0, 1,0, false));
@@ -42,22 +38,19 @@ public class World {
         blocs.add(new Bloc("arrow_up",              0xff00ff00, 6,3, false));
     }
 
-    /**
-     * Initialize GameMap with all pixels of img
-     * @param img image
-     */
-    public void init(Image img) {
-        this.width = img.getW();
-        this.height = img.getH();
-        int[] p = img.getP();
-        map = new int[width * height];
-        for (int i = 0; i < width * height; i++) {
-            if (p[i] == getBloc("spawn").getCode()) {
-                spawnY = i / width;
-                spawnX = i - spawnY * width;
-            }
-            map[i] = p[i];
-        }
+    public Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Level level) {
+        this.level = level;
+    }
+
+    public Bloc getBlocMap(int x, int y) {
+        if (x >= 0 && x < level.getWidth() && y >= 0 && y < level.getHeight())
+            return getBloc(level.getTiles()[x + y * level.getWidth()]);
+        else
+            return getBloc("wall");
     }
 
     /**
@@ -67,21 +60,13 @@ public class World {
      * @param col Rgba code
      */
     public void setBloc(int x, int y, int col) {
-        int pos = x + y * width;
-        if (pos >= 0 && pos < map.length) {
+        int pos = x + y * level.getWidth();
+        if (pos >= 0 && pos < level.getTiles().length) {
             if (col == getBloc("spawn").getCode()) {
-                spawnX = x;
-                spawnY = y;
+                level.setSpawn(x, y);
             }
-            map[pos] = col;
+            level.getTiles()[pos] = col;
         }
-    }
-
-    public Bloc getBlocMap(int x, int y) {
-        if (x >= 0 && x < width && y >= 0 && y < height)
-            return getBloc(map[x + y * width]);
-        else
-            return getBloc("wall");
     }
 
     public Bloc getBloc(String tag) {
@@ -100,50 +85,5 @@ public class World {
         }
         if (i < blocs.size()) return blocs.get(i);
         return getBloc("wall");
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * X coordinate of Spawn point in the map
-     *
-     * @return the x coor of the spawn
-     */
-    public int getSpawnX() {
-        return spawnX;
-    }
-
-    /**
-     * Y coordinate of Spawn point in the map
-     *
-     * @return the y coor of the spawn
-     */
-    public int getSpawnY() {
-        return spawnY;
-    }
-
-    public void resetSpawn() {
-        spawnX = -1;
-        spawnY = -1;
-    }
-
-    /**
-     * Remove the bloc at (x, y) position in the map
-     *
-     * @param x With coordinate
-     * @param y Height coordinate
-     */
-    public void clean(int x, int y) {
-        map[x + y * width] = 0;
-    }
-
-    public void blank() {
-        IntStream.range(0, map.length).forEach(i -> map[i] = 0);
     }
 }

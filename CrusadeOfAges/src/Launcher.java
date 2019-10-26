@@ -2,19 +2,12 @@ import engine.*;
 import game.Conf;
 import exceptions.ConfException;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-import java.net.Socket;
-import java.net.ConnectException;
 import java.io.IOException;
 
 public class Launcher {
 
     private static final String GAMENAME = "Crusade Of Ages";
-    private static final String VERSION = "0.0.1";
-
-    private static String host = "localhost";
-    private static int port = 5338;
+    private static final String VERSION = "0.1.0";
     private static String appdata;
 
     /**
@@ -34,14 +27,10 @@ public class Launcher {
             conf.initiate();
             conf.readSettings(settings);
 
-            Socket socket = new Socket(host, port); // A déplacer dans Multiplayer (AbstractGame)
-
-            GameContainer gc = new GameContainer(socket, settings);
+            GameContainer gc = new GameContainer(settings);
             gc.setTitle(GAMENAME + " " + VERSION);
             gc.setScale(settings.getScale());
             gc.start();
-        } catch (ConnectException e) {
-            System.out.println("[ConnectException] Connexion refusée: " + host + ":" + port);
         } catch (ConfException e) {
             System.out.println("[ConfException] " + e.getMessage());
         } catch (IOException e) {
@@ -53,13 +42,8 @@ public class Launcher {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
                 case "-c":
+                case "--conf":
                     appdata = args[i + 1];
-                    break;
-                case "-h":
-                    host = args[i + 1];
-                    break;
-                case "-p":
-                    port = Integer.parseInt(args[i + 1]);
                     break;
             }
         }

@@ -18,7 +18,7 @@ public class Font {
         int unicode = 0;
         boolean next = true;
 
-        for (int i = 0; i < fontImage.getW(); i++) {
+        for (int i = 0; i < fontImage.getWidth(); i++) {
 
             if (!next && fontImage.getP()[i] == 0xff0000ff) {
                 widths[unicode] = i - offsets[unicode];

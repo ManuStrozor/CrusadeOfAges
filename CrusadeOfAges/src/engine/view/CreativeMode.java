@@ -2,13 +2,12 @@ package engine.view;
 
 import engine.GameContainer;
 import engine.Renderer;
-import engine.Settings;
 import engine.gfx.Font;
 import engine.gfx.Button;
 import engine.gfx.Image;
 import game.Conf;
 import game.Editor;
-import game.GameManager;
+import game.Game;
 import game.Notification;
 
 import java.awt.*;
@@ -63,7 +62,7 @@ public class CreativeMode extends View {
         }
 
         if (!once) {
-            sMax = 10 - (gc.getHeight() - 3 * GameManager.TS);
+            sMax = 10 - (gc.getHeight() - 3 * Game.TS);
             files = new File(creativeFolder).listFiles();
 
             int count = 0;
@@ -112,13 +111,13 @@ public class CreativeMode extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn) && !((btn == edit || btn == rename || btn == delete) && !focus)) {
+            if (btn.isHover(gc.getInput()) && !((btn == edit || btn == rename || btn == delete) && !focus)) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
 
             //Button selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 switch (btn.getText()) {
                     case "Back":
                         focus = false;
@@ -140,7 +139,9 @@ public class CreativeMode extends View {
                         break;
                     case "Rename":
                         if (focus) {
-                            InputDialog.input = files[fIndex].getName().substring(0, files[fIndex].getName().length() - 4);
+                            String text = files[fIndex].getName().substring(0, files[fIndex].getName().length() - 4);
+                            InputDialog.textInput.setText(text);
+                            InputDialog.textInput.setBlinkBarPos(text.length());
                             InputDialog.path = files[fIndex].getPath();
                         }
                         break;
@@ -179,7 +180,7 @@ public class CreativeMode extends View {
             }
 
             if (!((btn == edit || btn == rename || btn == delete) && !focus)) {
-                if (btn.setHover(isHover(gc, btn))) {
+                if (btn.isHover(gc.getInput())) {
                     if (!btn.isHoverSounded()) {
                         if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                         btn.setHoverSounded(true);
@@ -203,43 +204,43 @@ public class CreativeMode extends View {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        //Fill general background
         r.drawBackground();
         r.fillRect(0, 0, gc.getWidth(), gc.getHeight(), 0x55000000);
+
         //Draw list of files & scroll bar
         if (sMax <= 0) scroll = 0;
         r.drawCreaList(files, imgs, "Create your first map !");
         //Draw background & Top title
-        r.fillAreaBloc(0, 0, gc.getWidth() / GameManager.TS + 1, 1, "wall");
-        r.drawText("Select a map", gc.getWidth() / 2, GameManager.TS / 2, 0, 0, -1, Font.STANDARD);
+        r.fillAreaBloc(0, 0, gc.getWidth() / Game.TS + 1, 1, "wall");
+        r.drawText("Select a map", gc.getWidth() / 2, Game.TS / 2, 0, 0, -1, Font.STANDARD);
         //Draw background & buttons
-        r.fillAreaBloc(0, gc.getHeight() - GameManager.TS * 2, gc.getWidth() / GameManager.TS + 1, 2, "wall");
+        r.fillAreaBloc(0, gc.getHeight() - Game.TS * 2, gc.getWidth() / Game.TS + 1, 2, "wall");
 
         int x = gc.getWidth() / 2;
-        int y = gc.getHeight() - 2 * GameManager.TS + 8;
+        int y = gc.getHeight() - 2 * Game.TS + 8;
 
         for (Button btn : buttons) {
             switch (btn.getText()) {
                 case "Edit":
-                    btn.setAlignCoor(x - 5, y, -1, 1);
+                    btn.setCoor(x - 5, y, -1, 1);
                     break;
                 case "Rename":
-                    btn.setAlignCoor(x - delete.getWidth() - 15, gc.getHeight() - 8, -1, -1);
+                    btn.setCoor(x - delete.getWidth() - 15, gc.getHeight() - 8, -1, -1);
                     break;
                 case "Delete":
-                    btn.setAlignCoor(x - 5, gc.getHeight() - 8, -1, -1);
+                    btn.setCoor(x - 5, gc.getHeight() - 8, -1, -1);
                     break;
                 case "Folder":
-                    btn.setAlignCoor(x + 5, y, 1, 1);
+                    btn.setCoor(x + 5, y, 1, 1);
                     break;
                 case "Create":
-                    btn.setAlignCoor(x + folder.getWidth() + 15, y, 1, 1);
+                    btn.setCoor(x + folder.getWidth() + 15, y, 1, 1);
                     break;
                 case "Back":
-                    btn.setAlignCoor(x + folder.getWidth() + 15, gc.getHeight() - 8, 1, -1);
+                    btn.setCoor(x + folder.getWidth() + 15, gc.getHeight() - 8, 1, -1);
                     break;
             }
-            r.drawButton(btn);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
 
         for (Notification notif : notifs) notif.render(gc, r);

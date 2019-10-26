@@ -1,9 +1,9 @@
 package game.actions;
 
 import engine.GameContainer;
+import engine.Level;
 import engine.World;
-import game.GameManager;
-import game.objects.Player;
+import game.entity.Player;
 
 import java.awt.event.KeyEvent;
 
@@ -38,16 +38,20 @@ public class Event {
         pl.setOffY(0);
     }
 
-    public void switchLevel(GameContainer gc, GameManager gm) {
+    public void switchLevel(GameContainer gc) {
+        Level level = gc.getGame().getLevel();
         if (pl.getKeys() >= 1 && gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            if (gc.getPlayerStats().getValueOf("Level up") <= GameManager.current) {
+            if (gc.getPlayerStats().getValueOf("Level up") <= level.getCurrLevel()) {
                 gc.getPlayerStats().upValueOf("Level up");
             }
             pl.setKeys(pl.getKeys() - 1);
-            if (GameManager.current < GameManager.levels.length - 1) GameManager.current++;
-            else GameManager.current = 0;
-            gm.load(GameManager.levels[GameManager.current][0]);
-            respawn(world.getSpawnX(), world.getSpawnY());
+            if (level.getCurrLevel() < level.getLvls().length - 1) {
+                level.setCurrLevel(level.getCurrLevel() + 1);
+            } else {
+                level.setCurrLevel(0);
+            }
+            level.load();
+            respawn(level.getSpawnX(), level.getSpawnY());
         }
     }
 

@@ -24,13 +24,13 @@ public class Credits extends View {
         for (Button btn : buttons) {
 
             //Button Selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
                 gc.setActiView(btn.getTargetView());
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -40,7 +40,7 @@ public class Credits extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -50,8 +50,8 @@ public class Credits extends View {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-
         r.drawBackground();
+
         r.drawMenuTitle("Game credits", "Development team");
 
         r.drawList("DEVELOPERS", devs, gc.getWidth() / 4, gc.getHeight() / 3);
@@ -59,8 +59,8 @@ public class Credits extends View {
         r.drawList("THANKS TO", thanks, gc.getWidth() - gc.getWidth() / 4, gc.getHeight() / 3);
 
         for (Button btn : buttons) {
-            btn.setAlignCoor(5, 5, 1, 1);
-            r.drawButton(btn);
+            btn.setCoor(5, 5, 1, 1);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
     }
 }

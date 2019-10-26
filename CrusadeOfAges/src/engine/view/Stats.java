@@ -21,13 +21,13 @@ public class Stats extends View {
         for (Button btn : buttons) {
 
             //Button selection
-            if (isSelected(gc, btn)) {
+            if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
                 gc.setActiView(gc.getPrevView());
             }
 
             // Hover Sound
-            if (btn.setHover(isHover(gc, btn))) {
+            if (btn.isHover(gc.getInput())) {
                 if (!btn.isHoverSounded()) {
                     if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
                     btn.setHoverSounded(true);
@@ -37,7 +37,7 @@ public class Stats extends View {
             }
 
             // Hand Cursor
-            if (isHover(gc, btn)) {
+            if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
             }
@@ -58,8 +58,8 @@ public class Stats extends View {
         }
 
         for (Button btn : buttons) {
-            btn.setAlignCoor(5, 5, 1, 1);
-            r.drawButton(btn);
+            btn.setCoor(5, 5, 1, 1);
+            r.drawButton(btn, btn.isHover(gc.getInput()));
         }
     }
 }
