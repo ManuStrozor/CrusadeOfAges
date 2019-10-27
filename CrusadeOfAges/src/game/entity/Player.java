@@ -103,7 +103,7 @@ public class Player extends Entity {
             event.impale(gc);
             gc.getPlayerStats().upValueOf("Death");
             if (getLives() == 0) {
-                this.setDead(true);
+                this.death();
                 gc.getPlayerStats().upValueOf("Game over");
                 gc.setActiView("gameOver");
             } else {

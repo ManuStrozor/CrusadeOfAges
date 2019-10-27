@@ -1,8 +1,6 @@
 package game;
 
 import engine.*;
-import engine.gfx.*;
-import game.entity.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.event.KeyEvent;
@@ -17,7 +15,6 @@ public class Game extends AbstractGame {
     public static final int TS = 32;
     private Level level;
     private ArrayList<Notification> notifs = new ArrayList<>();
-    private Camera camera;
 
     public Game(World world) {
         super(world);
@@ -42,6 +39,8 @@ public class Game extends AbstractGame {
             }
         }
 
+        level.update(gc, dt);
+
         // Notifications update
         for(int i = 0; i < notifs.size(); i++) {
             if(notifs.get(i).isEnded()) {
@@ -50,23 +49,10 @@ public class Game extends AbstractGame {
                 notifs.get(i).update(dt);
             }
         }
-
-        level.update(gc, dt);
-
-        // Load level
-        if(level.getEntity(gc.getSocketClient().getPlayerName()) == null
-                && (gc.getPrevView().equals("gameOver") || gc.getPrevView().equals("mainMenu"))) {
-            level.load();
-        }
-
-        if (camera != null) camera.update(gc, dt);
     }
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        if (camera != null) camera.render(r);
-        r.drawLevel(true);
-        if(gc.getSettings().isShowLights()) r.drawLevelLights(new Light(30, 0xffffff99));
         level.render(gc, r);
         for(Notification notif : notifs) notif.render(gc, r);
     }

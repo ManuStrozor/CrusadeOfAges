@@ -72,12 +72,11 @@ public class Lobby extends View {
                         String playerName =
                                 JOptionPane.showInputDialog("Player name ?", "toto");
                         gc.getSocketClient().setPlayerName(playerName);
-                        level.load();
-                        Player player = new PlayerMP(playerName, gc.getWorld(), null, -1);
-                        level.addEntity(player);
+                        PlayerMP player = new PlayerMP(playerName, gc.getWorld(), null, -1);
+                        level.loadMulti(player);
                         Packet00Login loginPacket = new Packet00Login(playerName);
                         if (gc.getSocketServer() != null) {
-                            gc.getSocketServer().addConnection((PlayerMP)player, loginPacket);
+                            gc.getSocketServer().addConnection(player, loginPacket);
                         }
                         loginPacket.writeData(gc.getSocketClient());
                         break;

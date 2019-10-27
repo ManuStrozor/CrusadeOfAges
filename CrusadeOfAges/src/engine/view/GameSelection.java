@@ -2,8 +2,10 @@ package engine.view;
 
 import engine.gfx.Button;
 import engine.gfx.Font;
+import game.Camera;
 import game.Game;
 import engine.*;
+import game.entity.Player;
 
 import java.awt.event.KeyEvent;
 

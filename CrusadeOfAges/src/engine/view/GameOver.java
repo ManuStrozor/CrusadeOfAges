@@ -25,6 +25,7 @@ public class GameOver extends View {
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
             gc.setActiView("game");
+            gc.getGame().getLevel().load();
             gc.getWindow().setBlankCursor();
             gc.getClickSound().play();
             gc.getGameoverSound().stop();
@@ -48,7 +49,10 @@ public class GameOver extends View {
             // Button Selection
             if (btn.isSelected(gc.getInput())) {
                 if (btn.getText().contains("Quit")) gc.getPlayerStats().saveData();
-                if (btn.getText().contains("Try")) gc.getWindow().setBlankCursor();
+                if (btn.getText().contains("Try")) {
+                    gc.getGame().getLevel().load();
+                    gc.getWindow().setBlankCursor();
+                }
                 gc.getClickSound().play();
                 gc.getGameoverSound().stop();
                 sounded = false;

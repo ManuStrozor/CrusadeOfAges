@@ -51,7 +51,7 @@ public class Client extends Thread {
                 System.out.println("["+address.getHostAddress() + ":"+port+"] " + ((Packet00Login)packet).getUsername()
                         + " has joined the game...");
                 PlayerMP player = new PlayerMP(((Packet00Login)packet).getUsername(), gc.getWorld(), address, port);
-                gc.getGame().getLevel().addEntity(player);
+                //gc.getGame().getLevel().addEntity(player);
                 break;
             case DISCONNECT:
                 break;

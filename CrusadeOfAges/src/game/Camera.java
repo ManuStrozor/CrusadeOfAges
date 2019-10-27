@@ -14,14 +14,14 @@ public class Camera {
 
     private int tileSize = Game.TS;
 
-    Camera(String tag, World world) {
+    public Camera(String tag, World world) {
         this.targetTag = tag;
         this.world = world;
     }
 
     public void update(GameContainer gc, float dt) {
 
-        if (target == null) target = gc.getGame().getLevel().getEntity(targetTag);
+        if (target == null) target = world.getLevel().getEntity(targetTag);
         if (target == null) return;
 
         float targetX = (target.getPosX() + target.getWidth() / 2f) - gc.getWidth() / 2f;

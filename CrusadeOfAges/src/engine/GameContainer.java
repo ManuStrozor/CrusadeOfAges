@@ -132,9 +132,12 @@ public class GameContainer implements Runnable {
                 }
             }
 
-            Entity go = null;
+            // Utile pour afficher le hud
+            Entity go;
             if (socketClient != null && socketClient.getPlayerName() != null) {
-                go = game.getLevel().getEntity(socketClient.getPlayerName()); // Utile pour afficher le hud
+                go = game.getLevel().getEntity(socketClient.getPlayerName());
+            } else {
+                go = game.getLevel().getEntity("player1");
             }
             r.clear();
 

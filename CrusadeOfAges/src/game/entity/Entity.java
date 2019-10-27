@@ -2,13 +2,12 @@ package game.entity;
 
 import engine.GameContainer;
 import engine.Renderer;
-import game.Game;
 
 public abstract class Entity {
 
     protected String tag;
-    protected float posX, posY;
-    protected int width, height;
+    float posX, posY;
+    int width, height;
     private int lives, coins, keys, skulls;
     private boolean dead = false;
 
@@ -48,8 +47,8 @@ public abstract class Entity {
         return dead;
     }
 
-    public void setDead(boolean dead) {
-        this.dead = dead;
+    void death() {
+        this.dead = true;
     }
 
     public int getLives() {

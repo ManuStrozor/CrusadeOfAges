@@ -1,9 +1,14 @@
 package engine;
 
 import engine.gfx.Image;
+import engine.gfx.Light;
+import game.Camera;
 import game.entity.Entity;
+import game.entity.Player;
+import game.entity.PlayerMP;
 
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -20,6 +25,8 @@ public class Level {
     private List<Entity> entities = new ArrayList<>();
 
     private World world;
+    private Player player;
+    private Camera camera;
     private Image image;
 
     public Level(World world) {
@@ -27,21 +34,54 @@ public class Level {
         this.world = world;
     }
 
+    public void update(GameContainer gc, float dt) {
+        if (camera != null) camera.update(gc, dt);
+        for(int i = 0; i < entities.size(); i++) {
+            if(entities.get(i).isDead()) {
+                entities.remove(i--);
+            } else {
+                entities.get(i).update(gc, dt);
+            }
+        }
+    }
+
+    public void render(GameContainer gc, Renderer r) {
+        if (camera != null) camera.render(r);
+        r.drawLevel(true);
+        if(gc.getSettings().isShowLights()) r.drawLevelLights(new Light(30, 0xffffff99));
+        try {
+            for(Entity ent : entities) {
+                System.out.print(ent.getTag() + " ");
+                ent.render(gc, r);
+            }
+            System.out.println("");
+        } catch(ConcurrentModificationException e) {
+            System.out.println("/// " + entities.size() + " ///");
+        }
+    }
+
     public void load() {
-        image = new Image(lvls[currLevel][0], false);
-        width = image.getWidth();
-        height = image.getHeight();
-        tiles = new int[width * height];
-        loadTiles();
-        entities.clear();
+        loadFromImage(new Image(lvls[currLevel][0], false));
+        if (player == null || player.isDead()) {
+            player = new Player("player1", world);
+            camera = new Camera("player1", world);
+        }
+        addEntity(player);
+    }
+
+    public void loadMulti(PlayerMP player) {
+        loadFromImage(new Image(lvls[currLevel][0], false));
+        this.player = player;
+        camera = new Camera(player.getTag(), world);
     }
 
     public void loadFromImage(Image image) {
+        entities.clear();
+        this.image = image;
         width = image.getWidth();
         height = image.getHeight();
         tiles = new int[width * height];
         loadTiles();
-        entities.clear();
     }
 
     private void loadTiles() {
@@ -53,10 +93,6 @@ public class Level {
             }
             tiles[i] = p[i];
         }
-    }
-
-    public synchronized List<Entity> getEntities() {
-        return entities;
     }
 
     /**
@@ -74,22 +110,6 @@ public class Level {
 
     public void addEntity(Entity ent) {
         entities.add(ent);
-    }
-
-    public void update(GameContainer gc, float dt) {
-        for(int i = 0; i < entities.size(); i++) {
-            if(entities.get(i).isDead()) {
-                entities.remove(i--);
-            } else {
-                entities.get(i).update(gc, dt);
-            }
-        }
-    }
-
-    public void render(GameContainer gc, Renderer r) {
-        for(Entity ent : entities) {
-            ent.render(gc, r);
-        }
     }
 
     public int getSpawnX() {
@@ -150,4 +170,17 @@ public class Level {
     public void setCurrLevel(int current) {
         this.currLevel = current;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void setCamera(Camera camera) {
+        this.camera = camera;
+    }
+
 }
