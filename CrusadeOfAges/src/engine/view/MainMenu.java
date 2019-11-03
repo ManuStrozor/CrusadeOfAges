@@ -10,7 +10,7 @@ public class MainMenu extends View {
     public MainMenu(Confirm confirm) {
 
         buttons.add(new Button("Single player", "gameSelection"));
-        buttons.add(new Button("Multiplayer", "lobby"));
+        buttons.add(new Button("Multiplayer", "mainMenu"));
         buttons.add(new Button("Stats", "stats"));
         buttons.add(new Button("Editor", "creativeMode"));
         buttons.add(new Button("Game credits", "credits"));

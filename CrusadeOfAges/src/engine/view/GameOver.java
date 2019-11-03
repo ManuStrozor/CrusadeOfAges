@@ -24,15 +24,17 @@ public class GameOver extends View {
         }
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ENTER)) {
-            gc.setActiView("game");
             gc.getGame().getLevel().load();
             gc.getWindow().setBlankCursor();
+            gc.getWorld().getLevel().getPlayer().setChrono(0);
             gc.getClickSound().play();
             gc.getGameoverSound().stop();
+            gc.setActiView("game");
             sounded = false;
         }
 
         if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            gc.getWorld().getLevel().getPlayer().setChrono(0);
             gc.setActiView("mainMenu");
             sounded = false;
         }
@@ -53,6 +55,7 @@ public class GameOver extends View {
                     gc.getGame().getLevel().load();
                     gc.getWindow().setBlankCursor();
                 }
+                gc.getWorld().getLevel().getPlayer().setChrono(0);
                 gc.getClickSound().play();
                 gc.getGameoverSound().stop();
                 sounded = false;

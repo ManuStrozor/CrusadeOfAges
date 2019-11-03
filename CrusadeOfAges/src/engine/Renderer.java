@@ -402,7 +402,7 @@ public class Renderer {
         drawSprite(objs, x + ts * 2, 0, 5, 0, ts);
         drawSprite(objs, x + ts * 4, 0, 3, 1, ts);
 
-        drawText("x" + obj.getLives(), x + ts - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
+        drawText("x" + Math.max(obj.getLives(), 0), x + ts - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getCoins(), x + ts * 3 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
         drawText("x" + obj.getKeys(), x + ts * 5 - 4, ts, 1, -1, 0xffcdcdcd, Font.BIG_STANDARD);
     }
@@ -729,5 +729,11 @@ public class Renderer {
         camX -= (mouseX + camX) / ts;
         camY -= (mouseY + camY) / ts;
         if (ts > amount) ts -= amount;
+    }
+
+    public void drawChrono(int chrono) {
+        String text = "Chrono : ";
+        drawText(text, 5, 10, 1, 1, -1, Font.STANDARD);
+        drawText("" + chrono, textSize(text, Font.STANDARD) + 5, 5, 1, 1, -1, Font.BIG_STANDARD);
     }
 }

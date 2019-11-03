@@ -33,6 +33,7 @@ public class PausedGame extends View {
             // Button Selection
             if (btn.isSelected(gc.getInput())) {
                 if (btn.getText().contains("Quit")) {
+                    gc.getWorld().getLevel().getPlayer().setChrono(0);
                     gc.getPlayerStats().saveData();
                 }
                 if (btn.getText().contains("Back")) gc.getWindow().setBlankCursor();

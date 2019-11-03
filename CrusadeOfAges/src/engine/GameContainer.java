@@ -33,7 +33,7 @@ public class GameContainer implements Runnable {
     private Server socketServer;
 
     private boolean running = false;
-    private int width, height;
+    private int width, height, fps = 0;
     private float scale;
     private String title;
     private String prevView = null;
@@ -94,7 +94,7 @@ public class GameContainer implements Runnable {
     public void run() {
         double startTime, passedTime, frameTime = 0, unprocessedTime = 0;
         double lastTime = System.nanoTime() / 1000000000.0;
-        int fps = 0, frames = 0;
+        int frames = 0;
         double UPDATE_CAP = 1.0 / 60.0;
 
         running = true;
@@ -156,6 +156,7 @@ public class GameContainer implements Runnable {
                     r.setCoorCam(0, 0);
                     if (settings.isShowLights()) r.process();
                     if (go != null) r.drawHUD(go);
+                    r.drawChrono(getWorld().getLevel().getPlayer().getChrono());
                     break;
                 case "stats":
                     if (prevView.equals("pausedGame")) {
@@ -181,6 +182,7 @@ public class GameContainer implements Runnable {
                     r.setCoorCam(0, 0);
                     if (settings.isShowLights()) r.process();
                     if (go != null) r.drawHUD(go);
+                    r.drawChrono(getWorld().getLevel().getPlayer().getChrono());
                     break;
                 case "creativeMode":
                     v.get("creativeMode").render(this, r);
@@ -294,6 +296,10 @@ public class GameContainer implements Runnable {
 
     void setHeight(int height) {
         this.height = height;
+    }
+
+    public int getFps() {
+        return fps;
     }
 
     float getScale() {

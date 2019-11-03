@@ -31,8 +31,11 @@ public class Player extends Entity {
     private int speed, ground = 2;
     private float fallDist = 0;
     private int padding = 8;
-
+    private float pauseRes = 0;
     public static int tileSize = Game.TS;
+
+    private float tick = 0;
+    private int chrono = 0;
 
     public Player(String name, World world) {
         plSprite = new Sprite(Conf.SM_FOLDER + "/assets/player.png", tileSize, tileSize, true);
@@ -57,6 +60,13 @@ public class Player extends Entity {
 
     @Override
     public void update(GameContainer gc, float dt) {
+
+        if (tick < gc.getFps()) {
+            tick += dt * gc.getFps();
+        } else {
+            chrono++;
+            tick = 0;
+        }
 
         String currTag = world.getBlocMap(tileX, tileY).getTag();
         String botTag = world.getBlocMap(tileX, tileY + 1).getTag();
@@ -100,14 +110,20 @@ public class Player extends Entity {
         //Hit spikes
         if (currTag.contains("spikes")) {
 
-            event.impale(gc);
-            gc.getPlayerStats().upValueOf("Death");
-            if (getLives() == 0) {
+            if (getLives() == -1) {
                 this.death();
                 gc.getPlayerStats().upValueOf("Game over");
                 gc.setActiView("gameOver");
             } else {
-                event.respawn(lastFloorX, lastFlorrY);
+                if (pauseRes == 0) {
+                    event.impale(gc);
+                    gc.getPlayerStats().upValueOf("Death");
+                }
+                pauseRes += dt * 10;
+                if (pauseRes > 5) {
+                    event.respawn(lastFloorX, lastFlorrY);
+                    pauseRes = 0;
+                }
             }
 
         } else {
@@ -208,7 +224,7 @@ public class Player extends Entity {
 
     @Override
     public void render(GameContainer gc, Renderer r) {
-        r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
+        if (gc.getSettings().isShowLights()) r.drawLight(new Light(200, 0xffffff99), (int) posX + tileSize / 2, (int) posY + tileSize / 2);
         r.drawSprite(plSprite, (int) posX, (int) posY, direction, (int) anim, tileSize);
         r.drawText(tag, (int) posX - r.getCamX(), (int) posY - r.getCamY(), 1, -1, -1, Font.STANDARD);
     }
@@ -267,5 +283,13 @@ public class Player extends Entity {
 
     public int getPadding() {
         return padding;
+    }
+
+    public int getChrono() {
+        return chrono;
+    }
+
+    public void setChrono(int chrono) {
+        this.chrono = chrono;
     }
 }
