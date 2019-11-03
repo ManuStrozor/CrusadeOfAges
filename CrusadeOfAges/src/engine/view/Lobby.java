@@ -43,46 +43,44 @@ public class Lobby extends View {
             if (btn.isSelected(gc.getInput())) {
                 gc.getClickSound().play();
 
+
+                String serverLocation, playerName = null;
                 switch (btn.getText()) {
                     case "Create":
-                        if (gc.getSocketServer() == null || !gc.getSocketServer().isAlive()) {
-                            gc.setSocketServer(new Server(gc));
-                            gc.getSocketServer().start();
-                        }
-                        if (gc.getSocketClient() == null || !gc.getSocketClient().isAlive()) {
-                            gc.setSocketClient(new Client(gc, "localhost"));
-                            gc.getSocketClient().start();
+                        if ((playerName = ask("Player name ?")) != null) {
+                            if (gc.getSocketServer() == null) {
+                                gc.setSocketServer(new Server(gc));
+                                gc.getSocketServer().start();
+                            }
+                            if (gc.getSocketClient() == null) {
+                                gc.setSocketClient(new Client(gc, "localhost"));
+                                gc.getSocketClient().start();
+                            }
+                            gc.setActiView(btn.getTargetView());
                         }
                         break;
                     case "Join":
-                        if (gc.getSocketClient() == null || !gc.getSocketClient().isAlive()) {
-                            String serverLocation =
-                                    JOptionPane.showInputDialog("Server location ?", "localhost");
-                            gc.setSocketClient(new Client(gc, serverLocation));
-                            gc.getSocketClient().start();
+                        if ((serverLocation = ask("Server location ?")) != null) {
+                            if (gc.getSocketClient() == null) {
+                                gc.setSocketClient(new Client(gc, serverLocation));
+                                gc.getSocketClient().start();
+                            }
+                            playerName = ask("Player name ?");
                         }
                         break;
+                    default:
+                        gc.setActiView(btn.getTargetView());
                 }
-
-                Level level = gc.getGame().getLevel();
-                switch (btn.getText()) {
-                    case "Create":
-                    case "Join":
-                        gc.getWindow().setBlankCursor();
-                        String playerName =
-                                JOptionPane.showInputDialog("Player name ?", "toto");
-                        gc.getSocketClient().setPlayerName(playerName);
-                        PlayerMP player = new PlayerMP(playerName, gc.getWorld(), null, -1);
-                        level.loadMulti(player);
-                        Packet00Login loginPacket = new Packet00Login(playerName);
-                        if (gc.getSocketServer() != null) {
-                            gc.getSocketServer().addConnection(player, loginPacket);
-                        }
-                        loginPacket.writeData(gc.getSocketClient());
-                        break;
+                if (gc.getSocketServer() != null && playerName != null) {
+                    gc.getSocketClient().setPlayerName(playerName);
+                    PlayerMP player = new PlayerMP(playerName, gc.getWorld(), null, -1);
+                    gc.getGame().getLevel().loadMulti(player);
+                    gc.getWindow().setBlankCursor();
+                    Packet00Login loginPacket = new Packet00Login(playerName);
+                    gc.getSocketServer().addConnection(player, loginPacket);
+                    loginPacket.writeData(gc.getSocketClient());
+                    gc.setActiView(btn.getTargetView());
                 }
-
-                gc.setActiView(btn.getTargetView());
             }
 
             // Hover Sound
@@ -127,5 +125,13 @@ public class Lobby extends View {
             }
             r.drawButton(btn, btn.isHover(gc.getInput()));
         }
+    }
+
+    private String ask(String question) {
+        String name = "";
+        while (name != null && name.length() < 3) {
+            name = JOptionPane.showInputDialog(question, null);
+        }
+        return name;
     }
 }

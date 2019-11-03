@@ -63,8 +63,9 @@ public class SoundClip {
     }
 
     public void stop() {
-        if (clip.isRunning())
+        if (clip.isRunning()) {
             clip.stop();
+        }
     }
 
     public void close() {
@@ -74,8 +75,10 @@ public class SoundClip {
     }
 
     public void loop() {
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-        play();
+        if (!clip.isRunning()) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+            play();
+        }
     }
 
     public void setVolume(float value) {

@@ -49,15 +49,15 @@ public class Level {
         if (camera != null) camera.render(r);
         r.drawLevel(true);
         if(gc.getSettings().isShowLights()) r.drawLevelLights(new Light(30, 0xffffff99));
-        try {
-            for(Entity ent : entities) {
-                System.out.print(ent.getTag() + " ");
+        for(Entity ent : entities) {
+            try {
+                //System.out.print(ent.getTag() + " ");
                 ent.render(gc, r);
+            } catch(ConcurrentModificationException e) {
+                e.printStackTrace();
             }
-            System.out.println("");
-        } catch(ConcurrentModificationException e) {
-            System.out.println("/// " + entities.size() + " ///");
         }
+        //if (entities.size() > 0) System.out.println("");
     }
 
     public void load() {

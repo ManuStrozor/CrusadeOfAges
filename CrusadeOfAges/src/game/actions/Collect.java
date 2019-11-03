@@ -1,5 +1,6 @@
 package game.actions;
 
+import engine.Level;
 import engine.World;
 import engine.audio.SoundClip;
 import game.entity.Player;
@@ -7,39 +8,39 @@ import game.entity.Player;
 public class Collect {
 
     private Player pl;
-    private World world;
-    private SoundClip coin;
-    private SoundClip bonus;
+    private Level level;
+    private SoundClip coin, key, skull, pill;
 
     public Collect(Player pl, World world) {
         this.pl = pl;
-        this.world = world;
-
-        coin = new SoundClip("/audio/getcoin.wav", -20f);
-        bonus = new SoundClip("/audio/getlife.wav", -15f);
+        level = world.getLevel();
+        pill = new SoundClip("/audio/swallow.wav");
+        key = new SoundClip("/audio/key.wav", -10f);
+        coin = new SoundClip("/audio/coin.wav");
+        skull = new SoundClip("/audio/getlife.wav", -10f);
     }
 
     public void coin() {
-        world.getLevel().clean(pl.getTileX(), pl.getTileY());
+        level.clean(pl.getTileX(), pl.getTileY());
         pl.setCoins(pl.getCoins() + 1);
         coin.play();
     }
 
     public void key() {
-        world.getLevel().clean(pl.getTileX(), pl.getTileY());
+        level.clean(pl.getTileX(), pl.getTileY());
         pl.setKeys(pl.getKeys() + 1);
-        bonus.play();
+        key.play();
     }
 
     public void skull() {
-        world.getLevel().clean(pl.getTileX(), pl.getTileY());
+        level.clean(pl.getTileX(), pl.getTileY());
         pl.setSkulls(pl.getSkulls() + 1);
-        bonus.play();
+        skull.play();
     }
 
     public void pill() {
-        world.getLevel().clean(pl.getTileX(), pl.getTileY());
+        level.clean(pl.getTileX(), pl.getTileY());
         pl.setLives(pl.getLives() + 1);
-        bonus.play();
+        pill.play();
     }
 }

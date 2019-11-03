@@ -26,7 +26,7 @@ public class GameContainer implements Runnable {
     private World world;
     private Settings settings;
     private PlayerStats playerStats;
-    private SoundClip hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
+    private SoundClip ambientSound, hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
     private Map<String, View> v = new HashMap<>();
 
     private Client socketClient;
@@ -63,6 +63,7 @@ public class GameContainer implements Runnable {
         v.put("pausedGame", new PausedGame());
         v.put("gameOver", new GameOver());
 
+        ambientSound = new SoundClip("/audio/ambient.wav", -15f);
         hoverSound = new SoundClip("/audio/hover.wav", -10f);
         clickSound = new SoundClip("/audio/click.wav", -10f);
         gameoverSound = new SoundClip("/audio/gameover.wav", -5f);
@@ -140,6 +141,12 @@ public class GameContainer implements Runnable {
                 go = game.getLevel().getEntity("player1");
             }
             r.clear();
+
+            if (actiView.equals("game") || actiView.equals("pausedGame") || actiView.equals("gameOver")) {
+                ambientSound.loop();
+            } else {
+                ambientSound.stop();
+            }
 
             // Affichage du jeu en arrière plan
             switch (actiView) {

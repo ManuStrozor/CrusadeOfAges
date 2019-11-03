@@ -14,7 +14,7 @@ public class Move {
         this.pl = pl;
         this.world = world;
 
-        jump = new SoundClip("/audio/jump.wav", -10f);
+        jump = new SoundClip("/audio/jump.wav", -20f);
     }
 
     public void toLeft(float dt, float speed) {
