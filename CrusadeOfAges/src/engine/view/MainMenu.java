@@ -27,19 +27,11 @@ public class MainMenu extends View {
 
             // Button Click
             if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
                 gc.setActiView(btn.getTargetView());
             }
 
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
 
             // Hand Cursor
             if (btn.isHover(gc.getInput())) {

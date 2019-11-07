@@ -19,7 +19,7 @@ public class GameOver extends View {
     public void update(GameContainer gc, float dt) {
 
         if (gc.getPrevView().equals("game") && !sounded) {
-            gc.getGameoverSound().play();
+            gc.getSb().get("game over").play();
             sounded = true;
         }
 
@@ -27,8 +27,8 @@ public class GameOver extends View {
             gc.getGame().getLevel().load();
             gc.getWindow().setBlankCursor();
             gc.getWorld().getLevel().getPlayer().setChrono(0);
-            gc.getClickSound().play();
-            gc.getGameoverSound().stop();
+            gc.getSb().get("click").play();
+            gc.getSb().get("game over").stop();
             gc.setActiView("game");
             sounded = false;
         }
@@ -56,21 +56,12 @@ public class GameOver extends View {
                     gc.getWindow().setBlankCursor();
                 }
                 gc.getWorld().getLevel().getPlayer().setChrono(0);
-                gc.getClickSound().play();
-                gc.getGameoverSound().stop();
+                gc.getSb().get("click").play();
+                gc.getSb().get("game over").stop();
                 sounded = false;
                 gc.setActiView(btn.getTargetView());
             }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
     }

@@ -37,19 +37,10 @@ public class PausedGame extends View {
                     gc.getPlayerStats().saveData();
                 }
                 if (btn.getText().contains("Back")) gc.getWindow().setBlankCursor();
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
                 gc.setActiView(btn.getTargetView());
             }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
     }

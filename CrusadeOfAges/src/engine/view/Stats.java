@@ -20,26 +20,18 @@ public class Stats extends View {
         boolean cursorHand = false;
         for (Button btn : buttons) {
 
-            //Button selection
-            if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
-                gc.setActiView(gc.getPrevView());
-            }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
-
-            // Hand Cursor
+            // Button Hover
             if (btn.isHover(gc.getInput())) {
                 gc.getWindow().setHandCursor();
                 cursorHand = true;
+            }
+
+            btn.hearHover(gc.getInput(), gc.getSb());
+
+            //Button selection
+            if (btn.isSelected(gc.getInput())) {
+                gc.getSb().get("click").play();
+                gc.setActiView(gc.getPrevView());
             }
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();

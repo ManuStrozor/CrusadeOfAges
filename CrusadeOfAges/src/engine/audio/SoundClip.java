@@ -47,11 +47,11 @@ public class SoundClip {
             clip.open(dais);
             gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         } catch (UnsupportedAudioFileException e) {
-            System.out.println("[UnsupportedAudioFileException] " + e.getMessage());
+            System.out.println("Soundclip [UnsupportedAudioFileException] " + e.getMessage());
         } catch (LineUnavailableException e) {
-            System.out.println("[LineUnavailableException] " + e.getMessage());
+            System.out.println("Soundclip [LineUnavailableException] " + e.getMessage());
         } catch (IOException e) {
-            System.out.println("[IOException] " + e.getMessage());
+            System.out.println("Soundclip [IOException] " + e.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class SoundClip {
         }
     }
 
-    public void setVolume(float value) {
+    private void setVolume(float value) {
         gainControl.setValue(value);
     }
 

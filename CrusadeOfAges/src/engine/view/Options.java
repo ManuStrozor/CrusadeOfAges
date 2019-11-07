@@ -45,7 +45,7 @@ public class Options extends View {
 
             //Button selection
             if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
                 switch (btn.getText()) {
                     case "<":
                         if (s.getIFlag(s.getFlag()) > 0) {
@@ -67,16 +67,7 @@ public class Options extends View {
                         break;
                 }
             }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
         }
 
         for (Checkbox chk : checkboxes) {

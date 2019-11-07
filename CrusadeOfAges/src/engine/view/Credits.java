@@ -9,7 +9,7 @@ public class Credits extends View {
 
     private String[] devs = {"Majoolwip", "Manu TD"};
     private String[] thanks = {"Marguerite Turbet", "Marie Lys Turbet", "Martin Turbet-Delof"};
-    private String[] contribs = {"Anne Sospedra", "Firas Htm", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
+    private String[] contribs = {"Anne Sospedra", "Gaël Di Malta", "Hamza Makri", "Wissem HF", "Yassine El", "Youssra El"};
 
     public Credits() {
         buttons.add(new Button(60, 20, "Back", "mainMenu"));
@@ -18,34 +18,15 @@ public class Credits extends View {
     @Override
     public void update(GameContainer gc, float dt) {
 
-        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) gc.setActiView(gc.getPrevView());
-
-        boolean cursorHand = false;
-        for (Button btn : buttons) {
-
-            //Button Selection
-            if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
-                gc.setActiView(btn.getTargetView());
-            }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
-
-            // Hand Cursor
-            if (btn.isHover(gc.getInput())) {
-                gc.getWindow().setHandCursor();
-                cursorHand = true;
-            }
+        if (gc.getInput().isKeyDown(KeyEvent.VK_ESCAPE)) {
+            gc.setActiView(gc.getPrevView());
         }
-        if (!cursorHand) gc.getWindow().setDefaultCursor();
+
+        updateButtons(gc);
+
+        if (btnSelected != null) {
+            gc.setActiView(btnSelected.getTargetView());
+        }
     }
 
     @Override

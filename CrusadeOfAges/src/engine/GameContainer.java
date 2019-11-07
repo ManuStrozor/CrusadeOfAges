@@ -1,6 +1,6 @@
 package engine;
 
-import engine.audio.SoundClip;
+import engine.audio.SoundBank;
 import engine.gfx.Font;
 import engine.gfx.Light;
 import engine.view.*;
@@ -10,7 +10,6 @@ import game.entity.Entity;
 import network.Client;
 import network.Server;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ public class GameContainer implements Runnable {
     private World world;
     private Settings settings;
     private PlayerStats playerStats;
-    private SoundClip ambientSound, hoverSound, clickSound, gameoverSound, impaleSound, leverSound;
+    private SoundBank sb;
     private Map<String, View> v = new HashMap<>();
 
     private Client socketClient;
@@ -41,7 +40,7 @@ public class GameContainer implements Runnable {
 
     private static final String FACTORY = "Strozor Inc.";
 
-    public GameContainer(Settings settings) throws IOException {
+    public GameContainer(Settings settings) {
         world = new World();
         this.settings = settings;
         game = new Game(world);
@@ -63,12 +62,7 @@ public class GameContainer implements Runnable {
         v.put("pausedGame", new PausedGame());
         v.put("gameOver", new GameOver());
 
-        ambientSound = new SoundClip("/audio/ambient.wav", -15f);
-        hoverSound = new SoundClip("/audio/hover.wav", -10f);
-        clickSound = new SoundClip("/audio/click.wav", -10f);
-        gameoverSound = new SoundClip("/audio/gameover.wav", -5f);
-        impaleSound = new SoundClip("/audio/impaled.wav");
-        leverSound = new SoundClip("/audio/lever.wav", -15f);
+        sb = new SoundBank("/audio/");
     }
 
     public synchronized void start() {
@@ -143,9 +137,9 @@ public class GameContainer implements Runnable {
             r.clear();
 
             if (actiView.equals("game") || actiView.equals("pausedGame") || actiView.equals("gameOver")) {
-                ambientSound.loop();
+                sb.get("ambient").loop();
             } else {
-                ambientSound.stop();
+                sb.get("ambient").stop();
             }
 
             // Affichage du jeu en arrière plan
@@ -330,24 +324,8 @@ public class GameContainer implements Runnable {
         return playerStats;
     }
 
-    public SoundClip getHoverSound() {
-        return hoverSound;
-    }
-
-    public SoundClip getClickSound() {
-        return clickSound;
-    }
-
-    public SoundClip getGameoverSound() {
-        return gameoverSound;
-    }
-
-    public SoundClip getImpaleSound() {
-        return impaleSound;
-    }
-
-    public SoundClip getLeverSound() {
-        return leverSound;
+    public SoundBank getSb() {
+        return sb;
     }
 
     public String getPrevView() {

@@ -41,7 +41,7 @@ public class Lobby extends View {
 
             btn.setBgColor(0xff616E7A);
             if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
 
 
                 String serverLocation, playerName = null;
@@ -82,16 +82,7 @@ public class Lobby extends View {
                     gc.setActiView(btn.getTargetView());
                 }
             }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
 

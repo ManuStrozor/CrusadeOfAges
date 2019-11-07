@@ -34,36 +34,13 @@ public class Confirm extends View {
             gc.setActiView(gc.getPrevView());
         }
 
-        boolean cursorHand = false;
-        for (Button btn : buttons) {
+        updateButtons(gc);
 
-            // Button Selection
-            if (btn.isSelected(gc.getInput())) {
-                gc.getClickSound().play();
-                if (btn.getText().equals("Cancel")) {
-                    gc.setActiView(gc.getPrevView());
-                } else {
-                    gc.setActiView(btn.getTargetView());
-                }
-            }
-
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
-
-            // Hand Cursor
-            if (btn.isHover(gc.getInput())) {
-                gc.getWindow().setHandCursor();
-                cursorHand = true;
-            }
+        if (btnSelected != null && btnSelected != btn) {
+            gc.setActiView(gc.getPrevView());
+        } else if (btnSelected != null) {
+            gc.setActiView(btnSelected.getTargetView());
         }
-        if (!cursorHand) gc.getWindow().setDefaultCursor();
     }
 
     @Override

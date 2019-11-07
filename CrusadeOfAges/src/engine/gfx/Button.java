@@ -1,5 +1,8 @@
 package engine.gfx;
 
+import engine.InputHandler;
+import engine.audio.SoundBank;
+
 public class Button extends Clickable {
 
     private String text, targetView;
@@ -31,5 +34,18 @@ public class Button extends Clickable {
 
     public void setHoverSounded(boolean hoverSounded) {
         this.hoverSounded = hoverSounded;
+    }
+
+    public void hearHover(InputHandler input, SoundBank sb) {
+        if (isHover(input)) {
+            if (!hoverSounded) {
+                if (!sb.get("hover").isRunning()) {
+                    sb.get("hover").play();
+                }
+                hoverSounded = true;
+            }
+        } else {
+            hoverSounded = false;
+        }
     }
 }

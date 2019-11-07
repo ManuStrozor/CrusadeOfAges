@@ -1,7 +1,10 @@
 package engine.view;
 
 import engine.GameContainer;
+import engine.InputHandler;
 import engine.Renderer;
+import engine.Window;
+import engine.audio.SoundBank;
 import engine.gfx.Button;
 import engine.gfx.Checkbox;
 import engine.gfx.Image;
@@ -15,9 +18,35 @@ public abstract class View {
     protected ArrayList<Button> buttons = new ArrayList<>();
     protected ArrayList<Checkbox> checkboxes = new ArrayList<>();
 
+    protected Button btnHovered, btnSelected;
+
     public abstract void update(GameContainer gc, float dt);
 
     public abstract void render(GameContainer gc, Renderer r);
+
+    void updateButtons(GameContainer gc) {
+        btnHovered = null;
+        btnSelected = null;
+        for (Button btn : buttons) {
+            if (btn.isHover(gc.getInput())) {
+                btnHovered = btn;
+                if (!btn.isHoverSounded()) {
+                    if (!gc.getSb().get("hover").isRunning()) {
+                        gc.getSb().get("hover").play();
+                    }
+                    btn.setHoverSounded(true);
+                }
+                gc.getWindow().setHandCursor();
+            } else {
+                btn.setHoverSounded(false);
+                gc.getWindow().setDefaultCursor();
+            }
+            if (btn.isSelected(gc.getInput())) {
+                btnSelected = btn;
+                gc.getSb().get("click").play();
+            }
+        }
+    }
 
     boolean fileSelected(GameContainer gc, int index, int scroll) {
 

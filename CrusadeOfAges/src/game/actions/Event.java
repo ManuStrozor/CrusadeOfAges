@@ -25,7 +25,7 @@ public class Event {
         else if (tag.contains("ceiling"))
             world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("ceiling_spikes_blooded").getCode());
 
-        gc.getImpaleSound().play();
+        gc.getSb().get("impale").play();
         pl.setLives(pl.getLives() - 1);
     }
 
@@ -59,7 +59,7 @@ public class Event {
         if (tag.contains("left")) {
             world.setBloc(pl.getTileX(), pl.getTileY(), world.getBloc("lever_right").getCode());
             gc.getPlayerStats().upValueOf("Lever_pulled");
-            gc.getLeverSound().play();
+            gc.getSb().get("lever").play();
         }
     }
 }

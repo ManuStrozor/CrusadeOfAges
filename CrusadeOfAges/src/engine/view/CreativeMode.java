@@ -173,21 +173,14 @@ public class CreativeMode extends View {
                 }
 
                 if (!((btn == edit || btn == rename || btn == delete) && !focus)) {
-                    gc.getClickSound().play();
+                    gc.getSb().get("click").play();
                     gc.setActiView(btn.getTargetView());
                     once = false;
                 }
             }
 
             if (!((btn == edit || btn == rename || btn == delete) && !focus)) {
-                if (btn.isHover(gc.getInput())) {
-                    if (!btn.isHoverSounded()) {
-                        if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                        btn.setHoverSounded(true);
-                    }
-                } else {
-                    btn.setHoverSounded(false);
-                }
+                btn.hearHover(gc.getInput(), gc.getSb());
             }
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();

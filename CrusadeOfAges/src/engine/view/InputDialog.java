@@ -51,20 +51,12 @@ public class InputDialog extends View {
             // Button Selection
             if (btn.isSelected(gc.getInput())) {
                 if (btn.getText().equals("Rename")) renameFile();
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
-            // Hover Sound
-            if (btn.isHover(gc.getInput())) {
-                if (!btn.isHoverSounded()) {
-                    if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                    btn.setHoverSounded(true);
-                }
-            } else {
-                btn.setHoverSounded(false);
-            }
+            btn.hearHover(gc.getInput(), gc.getSb());
 
             // Hand Cursor
             if (btn.isHover(gc.getInput())) {

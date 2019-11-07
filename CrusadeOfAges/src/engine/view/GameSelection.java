@@ -74,21 +74,14 @@ public class GameSelection extends View {
                     gc.getGame().getLevel().load();
                     gc.getWindow().setBlankCursor();
                 }
-                gc.getClickSound().play();
+                gc.getSb().get("click").play();
                 gc.setActiView(btn.getTargetView());
                 once = false;
             }
 
             // Hover Sound
             if (!(btn == play && !focus)) {
-                if (btn.isHover(gc.getInput())) {
-                    if (!btn.isHoverSounded()) {
-                        if (!gc.getHoverSound().isRunning()) gc.getHoverSound().play();
-                        btn.setHoverSounded(true);
-                    }
-                } else {
-                    btn.setHoverSounded(false);
-                }
+                btn.hearHover(gc.getInput(), gc.getSb());
             }
         }
         if (!cursorHand) gc.getWindow().setDefaultCursor();
